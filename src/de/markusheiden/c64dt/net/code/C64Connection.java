@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.DatagramSocket;
+import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 
 /**
  * IP connection to a c64.
@@ -17,7 +20,10 @@ public class C64Connection extends AbstractConnection {
   public static final int DEFAULT_PORT = 6462;
 
   private static final int IDX_SEQUENCE = 2;
-  private static final int IDX_REPLY = 3;
+  private static final int IDX_SERVICE = 3;
+  private static final int IDX_DATA = 4;
+
+  private static final int IDX_REPLY = 3; // TODO correct?
 
   private static final int MAX_PACKET = 0x90;
 
@@ -26,22 +32,18 @@ public class C64Connection extends AbstractConnection {
   /**
    * Constructor.
    */
-  public C64Connection(InetAddress address) {
-    this(address, DEFAULT_PORT);
+  public C64Connection(InetAddress address) throws IOException {
+    this(DEFAULT_PORT, address, DEFAULT_PORT);
   }
 
   /**
    * Constructor.
    */
-  public C64Connection(InetAddress address, int port) {
-    super(port, MAX_PACKET, 0xCA, 0x1F);
+  public C64Connection(int sourcePort, InetAddress address, int destinationPort) throws IOException {
+    super(new InetSocketAddress(InetAddress.getLocalHost(), sourcePort), new InetSocketAddress(address, destinationPort), MAX_PACKET, 0xCA, 0x1F);
     Assert.notNull(address, "Precondition: address != null");
 
     this.address = address;
-  }
-
-  public synchronized void open() throws IOException {
-    open(new Socket(address, port));
   }
 
   /**
@@ -56,11 +58,13 @@ public class C64Connection extends AbstractConnection {
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
     sendPacket(4, hi(address), lo(address), hi(data.length), lo(data.length));
-    os.write(data);
+    System.arraycopy(data, 0, output, IDX_DATA, data.length);
     // Align to 16 bit words
     if (data.length % 2 != 0) {
-      os.write(0x00);
+      output[IDX_DATA + data.length] = 0x00;
     }
+    sendPacket(IDX_DATA + data.length); // TODO pad!!!
+
     return receiveReply();
   }
 
@@ -109,30 +113,24 @@ public class C64Connection extends AbstractConnection {
   protected synchronized void sendPacket(int service, byte... data) throws IOException {
     sequence++;
     writeMagic();
-    os.write(sequence);
-    os.write(service);
-    os.write(data);
+    output[IDX_SEQUENCE] = sequence;
+    output[IDX_SERVICE] = (byte) service;
+    System.arraycopy(data, 0, output, IDX_DATA, data.length);
+
+    sendPacket(IDX_DATA + data.length);
   }
 
   /**
    * Send packet and receive immediate reply.
    */
   protected synchronized boolean receiveReply() throws IOException {
-    // really send
-    os.flush();
-
-    // receive
-    try {
-      // Just one reply-packet expected -> should be read at once
-      int read = is.read(packet);
-      byte reply = packet[IDX_REPLY];
-      if (read != packet.length || !isValid() || packet[IDX_SEQUENCE] != sequence) {
-        throw new IOException("Wrong reply");
-      }
-
-      return reply == 0;
-    } catch (InterruptedIOException e) {
-      throw new IOException("No reply");
+    receivePacket();
+    byte reply = input[IDX_REPLY];
+    // TODO check packet.length?
+    if (!isValid() || input[IDX_SEQUENCE] != sequence) {
+      throw new IOException("Wrong reply");
     }
+
+    return reply == 0;
   }
 }

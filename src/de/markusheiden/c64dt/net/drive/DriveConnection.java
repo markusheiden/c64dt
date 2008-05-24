@@ -6,6 +6,10 @@ import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.DatagramSocket;
+import java.net.SocketAddress;
+import java.net.InetSocketAddress;
+import java.net.InetAddress;
 
 /**
  * Connection of net drive server.
@@ -30,67 +34,48 @@ public class DriveConnection extends AbstractConnection {
 
   private static final int MAX_PACKET = 0x90;
 
-  private ServerSocket server;
   private int received;
 
   /**
    * Constructor.
    */
-  public DriveConnection() {
+  public DriveConnection() throws IOException {
     this(DEFAULT_PORT);
   }
 
   /**
    * Constructor.
    */
-  public DriveConnection(int port) {
-    super(DEFAULT_PORT, MAX_PACKET, 0xAD, 0xF8);
-  }
-
-  public synchronized void open() throws IOException {
-    server = new ServerSocket(port);
-    server.setReceiveBufferSize(MAX_PACKET);
-    open(server.accept());
-  }
-
-  /**
-   * Receive a request.
-   */
-  public synchronized void receiveRequest() throws IOException {
-    received = is.read(packet);
-    if (received <= 0) {
-      throw new IOException("Connection lost");
-    } else if (!isValid()) {
-      throw new IOException("Invalid packet");
-    }
+  public DriveConnection(int port) throws IOException {
+    super(new InetSocketAddress(InetAddress.getLocalHost(), port), null, MAX_PACKET, 0xAD, 0xF8);
   }
 
   /**
    * Number of the requested service.
    */
   public byte getService() {
-    return packet[IDX_SERVICE];
+    return input[IDX_SERVICE];
   }
 
   /**
    * Number of the requested service.
    */
   public void setService(byte service) {
-    packet[IDX_SERVICE] = service;
+    input[IDX_SERVICE] = service;
   }
 
   /**
    * Is this a request a request to resend the last reply?.
    */
   public boolean isResendRequest() {
-    return packet[IDX_SEQUENCE] == sequence;
+    return input[IDX_SEQUENCE] == sequence;
   }
 
   /**
    * Logical file number.
    */
   public byte getLogicalFile() {
-    return packet[IDX_LOGICAL_FILE];
+    return input[IDX_LOGICAL_FILE];
   }
 
   /**
@@ -98,21 +83,21 @@ public class DriveConnection extends AbstractConnection {
    * 0-15
    */
   public byte getChannel() {
-    return packet[IDX_CHANNEL];
+    return input[IDX_CHANNEL];
   }
 
   /**
    * Device number.
    */
   public byte getDevice() {
-    return packet[IDX_DEVICE];
+    return input[IDX_DEVICE];
   }
 
   /**
    * Get size of payload data.
    */
   public int getSize() {
-    return ByteUtil.toByte(packet[IDX_SIZE]);
+    return ByteUtil.toByte(input[IDX_SIZE]);
   }
 
   /**
@@ -123,7 +108,7 @@ public class DriveConnection extends AbstractConnection {
       throw new IOException("Invalid packet size");
     }
 
-    return packet[0];
+    return input[0];
   }
 
   /**
@@ -136,7 +121,7 @@ public class DriveConnection extends AbstractConnection {
     }
 
     byte[] result = new byte[size];
-    System.arraycopy(packet, IDX_DATA, result, 0, result.length);
+    System.arraycopy(input, IDX_DATA, result, 0, result.length);
 
     Assert.notNull(result, "Postcondition: result != null");
     return result;
@@ -148,12 +133,14 @@ public class DriveConnection extends AbstractConnection {
    * @param error error code
    */
   public synchronized void sendReply(Error error) throws IOException {
-    sequence = packet[IDX_SEQUENCE];
+    sequence = input[IDX_SEQUENCE];
 
-    packet[IDX_SIZE] = 0x01;
-    packet[IDX_DATA] = error.getResult();
-    packet[9] = 0x00; // padding byte
-    os.write(packet, 0, 10);
+    System.arraycopy(input, 0, output, 0, IDX_SIZE);
+    output[IDX_SIZE] = 0x01;
+    output[IDX_DATA] = error.getResult();
+    output[9] = 0x00; // padding byte
+
+    sendPacket(10);
   }
 
   /**
@@ -169,23 +156,16 @@ public class DriveConnection extends AbstractConnection {
       throw new IOException("Invalid packet size");
     }
 
-    packet[IDX_SERVICE] = SERVICE_DATA;
-    packet[IDX_SIZE] = size;
-    System.arraycopy(data, 0, packet, IDX_DATA, data.length);
-  }
+    sequence = input[IDX_SEQUENCE];
 
-  /**
-   * Send the last reply again.
-   */
-  public synchronized void resendReply() throws IOException {
-    os.write(packet, 0, 10);
-  }
-
-  public void close() throws IOException {
-    try {
-      super.close();
-    } finally {
-      server.close();
+    System.arraycopy(input, 0, output, 0, IDX_SIZE);
+    output[IDX_SERVICE] = SERVICE_DATA;
+    output[IDX_SIZE] = size;
+    System.arraycopy(data, 0, output, IDX_DATA, data.length);
+    if (data.length % 2 != 0) {
+      output[IDX_DATA + data.length] = 0x00;
     }
+
+    sendPacket(IDX_DATA + data.length);
   }
 }

@@ -3,9 +3,9 @@ package de.markusheiden.c64dt.net;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
+import java.net.DatagramSocket;
+import java.net.DatagramPacket;
+import java.net.SocketAddress;
 
 /**
  * Common code for connections.
@@ -14,45 +14,58 @@ public abstract class AbstractConnection {
   private static final int IDX_MAGIC1 = 0;
   private static final int IDX_MAGIC2 = 1;
 
-  protected final int port;
+  private final SocketAddress source;
+  private SocketAddress destination;
+  private SocketAddress lastDestination;
+  protected final int packetSize;
   private final byte magic1;
   private final byte magic2;
 
-  private Socket socket;
-  protected OutputStream os;
-  protected InputStream is;
+  private DatagramSocket socket;
+  protected final byte[] input;
+  private DatagramPacket lastInput;
+  protected final byte[] output;
+  private DatagramPacket lastOutput;
   protected byte sequence;
-  protected final byte[] packet;
 
   /**
    * Constructor.
-   *
-   * @param port port
    */
-  protected AbstractConnection(int port, int packetSize, int magic1, int magic2) {
-    this.port = port;
-    this.packet = new byte[packetSize];
+  protected AbstractConnection(SocketAddress source, SocketAddress destination, int packetSize, int magic1, int magic2) {
+    this.source = source;
+    this.destination = destination;
+    this.packetSize = packetSize;
     this.magic1 = (byte) magic1;
     this.magic2 = (byte) magic2;
 
     socket = null;
-    os = null;
-    is = null;
+    input = new byte[packetSize];
+    lastInput = null;
+    output = new byte[packetSize];
+    lastOutput = null;
     sequence = 0;
   }
 
   /**
-   * Port.
+   * Source address.
    */
-  public int getPort() {
-    return port;
+  public String getSource() {
+    return source.toString();
+  }
+
+  /**
+   * Remote address.
+   */
+  public String getDestination() {
+    SocketAddress result = destination != null? destination : lastDestination;
+    return result != null? result.toString() : "unknown";
   }
 
   /**
    * Maximum packet size.
    */
   public int getPacketSize() {
-    return packet.length;
+    return packetSize;
   }
 
   /**
@@ -67,45 +80,58 @@ public abstract class AbstractConnection {
    *
    * @throws java.io.IOException
    */
-  public abstract void open() throws IOException;
-
-  /**
-   * Open connection for a socket.
-   *
-   * @throws java.io.IOException
-   */
-  protected synchronized void open(Socket socket) throws IOException {
-    Assert.isTrue(!isOpen(), "Precondition: !isOpen()");
-
-    this.socket = socket;
+  public synchronized void open() throws IOException {
+    socket = new DatagramSocket(source);
     socket.setSendBufferSize(256);
     socket.setReceiveBufferSize(256);
-    socket.setSoTimeout(2000);
-    os = socket.getOutputStream();
-    is = socket.getInputStream();
   }
 
   /**
-   * Write magic bytes.
+   * Receive a packet.
    */
-  protected void writeMagic() throws IOException {
-    os.write(magic1);
-    os.write(magic2);
+  public synchronized void receivePacket() throws IOException {
+    lastInput = new DatagramPacket(input, input.length);
+    socket.receive(lastInput);
+    lastDestination = lastInput.getSocketAddress();
+    if (!isValid()) {
+      throw new IOException("Invalid packet");
+    }
+  }
+
+  /**
+   * Send a packet.
+   */
+  public synchronized void sendPacket(int length) throws IOException {
+    lastOutput = new DatagramPacket(output, length, destination != null? destination : lastDestination);
+    socket.send(lastOutput);
+  }
+
+  /**
+   * Send the last packet again.
+   */
+  public synchronized void resendPacket() throws IOException {
+    socket.send(lastOutput);
   }
 
   /**
    * Check magic bytes.
    */
   protected boolean isValid() {
-    return packet[IDX_MAGIC1] == magic1 && packet[IDX_MAGIC2] == magic2;
+    return input[IDX_MAGIC1] == magic1 && input[IDX_MAGIC2] == magic2;
+  }
+
+  /**
+   * Write magic bytes.
+   */
+  protected void writeMagic() throws IOException {
+    output[IDX_MAGIC1] = magic1;
+    output[IDX_MAGIC2] = magic2;
   }
 
   /**
    * Close connection.
    */
   public void close() throws IOException {
-    os = null;
-    is = null;
     try {
       if (socket != null) {
         socket.close();

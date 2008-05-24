@@ -5,8 +5,13 @@ import de.markusheiden.c64dt.charset.C64Charset;
 import de.markusheiden.c64dt.net.drive.stream.AbstractStream;
 import de.markusheiden.c64dt.net.drive.stream.NullStream;
 import de.markusheiden.c64dt.net.drive.stream.IStream;
+import de.markusheiden.c64dt.net.drive.stream.FileStream;
+import de.markusheiden.c64dt.net.drive.path.IPath;
+import de.markusheiden.c64dt.net.drive.path.Path;
 
 import java.io.IOException;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 /**
  * Simulated device.
@@ -16,11 +21,15 @@ public class Device {
 
   private IStream[] streams;
   private byte[] error;
+  private IPath path;
 
   /**
    * Constructor.
    */
-  public Device() {
+  public Device(File root) throws FileNotFoundException {
+    Assert.notNull(root, "Precondition: root != null");
+    Assert.isTrue(root.isDirectory(), "Precondition: root.isDirectory()");
+
     streams = new IStream[16];
     for (int i = 0; i < streams.length; i++) {
       streams[i] = new NullStream();
@@ -29,6 +38,8 @@ public class Device {
     streams[COMMAND_CHANNEL] = new CommandStream();
 
     error = Error.OK.toBytes(0, 0);
+
+    path = new Path(null, root);
   }
 
   public boolean isOpen(byte channel) {
@@ -45,8 +56,12 @@ public class Device {
       close(channel);
     }
 
-    // TODO create specific stream
-    // TODO evaluate error from stream
+    try {
+      streams[channel] = path.getFile(file);
+    } catch (FileNotFoundException e) {
+      error = Error.NOTFOUND.toBytes(0, 0);
+      throw new DeviceException(Error.NOTFOUND);
+    }
   }
 
   public void incrementPosition(byte channel, int increment) throws DeviceException {
@@ -82,7 +97,7 @@ public class Device {
   }
 
   protected final void assertValidChannel(byte channel) {
-    Assert.isTrue(channel >= 0 && channel >= 15, "Precondition: channel >= 0 && channel >= 15");
+    Assert.isTrue(channel >= 0 && channel <= 15, "Precondition: channel >= 0 && channel <= 15");
   }
 
   protected final void assertOpen(byte channel) throws DeviceException {
