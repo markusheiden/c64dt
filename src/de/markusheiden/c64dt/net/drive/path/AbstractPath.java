@@ -3,6 +3,7 @@ package de.markusheiden.c64dt.net.drive.path;
 import de.markusheiden.c64dt.charset.C64Charset;
 import de.markusheiden.c64dt.disk.IDirectory;
 import de.markusheiden.c64dt.net.drive.stream.IStream;
+import de.markusheiden.c64dt.net.drive.stream.DirectoryStream;
 import org.springframework.util.Assert;
 
 import java.util.Arrays;
@@ -38,9 +39,7 @@ public abstract class AbstractPath implements IPath {
     Assert.notNull(filename, "Precondition: filename != null");
 
     if (Arrays.equals(filename, directoryName)) {
-      IDirectory directory = doDirectory();
-      // TODO implement
-      return null;
+      return new DirectoryStream(doDirectory());
     } else {
       return doFile(filename);
     }

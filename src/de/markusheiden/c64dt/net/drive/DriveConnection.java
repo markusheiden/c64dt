@@ -103,12 +103,12 @@ public class DriveConnection extends AbstractConnection {
   /**
    * Get first byte of payload data.
    */
-  public byte getData0() throws IOException {
+  public int getData0() throws IOException {
     if (getSize() != 1) {
       throw new IOException("Invalid packet size");
     }
 
-    return input[0];
+    return ByteUtil.toByte(input[IDX_DATA]);
   }
 
   /**

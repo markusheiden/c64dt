@@ -92,7 +92,7 @@ public class NetDrive {
           while (isRunning) {
             try {
               connection.receivePacket();
-              logger.info("Received packet from " + connection.getDestination());
+              logger.debug("Received packet from " + connection.getDestination());
               if (connection.isResendRequest()) {
                 connection.resendPacket();
                 logger.info("Resend last reply");
@@ -101,7 +101,7 @@ public class NetDrive {
                   case DriveConnection.SERVICE_OPEN: {
                     logger.info("OPEN " + connection.getLogicalFile() + "," + connection.getDevice() + "," + connection.getChannel());
                     try {
-                      device.open(connection.getChannel(), connection.getData());
+                      device.open(connection.getChannel(), strip0(connection.getData()));
                       connection.sendReply(Error.OK);
                     } catch (DeviceException e) {
                       connection.sendReply(e.getError());
@@ -167,8 +167,18 @@ public class NetDrive {
         }
       }
 
-
       logger.info("Net drive server has been shut down");
     }
+  }
+
+  private byte[] strip0(byte[] data) {
+    if (data[data.length - 1] != 0x00) {
+      return data;
+    }
+
+    byte[] result = new byte[data.length - 1];
+    System.arraycopy(data, 0, result, 0, result.length);
+
+    return result;
   }
 }

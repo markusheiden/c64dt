@@ -58,6 +58,7 @@ public class Device {
 
     try {
       streams[channel] = path.getFile(file);
+      streams[channel].open(file);
     } catch (FileNotFoundException e) {
       error = Error.NOTFOUND.toBytes(0, 0);
       throw new DeviceException(Error.NOTFOUND);
@@ -70,7 +71,7 @@ public class Device {
     streams[channel].incrementPosition(increment);
   }
 
-  public byte[] read(byte channel, byte length) throws DeviceException {
+  public byte[] read(byte channel, int length) throws DeviceException {
     assertOpen(channel);
 
     try {

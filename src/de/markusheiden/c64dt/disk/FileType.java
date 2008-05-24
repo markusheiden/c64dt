@@ -28,7 +28,7 @@ public enum FileType {
   /**
    * User defined sequential file.
    */
-  USR(0x03, "PRG"),
+  USR(0x03, "USR"),
 
   /**
    * Relative file.

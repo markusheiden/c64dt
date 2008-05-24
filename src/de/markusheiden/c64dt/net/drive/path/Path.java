@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 /**
  * Represent a directory.
@@ -41,9 +42,13 @@ public class Path extends AbstractPath {
       FileMode mode = new FileMode(file.isDirectory()? FileType.DIR : FileType.fileType(extension));
       byte[] filename = encode(trimTo16(file.getName()));
       int size = file.isDirectory ()? 0 : (int) (file.length() + 253 / 254);
-      entries.add(new de.markusheiden.c64dt.disk.File(mode, 0, 0, filename, size));
+      entries.add(new de.markusheiden.c64dt.disk.File(mode, 1, 0, filename, size));
     }
-    return new Directory(encode(trimTo16(directory.getName())), encode(""), entries, 0);
+    byte[] trimmedName = new byte[16];
+    Arrays.fill(trimmedName, (byte) 0x20); // TODO don't use constant
+    byte[] dirName = encode(trimTo16(directory.getName()));
+    System.arraycopy(dirName, 0, trimmedName, 0, dirName.length);
+    return new Directory(trimmedName, encode(">NET<"), entries, 0);
   }
 
   /**
