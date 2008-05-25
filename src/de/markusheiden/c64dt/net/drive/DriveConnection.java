@@ -74,23 +74,23 @@ public class DriveConnection extends AbstractConnection {
   /**
    * Logical file number.
    */
-  public byte getLogicalFile() {
-    return input[IDX_LOGICAL_FILE];
+  public int getLogicalFile() {
+    return ByteUtil.toByte(input[IDX_LOGICAL_FILE]);
   }
 
   /**
    * Channel number.
    * 0-15
    */
-  public byte getChannel() {
-    return input[IDX_CHANNEL];
+  public int getChannel() {
+    return ByteUtil.toByte(input[IDX_CHANNEL] & 0x0F);
   }
 
   /**
    * Device number.
    */
-  public byte getDevice() {
-    return input[IDX_DEVICE];
+  public int getDevice() {
+    return ByteUtil.toByte(input[IDX_DEVICE]);
   }
 
   /**

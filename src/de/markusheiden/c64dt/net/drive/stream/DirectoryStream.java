@@ -2,6 +2,7 @@ package de.markusheiden.c64dt.net.drive.stream;
 
 import de.markusheiden.c64dt.disk.IDirectory;
 import de.markusheiden.c64dt.disk.IFile;
+import static de.markusheiden.c64dt.net.drive.DeviceEncoding.*;
 import de.markusheiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 
@@ -12,9 +13,9 @@ import java.io.IOException;
  * Creates stream from a directory.
  */
 public class DirectoryStream extends AbstractStream {
-  private static final byte DOUBLE_QUOTE = encode("\"")[0];
-  private static final byte SPACE = encode(" ")[0];
-  private static final byte LOWER = encode("<")[0];
+  private static final byte DOUBLE_QUOTE = encode('"');
+  private static final byte SPACE = encode(' ');
+  private static final byte LOWER = encode('<');
   private static final byte[] BLOCKS_FREE = encode("BLOCKS FREE");
 
   private ByteArrayOutputStream baos;
@@ -53,12 +54,11 @@ public class DirectoryStream extends AbstractStream {
   }
 
   private void writeFile(IFile file) {
-   writeWord(0x0101);
+    writeWord(0x0101);
     writeWord(file.getSize());
     for (int i = 0; i < 4 - Integer.toString(file.getSize()).length(); i++) {
       writeByte(SPACE);
     }
-    // TODO pad with spaces
     writeByte(DOUBLE_QUOTE);
     writeBytes(file.getName());
     writeByte(DOUBLE_QUOTE);
@@ -66,14 +66,15 @@ public class DirectoryStream extends AbstractStream {
       writeByte(SPACE);
     }
     writeByte(SPACE);
-    writeBytes(encode(file.getMode().getType().toString()));
+    writeBytes(encode(file.getMode().getType().getExtension()));
     writeByte(file.getMode().isLocked()? LOWER : SPACE);
+    writeByte(SPACE);
     writeByte(0x00);
   }
 
   private void writeFooter(IDirectory directory) {
     writeWord(0x0101);
-    writeBytes(encode(Integer.toString(directory.getFreeBlocks())));
+    writeWord(directory.getFreeBlocks());
     writeBytes(BLOCKS_FREE);
     writeByte(0x00);
   }

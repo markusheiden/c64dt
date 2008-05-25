@@ -42,13 +42,13 @@ public class Device {
     path = new Path(null, root);
   }
 
-  public boolean isOpen(byte channel) {
+  public boolean isOpen(int channel) {
     assertValidChannel(channel);
 
     return streams[channel].isOpen();
   }
 
-  public void open(byte channel, byte[] file) throws DeviceException {
+  public void open(int channel, byte[] file) throws DeviceException {
     assertValidChannel(channel);
     Assert.notNull(file, "Precondition: file != null");
 
@@ -65,13 +65,13 @@ public class Device {
     }
   }
 
-  public void incrementPosition(byte channel, int increment) throws DeviceException {
+  public void incrementPosition(int channel, int increment) throws DeviceException {
     assertOpen(channel);
 
     streams[channel].incrementPosition(increment);
   }
 
-  public byte[] read(byte channel, int length) throws DeviceException {
+  public byte[] read(int channel, int length) throws DeviceException {
     assertOpen(channel);
 
     try {
@@ -81,7 +81,7 @@ public class Device {
     }
   }
 
-  public void write(byte channel, byte[] data) throws DeviceException {
+  public void write(int channel, byte[] data) throws DeviceException {
     assertOpen(channel);
 
     try {
@@ -91,17 +91,17 @@ public class Device {
     }
   }
 
-  public void close(byte channel) throws DeviceException {
+  public void close(int channel) throws DeviceException {
     assertValidChannel(channel);
 
     streams[channel].close();
   }
 
-  protected final void assertValidChannel(byte channel) {
+  protected final void assertValidChannel(int channel) {
     Assert.isTrue(channel >= 0 && channel <= 15, "Precondition: channel >= 0 && channel <= 15");
   }
 
-  protected final void assertOpen(byte channel) throws DeviceException {
+  protected final void assertOpen(int channel) throws DeviceException {
     if (!isOpen(channel)) {
       throw new DeviceException(Error.FILENOTOPEN);
     }

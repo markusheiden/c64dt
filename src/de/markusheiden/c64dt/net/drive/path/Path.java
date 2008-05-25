@@ -5,6 +5,8 @@ import de.markusheiden.c64dt.disk.FileMode;
 import de.markusheiden.c64dt.disk.FileType;
 import de.markusheiden.c64dt.disk.IDirectory;
 import de.markusheiden.c64dt.disk.IFile;
+import static de.markusheiden.c64dt.net.drive.DeviceEncoding.decode;
+import static de.markusheiden.c64dt.net.drive.DeviceEncoding.encode;
 import de.markusheiden.c64dt.net.drive.stream.FileStream;
 import de.markusheiden.c64dt.net.drive.stream.IStream;
 import org.springframework.util.Assert;
@@ -12,13 +14,15 @@ import org.springframework.util.Assert;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 
 /**
- * Represent a directory.
+ * Path to a directory.
  */
 public class Path extends AbstractPath {
+  private static final byte SPACE = encode(' ');
+
   private File directory;
 
   public Path(IPath parent, File directory) throws FileNotFoundException {
@@ -45,7 +49,7 @@ public class Path extends AbstractPath {
       entries.add(new de.markusheiden.c64dt.disk.File(mode, 1, 0, filename, size));
     }
     byte[] trimmedName = new byte[16];
-    Arrays.fill(trimmedName, (byte) 0x20); // TODO don't use constant
+    Arrays.fill(trimmedName, (byte) SPACE);
     byte[] dirName = encode(trimTo16(directory.getName()));
     System.arraycopy(dirName, 0, trimmedName, 0, dirName.length);
     return new Directory(trimmedName, encode(">NET<"), entries, 0);
@@ -64,15 +68,9 @@ public class Path extends AbstractPath {
     return filename.substring(0, 16);
   }
 
-  protected IStream doFile(byte[] filename) throws FileNotFoundException {
-    String decodedFilename = decode(filename);
-    // TODO implement wildcard search
-    File file = new File(directory, decodedFilename);
-    return new FileStream(file);
-  }
-
   protected IPath doChangePath(byte[] path) throws FileNotFoundException {
     String decodedPath = decode(path);
+    // TODO implement wildcard search
     File newPath = new File(directory, decodedPath);
 
     if (!newPath.exists()) {
@@ -85,5 +83,12 @@ public class Path extends AbstractPath {
     } else {
       return new Path(this, newPath);
     }
+  }
+
+  protected IStream doFile(byte[] filename) throws FileNotFoundException {
+    String decodedFilename = decode(filename);
+    // TODO implement wildcard search
+    File file = new File(directory, decodedFilename);
+    return new FileStream(file);
   }
 }

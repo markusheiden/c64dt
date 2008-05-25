@@ -1,22 +1,22 @@
 package de.markusheiden.c64dt.net.drive.path;
 
-import de.markusheiden.c64dt.charset.C64Charset;
 import de.markusheiden.c64dt.disk.IDirectory;
-import de.markusheiden.c64dt.net.drive.stream.IStream;
+import static de.markusheiden.c64dt.net.drive.DeviceEncoding.encode;
 import de.markusheiden.c64dt.net.drive.stream.DirectoryStream;
+import de.markusheiden.c64dt.net.drive.stream.IStream;
 import org.springframework.util.Assert;
 
-import java.util.Arrays;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 
 /**
  * Directory path.
  */
 public abstract class AbstractPath implements IPath {
-  private static final byte separator = C64Charset.LOWER.toBytes("/")[0];
-  private static final byte[] parentDirPath = C64Charset.LOWER.toBytes("..");
-  private static final byte[] currenttDirPath = C64Charset.LOWER.toBytes(".");
-  private static final byte[] directoryName = C64Charset.LOWER.toBytes("$");
+  private static final byte SEPARATOR = encode('/');
+  private static final byte[] PARENT_DIR_PATH = encode("..");
+  private static final byte[] CURRENTT_DIR_PATH = encode(".");
+  private static final byte[] DIRECTORY_NAME = encode("$");
 
   private IPath parent;
 
@@ -38,7 +38,7 @@ public abstract class AbstractPath implements IPath {
   public IStream getFile(byte[] filename) throws FileNotFoundException {
     Assert.notNull(filename, "Precondition: filename != null");
 
-    if (Arrays.equals(filename, directoryName)) {
+    if (Arrays.equals(filename, DIRECTORY_NAME)) {
       return new DirectoryStream(doDirectory());
     } else {
       return doFile(filename);
@@ -71,9 +71,9 @@ public abstract class AbstractPath implements IPath {
       byte[] tail = new byte[path.length - separatorPos - 1];
       System.arraycopy(path, separatorPos + 1, tail, 0, tail.length);
 
-      if (Arrays.equals(head, currenttDirPath)) {
+      if (Arrays.equals(head, CURRENTT_DIR_PATH)) {
         result = changePath(tail);
-      } else if (Arrays.equals(head, parentDirPath)) {
+      } else if (Arrays.equals(head, PARENT_DIR_PATH)) {
         result = getParent().changePath(tail);
       } else {
         result = doChangePath(head).changePath(tail);
@@ -103,29 +103,11 @@ public abstract class AbstractPath implements IPath {
    */
   protected int indexOfSeparator(byte[] path) {
     for (int i = 0; i < path.length; i++) {
-      if (path[i] == separator) {
+      if (path[i] == SEPARATOR) {
         return i;
       }
     }
 
     return -1;
-  }
-
-  /**
-   * Encodes a string to c64 encoding.
-   *
-   * @param decoded string
-   */
-  protected byte[] encode(String decoded) {
-    return C64Charset.LOWER.toBytes(decoded);
-  }
-
-  /**
-   * Decodes a c64 encoded string.
-   *
-   * @param encoded c64 encoded string
-   */
-  protected String decode(byte[] encoded) {
-    return C64Charset.LOWER.toString(encoded);
   }
 }

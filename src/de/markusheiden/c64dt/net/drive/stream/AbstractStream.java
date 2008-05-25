@@ -87,22 +87,4 @@ public abstract class AbstractStream implements IStream {
   public final int getPosition() {
     return position;
   }
-
-  /**
-   * Encodes a string to c64 encoding.
-   *
-   * @param decoded string
-   */
-  protected static byte[] encode(String decoded) {
-    return C64Charset.LOWER.toBytes(decoded);
-  }
-
-  /**
-   * Decodes a c64 encoded string.
-   *
-   * @param encoded c64 encoded string
-   */
-  protected static String decode(byte[] encoded) {
-    return C64Charset.LOWER.toString(encoded);
-  }
 }
