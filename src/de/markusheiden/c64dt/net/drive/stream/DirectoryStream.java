@@ -54,9 +54,11 @@ public class DirectoryStream extends AbstractStream {
   }
 
   private void writeFile(IFile file) {
+    int size = Math.min(file.getSize(), 9999);
+
     writeWord(0x0101);
-    writeWord(file.getSize());
-    for (int i = 0; i < 4 - Integer.toString(file.getSize()).length(); i++) {
+    writeWord(size);
+    for (int i = 0; i < 4 - Integer.toString(size).length(); i++) {
       writeByte(SPACE);
     }
     writeByte(DOUBLE_QUOTE);

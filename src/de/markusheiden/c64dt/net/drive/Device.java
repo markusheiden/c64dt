@@ -52,17 +52,21 @@ public class Device {
     assertValidChannel(channel);
     Assert.notNull(file, "Precondition: file != null");
 
-    if (streams[channel].isOpen()) {
-      close(channel);
+    // create new channel from path
+    if (channel != COMMAND_CHANNEL) {
+      if (streams[channel].isOpen()) {
+        close(channel);
+      }
+
+      try {
+        streams[channel] = path.getFile(file);
+      } catch (FileNotFoundException e) {
+        error = Error.NOTFOUND.toBytes(0, 0);
+        throw new DeviceException(Error.NOTFOUND);
+      }
     }
 
-    try {
-      streams[channel] = path.getFile(file);
-      streams[channel].open(file);
-    } catch (FileNotFoundException e) {
-      error = Error.NOTFOUND.toBytes(0, 0);
-      throw new DeviceException(Error.NOTFOUND);
-    }
+    streams[channel].open(file);
   }
 
   public void incrementPosition(int channel, int increment) throws DeviceException {
