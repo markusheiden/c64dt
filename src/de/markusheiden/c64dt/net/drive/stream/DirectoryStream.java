@@ -15,7 +15,7 @@ public class DirectoryStream extends AbstractStream {
   private static final byte DOUBLE_QUOTE = encode("\"")[0];
   private static final byte SPACE = encode(" ")[0];
   private static final byte LOWER = encode("<")[0];
-  private static final byte[] BLOCKS_FREE = encode(" BLOCKS FREE");
+  private static final byte[] BLOCKS_FREE = encode("BLOCKS FREE");
 
   private ByteArrayOutputStream baos;
   private byte[] content;
@@ -53,11 +53,12 @@ public class DirectoryStream extends AbstractStream {
   }
 
   private void writeFile(IFile file) {
-    String size = (Integer.toString(file.getSize()) + "    ").substring(0, 4);
-    String type = file.getMode().getType().toString();
-
-    writeWord(0x0101);
-    writeBytes(encode(size));
+   writeWord(0x0101);
+    writeWord(file.getSize());
+    for (int i = 0; i < 4 - Integer.toString(file.getSize()).length(); i++) {
+      writeByte(SPACE);
+    }
+    // TODO pad with spaces
     writeByte(DOUBLE_QUOTE);
     writeBytes(file.getName());
     writeByte(DOUBLE_QUOTE);
@@ -65,17 +66,14 @@ public class DirectoryStream extends AbstractStream {
       writeByte(SPACE);
     }
     writeByte(SPACE);
-    writeBytes(encode(type));
+    writeBytes(encode(file.getMode().getType().toString()));
     writeByte(file.getMode().isLocked()? LOWER : SPACE);
     writeByte(0x00);
   }
 
   private void writeFooter(IDirectory directory) {
-    // TODO implement
-    String free = (Integer.toString(directory.getFreeBlocks()) + "    ").substring(0, 4);
-
     writeWord(0x0101);
-    writeBytes(encode(free));
+    writeBytes(encode(Integer.toString(directory.getFreeBlocks())));
     writeBytes(BLOCKS_FREE);
     writeByte(0x00);
   }
