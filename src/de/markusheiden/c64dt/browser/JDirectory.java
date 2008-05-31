@@ -97,7 +97,7 @@ public class JDirectory extends JList {
   }
 
   protected void writeInt(int size, byte[] text, int pos) {
-    Assert.isTrue(size >= 0, "Precondition: size >= 0");
+    Assert.isTrue(size >= 0, "Precondition: getSize >= 0");
     Assert.notNull(text, "Precondition: text != null");
 
     if (size == 0) {

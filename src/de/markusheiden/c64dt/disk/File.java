@@ -29,7 +29,7 @@ public class File implements IFile {
     Assert.isTrue(sector >= 0, "Precondition: sector >= 0");
     Assert.notNull(name, "Precondition: name != null");
     Assert.isTrue(name.length <= 16, "Precondition: name.length <= 16");
-    Assert.isTrue(size >= 0, "Precondition: size >= 0");
+    Assert.isTrue(size >= 0, "Precondition: getSize >= 0");
 
     this.mode = mode;
     this.track = track;

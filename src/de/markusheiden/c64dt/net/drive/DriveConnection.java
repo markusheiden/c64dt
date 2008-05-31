@@ -5,9 +5,6 @@ import de.markusheiden.c64dt.net.AbstractConnection;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.DatagramSocket;
-import java.net.SocketAddress;
 import java.net.InetSocketAddress;
 import java.net.InetAddress;
 
@@ -105,7 +102,7 @@ public class DriveConnection extends AbstractConnection {
    */
   public int getData0() throws IOException {
     if (getSize() != 1) {
-      throw new IOException("Invalid packet size");
+      throw new IOException("Invalid packet getSize");
     }
 
     return ByteUtil.toByte(input[IDX_DATA]);
@@ -117,7 +114,7 @@ public class DriveConnection extends AbstractConnection {
   public byte[] getData() throws IOException {
     int size = getSize();
     if (size >= MAX_PACKET) {
-      throw new IOException("Invalid packet size");
+      throw new IOException("Invalid packet getSize");
     }
 
     byte[] result = new byte[size];
@@ -153,7 +150,7 @@ public class DriveConnection extends AbstractConnection {
 
     byte size = (byte) data.length;
     if (IDX_DATA + size >= MAX_PACKET) {
-      throw new IOException("Invalid packet size");
+      throw new IOException("Invalid packet getSize");
     }
 
     sequence = input[IDX_SEQUENCE];
