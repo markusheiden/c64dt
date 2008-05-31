@@ -18,13 +18,13 @@ are the authors initials, "BL".
       00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F        ASCII
       -----------------------------------------------   ----------------
 0000: FF 42 4C FF 50 4F 4F 59 41 4E 00 02 00 82 04 60   úBLúPOOYANú.ú‚.`
-0010: 80 50 01 16 41 59 0C 14 F0 81 0C 47 49 31 11 40   €P..AY..ğ.GI1.@
-0020: 9E 4F 2C 90 49 C2 E2 61 3C 82 44 22 94 84 42 C1   O,IÂâa<‚D"”„BÁ
-0030: C0 B0 62 00 21 82 02 90 62 0C 61 63 19 43 D4 4D   À°bú!‚.b.ac.CÔM
+0010: 80 50 01 16 41 59 0C 14 F0 81 0C 47 49 31 11 40   €P..AY..ğ?.GI1.@
+0020: 9E 4F 2C 90 49 C2 E2 61 3C 82 44 22 94 84 42 C1   O,?IÂâa<‚D"”„BÁ
+0030: C0 B0 62 00 21 82 02 90 62 0C 61 63 19 43 D4 4D   À°bú!‚.?b.ac.CÔM
 0040: 20 92 49 D1 F3 13 41 01 E0 02 78 68 37 1C 0D 40   ú’IÑó.A.à.xh7..@
 0050: 14 E1 40 00 DD 0B FF 42 4C FF 50 4F 4F 59 41 4E   .á@úİ.úBLúPOOYAN
 0060: 2E 4D 41 49 4E 00 02 7E 0C 0A B0 31 31 00 08 00   .MAINú.~..°11ú.ú
-0070: 00 09 40 00 05 2A 00 02 A5 54 3C 81 10 88 00 08   úú@ú.*ú.¥T<.ˆú.
+0070: 00 09 40 00 05 2A 00 02 A5 54 3C 81 10 88 00 08   úú@ú.*ú.¥T<?.ˆú.
 
   Byte: $00-03: FF 42 4C FF          - Compressed file signature "úBLú"
          04-xx: 50 4F 4F 59 41 4E 00 - File name "POOYAN", terminated  with
@@ -101,13 +101,13 @@ void main(void)
   char data, type, tmp, rep_length, read_bitsize;
   unsigned buff_pointer, dict_offset;
 
-  /* Output stream buffer */
+  /* Output buffer buffer */
   char buffer[(unsigned)32768];
 
   /* Compressed file to decode */
   readfile=fopen("compress.wra","rb");
 
-  /* Uncompressed output stream */
+  /* Uncompressed output buffer */
   writefile=fopen("uncompressed","wb");
 
   /* Initial bitsize of the dictionary lookup */
@@ -118,7 +118,7 @@ void main(void)
 
   while(1)
   {
-    /* Get compressed yes/no flag (single bit) from the input stream */
+    /* Get compressed yes/no flag (single bit) from the input buffer */
     type=get_bits(1);
 
     /* Normal unencoded data, preceeded by a zero bit */
@@ -204,7 +204,7 @@ void main(void)
     }
   }
 
-  /* Get the two-byte CRC which follows the compressed data stream */
+  /* Get the two-byte CRC which follows the compressed data buffer */
   get_crc();
 
   /* Make sure the CRC you read matches the one you calculated */

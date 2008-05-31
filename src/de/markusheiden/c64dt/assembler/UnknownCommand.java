@@ -34,6 +34,6 @@ public class UnknownCommand extends AbstractCommand {
   }
 
   public boolean isEnd() {
-    return false;
+    return true;
   }
 }

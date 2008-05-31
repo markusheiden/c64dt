@@ -57,7 +57,7 @@ public class Reassembler {
     Assert.notNull(code, "Precondition: code != null");
     Assert.notNull(output, "Precondition: output != null");
 
-    CodeStream stream = new CodeStream(startAddress, code);
+    CodeBuffer buffer = new CodeBuffer(startAddress, code);
 
     if (startAddress == 0x0801) {
       // TODO check for basic header
@@ -66,27 +66,25 @@ public class Reassembler {
     // Convert every byte to its opcode
     Set<Integer> labels = new HashSet<Integer>();
 
-    ICommand[] commands = scan(stream, labels);
-    analyze(stream, labels, commands);
-    writeOutput(stream, labels, commands, output);
+    scan(buffer, labels);
+    analyze(buffer, labels);
+    writeOutput(buffer, labels, output);
 
     output.flush();
   }
 
-  private ICommand[] scan(CodeStream stream, Set<Integer> labels) {
-    ICommand[] commands = new ICommand[stream.getSize()];
-    while(stream.has(1)) {
-      int pc = stream.getAddress();
-      Opcode opcode = Opcode.opcode(stream.read());
+  private void scan(CodeBuffer buffer, Set<Integer> labels) {
+    while(buffer.has(1)) {
+      Opcode opcode = buffer.readOpcode();
       OpcodeMode mode = opcode.getMode();
       int size = mode.getSize();
 
       ICommand command;
-      if (opcode.isLegal() && stream.has(size)) {
+      if (opcode.isLegal() && buffer.has(size)) {
         if (size > 0) {
-          int address = mode == OpcodeMode.REL? stream.readRelative() : stream.readAbsolute(size);
+          int address = mode == OpcodeMode.REL? buffer.readRelative() : buffer.readAbsolute(size);
           command = new OpcodeCommand(opcode, address);
-          if (mode.isAddress() && stream.hasAddress(address)) {
+          if (mode.isAddress() && buffer.hasAddress(address)) {
             labels.add(address);
           }
         } else {
@@ -95,51 +93,48 @@ public class Reassembler {
       } else {
         command = new UnknownCommand(opcode.getOpcode());
       }
-      commands[pc - stream.getStartAddress()] = command;
+      buffer.setCommand(command);
     }
-
-    return commands;
   }
 
-  private void analyze(CodeStream stream, Set<Integer> labels, ICommand[] commands) {
-    ICommand lastCommand = new UnknownCommand();
-    for (int i = 0, pc = stream.getStartAddress(); i < stream.getSize(); i++, pc++) {
-      ICommand command = commands[i];
+  private void analyze(CodeBuffer buffer, Set<Integer> labels) {
+    buffer.restart();
+
+    ICommand command = new UnknownCommand();
+    while (buffer.has(1)) {
+      boolean reachable = (command != null && !command.isEnd()) || labels.contains(buffer.getAddress());
+      command = buffer.readCommand();
       if (command != null) {
-        command.setReachable(!command.isEnd() || labels.contains(pc));
-        i += command.getSize() - 1;
-        pc += command.getSize() - 1;
+        command.setReachable(reachable);
       }
     }
   }
 
-  private void writeOutput(CodeStream stream, Set<Integer> labels, ICommand[] commands, Writer output) throws IOException {
-    for (int i = 0, pc = stream.getStartAddress(); i < commands.length; i++, pc++) {
-      ICommand command = commands[i];
+  private void writeOutput(CodeBuffer buffer, Set<Integer> labels, Writer output) throws IOException {
+    buffer.restart();
+
+    while (buffer.has(1)) {
+      int pc = buffer.getAddress();
+      ICommand command = buffer.readCommand();
       if (labels.contains(pc)) {
         output.append("L");
         output.append(format4(pc));
         output.append(":    ");
       } else if (command == null) {
-        output.append("???       ");
+        output.append("?         ");
       } else if (!command.isReachable()) {
-        output.append("unreach   ");
+        output.append("U         ");
       } else {
         output.append("          ");
-//        output.append(format4(startAddress + i));
-//        output.append("      ");
       }
 
-      command = commands[i];
       if (command instanceof OpcodeCommand) {
         Opcode opcode = ((OpcodeCommand) command).getOpcode();
         OpcodeMode mode = opcode.getMode();
-        int size = mode.getSize();
         int address = ((OpcodeCommand) command).getArgument();
 
         output.append(opcode.getType().toString());
-        if (size > 0) {
-          i += size;
+        if (mode.getSize() > 0) {
           output.append(" ");
           output.append(labels.contains(address)? mode.toString("L" + format4(address)) :  mode.toString(address));
         }

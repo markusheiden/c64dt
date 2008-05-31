@@ -56,25 +56,25 @@ public class Disassembler {
     Assert.notNull(code, "Precondition: code != null");
     Assert.notNull(output, "Precondition: output != null");
 
-    CodeStream stream = new CodeStream(startAddress, code);
+    CodeBuffer buffer = new CodeBuffer(startAddress, code);
 
     if (startAddress == 0x0801) {
       // TODO check for basic header
     }
 
-    while(stream.has(1)) {
-      output.append(format4(stream.getAddress()));
+    while(buffer.has(1)) {
+      output.append(format4(buffer.getAddress()));
 
-      Opcode opcode = Opcode.opcode(stream.read());
+      Opcode opcode = buffer.readOpcode();
       OpcodeMode mode = opcode.getMode();
       int size = mode.getSize();
 
       output.append(" ");
       output.append(format2(opcode.getOpcode()));
 
-      if (opcode.isLegal() && stream.has(size)) {
+      if (opcode.isLegal() && buffer.has(size)) {
         if (size > 0) {
-          int address = mode == OpcodeMode.REL? stream.readRelative() : stream.readAbsolute(size);
+          int address = mode == OpcodeMode.REL? buffer.readRelative() : buffer.readAbsolute(size);
 
           output.append(size >= 1? " " + format2(lo(address)) : "   ");
           output.append(size >= 2? " " + format2(hi(address)) : "   ");
