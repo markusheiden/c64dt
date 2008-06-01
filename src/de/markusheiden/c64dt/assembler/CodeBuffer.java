@@ -195,7 +195,7 @@ public class CodeBuffer {
   /**
    * Remove a reference from the current address.
    *
-   * @return whether a code label has been removed due to reference removal
+   * @return whether a code label before the current position has been removed due to reference removal
    */
   public boolean removeReference() {
     Integer removedDataLabel = dataReferences.remove(address(mark));
@@ -206,7 +206,7 @@ public class CodeBuffer {
     Integer removedCodeLabel = codeReferences.remove(address(mark));
     if (removedCodeLabel != null && !codeReferences.containsValue(removedCodeLabel)) {
       codeLabels.remove(removedCodeLabel);
-      return true;
+      return removedCodeLabel <= address(mark);
     }
 
     return false;
