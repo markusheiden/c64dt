@@ -8,8 +8,6 @@ import org.springframework.util.FileCopyUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Reassembler.
@@ -63,17 +61,15 @@ public class Reassembler {
       // TODO check for basic header
     }
 
-    // Convert every byte to its opcode
-    Set<Integer> labels = new HashSet<Integer>();
-
-    scan(buffer, labels);
-    analyze(buffer, labels);
-    writeOutput(buffer, labels, output);
+    tokenize(buffer);
+    reachability(buffer);
+    combine(buffer);
+    write(buffer, output);
 
     output.flush();
   }
 
-  private void scan(CodeBuffer buffer, Set<Integer> labels) {
+  private void tokenize(CodeBuffer buffer) {
     while(buffer.has(1)) {
       Opcode opcode = buffer.readOpcode();
       OpcodeMode mode = opcode.getMode();
@@ -85,64 +81,104 @@ public class Reassembler {
           int address = mode == OpcodeMode.REL? buffer.readRelative() : buffer.readAbsolute(size);
           command = new OpcodeCommand(opcode, address);
           if (mode.isAddress() && buffer.hasAddress(address)) {
-            labels.add(address);
+            buffer.addReference(opcode.getType().isJump(), address);
           }
         } else {
           command = new OpcodeCommand(opcode);
         }
       } else {
-        command = new UnknownCommand(opcode.getOpcode());
+        command = new DataCommand(opcode.getOpcode());
       }
       buffer.setCommand(command);
     }
   }
 
-  private void analyze(CodeBuffer buffer, Set<Integer> labels) {
+  private void reachability(CodeBuffer buffer) {
+    // transitive unreachability
+    do {
+      buffer.restart();
+
+      ICommand lastCommand = null;
+      while (!buffer.isEnd()) {
+        ICommand command = buffer.readCommand();
+        if (command != null) {
+          if ((lastCommand == null || lastCommand.isEnd() || !lastCommand.isReachable()) && !buffer.hasCodeLabel()) {
+            command.setReachable(false);
+            if (buffer.removeReference()) {
+              // restart, because reference could caused a false label in the already scanned code
+//              buffer.cleanupLabels();
+              break;
+            }
+          }
+
+          lastCommand = command;
+        } else {
+          // TODO log error?
+          lastCommand = null;
+        }
+      }
+    } while (!buffer.isEnd());
+  }
+
+  private void combine(CodeBuffer buffer) {
     buffer.restart();
 
-    ICommand command = new UnknownCommand();
+    ICommand lastCommand = null;
     while (buffer.has(1)) {
-      boolean reachable = (command != null && !command.isEnd()) || labels.contains(buffer.getAddress());
-      command = buffer.readCommand();
+      ICommand command = buffer.readCommand();
       if (command != null) {
-        command.setReachable(reachable);
+        if (lastCommand != null && lastCommand.combineWith(command)) {
+          buffer.removeCommand();
+        } else {
+          lastCommand = command;
+        }
+      } else {
+        // TODO log error?
+        lastCommand = null;
       }
     }
   }
 
-  private void writeOutput(CodeBuffer buffer, Set<Integer> labels, Writer output) throws IOException {
+  private void write(CodeBuffer buffer, Writer output) throws IOException {
     buffer.restart();
 
     while (buffer.has(1)) {
-      int pc = buffer.getAddress();
+      String label = buffer.getLabel();
+
+      output.append(format4(buffer.getAddress()));
+      output.append(" ");
+
       ICommand command = buffer.readCommand();
-      if (labels.contains(pc)) {
-        output.append("L");
-        output.append(format4(pc));
-        output.append(":    ");
-      } else if (command == null) {
-        output.append("?         ");
+
+      // debug prefixes...
+      int prefixes = 0;
+      if (command == null) {
+        output.append("?");
+        prefixes++;
       } else if (!command.isReachable()) {
-        output.append("U         ");
+        output.append("U");
+        prefixes++;
+      }
+
+      // fill remaining prefix space
+      for (; prefixes < 4; prefixes++) {
+        output.append(" ");
+      }
+
+      if (label != null) {
+        output.append(label);
+        output.append(":    ");
       } else {
         output.append("          ");
       }
 
-      if (command instanceof OpcodeCommand) {
-        Opcode opcode = ((OpcodeCommand) command).getOpcode();
-        OpcodeMode mode = opcode.getMode();
-        int address = ((OpcodeCommand) command).getArgument();
-
-        output.append(opcode.getType().toString());
-        if (mode.getSize() > 0) {
-          output.append(" ");
-          output.append(labels.contains(address)? mode.toString("L" + format4(address)) :  mode.toString(address));
-        }
-      } else if (command instanceof DataCommand) {
-        output.append("DAT");
+      if (command != null) {
+        command.toString(buffer, output);
       } else {
+        // TODO log error?
         output.append("???");
       }
+
       output.append("\n");
     }
 

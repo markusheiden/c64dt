@@ -1,15 +1,25 @@
 package de.markusheiden.c64dt.assembler;
 
-import org.springframework.util.Assert;
 import de.markusheiden.c64dt.util.ByteUtil;
+import static de.markusheiden.c64dt.util.HexUtil.format4;
+import org.springframework.util.Assert;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.HashMap;
 
 /**
  * Input stream for code.
  */
 public class CodeBuffer {
   private int position;
-  private int opcodePosition;
+  private int mark;
   private final byte[] code;
+  private final Set<Integer> codeLabels;
+  private final Set<Integer> dataLabels;
+  private final Map<Integer, Integer> codeReferences;
+  private final Map<Integer, Integer> dataReferences;
   private final ICommand[] commands;
   private final int startAddress;
   private final int endAddress;
@@ -25,10 +35,14 @@ public class CodeBuffer {
     Assert.notNull(code, "Precondition: code != null");
 
     this.position = 0;
-    this.opcodePosition = -1;
+    this.mark = -1;
     this.startAddress = startAddress;
     this.endAddress = startAddress + code.length;
     this.code = code;
+    this.codeLabels = new HashSet<Integer>();
+    this.dataLabels = new HashSet<Integer>();
+    this.codeReferences = new HashMap<Integer, Integer>();
+    this.dataReferences = new HashMap<Integer, Integer>();
     this.commands = new ICommand[code.length];
   }
 
@@ -38,14 +52,14 @@ public class CodeBuffer {
    */
   public void restart() {
     position = 0;
-    opcodePosition = -1;
+    mark = -1;
   }
 
   /**
    * The current address.
    */
   public final int getAddress() {
-    return startAddress + position;
+    return address(position);
   }
 
   /**
@@ -77,6 +91,13 @@ public class CodeBuffer {
   }
 
   /**
+   * Is the current address at the end of the code?.
+   */
+  public final boolean isEnd() {
+    return position >= code.length;
+  }
+
+  /**
    * Are there 'number' bytes?
    *
    * @param number number of bytes
@@ -96,7 +117,7 @@ public class CodeBuffer {
    */
   public final Opcode readOpcode() {
     // remember position of last read opcode
-    opcodePosition = position;
+    mark = position;
     return Opcode.opcode(readByte());
   }
 
@@ -120,19 +141,105 @@ public class CodeBuffer {
   }
 
   //
-  // command specific interface
+  // label/reference specific interface
   //
 
   /**
-   * Read a command and advance.
-   * Advances the size of the command, when existing, or 1 otherwise.
-   * @return the command at the current address or null, when no command has been associated with the current address
+   * Is a code label at the current opcode / command?
    */
-  public final ICommand readCommand() {
-    ICommand result = commands[position];
-    position += result == null? 1 : result.getSize();
-    return result;
+  public boolean hasCodeLabel() {
+    return hasCodeLabel(address(mark));
   }
+
+  /**
+   * Is a code label at the given address?
+   *
+   * @param address address
+   */
+  public boolean hasCodeLabel(int address) {
+    Assert.isTrue(address >= 0 && address <= 0xFFFF, "Precondition: address >= 0 && address <= 0xFFFF");
+
+    return codeLabels.contains(address);
+  }
+
+  /**
+   * Is a code label at the given address?
+   *
+   * @param address address
+   */
+  public boolean hasDataLabel(int address) {
+    Assert.isTrue(address >= 0 && address <= 0xFFFF, "Precondition: address >= 0 && address <= 0xFFFF");
+
+    return dataLabels.contains(address);
+  }
+
+  /**
+   * Add a reference from the current address to a given address.
+   * This will add a label.
+   *
+   * @param code is this a reference to code?
+   * @param address address
+   */
+  public void addReference(boolean code, int address) {
+    Assert.isTrue(address >= 0 && address <= 0xFFFF, "Precondition: address >= 0 && address <= 0xFFFF");
+
+    if (code) {
+      codeLabels.add(address);
+      codeReferences.put(address(mark), address);
+    } else {
+      dataLabels.add(address);
+      dataReferences.put(address(mark), address);
+    }
+  }
+
+  /**
+   * Remove a reference from the current address.
+   *
+   * @return whether a code label has been removed due to reference removal
+   */
+  public boolean removeReference() {
+    Integer removedDataLabel = dataReferences.remove(address(mark));
+    if (removedDataLabel != null && !dataReferences.containsValue(removedDataLabel)) {
+      dataLabels.remove(removedDataLabel);
+    }
+
+    Integer removedCodeLabel = codeReferences.remove(address(mark));
+    if (removedCodeLabel != null && !codeReferences.containsValue(removedCodeLabel)) {
+      codeLabels.remove(removedCodeLabel);
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Label representation for the current address.
+   *
+   * @return label representation or null if no label exists for the current address
+   */
+  public String getLabel() {
+    return getLabel(getAddress());
+  }
+
+  /**
+   * Label representation for an address.
+   *
+   * @param address address
+   * @return label representation or null if no label exists for this address
+   */
+  public String getLabel(int address) {
+    if (hasCodeLabel(address)) {
+      return "L" + format4(address);
+    } else if (hasDataLabel(address)) {
+      return "l" + format4(address);
+    } else {
+      return null;
+    }
+  }
+
+  //
+  // command specific interface
+  //
 
   /**
    * Associate a command with the last read opcode / byte.
@@ -142,12 +249,42 @@ public class CodeBuffer {
   public void setCommand(ICommand command) {
     Assert.notNull(command, "Precondition: command != null");
 
-    commands[opcodePosition] = command;
+    commands[mark] = command;
+  }
+
+  /**
+   * Read a command and advance.
+   * Advances the size of the command, when existing, or 1 otherwise.
+   * @return the command at the current address or null, when no command has been associated with the current address
+   */
+  public final ICommand readCommand() {
+    mark = position;
+    ICommand result = commands[position];
+    position += result == null? 1 : result.getSize();
+
+    return result;
+  }
+
+  /**
+   * Remove the current command.
+   * Advances to the next command position.
+   */
+  public final void removeCommand() {
+    position = mark + commands[mark].getSize();
+    commands[mark] = null;
+    mark = -1;
   }
 
   //
-  // protected interface
+  // protected helper
   //
+
+  /**
+   * The address to an index.
+   */
+  protected final int address(int index) {
+    return startAddress + index;
+  }
 
   /**
    * Read a byte from the code at the current position and advance.

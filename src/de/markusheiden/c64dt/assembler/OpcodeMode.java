@@ -12,76 +12,93 @@ public enum OpcodeMode {
   DIR(0, false) {
     public String toString(String argument) {
       return "";
-    }},
+    }
+  },
 
   // #$00
   IMM(1, false) {
     public String toString(String argument) {
       return "#" + argument;
-    }},
+    }
+  },
 
   // $00
-  ZP(1, false) {
+  ZP(1, true) {
     public String toString(String argument) {
       return argument;
-    }},
+    }
+  },
 
   // $00,X
-  ZPX(1, false) {
+  ZPX(1, true) {
     public String toString(String argument) {
       return argument + ",X";
-    }},
+    }
+  },
 
   // $00,Y
-  ZPY(1, false) {
+  ZPY(1, true) {
     public String toString(String argument) {
       return argument + ",Y";
-    }},
+    }
+  },
 
   // ($00,X)
-  IZX(1, false) {
+  IZX(1, true) {
     public String toString(String argument) {
       return "(" + argument + ",X)";
-    }},
+    }
+  },
 
   // ($00),Y
-  IZY(1, false) {
+  IZY(1, true) {
     public String toString(String argument) {
       return "(" + argument + "),Y";
-    }},
+    }
+  },
 
   // $0000
   ABS(2, true) {
     public String toString(String argument) {
       return argument;
-    }},
+    }
+  },
 
   // $0000,X
   ABX(2, true) {
     public String toString(String argument) {
       return argument + ",X";
-    }},
+    }
+  },
 
   // $0000,Y
   ABY(2, true) {
     public String toString(String argument) {
       return argument + ",Y";
-    }},
+    }
+  },
 
   // ($0000)
   IND(2, true) {
     public String toString(String argument) {
       return "(" + argument + ")";
-    }},
+    }
+  },
 
   // $0000, PC-relative
   REL(1, true) {
     public String toString(String argument) {
       return argument;
-    }};
+    }
 
-  private int size;
-  private boolean isAddress;
+    public String toString(int argument) {
+      // display target address as word
+      return toString("$" + format4(argument));
+    }
+  };
+
+  private final int size;
+  private final boolean isAddress;
 
   /**
    * Number of bytes this address mode uses.
@@ -92,7 +109,7 @@ public enum OpcodeMode {
   }
 
   /**
-   * Does this address mode use a (non zero page) address?.
+   * Does this address mode use a address?.
    */
   public boolean isAddress() {
     return isAddress;
