@@ -10,7 +10,7 @@ public abstract class AbstractCommand implements ICommand {
     return reachable;
   }
 
-  public void setReachable(boolean reachable) {
+  public final void setReachable(boolean reachable) {
     this.reachable = reachable;
   }
 }

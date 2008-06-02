@@ -17,6 +17,8 @@ public class DataCommand extends AbstractCommand {
   public DataCommand(int data) {
     this.data = new ArrayList(8);
     this.data.add(data);
+
+    setReachable(false);
   }
 
   public int getSize() {

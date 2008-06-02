@@ -1,6 +1,7 @@
 package de.markusheiden.c64dt.assembler;
 
 import de.markusheiden.c64dt.util.ByteUtil;
+import static de.markusheiden.c64dt.util.AddressUtil.assertValidAddress;
 import static de.markusheiden.c64dt.util.HexUtil.format4;
 import org.springframework.util.Assert;
 
@@ -157,8 +158,6 @@ public class CodeBuffer {
    * @param address address
    */
   public boolean hasCodeLabel(int address) {
-    Assert.isTrue(address >= 0 && address <= 0xFFFF, "Precondition: address >= 0 && address <= 0xFFFF");
-
     return codeLabels.contains(address);
   }
 
@@ -168,8 +167,6 @@ public class CodeBuffer {
    * @param address address
    */
   public boolean hasDataLabel(int address) {
-    Assert.isTrue(address >= 0 && address <= 0xFFFF, "Precondition: address >= 0 && address <= 0xFFFF");
-
     return dataLabels.contains(address);
   }
 
@@ -181,7 +178,7 @@ public class CodeBuffer {
    * @param address address
    */
   public void addReference(boolean code, int address) {
-    Assert.isTrue(address >= 0 && address <= 0xFFFF, "Precondition: address >= 0 && address <= 0xFFFF");
+    assertValidAddress(address);
 
     if (code) {
       codeLabels.add(address);
@@ -283,6 +280,8 @@ public class CodeBuffer {
    * The address to an index.
    */
   protected final int address(int index) {
+    Assert.isTrue(index >= 0 && index < code.length, "Precondition: index >= 0 && index < code.length");
+
     return startAddress + index;
   }
 

@@ -102,11 +102,10 @@ public class Reassembler {
       while (!buffer.isEnd()) {
         ICommand command = buffer.readCommand();
         if (command != null) {
-          if ((lastCommand == null || lastCommand.isEnd() || !lastCommand.isReachable()) && !buffer.hasCodeLabel()) {
+          if (command.isReachable() && commandIsNotReachable(buffer, lastCommand, command)) {
             command.setReachable(false);
             if (buffer.removeReference()) {
-              // restart, because reference could caused a false label in the already scanned code
-//              buffer.cleanupLabels();
+              // restart, because reference caused a wrong label in the already scanned code
               break;
             }
           }
@@ -118,6 +117,20 @@ public class Reassembler {
         }
       }
     } while (!buffer.isEnd());
+  }
+
+  private boolean commandIsNotReachable(CodeBuffer buffer, ICommand last, ICommand current) {
+    if (!current.isReachable()) {
+      // this command is already marked as not reachable
+      return true;
+    } else if (last == null || last.isEnd() || !last.isReachable()) {
+      // if there is no chance, that this command can be reached from the previous command,
+      // then check, if there is a code label, which may make this command reachable
+      return !buffer.hasCodeLabel();
+    } else {
+      // this command can be reached
+      return false;
+    }
   }
 
   private void combine(CodeBuffer buffer) {

@@ -1,17 +1,14 @@
 package de.markusheiden.c64dt.net.code;
 
+import de.markusheiden.c64dt.net.AbstractConnection;
+import static de.markusheiden.c64dt.util.AddressUtil.assertValidAddress;
 import static de.markusheiden.c64dt.util.ByteUtil.hi;
 import static de.markusheiden.c64dt.util.ByteUtil.lo;
-import de.markusheiden.c64dt.net.AbstractConnection;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.net.InetAddress;
-import java.net.Socket;
-import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 
 /**
  * IP connection to a c64.
@@ -53,6 +50,7 @@ public class C64Connection extends AbstractConnection {
    * @param data data
    */
   protected synchronized boolean sendData(int address, byte[] data) throws IOException {
+    assertValidAddress(address);
     Assert.notNull(data, "Precondition: data != null");
     Assert.isTrue(4 + data.length <= getPacketSize(), "Precondition: 4 + data.length <= getPacketSize()");
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
@@ -76,6 +74,7 @@ public class C64Connection extends AbstractConnection {
    * @param fill fill byte
    */
   protected synchronized boolean sendFill(int address, int length, byte fill) throws IOException {
+    assertValidAddress(address);
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
     sendPacket(5, hi(address), lo(address), hi(length), lo(length), fill, (byte) 0x00);
@@ -88,6 +87,7 @@ public class C64Connection extends AbstractConnection {
    * @param address address
    */
   protected synchronized boolean sendJump(int address) throws IOException {
+    assertValidAddress(address);
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
     sendPacket(6, hi(address), lo(address));
