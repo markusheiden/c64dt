@@ -1,11 +1,16 @@
 package de.markusheiden.c64dt.util;
 
-import org.springframework.util.Assert;
-
 /**
  * Helper class for handling hexadecimal values.
  */
 public class HexUtil {
+  private static final String[] ZEROS_2 = {
+    "00" , "0"
+  };
+
+  private static final String[] ZEROS_4 = {
+    "0000", "000", "00" , "0"
+  };
 
   /**
    * Format max. 2 digit number hexadecimal.
@@ -14,13 +19,15 @@ public class HexUtil {
    * @return
    */
   public static String format2(int number) {
-    String result = "00" + Integer.toHexString(number).toUpperCase();
-    if (result.length() > 2) {
-      result = result.substring(result.length() - 2);
+    String result = Integer.toHexString(number).toUpperCase();
+    final int length = result.length();
+    if (length == 2) {
+      return result;
+    } else if (result.length() < 2) {
+      return ZEROS_2[length] + result;
+    } else {
+      return result.substring(length - 2);
     }
-
-    Assert.notNull(result, "Postcondition: result != null");
-    return result;
   }
 
   /**
@@ -30,12 +37,14 @@ public class HexUtil {
    * @return
    */
   public static String format4(int number) {
-    String result = "0000" + Integer.toHexString(number).toUpperCase();
-    if (result.length() > 4) {
-      result = result.substring(result.length() - 4);
+    String result = Integer.toHexString(number).toUpperCase();
+    final int length = result.length();
+    if (length == 4) {
+      return result;
+    } else if (result.length() < 4) {
+      return ZEROS_4[length] + result;
+    } else {
+      return result.substring(length - 4);
     }
-
-    Assert.notNull(result, "Postcondition: result != null");
-    return result;
   }
 }

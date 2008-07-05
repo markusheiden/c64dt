@@ -1,14 +1,9 @@
 package de.markusheiden.c64dt.assembler;
 
 import de.markusheiden.c64dt.util.ByteUtil;
-import static de.markusheiden.c64dt.util.AddressUtil.assertValidAddress;
-import static de.markusheiden.c64dt.util.HexUtil.format4;
 import org.springframework.util.Assert;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.HashMap;
+import java.util.Arrays;
 
 /**
  * Input stream for code.
@@ -17,11 +12,7 @@ public class CodeBuffer {
   private int position;
   private int mark;
   private final byte[] code;
-  private final Set<Integer> codeLabels;
-  private final Set<Integer> dataLabels;
-  private final Map<Integer, Integer> codeReferences;
-  private final Map<Integer, Integer> dataReferences;
-  private final ICommand[] commands;
+  private final CodeType[] types;
   private final int startAddress;
   private final int endAddress;
 
@@ -40,11 +31,8 @@ public class CodeBuffer {
     this.startAddress = startAddress;
     this.endAddress = startAddress + code.length;
     this.code = code;
-    this.codeLabels = new HashSet<Integer>();
-    this.dataLabels = new HashSet<Integer>();
-    this.codeReferences = new HashMap<Integer, Integer>();
-    this.dataReferences = new HashMap<Integer, Integer>();
-    this.commands = new ICommand[code.length];
+    this.types = new CodeType[code.length];
+    Arrays.fill(this.types, CodeType.UNKNOWN);
   }
 
   /**
@@ -57,14 +45,23 @@ public class CodeBuffer {
   }
 
   /**
+   * The address of the current command.
+   */
+  public final int getCommandAddress() {
+    return startAddress + mark;
+  }
+
+  /**
    * The current address.
    */
-  public final int getAddress() {
-    return address(position);
+  public final int getCurrentAddress() {
+    return startAddress + position;
   }
 
   /**
    * Is the given address in the code?.
+   *
+   * @param address address
    */
   public final boolean hasAddress(int address) {
     return startAddress <= address && address <= endAddress;
@@ -84,22 +81,12 @@ public class CodeBuffer {
     return endAddress;
   }
 
-  /**
-   * Size of code.
-   */
-  public int getSize() {
-    return endAddress - startAddress;
-  }
+  //
+  // code specific interface
+  //
 
   /**
-   * Is the current address at the end of the code?.
-   */
-  public final boolean isEnd() {
-    return position >= code.length;
-  }
-
-  /**
-   * Are there 'number' bytes?
+   * Are there 'number' bytes left to read?
    *
    * @param number number of bytes
    */
@@ -109,9 +96,12 @@ public class CodeBuffer {
     return position + number < code.length;
   }
 
-  //
-  // code specific interface
-  //
+  /**
+   * Read a byte from the code at the current position and advance.
+   */
+  public final int readByte() {
+    return ByteUtil.toByte(code[position++]);
+  }
 
   /**
    * Read an opcode.
@@ -127,7 +117,7 @@ public class CodeBuffer {
    */
   public final int readRelative() {
     // read signed(!) offset
-    return ((byte) readByte()) + getAddress();
+    return ((byte) readByte()) + getCurrentAddress();
   }
 
   /**
@@ -142,153 +132,27 @@ public class CodeBuffer {
   }
 
   //
-  // label/reference specific interface
+  // code type specific stuff ("model")
   //
 
   /**
-   * Is a code label at the current opcode / command?
+   * Get code type at current position.
    */
-  public boolean hasCodeLabel() {
-    return hasCodeLabel(address(mark));
+  public CodeType getType() {
+    // TODO checks / contracts
+    return types[position];
   }
 
   /**
-   * Is a code label at the given address?
+   * Set code type for a given address.
    *
    * @param address address
+   * @param type code type
    */
-  public boolean hasCodeLabel(int address) {
-    return codeLabels.contains(address);
-  }
+  public void setType(int address, CodeType type) {
+    Assert.isTrue(hasAddress(address), "Precondition: hasAddress(address)");
+    Assert.notNull(type, "Precondition: type != null");
 
-  /**
-   * Is a code label at the given address?
-   *
-   * @param address address
-   */
-  public boolean hasDataLabel(int address) {
-    return dataLabels.contains(address);
-  }
-
-  /**
-   * Add a reference from the current address to a given address.
-   * This will add a label.
-   *
-   * @param code is this a reference to code?
-   * @param address address
-   */
-  public void addReference(boolean code, int address) {
-    assertValidAddress(address);
-
-    if (code) {
-      codeLabels.add(address);
-      codeReferences.put(address(mark), address);
-    } else {
-      dataLabels.add(address);
-      dataReferences.put(address(mark), address);
-    }
-  }
-
-  /**
-   * Remove a reference from the current address.
-   *
-   * @return whether a code label before the current position has been removed due to reference removal
-   */
-  public boolean removeReference() {
-    Integer removedDataLabel = dataReferences.remove(address(mark));
-    if (removedDataLabel != null && !dataReferences.containsValue(removedDataLabel)) {
-      dataLabels.remove(removedDataLabel);
-    }
-
-    Integer removedCodeLabel = codeReferences.remove(address(mark));
-    if (removedCodeLabel != null && !codeReferences.containsValue(removedCodeLabel)) {
-      codeLabels.remove(removedCodeLabel);
-      return removedCodeLabel <= address(mark);
-    }
-
-    return false;
-  }
-
-  /**
-   * Label representation for the current address.
-   *
-   * @return label representation or null if no label exists for the current address
-   */
-  public String getLabel() {
-    return getLabel(getAddress());
-  }
-
-  /**
-   * Label representation for an address.
-   *
-   * @param address address
-   * @return label representation or null if no label exists for this address
-   */
-  public String getLabel(int address) {
-    if (hasCodeLabel(address)) {
-      return "L" + format4(address);
-    } else if (hasDataLabel(address)) {
-      return "l" + format4(address);
-    } else {
-      return null;
-    }
-  }
-
-  //
-  // command specific interface
-  //
-
-  /**
-   * Associate a command with the last read opcode / byte.
-   *
-   * @param command command
-   */
-  public void setCommand(ICommand command) {
-    Assert.notNull(command, "Precondition: command != null");
-
-    commands[mark] = command;
-  }
-
-  /**
-   * Read a command and advance.
-   * Advances the size of the command, when existing, or 1 otherwise.
-   * @return the command at the current address or null, when no command has been associated with the current address
-   */
-  public final ICommand readCommand() {
-    mark = position;
-    ICommand result = commands[position];
-    position += result == null? 1 : result.getSize();
-
-    return result;
-  }
-
-  /**
-   * Remove the current command.
-   * Advances to the next command position.
-   */
-  public final void removeCommand() {
-    position = mark + commands[mark].getSize();
-    commands[mark] = null;
-    mark = -1;
-  }
-
-  //
-  // protected helper
-  //
-
-  /**
-   * The address to an index.
-   */
-  protected final int address(int index) {
-    Assert.isTrue(index >= 0 && index < code.length, "Precondition: index >= 0 && index < code.length");
-
-    return startAddress + index;
-  }
-
-  /**
-   * Read a byte from the code at the current position and advance.
-   */
-  protected int readByte() {
-    return ByteUtil.toByte(code[position++]);
+    this.types[address - startAddress] = type;
   }
 }

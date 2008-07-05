@@ -307,6 +307,15 @@ public enum Opcode {
     return mode;
   }
 
+  /**
+   * Is the argument of the opcode a reference to a code location?.
+   *
+   * TODO rework detect all kinds of references, not just single location code references
+   */
+  public boolean isCodeReference() {
+    return type.isJump() && (mode == OpcodeMode.REL || mode == OpcodeMode.ABS);
+  }
+
   public int getCycles() {
     return cycles;
   }

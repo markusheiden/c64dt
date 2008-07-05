@@ -20,11 +20,11 @@ public class Disassembler {
    * @param input program with start address
    * @param output output for reassembled code
    */
-  public void reassemble(InputStream input, Writer output) throws IOException {
+  public void disassemble(InputStream input, Writer output) throws IOException {
     Assert.notNull(input, "Precondition: input != null");
     Assert.notNull(output, "Precondition: output != null");
 
-    reassemble(FileCopyUtils.copyToByteArray(input), output);
+    disassemble(FileCopyUtils.copyToByteArray(input), output);
   }
 
   /**
@@ -33,7 +33,7 @@ public class Disassembler {
    * @param program program with start address
    * @param output output for reassembled code
    */
-  public void reassemble(byte[] program, Writer output) throws IOException {
+  public void disassemble(byte[] program, Writer output) throws IOException {
     Assert.notNull(program, "Precondition: program != null");
     Assert.isTrue(program.length >= 2, "Precondition: program.length >= 2");
     Assert.notNull(output, "Precondition: output != null");
@@ -41,7 +41,7 @@ public class Disassembler {
     int address = toWord(program, 0);
     byte[] code = new byte[program.length - 2];
     System.arraycopy(program, 2, code, 0, code.length);
-    reassemble(address, code, output);
+    disassemble(address, code, output);
   }
 
   /**
@@ -51,7 +51,7 @@ public class Disassembler {
    * @param code code
    * @param output output for reassembled code
    */
-  public void  reassemble(int startAddress, byte[] code, Writer output) throws IOException {
+  public void disassemble(int startAddress, byte[] code, Writer output) throws IOException {
     Assert.isTrue(startAddress >= 0, "Precondition: startAddress >= 0");
     Assert.notNull(code, "Precondition: code != null");
     Assert.notNull(output, "Precondition: output != null");
@@ -63,12 +63,11 @@ public class Disassembler {
     }
 
     while(buffer.has(1)) {
-      output.append(format4(buffer.getAddress()));
-
       Opcode opcode = buffer.readOpcode();
       OpcodeMode mode = opcode.getMode();
       int size = mode.getSize();
 
+      output.append(format4(buffer.getCommandAddress()));
       output.append(" ");
       output.append(format2(opcode.getOpcode()));
 

@@ -110,7 +110,7 @@ public class C64Connection extends AbstractConnection {
    * @param service Service
    * @param data data of the packet
    */
-  protected synchronized void sendPacket(int service, byte... data) throws IOException {
+  protected synchronized void sendPacket(int service, int... data) throws IOException {
     sequence++;
     writeMagic();
     output[IDX_SEQUENCE] = sequence;

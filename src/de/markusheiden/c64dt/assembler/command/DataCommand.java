@@ -1,12 +1,13 @@
-package de.markusheiden.c64dt.assembler;
+package de.markusheiden.c64dt.assembler.command;
 
 import static de.markusheiden.c64dt.util.HexUtil.format2;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Command for data.
@@ -15,17 +16,19 @@ public class DataCommand extends AbstractCommand {
   private List<Integer> data;
 
   public DataCommand(int data) {
-    this.data = new ArrayList(8);
+    super(false);
+
+    this.data = new ArrayList<Integer>(8);
     this.data.add(data);
 
     setReachable(false);
   }
 
-  public int getSize() {
+  public final int getSize() {
     return data.size();
   }
 
-  public boolean isEnd() {
+  public final boolean isEnd() {
     return true;
   }
 
@@ -38,7 +41,7 @@ public class DataCommand extends AbstractCommand {
     return true;
   }
 
-  public void toString(CodeBuffer buffer, Writer output) throws IOException {
+  public void toString(CommandBuffer buffer, Writer output) throws IOException {
     Assert.notNull(buffer, "Precondition: buffer != null");
     Assert.notNull(output, "Precondition: output != null");
 
@@ -48,5 +51,9 @@ public class DataCommand extends AbstractCommand {
       output.append(", $");
       output.append(format2(data.get(i)));
     }
+  }
+
+  public List<Integer> toBytes() {
+    return Collections.unmodifiableList(data);
   }
 }
