@@ -25,7 +25,7 @@ of offsets to the track data and speed zones. It is what's contained in the
 track data areas and speed zones which is  really  at  the  heart  of  this
 format.
 
-  Each track data area is simply the raw buffer of GCR data, just what  the
+  Each track data area is simply the raw stream of GCR data, just what  the
 read head would see when a diskette is rotating past it. How the data  gets
 interpreted is up to the program trying to access  the  disk.  Because  the
 data is stored in such a low-level manner, just about anything can be done.
@@ -263,7 +263,7 @@ they are all referenced by the offsets at the beginning of the image.
 
 
 
-Analysing the GCR data buffer
+Analysing the GCR data stream
 -----------------------------
 
   Since the information stored in the track data area is in GCR format,  it
