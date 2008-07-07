@@ -101,13 +101,13 @@ void main(void)
   char data, type, tmp, rep_length, read_bitsize;
   unsigned buff_pointer, dict_offset;
 
-  /* Output buffer buffer */
+  /* Output stream buffer */
   char buffer[(unsigned)32768];
 
   /* Compressed file to decode */
   readfile=fopen("compress.wra","rb");
 
-  /* Uncompressed output buffer */
+  /* Uncompressed output stream */
   writefile=fopen("uncompressed","wb");
 
   /* Initial bitsize of the dictionary lookup */
@@ -118,7 +118,7 @@ void main(void)
 
   while(1)
   {
-    /* Get compressed yes/no flag (single bit) from the input buffer */
+    /* Get compressed yes/no flag (single bit) from the input stream */
     type=get_bits(1);
 
     /* Normal unencoded data, preceeded by a zero bit */
@@ -204,7 +204,7 @@ void main(void)
     }
   }
 
-  /* Get the two-byte CRC which follows the compressed data buffer */
+  /* Get the two-byte CRC which follows the compressed data stream */
   get_crc();
 
   /* Make sure the CRC you read matches the one you calculated */
