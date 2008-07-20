@@ -7,14 +7,12 @@ import org.springframework.util.Assert;
  */
 public class SerialTask implements HierarchicalTask {
   private String name;
-  private Task parentTask;
   private Task firstTask;
   private Task lastTask;
 
   public SerialTask(HierarchicalTask parentTask, String name) {
     this(name);
-
-    this.parentTask = parentTask;
+    Assert.notNull(parentTask);
 
     parentTask.addSubtask(this);
   }

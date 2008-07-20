@@ -7,17 +7,19 @@ import org.springframework.util.Assert;
  */
 public class LeafTask implements Task {
   private String name;
-  private Task parentTask;
   private Task nextTask;
 
   public LeafTask(HierarchicalTask parentTask, String name) {
+    this(name);
     Assert.notNull(parentTask);
-    Assert.notNull(name);
-
-    this.parentTask = parentTask;
-    this.name = name;
 
     parentTask.addSubtask(this);
+  }
+
+  public LeafTask(String name) {
+    Assert.notNull(name);
+
+    this.name = name;
   }
 
   public void setNextTask(Task nextTask) {
