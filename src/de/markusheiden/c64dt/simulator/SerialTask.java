@@ -5,24 +5,35 @@ import org.springframework.util.Assert;
 /**
  * Implementation of a task.
  */
-public class SerialTask implements Task {
+public class SerialTask implements HierarchicalTask {
   private String name;
+  private Task parentTask;
   private Task firstTask;
   private Task lastTask;
 
+  public SerialTask(HierarchicalTask parentTask, String name) {
+    this(name);
+
+    this.parentTask = parentTask;
+
+    parentTask.addSubtask(this);
+  }
+
   public SerialTask(String name) {
+    Assert.notNull(name);
+
     this.name = name;
   }
 
-  public void setSubtasks(Task... subtasks) {
-    Assert.notNull(subtasks);
+  public void addSubtask(Task subtask) {
+    Assert.notNull(subtask);
 
-    int i = 0;
-    firstTask = subtasks[i];
-    for (; i < subtasks.length - 1; i++) {
-      subtasks[i].setNextTask(subtasks[i + 1]);
+    if (firstTask == null) {
+      firstTask = subtask;
+    } else {
+      lastTask.setNextTask(subtask);
     }
-    lastTask = subtasks[i];
+    lastTask = subtask;
   }
 
   public void setNextTask(Task nextTask) {
@@ -42,16 +53,17 @@ public class SerialTask implements Task {
   }
 
   public static void main(String[] args) {
-    SerialTask main = new SerialTask("main");
-    SerialTask sub1 = new SerialTask("sub1");
-    Task sub11 = new LeafTask("sub11");
-    Task sub12 = new LeafTask("sub12");
-    sub1.setSubtasks(sub11, sub12);
-    SerialTask sub2 = new SerialTask("sub2");
-    Task sub21 = new LeafTask("sub21");
-    sub2.setSubtasks(sub21);
-    Task end = new LeafTask("end");
-    main.setSubtasks(sub1, sub2, end);
+    HierarchicalTask main = new SerialTask("main");
+    HierarchicalTask sub1 = new SerialTask(main, "sub1");
+    HierarchicalTask sub11 = new SerialTask(sub1, "sub11");
+    Task sub111 = new LeafTask(sub11, "sub111");
+    Task sub112 = new LeafTask(sub11, "sub112");
+    Task sub12 = new LeafTask(sub1, "sub12");
+    HierarchicalTask sub2 = new SerialTask(main, "sub2");
+    HierarchicalTask sub21 = new SerialTask(sub2, "sub21");
+    Task sub211 = new LeafTask(sub21, "sub211");
+    Task sub212 = new LeafTask(sub21, "sub212");
+    HierarchicalTask sub22 = new SerialTask(sub2, "sub22");
 
     Task current = main;
     while (current != null) {
