@@ -30,6 +30,10 @@ public class C64Charset extends Charset {
     this.upper = upper;
   }
 
+  public static C64Charset charset(boolean upper) {
+    return upper? UPPER : LOWER;
+  }
+
   public boolean contains(Charset cs) {
     return cs instanceof C64Charset &&
       !upper || ((C64Charset) cs).upper;
