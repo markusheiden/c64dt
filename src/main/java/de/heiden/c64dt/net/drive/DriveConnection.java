@@ -1,12 +1,12 @@
-package main.java.de.heiden.c64dt.net.drive;
+package de.heiden.c64dt.net.drive;
 
-import main.java.de.heiden.c64dt.util.ByteUtil;
-import main.java.de.heiden.c64dt.net.AbstractConnection;
+import de.heiden.c64dt.net.AbstractConnection;
+import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 
 /**
  * Connection of net drive server.

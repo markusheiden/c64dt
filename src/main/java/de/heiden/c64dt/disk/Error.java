@@ -1,4 +1,4 @@
-package main.java.de.heiden.c64dt.disk;
+package de.heiden.c64dt.disk;
 
 import org.apache.log4j.Logger;
 import org.springframework.util.Assert;

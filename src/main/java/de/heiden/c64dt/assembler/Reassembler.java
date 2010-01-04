@@ -1,12 +1,9 @@
-package main.java.de.heiden.c64dt.assembler;
+package de.heiden.c64dt.assembler;
 
-import main.java.de.heiden.c64dt.assembler.command.CommandBuffer;
-import main.java.de.heiden.c64dt.assembler.command.DataCommand;
-import main.java.de.heiden.c64dt.assembler.command.ICommand;
-import main.java.de.heiden.c64dt.assembler.command.OpcodeCommand;
-import static main.java.de.heiden.c64dt.util.ByteUtil.toWord;
-import static main.java.de.heiden.c64dt.util.HexUtil.format2;
-import static main.java.de.heiden.c64dt.util.HexUtil.format4;
+import de.heiden.c64dt.assembler.command.CommandBuffer;
+import de.heiden.c64dt.assembler.command.DataCommand;
+import de.heiden.c64dt.assembler.command.ICommand;
+import de.heiden.c64dt.assembler.command.OpcodeCommand;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
@@ -15,6 +12,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
 import java.util.List;
+
+import static de.heiden.c64dt.util.ByteUtil.toWord;
+import static de.heiden.c64dt.util.HexUtil.format2;
+import static de.heiden.c64dt.util.HexUtil.format4;
 
 /**
  * Reassembler.

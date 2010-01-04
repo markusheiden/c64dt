@@ -1,8 +1,8 @@
-package main.java.de.heiden.c64dt.disk.d64;
+package de.heiden.c64dt.disk.d64;
 
-import main.java.de.heiden.c64dt.disk.AbstractDiskImageReader;
-import main.java.de.heiden.c64dt.disk.IDiskImage;
-import main.java.de.heiden.c64dt.disk.WrongDiskImageFormatException;
+import de.heiden.c64dt.disk.AbstractDiskImageReader;
+import de.heiden.c64dt.disk.IDiskImage;
+import de.heiden.c64dt.disk.WrongDiskImageFormatException;
 import org.apache.log4j.Logger;
 import org.springframework.util.Assert;
 

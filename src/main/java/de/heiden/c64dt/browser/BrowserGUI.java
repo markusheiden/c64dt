@@ -1,10 +1,12 @@
-package main.java.de.heiden.c64dt.browser;
+package de.heiden.c64dt.browser;
 
-import main.java.de.heiden.c64dt.disk.IDiskImage;
+import de.heiden.c64dt.disk.IDiskImage;
 import org.springframework.util.Assert;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.Component;
 
 /**
  * GUI of the browser.

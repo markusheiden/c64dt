@@ -1,10 +1,10 @@
-package main.java.de.heiden.c64dt.disk;
+package de.heiden.c64dt.disk;
 
-import org.springframework.util.Assert;
 import org.apache.log4j.Logger;
+import org.springframework.util.Assert;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Value type for file type.

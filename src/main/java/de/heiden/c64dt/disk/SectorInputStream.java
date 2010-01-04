@@ -1,11 +1,12 @@
-package main.java.de.heiden.c64dt.disk;
+package de.heiden.c64dt.disk;
 
-import static main.java.de.heiden.c64dt.disk.SectorModelUtil.assertSector;
-import main.java.de.heiden.c64dt.util.ByteUtil;
+import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import static de.heiden.c64dt.disk.SectorModelUtil.assertSector;
 
 /**
  * Reads a file from a chain of sectors.

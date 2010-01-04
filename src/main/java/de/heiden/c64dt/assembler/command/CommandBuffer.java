@@ -1,15 +1,16 @@
-package main.java.de.heiden.c64dt.assembler.command;
+package de.heiden.c64dt.assembler.command;
 
-import main.java.de.heiden.c64dt.assembler.CodeLabel;
-import main.java.de.heiden.c64dt.assembler.DataLabel;
-import main.java.de.heiden.c64dt.assembler.ILabel;
-import static main.java.de.heiden.c64dt.util.AddressUtil.assertValidAddress;
+import de.heiden.c64dt.assembler.CodeLabel;
+import de.heiden.c64dt.assembler.DataLabel;
+import de.heiden.c64dt.assembler.ILabel;
 import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Map;
+
+import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
 
 /**
  * Input stream for code.

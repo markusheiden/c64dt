@@ -1,11 +1,12 @@
-package main.java.de.heiden.c64dt.browser;
+package de.heiden.c64dt.browser;
 
-import main.java.de.heiden.c64dt.util.ByteUtil;
+import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.io.IOException;
 import java.io.InputStream;
 

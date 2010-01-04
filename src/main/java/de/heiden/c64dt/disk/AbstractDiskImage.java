@@ -1,12 +1,13 @@
-package main.java.de.heiden.c64dt.disk;
+package de.heiden.c64dt.disk;
 
-import static main.java.de.heiden.c64dt.disk.SectorModelUtil.assertSector;
-import main.java.de.heiden.c64dt.util.ByteUtil;
-import main.java.de.heiden.c64dt.util.TextUtil;
+import de.heiden.c64dt.util.ByteUtil;
+import de.heiden.c64dt.util.TextUtil;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static de.heiden.c64dt.disk.SectorModelUtil.assertSector;
 
 /**
  * Abstract disk image implementation.

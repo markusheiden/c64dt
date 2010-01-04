@@ -1,14 +1,15 @@
-package main.java.de.heiden.c64dt.net.code;
+package de.heiden.c64dt.net.code;
 
-import main.java.de.heiden.c64dt.net.AbstractConnection;
-import static main.java.de.heiden.c64dt.util.AddressUtil.assertValidAddress;
-import static main.java.de.heiden.c64dt.util.ByteUtil.hi;
-import static main.java.de.heiden.c64dt.util.ByteUtil.lo;
+import de.heiden.c64dt.net.AbstractConnection;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+
+import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
+import static de.heiden.c64dt.util.ByteUtil.hi;
+import static de.heiden.c64dt.util.ByteUtil.lo;
 
 /**
  * IP connection to a c64.

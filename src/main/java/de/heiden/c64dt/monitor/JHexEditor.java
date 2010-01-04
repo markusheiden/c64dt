@@ -1,13 +1,13 @@
-package main.java.de.heiden.c64dt.monitor;
+package de.heiden.c64dt.monitor;
 
-import main.java.de.heiden.c64dt.browser.JC64TextField;
+import de.heiden.c64dt.browser.JC64TextField;
 
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.CellEditorListener;
-import javax.swing.event.TableModelListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
@@ -16,9 +16,9 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Hex editor.

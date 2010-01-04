@@ -1,4 +1,4 @@
-package main.java.de.heiden.c64dt.assembler.command;
+package de.heiden.c64dt.assembler.command;
 
 import org.springframework.util.Assert;
 

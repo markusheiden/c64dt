@@ -1,14 +1,12 @@
-package main.java.de.heiden.c64dt.net.drive.path;
+package de.heiden.c64dt.net.drive.path;
 
-import main.java.de.heiden.c64dt.disk.Directory;
-import main.java.de.heiden.c64dt.disk.FileMode;
-import main.java.de.heiden.c64dt.disk.FileType;
-import main.java.de.heiden.c64dt.disk.IDirectory;
-import main.java.de.heiden.c64dt.disk.IFile;
-import static main.java.de.heiden.c64dt.net.drive.DeviceEncoding.decode;
-import static main.java.de.heiden.c64dt.net.drive.DeviceEncoding.encode;
-import main.java.de.heiden.c64dt.net.drive.stream.FileStream;
-import main.java.de.heiden.c64dt.net.drive.stream.IStream;
+import de.heiden.c64dt.disk.Directory;
+import de.heiden.c64dt.disk.FileMode;
+import de.heiden.c64dt.disk.FileType;
+import de.heiden.c64dt.disk.IDirectory;
+import de.heiden.c64dt.disk.IFile;
+import de.heiden.c64dt.net.drive.stream.FileStream;
+import de.heiden.c64dt.net.drive.stream.IStream;
 import org.springframework.util.Assert;
 
 import java.io.File;
@@ -16,6 +14,9 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static de.heiden.c64dt.net.drive.DeviceEncoding.decode;
+import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
 
 /**
  * Path to a directory.
@@ -46,7 +47,7 @@ public class Path extends AbstractPath {
       FileMode mode = new FileMode(file.isDirectory()? FileType.DIR : FileType.fileType(extension));
       byte[] filename = encode(trimTo16(file.getName()));
       int size = file.isDirectory ()? 0 : (int) ((file.length() + 253) / 254);
-      entries.add(new main.java.de.heiden.c64dt.disk.File(mode, 1, 0, filename, size));
+      entries.add(new de.heiden.c64dt.disk.File(mode, 1, 0, filename, size));
     }
     byte[] trimmedName = new byte[16];
     Arrays.fill(trimmedName, (byte) SPACE);

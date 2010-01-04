@@ -1,13 +1,14 @@
-package main.java.de.heiden.c64dt.net.drive.path;
+package de.heiden.c64dt.net.drive.path;
 
-import main.java.de.heiden.c64dt.disk.IDirectory;
-import static main.java.de.heiden.c64dt.net.drive.DeviceEncoding.encode;
-import main.java.de.heiden.c64dt.net.drive.stream.DirectoryStream;
-import main.java.de.heiden.c64dt.net.drive.stream.IStream;
+import de.heiden.c64dt.disk.IDirectory;
+import de.heiden.c64dt.net.drive.stream.DirectoryStream;
+import de.heiden.c64dt.net.drive.stream.IStream;
 import org.springframework.util.Assert;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
+
+import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
 
 /**
  * Directory path.

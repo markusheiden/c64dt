@@ -1,4 +1,4 @@
-package main.java.de.heiden.c64dt.charset;
+package de.heiden.c64dt.charset;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;

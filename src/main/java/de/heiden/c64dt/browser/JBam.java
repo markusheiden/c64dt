@@ -1,11 +1,16 @@
-package main.java.de.heiden.c64dt.browser;
+package de.heiden.c64dt.browser;
 
-import main.java.de.heiden.c64dt.disk.IBAM;
-import main.java.de.heiden.c64dt.disk.IDiskImage;
+import de.heiden.c64dt.disk.IBAM;
+import de.heiden.c64dt.disk.IDiskImage;
 import org.springframework.util.Assert;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 
 /**

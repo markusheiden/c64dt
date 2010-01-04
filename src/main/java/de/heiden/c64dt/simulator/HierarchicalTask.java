@@ -1,4 +1,4 @@
-package main.java.de.heiden.c64dt.simulator;
+package de.heiden.c64dt.simulator;
 
 /**
  * Task with subtasks to execute in emulator.

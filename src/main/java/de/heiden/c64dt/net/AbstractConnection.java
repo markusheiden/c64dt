@@ -1,8 +1,8 @@
-package main.java.de.heiden.c64dt.net;
+package de.heiden.c64dt.net;
 
 import java.io.IOException;
-import java.net.DatagramSocket;
 import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.SocketAddress;
 
 /**

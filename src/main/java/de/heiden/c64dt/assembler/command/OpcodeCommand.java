@@ -1,8 +1,8 @@
-package main.java.de.heiden.c64dt.assembler.command;
+package de.heiden.c64dt.assembler.command;
 
-import main.java.de.heiden.c64dt.assembler.ILabel;
-import main.java.de.heiden.c64dt.assembler.Opcode;
-import main.java.de.heiden.c64dt.util.ByteUtil;
+import de.heiden.c64dt.assembler.ILabel;
+import de.heiden.c64dt.assembler.Opcode;
+import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 
 import java.io.IOException;

@@ -1,11 +1,23 @@
-package main.java.de.heiden.c64dt.assembler;
+package de.heiden.c64dt.assembler;
 
-import static main.java.de.heiden.c64dt.assembler.OpcodeMode.*;
-import static main.java.de.heiden.c64dt.assembler.OpcodeType.*;
 import org.springframework.util.Assert;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+
+import static de.heiden.c64dt.assembler.OpcodeMode.ABS;
+import static de.heiden.c64dt.assembler.OpcodeMode.ABX;
+import static de.heiden.c64dt.assembler.OpcodeMode.ABY;
+import static de.heiden.c64dt.assembler.OpcodeMode.DIR;
+import static de.heiden.c64dt.assembler.OpcodeMode.IMM;
+import static de.heiden.c64dt.assembler.OpcodeMode.IND;
+import static de.heiden.c64dt.assembler.OpcodeMode.IZX;
+import static de.heiden.c64dt.assembler.OpcodeMode.IZY;
+import static de.heiden.c64dt.assembler.OpcodeMode.REL;
+import static de.heiden.c64dt.assembler.OpcodeMode.ZP;
+import static de.heiden.c64dt.assembler.OpcodeMode.ZPX;
+import static de.heiden.c64dt.assembler.OpcodeMode.ZPY;
+import static de.heiden.c64dt.assembler.OpcodeType.*;
 
 /**
  * 6502 series opcodes.

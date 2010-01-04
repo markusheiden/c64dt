@@ -1,4 +1,4 @@
-package main.java.de.heiden.c64dt.util;
+package de.heiden.c64dt.util;
 
 /**
  * Helper class for handling hexadecimal values.

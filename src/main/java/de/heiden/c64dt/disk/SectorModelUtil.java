@@ -1,4 +1,4 @@
-package main.java.de.heiden.c64dt.disk;
+package de.heiden.c64dt.disk;
 
 /**
  * Util class for checking preconditions based on a sector model.

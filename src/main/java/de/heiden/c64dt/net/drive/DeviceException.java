@@ -1,4 +1,4 @@
-package main.java.de.heiden.c64dt.net.drive;
+package de.heiden.c64dt.net.drive;
 
 import org.springframework.util.Assert;
 

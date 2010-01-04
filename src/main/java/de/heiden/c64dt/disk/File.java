@@ -1,7 +1,7 @@
-package main.java.de.heiden.c64dt.disk;
+package de.heiden.c64dt.disk;
 
-import main.java.de.heiden.c64dt.charset.C64Charset;
-import main.java.de.heiden.c64dt.util.TextUtil;
+import de.heiden.c64dt.charset.C64Charset;
+import de.heiden.c64dt.util.TextUtil;
 import org.springframework.util.Assert;
 
 /**

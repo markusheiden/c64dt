@@ -1,10 +1,11 @@
-package main.java.de.heiden.c64dt.disk.d71;
+package de.heiden.c64dt.disk.d71;
 
-import main.java.de.heiden.c64dt.disk.AbstractDiskImage;
-import main.java.de.heiden.c64dt.disk.BAM;
-import main.java.de.heiden.c64dt.disk.IBAM;
-import static main.java.de.heiden.c64dt.disk.SectorModelUtil.assertTrack;
+import de.heiden.c64dt.disk.AbstractDiskImage;
+import de.heiden.c64dt.disk.BAM;
+import de.heiden.c64dt.disk.IBAM;
 import org.springframework.util.Assert;
+
+import static de.heiden.c64dt.disk.SectorModelUtil.assertTrack;
 
 /**
  * D71 (1571) disk image implementation.

@@ -1,8 +1,9 @@
-package main.java.de.heiden.c64dt.disk;
+package de.heiden.c64dt.disk;
 
 import org.springframework.util.Assert;
-import static main.java.de.heiden.c64dt.disk.SectorModelUtil.assertTrack;
-import static main.java.de.heiden.c64dt.disk.SectorModelUtil.assertSector;
+
+import static de.heiden.c64dt.disk.SectorModelUtil.assertSector;
+import static de.heiden.c64dt.disk.SectorModelUtil.assertTrack;
 
 /**
  * Block allocation map implementation.

@@ -1,10 +1,10 @@
-package main.java.de.heiden.c64dt.net.drive.path;
+package de.heiden.c64dt.net.drive.path;
 
-import main.java.de.heiden.c64dt.disk.IDirectory;
-import main.java.de.heiden.c64dt.disk.IDiskImage;
-import main.java.de.heiden.c64dt.disk.WrongDiskImageFormatException;
-import main.java.de.heiden.c64dt.disk.d64.D64Reader;
-import main.java.de.heiden.c64dt.net.drive.stream.IStream;
+import de.heiden.c64dt.disk.IDirectory;
+import de.heiden.c64dt.disk.IDiskImage;
+import de.heiden.c64dt.disk.WrongDiskImageFormatException;
+import de.heiden.c64dt.disk.d64.D64Reader;
+import de.heiden.c64dt.net.drive.stream.IStream;
 import org.springframework.util.Assert;
 
 import java.io.File;

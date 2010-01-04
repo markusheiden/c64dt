@@ -1,4 +1,4 @@
-package main.java.de.heiden.c64dt.assembler.command;
+package de.heiden.c64dt.assembler.command;
 
 import java.io.IOException;
 import java.io.Writer;

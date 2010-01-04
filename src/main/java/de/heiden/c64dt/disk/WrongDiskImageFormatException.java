@@ -1,4 +1,4 @@
-package main.java.de.heiden.c64dt.disk;
+package de.heiden.c64dt.disk;
 
 /**
  * Exception thrown when an unknown disk image format is detected.

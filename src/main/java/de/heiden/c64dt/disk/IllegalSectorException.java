@@ -1,4 +1,4 @@
-package main.java.de.heiden.c64dt.disk;
+package de.heiden.c64dt.disk;
 
 /**
  * Exception thrown when an invalid track or sector number is detected.

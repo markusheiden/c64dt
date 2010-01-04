@@ -1,6 +1,6 @@
-package main.java.de.heiden.c64dt;
+package de.heiden.c64dt;
 
-import main.java.de.heiden.c64dt.assembler.Reassembler;
+import de.heiden.c64dt.assembler.Reassembler;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.File;

@@ -1,7 +1,7 @@
-package main.java.de.heiden.c64dt.assembler;
+package de.heiden.c64dt.assembler;
 
-import static main.java.de.heiden.c64dt.util.AddressUtil.assertValidAddress;
-import static main.java.de.heiden.c64dt.util.HexUtil.format4;
+import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
+import static de.heiden.c64dt.util.HexUtil.format4;
 
 /**
  * Base implementation of labels.

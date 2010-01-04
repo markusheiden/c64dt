@@ -1,6 +1,6 @@
-package main.java.de.heiden.c64dt.net.drive.path;
+package de.heiden.c64dt.net.drive.path;
 
-import main.java.de.heiden.c64dt.net.drive.stream.IStream;
+import de.heiden.c64dt.net.drive.stream.IStream;
 
 import java.io.FileNotFoundException;
 

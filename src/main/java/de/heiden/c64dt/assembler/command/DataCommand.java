@@ -1,6 +1,5 @@
-package main.java.de.heiden.c64dt.assembler.command;
+package de.heiden.c64dt.assembler.command;
 
-import static main.java.de.heiden.c64dt.util.HexUtil.format2;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
@@ -8,6 +7,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static de.heiden.c64dt.util.HexUtil.format2;
 
 /**
  * Command for data.

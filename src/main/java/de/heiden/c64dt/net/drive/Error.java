@@ -1,6 +1,6 @@
-package main.java.de.heiden.c64dt.net.drive;
+package de.heiden.c64dt.net.drive;
 
-import main.java.de.heiden.c64dt.charset.C64Charset;
+import de.heiden.c64dt.charset.C64Charset;
 import org.springframework.util.Assert;
 
 import java.text.DecimalFormat;

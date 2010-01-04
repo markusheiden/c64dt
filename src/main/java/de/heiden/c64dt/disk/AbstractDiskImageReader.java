@@ -1,4 +1,4 @@
-package main.java.de.heiden.c64dt.disk;
+package de.heiden.c64dt.disk;
 
 import org.apache.log4j.Logger;
 import org.springframework.util.Assert;
@@ -74,7 +74,7 @@ public abstract class AbstractDiskImageReader {
       logger.debug("Reading errors");
       for (int track = 1; track <= diskImage.getTracks(); track++) {
         for (int sector = 0; sector < diskImage.getSectors(track); sector++) {
-          diskImage.setError(track, sector, main.java.de.heiden.c64dt.disk.Error.error(data[i]));
+          diskImage.setError(track, sector, Error.error(data[i]));
           i++;
         }
       }

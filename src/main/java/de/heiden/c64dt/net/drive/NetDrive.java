@@ -1,10 +1,10 @@
-package main.java.de.heiden.c64dt.net.drive;
+package de.heiden.c64dt.net.drive;
 
 import org.apache.log4j.Logger;
 import org.springframework.util.Assert;
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 import java.net.SocketException;
 
 /**

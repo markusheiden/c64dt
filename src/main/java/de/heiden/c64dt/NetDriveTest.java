@@ -1,6 +1,6 @@
-package main.java.de.heiden.c64dt;
+package de.heiden.c64dt;
 
-import main.java.de.heiden.c64dt.net.drive.NetDrive;
+import de.heiden.c64dt.net.drive.NetDrive;
 
 import java.io.File;
 

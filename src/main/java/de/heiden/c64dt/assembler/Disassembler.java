@@ -1,14 +1,17 @@
-package main.java.de.heiden.c64dt.assembler;
+package de.heiden.c64dt.assembler;
 
-import static main.java.de.heiden.c64dt.util.ByteUtil.*;
-import static main.java.de.heiden.c64dt.util.HexUtil.format2;
-import static main.java.de.heiden.c64dt.util.HexUtil.format4;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
+
+import static de.heiden.c64dt.util.ByteUtil.hi;
+import static de.heiden.c64dt.util.ByteUtil.lo;
+import static de.heiden.c64dt.util.ByteUtil.toWord;
+import static de.heiden.c64dt.util.HexUtil.format2;
+import static de.heiden.c64dt.util.HexUtil.format4;
 
 /**
  * Reassembler.

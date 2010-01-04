@@ -1,8 +1,8 @@
-package main.java.de.heiden.c64dt.browser;
+package de.heiden.c64dt.browser;
 
-import main.java.de.heiden.c64dt.charset.C64Charset;
-import main.java.de.heiden.c64dt.disk.IDirectory;
-import main.java.de.heiden.c64dt.disk.IFile;
+import de.heiden.c64dt.charset.C64Charset;
+import de.heiden.c64dt.disk.IDirectory;
+import de.heiden.c64dt.disk.IFile;
 import org.springframework.util.Assert;
 
 import javax.swing.JList;

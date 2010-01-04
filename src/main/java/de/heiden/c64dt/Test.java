@@ -1,10 +1,10 @@
-package main.java.de.heiden.c64dt;
+package de.heiden.c64dt;
 
-import main.java.de.heiden.c64dt.browser.BrowserGUI;
-import main.java.de.heiden.c64dt.charset.C64Charset;
-import main.java.de.heiden.c64dt.disk.IDiskImage;
-import main.java.de.heiden.c64dt.disk.SectorInputStream;
-import main.java.de.heiden.c64dt.disk.d64.D64Reader;
+import de.heiden.c64dt.browser.BrowserGUI;
+import de.heiden.c64dt.charset.C64Charset;
+import de.heiden.c64dt.disk.IDiskImage;
+import de.heiden.c64dt.disk.SectorInputStream;
+import de.heiden.c64dt.disk.d64.D64Reader;
 import org.springframework.util.FileCopyUtils;
 
 import javax.swing.JFrame;

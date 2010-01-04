@@ -1,4 +1,4 @@
-package main.java.de.heiden.c64dt.net.drive.stream;
+package de.heiden.c64dt.net.drive.stream;
 
 /**
  * Stream for not used stream.

@@ -1,6 +1,6 @@
-package main.java.de.heiden.c64dt.assembler;
+package de.heiden.c64dt.assembler;
 
-import main.java.de.heiden.c64dt.util.ByteUtil;
+import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 
 import java.util.Arrays;

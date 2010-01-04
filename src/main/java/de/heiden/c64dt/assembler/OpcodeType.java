@@ -1,4 +1,4 @@
-package main.java.de.heiden.c64dt.assembler;
+package de.heiden.c64dt.assembler;
 
 /**
  * Opcode types.

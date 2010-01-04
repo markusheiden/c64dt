@@ -1,16 +1,16 @@
-package main.java.de.heiden.c64dt.net.drive;
+package de.heiden.c64dt.net.drive;
 
+import de.heiden.c64dt.charset.C64Charset;
+import de.heiden.c64dt.net.drive.path.IPath;
+import de.heiden.c64dt.net.drive.path.Path;
+import de.heiden.c64dt.net.drive.stream.AbstractStream;
+import de.heiden.c64dt.net.drive.stream.IStream;
+import de.heiden.c64dt.net.drive.stream.NullStream;
 import org.springframework.util.Assert;
-import main.java.de.heiden.c64dt.charset.C64Charset;
-import main.java.de.heiden.c64dt.net.drive.stream.AbstractStream;
-import main.java.de.heiden.c64dt.net.drive.stream.NullStream;
-import main.java.de.heiden.c64dt.net.drive.stream.IStream;
-import main.java.de.heiden.c64dt.net.drive.path.IPath;
-import main.java.de.heiden.c64dt.net.drive.path.Path;
 
-import java.io.IOException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Simulated device.

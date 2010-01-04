@@ -1,13 +1,14 @@
-package main.java.de.heiden.c64dt.net.drive.stream;
+package de.heiden.c64dt.net.drive.stream;
 
-import main.java.de.heiden.c64dt.disk.IDirectory;
-import main.java.de.heiden.c64dt.disk.IFile;
-import static main.java.de.heiden.c64dt.net.drive.DeviceEncoding.*;
-import main.java.de.heiden.c64dt.util.ByteUtil;
+import de.heiden.c64dt.disk.IDirectory;
+import de.heiden.c64dt.disk.IFile;
+import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
 
 /**
  * Creates stream from a directory.

@@ -1,8 +1,9 @@
-package main.java.de.heiden.c64dt.assembler;
+package de.heiden.c64dt.assembler;
 
 import org.springframework.util.Assert;
-import static main.java.de.heiden.c64dt.util.HexUtil.format4;
-import static main.java.de.heiden.c64dt.util.HexUtil.format2;
+
+import static de.heiden.c64dt.util.HexUtil.format2;
+import static de.heiden.c64dt.util.HexUtil.format4;
 
 /**
  * Opcode address mode.
