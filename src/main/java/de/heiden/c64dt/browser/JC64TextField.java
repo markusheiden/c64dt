@@ -43,8 +43,8 @@ public class JC64TextField extends JComponent {
 
   private void init() {
     if (charRom == null) {
-      InputStream stream = getClass().getResourceAsStream("/roms/char.rom");
-      Assert.notNull(stream, "Precondition: char.rom exists in roms folder");
+      InputStream stream = getClass().getResourceAsStream("/roms/display.bin");
+      Assert.notNull(stream, "Precondition: display.bin exists in roms folder");
       try {
         charRom = FileCopyUtils.copyToByteArray(stream);
       } catch (IOException e) {

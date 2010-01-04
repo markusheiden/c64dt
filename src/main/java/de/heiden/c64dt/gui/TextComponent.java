@@ -1,8 +1,7 @@
 package de.heiden.c64dt.gui;
 
-import de.heiden.jem.models.c64.components.ROM;
-import de.heiden.jem.models.c64.util.ROMLoader;
 import de.heiden.c64dt.charset.C64Charset;
+import de.heiden.c64dt.util.ResourceLoader;
 
 import javax.swing.JFrame;
 import java.awt.Color;
@@ -33,7 +32,7 @@ public class TextComponent extends AbstractScreenComponent
     setCharset(false);
     try
     {
-      _charsetROM = ROMLoader.character(ROMLoader.DEFAULT_CHARACTER);
+      _charsetROM = ResourceLoader.load(0x1000, "/roms/character/display.bin");
     }
     catch (Exception e)
     {
@@ -248,7 +247,7 @@ public class TextComponent extends AbstractScreenComponent
     int charPtr = offset + (_chars[row][column] & 0xFF) * 8;
     for (int dy = 0; dy < 8; dy++)
     {
-      int data = _charsetROM.read(charPtr++);
+      int data = _charsetROM[charPtr++];
       for (int dx = 0, bit = 0x80; bit > 0; dx++, bit = bit >> 1)
       {
         raster.setDataElements(x + dx, y + dy, (data & bit) != 0 ? foreground : background);
@@ -312,5 +311,5 @@ public class TextComponent extends AbstractScreenComponent
 
   private boolean _upper;
   private C64Charset _charset;
-  private final ROM _charsetROM;
+  private final int[] _charsetROM;
 }
