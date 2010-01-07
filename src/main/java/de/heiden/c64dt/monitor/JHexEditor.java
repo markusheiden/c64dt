@@ -8,6 +8,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
@@ -116,55 +117,69 @@ public class JHexEditor extends JTable {
 
   public void setBytes(final byte[] bytes) {
     final int width = 16;
-    setModel(new TableModel() {
-      public int getRowCount() {
-        return (bytes.length + (width - 1)) / width;
-      }
-
-      public int getColumnCount() {
-        return 2;
-      }
-
-      public String getColumnName(int columnIndex) {
-        switch (columnIndex) {
-          case 0: return "Hex";
-          case 1: return "ASCII";
-          default: throw new IllegalArgumentException("Wrong column index");
-        }
-      }
-
-      public Class<?> getColumnClass(int columnIndex) {
-        switch (columnIndex) {
-          case 0: return byte[].class;
-          case 1: return byte[].class;
-          default: throw new IllegalArgumentException("Wrong column index");
-        }
-      }
-
-      public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return true;
-      }
-
-      public Object getValueAt(int rowIndex, int columnIndex) {
-        byte[] line = new byte[width];
-        System.arraycopy(bytes, rowIndex * width, line, 0, width);
-        switch (columnIndex) {
-          case 0: return line;
-          case 1: return line;
-          default: throw new IllegalArgumentException("Wrong column index");
-        }
-      }
-
-      public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-      }
-
-      public void addTableModelListener(TableModelListener l) {
-      }
-
-      public void removeTableModelListener(TableModelListener l) {
-      }
-    });
+    setModel(new JHexEditorTableModel(bytes, width));
   }
+
+  //
+  // Specific model class
+  //
+
+  private static class JHexEditorTableModel extends AbstractTableModel
+  {
+    private final byte[] bytes;
+    private final int width;
+
+    public JHexEditorTableModel(byte[] bytes, int width)
+    {
+      this.bytes = bytes;
+      this.width = width;
+    }
+
+    public int getRowCount() {
+      return (bytes.length + (width - 1)) / width;
+    }
+
+    public int getColumnCount() {
+      return 2;
+    }
+
+    public String getColumnName(int columnIndex) {
+      switch (columnIndex) {
+        case 0: return "Hex";
+        case 1: return "ASCII";
+        default: throw new IllegalArgumentException("Wrong column index");
+      }
+    }
+
+    public Class<?> getColumnClass(int columnIndex) {
+      switch (columnIndex) {
+        case 0: return byte[].class;
+        case 1: return byte[].class;
+        default: throw new IllegalArgumentException("Wrong column index");
+      }
+    }
+
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+      return true;
+    }
+
+    public Object getValueAt(int rowIndex, int columnIndex) {
+      byte[] line = new byte[width];
+      System.arraycopy(bytes, rowIndex * width, line, 0, width);
+      switch (columnIndex) {
+        case 0: return line;
+        case 1: return line;
+        default: throw new IllegalArgumentException("Wrong column index");
+      }
+    }
+
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+    }
+  }
+
+  //
+  // Test
+  //
 
   public static void main(String[] args) {
     JHexEditor editor = new JHexEditor();

@@ -40,6 +40,7 @@ public class JC64TextField extends JComponent {
 
     setOpaque(true);
     setPreferredSize(new Dimension(text.length * fontSize , fontSize));
+    setSize(new Dimension(text.length * fontSize , fontSize));
   }
 
   private void init() {
