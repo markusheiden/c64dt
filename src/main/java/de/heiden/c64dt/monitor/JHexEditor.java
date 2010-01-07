@@ -30,7 +30,7 @@ public class JHexEditor extends JTable {
     }
     setBytes(bytes);
 
-    setShowGrid(true);
+    setShowGrid(false);
     setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     setRowSelectionAllowed(false);
     setColumnSelectionAllowed(false);
