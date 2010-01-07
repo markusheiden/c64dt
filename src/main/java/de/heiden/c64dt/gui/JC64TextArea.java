@@ -12,7 +12,7 @@ import java.awt.image.WritableRaster;
 /**
  * Component for displaying C64 text.
  */
-public class JC64TextComponent extends JC64ScreenComponent
+public class JC64TextArea extends JC64ScreenComponent
 {
   /**
    * Constructor.
@@ -22,7 +22,7 @@ public class JC64TextComponent extends JC64ScreenComponent
    * @param rows character rows to display
    * @param factor zoom factor
    */
-  public JC64TextComponent(int columns, int rows, int factor)
+  public JC64TextArea(int columns, int rows, int factor)
   {
     super(columns * 8, rows * 8, factor);
 
@@ -280,7 +280,7 @@ public class JC64TextComponent extends JC64ScreenComponent
     JFrame frame = new JFrame();
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    JC64TextComponent text = new JC64TextComponent(40, 25, 2);
+    JC64TextArea text = new JC64TextArea(40, 25, 2);
     frame.add(text);
 
     frame.pack();

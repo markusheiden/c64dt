@@ -3,7 +3,7 @@ package de.heiden.c64dt.browser;
 import de.heiden.c64dt.charset.C64Charset;
 import de.heiden.c64dt.disk.IDirectory;
 import de.heiden.c64dt.disk.IFile;
-import de.heiden.c64dt.gui.JC64TextComponent;
+import de.heiden.c64dt.gui.JC64TextArea;
 import org.springframework.util.Assert;
 
 import javax.swing.JList;
@@ -82,7 +82,7 @@ public class JDirectory extends JList {
           }
         }
 
-        JC64TextComponent result = new JC64TextComponent(text.length, 1, 2);
+        JC64TextArea result = new JC64TextArea(text.length, 1, 2);
         if (isSelected) {
           result.setForeground(getSelectionForeground());
           result.setBackground(getSelectionBackground());
