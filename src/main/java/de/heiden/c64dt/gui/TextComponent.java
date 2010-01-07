@@ -39,6 +39,9 @@ public class TextComponent extends AbstractScreenComponent
       throw new IllegalArgumentException("Unable to load default charset", e);
     }
 
+    setForeground(Color.BLACK);
+    setBackground(Color.BLACK);
+
     _chars = new byte[rows][columns];
     _foregrounds = new Color[rows][columns];
     _backgrounds = new Color[rows][columns];
