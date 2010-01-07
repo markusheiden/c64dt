@@ -3,6 +3,7 @@ package de.heiden.c64dt.browser;
 import de.heiden.c64dt.charset.C64Charset;
 import de.heiden.c64dt.disk.IDirectory;
 import de.heiden.c64dt.disk.IFile;
+import de.heiden.c64dt.gui.JC64TextComponent;
 import org.springframework.util.Assert;
 
 import javax.swing.JList;
@@ -81,7 +82,7 @@ public class JDirectory extends JList {
           }
         }
 
-        JC64TextField result = new JC64TextField(text);
+        JC64TextComponent result = new JC64TextComponent(text.length, 1, 2);
         if (isSelected) {
           result.setForeground(getSelectionForeground());
           result.setBackground(getSelectionBackground());
@@ -89,6 +90,7 @@ public class JDirectory extends JList {
           result.setForeground(getForeground());
           result.setBackground(getBackground());
         }
+        result.setText(0, 0, text);
 
         Assert.notNull(result, "Postcondition: result != null");
         return result;

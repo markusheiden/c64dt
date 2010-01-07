@@ -12,7 +12,7 @@ import java.awt.image.WritableRaster;
 /**
  * Component for displaying C64 text.
  */
-public class TextComponent extends AbstractScreenComponent
+public class JC64TextComponent extends JC64ScreenComponent
 {
   /**
    * Constructor.
@@ -22,7 +22,7 @@ public class TextComponent extends AbstractScreenComponent
    * @param rows character rows to display
    * @param factor zoom factor
    */
-  public TextComponent(int columns, int rows, int factor)
+  public JC64TextComponent(int columns, int rows, int factor)
   {
     super(columns * 8, rows * 8, factor);
 
@@ -30,14 +30,7 @@ public class TextComponent extends AbstractScreenComponent
     _rows = rows;
 
     setCharset(false);
-    try
-    {
-      _charsetROM = ResourceLoader.load(0x1000, "/roms/character/display.bin");
-    }
-    catch (Exception e)
-    {
-      throw new IllegalArgumentException("Unable to load default charset", e);
-    }
+    _charsetROM = getDefaultCharset();
 
     setForeground(Color.BLACK);
     setBackground(Color.BLACK);
@@ -46,6 +39,26 @@ public class TextComponent extends AbstractScreenComponent
     _foregrounds = new Color[rows][columns];
     _backgrounds = new Color[rows][columns];
     clear();
+  }
+
+  /**
+   * Default charset.
+   */
+  private static int[] getDefaultCharset()
+  {
+    if (_defaultCharsetROM == null)
+    {
+      try
+      {
+        _defaultCharsetROM = ResourceLoader.load(0x1000, "/roms/character/display.bin");
+      }
+      catch (Exception e)
+      {
+        throw new IllegalArgumentException("Unable to load default charset", e);
+      }
+    }
+
+    return _defaultCharsetROM;
   }
 
   /**
@@ -122,9 +135,9 @@ public class TextComponent extends AbstractScreenComponent
    * @param row row
    * @param s characters
    */
-  public void drawString(int column, int row, String s)
+  public void setText(int column, int row, String s)
   {
-    drawString(column, row, _charset.toBytes(s));
+    setText(column, row, _charset.toBytes(s));
   }
 
   /**
@@ -134,14 +147,14 @@ public class TextComponent extends AbstractScreenComponent
    * @param row row
    * @param s characters
    */
-  public void drawStringInverted(int column, int row, String s)
+  public void setTextInverted(int column, int row, String s)
   {
     byte[] characters = _charset.toBytes(s);
     for (int i = 0; i < characters.length; i++)
     {
       characters[i] |= 0x80;
     }
-    drawString(column, row, characters);
+    setText(column, row, characters);
   }
 
   /**
@@ -151,11 +164,11 @@ public class TextComponent extends AbstractScreenComponent
    * @param row row
    * @param s characters in C64 encoding
    */
-  public void drawString(int column, int row, byte... s)
+  public void setText(int column, int row, byte... s)
   {
     for (int i = 0, c = column; i < s.length && c < _columns; i++, c++)
     {
-      drawCharacterInternal(c, row, s[i]);
+      setTextInternal(c, row, s[i]);
     }
     repaint();
   }
@@ -167,9 +180,9 @@ public class TextComponent extends AbstractScreenComponent
    * @param row row
    * @param c character in C64 encoding
    */
-  public void drawCharacter(int column, int row, byte c)
+  public void setText(int column, int row, byte c)
   {
-    drawCharacterInternal(column, row, c);
+    setTextInternal(column, row, c);
     repaint();
   }
 
@@ -180,7 +193,7 @@ public class TextComponent extends AbstractScreenComponent
    * @param row row
    * @param c character in C64 encoding
    */
-  protected void drawCharacterInternal(int column, int row, byte c)
+  protected void setTextInternal(int column, int row, byte c)
   {
     _chars[row][column] = c;
     _foregrounds[row][column] = getForeground();
@@ -219,7 +232,7 @@ public class TextComponent extends AbstractScreenComponent
    * @param g graphics
    */
   @Override
-  public void doUpdate(Graphics g)
+  public void doPaintComponent(Graphics g)
   {
     for (int row = 0; row < _rows; row++)
     {
@@ -267,7 +280,7 @@ public class TextComponent extends AbstractScreenComponent
     JFrame frame = new JFrame();
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    TextComponent text = new TextComponent(40, 25, 2);
+    JC64TextComponent text = new JC64TextComponent(40, 25, 2);
     frame.add(text);
 
     frame.pack();
@@ -278,14 +291,14 @@ public class TextComponent extends AbstractScreenComponent
     text.clear();
 
     text.setCharset(false);
-    text.drawString(0, 0, "This is a test azAZ");
-    text.drawStringInverted(0, 1, "This is a test azAZ");
-    text.drawString(0, 2, "@[] !\"#$%&'()*+,-./1234567890:;<=>?|_");
+    text.setText(0, 0, "This is a test azAZ");
+    text.setTextInverted(0, 1, "This is a test azAZ");
+    text.setText(0, 2, "@[] !\"#$%&'()*+,-./1234567890:;<=>?|_");
 
     text.setCharset(true);
-    text.drawString(0, 3, "THIS IS A TEST AZ");
-    text.drawStringInverted(0, 4, "THIS IS A TEST AZ");
-    text.drawString(0, 5, "@[] !\"#$%&'()*+,-./1234567890:;<=>?|_");
+    text.setText(0, 3, "THIS IS A TEST AZ");
+    text.setTextInverted(0, 4, "THIS IS A TEST AZ");
+    text.setText(0, 5, "@[] !\"#$%&'()*+,-./1234567890:;<=>?|_");
 
     byte c = 0;
     for (int y = 0; y < 16; y++)
@@ -294,10 +307,10 @@ public class TextComponent extends AbstractScreenComponent
       {
         text.setCharset(false);
         text.setForeground(C64Color.LIGHT_GREEN);
-        text.drawCharacter(x, y + 8, c);
+        text.setText(x, y + 8, c);
         text.setCharset(true);
         text.setForeground(C64Color.LIGHT_RED);
-        text.drawCharacter(x + 20, y + 8, c);
+        text.setText(x + 20, y + 8, c);
       }
     }
   }
@@ -315,4 +328,6 @@ public class TextComponent extends AbstractScreenComponent
   private boolean _upper;
   private C64Charset _charset;
   private final int[] _charsetROM;
+
+  private static int[] _defaultCharsetROM;
 }

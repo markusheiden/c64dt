@@ -1,6 +1,6 @@
 package de.heiden.c64dt.gui;
 
-import java.awt.Canvas;
+import javax.swing.JComponent;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
@@ -10,7 +10,7 @@ import java.awt.image.ColorModel;
 /**
  * Base class for component displaying c64 content.
  */
-public abstract class AbstractScreenComponent extends Canvas
+public abstract class JC64ScreenComponent extends JComponent
 {
   /**
    * Constructor.
@@ -19,10 +19,11 @@ public abstract class AbstractScreenComponent extends Canvas
    * @param height height in pixel
    * @param factor zoom factor
    */
-  protected AbstractScreenComponent(int width, int height, int factor)
+  protected JC64ScreenComponent(int width, int height, int factor)
   {
     _height = height;
     _width = width;
+    _factor = factor;
     _colors = new Object[C64Color.values().length];
 
     Dimension size = new Dimension(width * factor, height * factor);
@@ -48,17 +49,10 @@ public abstract class AbstractScreenComponent extends Canvas
   }
 
   @Override
-  public final void paint(Graphics g)
+  public final void paintComponent(Graphics g)
   {
     createScreenImage();
-    drawImage(g);
-  }
-
-  @Override
-  public final void update(Graphics g)
-  {
-    createScreenImage();
-    doUpdate(g);
+    doPaintComponent(g);
     drawImage(g);
   }
 
@@ -67,14 +61,34 @@ public abstract class AbstractScreenComponent extends Canvas
    *
    * @param g graphics
    */
-  protected abstract void doUpdate(Graphics g);
+  protected abstract void doPaintComponent(Graphics g);
 
   /**
-   * Draw backing image.
+   * Draw backing image with the fixed defined size.
    *
    * @param g graphics
    */
   protected void drawImage(Graphics g)
+  {
+    drawImageFixed(g);
+  }
+
+  /**
+   * Draw backing image with the fixed defined size.
+   *
+   * @param g graphics
+   */
+  protected void drawImageFixed(Graphics g)
+  {
+    g.drawImage(_image, 0, 0, _width * _factor, _height * _factor, null);
+  }
+
+  /**
+   * Draw backing image fitting into the current component size.
+   *
+   * @param g graphics
+   */
+  protected void drawImageResized(Graphics g)
   {
     g.drawImage(_image, 0, 0, getWidth(), getHeight(), null);
   }
@@ -110,6 +124,7 @@ public abstract class AbstractScreenComponent extends Canvas
 
   private final int _width;
   private final int _height;
+  private final int _factor;
 
   private BufferedImage _image;
   private final Object[] _colors;

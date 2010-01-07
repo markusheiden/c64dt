@@ -1,18 +1,15 @@
 package de.heiden.c64dt.monitor;
 
-import de.heiden.c64dt.browser.JC64TextField;
+import de.heiden.c64dt.gui.JC64TextComponent;
 
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
@@ -33,18 +30,23 @@ public class JHexEditor extends JTable {
     }
     setBytes(bytes);
 
-    setShowGrid(false);
+    setShowGrid(true);
     setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     setRowSelectionAllowed(false);
     setColumnSelectionAllowed(false);
     setCellSelectionEnabled(true);
     setDefaultRenderer (byte[].class, new TableCellRenderer() {
       public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        JC64TextField renderer = new JC64TextField((byte[]) value);
+        byte[] text = (byte[]) value;
+        JC64TextComponent renderer = new JC64TextComponent(text.length, 1, 2);
         if (isSelected) {
           renderer.setBackground(getSelectionBackground());
           renderer.setForeground(getSelectionForeground());
+        } else {
+          renderer.setBackground(getBackground());
+          renderer.setForeground(getForeground());
         }
+        renderer.setText(0, 0, text);
         return renderer;
       }
     });
@@ -52,12 +54,16 @@ public class JHexEditor extends JTable {
       private List<CellEditorListener> listeners = new ArrayList<CellEditorListener>();
 
       public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, final int row, final int column) {
-        JC64TextField editor = new JC64TextField((byte[]) value);
+        byte[] text = (byte[]) value;
+        JC64TextComponent editor = new JC64TextComponent(text.length, 1, 2);
         if (isSelected) {
           editor.setBackground(getSelectionBackground());
           editor.setForeground(getSelectionForeground());
+        } else {
+          editor.setBackground(getBackground());
+          editor.setForeground(getForeground());
         }
-        editor.setForeground(Color.red);
+        editor.setText(0, 0, text);
         editor.addKeyListener(new KeyAdapter() {
           public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_DOWN) {
