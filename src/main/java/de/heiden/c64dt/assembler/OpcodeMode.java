@@ -110,7 +110,7 @@ public enum OpcodeMode {
   }
 
   /**
-   * Does this address mode use a address?.
+   * Does this address mode use an address?.
    */
   public boolean isAddress() {
     return isAddress;
