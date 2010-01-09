@@ -24,7 +24,7 @@ public enum OpcodeMode {
   },
 
   // $00
-  ZP(1, true) {
+  ZPD(1, true) {
     public String toString(String argument) {
       return argument;
     }
@@ -141,7 +141,7 @@ public enum OpcodeMode {
   public abstract String toString(String argument);
 
   /**
-   * Cosntructor.
+   * Constructor.
    *
    * @param size number of bytes the argument takes
    * @param isAddress is the argument a (non zero page) address?
