@@ -1,5 +1,6 @@
 package de.heiden.c64dt;
 
+import de.heiden.c64dt.assembler.Disassembler;
 import de.heiden.c64dt.assembler.Reassembler;
 import org.springframework.util.FileCopyUtils;
 
@@ -13,7 +14,13 @@ import java.io.StringWriter;
  */
 public class ReassemblerTest {
   public static void main(String[] args) throws Exception {
-    reassemble();
+    disassemble();
+  }
+
+  public static void disassemble() throws Exception {
+    byte[] data = FileCopyUtils.copyToByteArray(new File("./dummy2.prg"));
+    Disassembler disassembler = new Disassembler();
+    disassembler.disassemble(data, new OutputStreamWriter(System.out));
   }
 
   public static void reassemble() throws Exception {
