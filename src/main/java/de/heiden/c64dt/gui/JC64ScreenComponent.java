@@ -1,6 +1,7 @@
 package de.heiden.c64dt.gui;
 
 import javax.swing.JComponent;
+import javax.swing.text.JTextComponent;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
@@ -19,14 +20,14 @@ public abstract class JC64ScreenComponent extends JComponent
    * @param height height in pixel
    * @param factor zoom factor
    */
-  protected JC64ScreenComponent(int width, int height, int factor)
+  protected JC64ScreenComponent(int width, int height, double factor)
   {
     _height = height;
     _width = width;
     _factor = factor;
     _colors = new Object[C64Color.values().length];
 
-    Dimension size = new Dimension(width * factor, height * factor);
+    Dimension size = new Dimension((int) Math.round(width * factor), (int) Math.round(height * factor));
     setPreferredSize(size);
     setSize(size);
   }
@@ -80,7 +81,7 @@ public abstract class JC64ScreenComponent extends JComponent
    */
   protected void drawImageFixed(Graphics g)
   {
-    g.drawImage(_image, 0, 0, _width * _factor, _height * _factor, null);
+    g.drawImage(_image, 0, 0, (int) Math.round(_width * _factor), (int) Math.round(_height * _factor), null);
   }
 
   /**
@@ -124,7 +125,7 @@ public abstract class JC64ScreenComponent extends JComponent
 
   private final int _width;
   private final int _height;
-  private final int _factor;
+  private final double _factor;
 
   private BufferedImage _image;
   private final Object[] _colors;

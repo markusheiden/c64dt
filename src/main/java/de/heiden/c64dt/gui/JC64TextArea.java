@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
+import java.util.StringTokenizer;
 
 /**
  * Component for displaying C64 text.
@@ -22,7 +23,7 @@ public class JC64TextArea extends JC64ScreenComponent
    * @param rows character rows to display
    * @param factor zoom factor
    */
-  public JC64TextArea(int columns, int rows, int factor)
+  public JC64TextArea(int columns, int rows, double factor)
   {
     super(columns * 8, rows * 8, factor);
 
@@ -32,13 +33,11 @@ public class JC64TextArea extends JC64ScreenComponent
     setCharset(false);
     _charsetROM = getDefaultCharset();
 
-    setForeground(Color.BLACK);
-    setBackground(Color.BLACK);
-
     _chars = new byte[rows][columns];
     _foregrounds = new Color[rows][columns];
     _backgrounds = new Color[rows][columns];
-    clear();
+
+    clear(Color.BLACK, Color.BLACK);
   }
 
   /**
@@ -137,7 +136,18 @@ public class JC64TextArea extends JC64ScreenComponent
    */
   public void setText(int column, int row, String s)
   {
-    setText(column, row, _charset.toBytes(s));
+    if (!s.contains("\n"))
+    {
+      setText(column, row, _charset.toBytes(s));
+    }
+    else
+    {
+      StringTokenizer tokenizer = new StringTokenizer(s , "\n");
+      for (int r = row; tokenizer.hasMoreTokens() && r < _rows; r++)
+      {
+        setText(column, r++, tokenizer.nextToken());
+      }
+    }
   }
 
   /**
@@ -196,19 +206,31 @@ public class JC64TextArea extends JC64ScreenComponent
   protected void setTextInternal(int column, int row, byte c)
   {
     _chars[row][column] = c;
-    _foregrounds[row][column] = getForeground();
-    _backgrounds[row][column] = getBackground();
+    Color foreground = getForeground();
+    assert foreground != null : "Check: foreground != null";
+    _foregrounds[row][column] = foreground;
+    Color background = getBackground();
+    assert background != null : "Check: background != null";
+    _backgrounds[row][column] = background;
   }
 
   /**
    * Clear component with background color.
    */
-  public final void clear()
+  public void clear()
   {
-    byte space = _charset.toBytes(" ")[0];
-    Color foreground = getForeground();
-    Color background = getBackground();
+    clear(getForeground(), getBackground());
+  }
 
+  /**
+   * Clear component with background color.
+   */
+  private void clear(Color foreground, Color background)
+  {
+    assert foreground != null : "Check: foreground != null";
+    assert background != null : "Check: background != null";
+
+    byte space = _charset.toBytes(" ")[0];
     for (int row = 0; row < _rows; row++)
     {
       byte[] charRow = _chars[row];
