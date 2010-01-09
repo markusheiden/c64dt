@@ -2,8 +2,8 @@ package de.heiden.c64dt.assembler;
 
 import org.springframework.util.Assert;
 
-import static de.heiden.c64dt.util.HexUtil.format2;
-import static de.heiden.c64dt.util.HexUtil.format4;
+import static de.heiden.c64dt.util.HexUtil.hexByte;
+import static de.heiden.c64dt.util.HexUtil.hexWord;
 
 /**
  * Opcode address mode.
@@ -94,7 +94,7 @@ public enum OpcodeMode {
 
     public String toString(int argument) {
       // display target address as word
-      return toString("$" + format4(argument));
+      return toString(hexWord(argument));
     }
   };
 
@@ -130,7 +130,7 @@ public enum OpcodeMode {
    */
   public String toString(int argument) {
     Assert.isTrue(hasArgument(), "Precondition: hasArgument()");
-    return toString("$" + (size == 1? format2(argument) : format4(argument)));
+    return toString(size == 1? hexByte(argument) : hexWord(argument));
   }
 
   /**

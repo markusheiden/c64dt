@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static de.heiden.c64dt.util.HexUtil.format2;
+import static de.heiden.c64dt.util.HexUtil.hexByte;
 
 /**
  * Command for data.
@@ -46,11 +46,11 @@ public class DataCommand extends AbstractCommand {
     Assert.notNull(buffer, "Precondition: buffer != null");
     Assert.notNull(output, "Precondition: output != null");
 
-    output.append(".DB $");
-    output.append(format2(data.get(0)));
+    output.append(".DB ");
+    output.append(hexByte(data.get(0)));
     for (int i = 1; i < data.size(); i++) {
-      output.append(", $");
-      output.append(format2(data.get(i)));
+      output.append(", ");
+      output.append(hexByte(data.get(i)));
     }
   }
 

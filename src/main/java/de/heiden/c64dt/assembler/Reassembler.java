@@ -14,8 +14,8 @@ import java.io.Writer;
 import java.util.List;
 
 import static de.heiden.c64dt.util.ByteUtil.toWord;
-import static de.heiden.c64dt.util.HexUtil.format2;
-import static de.heiden.c64dt.util.HexUtil.format4;
+import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
+import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
 
 /**
  * Reassembler.
@@ -286,11 +286,11 @@ public class Reassembler {
 
       // debug output: byte representation of command
       output.append(" | ");
-      output.append(format4(pc));
+      output.append(hexWordPlain(pc));
       List<Integer> data = command.toBytes();
       for (int i = 0; i < data.size() && i < 3; i++) {
         output.append(" ");
-        output.append(format2(data.get(i)));
+        output.append(hexBytePlain(data.get(i)));
       }
       for (int i = data.size(); i < 3; i++) {
         output.append("   ");

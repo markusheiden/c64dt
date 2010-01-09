@@ -4,47 +4,61 @@ package de.heiden.c64dt.util;
  * Helper class for handling hexadecimal values.
  */
 public class HexUtil {
-  private static final String[] ZEROS_2 = {
-    "00" , "0"
-  };
-
-  private static final String[] ZEROS_4 = {
-    "0000", "000", "00" , "0"
-  };
-
   /**
-   * Format max. 2 digit number hexadecimal.
+   * String representation of a byte.
    *
-   * @param number number
-   * @return
+   * @require value < 0x100
    */
-  public static String format2(int number) {
-    String result = Integer.toHexString(number).toUpperCase();
-    final int length = result.length();
-    if (length == 2) {
-      return result;
-    } else if (result.length() < 2) {
-      return ZEROS_2[length] + result;
-    } else {
-      return result.substring(length - 2);
-    }
+  public static String hexBytePlain (int value)
+  {
+    assert value >= 0: "Precondition: value >= 0";
+    assert value < 0x100: "Precondition: value < 0x100";
+
+    StringBuffer result = new StringBuffer(Long.toHexString(value + 0x100).toUpperCase());
+    return result.substring(1);
   }
 
   /**
-   * Format max. 4 digit number hexadecimal.
+   * String representation of a byte with leading '$'.
    *
-   * @param number number
-   * @return
+   * @require value < 0x100
    */
-  public static String format4(int number) {
-    String result = Integer.toHexString(number).toUpperCase();
-    final int length = result.length();
-    if (length == 4) {
-      return result;
-    } else if (result.length() < 4) {
-      return ZEROS_4[length] + result;
-    } else {
-      return result.substring(length - 4);
-    }
+  public static String hexByte (int value)
+  {
+    assert value >= 0: "Precondition: value >= 0";
+    assert value < 0x100: "Precondition: value < 0x100";
+
+    StringBuffer result = new StringBuffer(Long.toHexString(value + 0x100).toUpperCase());
+    result.setCharAt(0, '$');
+    return result.toString();
+  }
+
+  /**
+   * String representation of a word.
+   *
+   * @require value < 0x10000
+   */
+  public static String hexWordPlain (int value)
+  {
+    assert value >= 0: "Precondition: value >= 0";
+    assert value < 0x10000: "value < 0x10000";
+
+    StringBuffer result = new StringBuffer(Long.toHexString(value + 0x10000).toUpperCase());
+    return result.substring(1, 5);
+  }
+
+  /**
+   * String representation of a word with leading '$'.
+   *
+   * @require value < 0x10000
+   */
+  public static String hexWord (int value)
+  {
+    assert value >= 0: "Precondition: value >= 0";
+    assert value < 0x10000: "value < 0x10000";
+
+    StringBuffer result = new StringBuffer(Long.toHexString(value + 0x10000).toUpperCase());
+    result.setCharAt(0, '$');
+    return result.toString();
   }
 }

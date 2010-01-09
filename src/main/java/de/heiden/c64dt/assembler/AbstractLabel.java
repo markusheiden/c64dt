@@ -1,7 +1,7 @@
 package de.heiden.c64dt.assembler;
 
 import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
-import static de.heiden.c64dt.util.HexUtil.format4;
+import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
 
 /**
  * Base implementation of labels.
@@ -25,7 +25,7 @@ public abstract class AbstractLabel implements ILabel {
   }
 
   public String toString() {
-    return getLabelPrefix() + format4(address);
+    return getLabelPrefix() + hexWordPlain(address);
   }
 
   /**

@@ -10,8 +10,8 @@ import java.io.Writer;
 import static de.heiden.c64dt.util.ByteUtil.hi;
 import static de.heiden.c64dt.util.ByteUtil.lo;
 import static de.heiden.c64dt.util.ByteUtil.toWord;
-import static de.heiden.c64dt.util.HexUtil.format2;
-import static de.heiden.c64dt.util.HexUtil.format4;
+import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
+import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
 
 /**
  * Reassembler.
@@ -70,16 +70,16 @@ public class Disassembler {
       OpcodeMode mode = opcode.getMode();
       int size = mode.getSize();
 
-      output.append(format4(buffer.getCommandAddress()));
+      output.append(hexWordPlain(buffer.getCommandAddress()));
       output.append(" ");
-      output.append(format2(opcode.getOpcode()));
+      output.append(hexBytePlain(opcode.getOpcode()));
 
       if (opcode.isLegal() && buffer.has(size)) {
         if (size > 0) {
           int address = mode == OpcodeMode.REL? buffer.readRelative() : buffer.readAbsolute(size);
 
-          output.append(size >= 1? " " + format2(lo(address)) : "   ");
-          output.append(size >= 2? " " + format2(hi(address)) : "   ");
+          output.append(size >= 1? " " + hexBytePlain(lo(address)) : "   ");
+          output.append(size >= 2? " " + hexBytePlain(hi(address)) : "   ");
           output.append(" ");
           output.append(opcode.getType().toString());
           output.append(" ");
