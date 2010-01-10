@@ -342,7 +342,10 @@ public enum Opcode {
   public static Opcode opcode(int opcode) {
     Assert.isTrue(opcode >= 0x00 && opcode <= 0xFF, "Precondition: opcode >= 0x00 && opcode <= 0xFF");
 
-    return opcodes().get(opcode);
+    Opcode result = values()[opcode];
+
+    Assert.isTrue(result.getOpcode() == opcode, "Postcondition: result.getOpcode() == opcode");
+    return result;
   }
 
   /**
@@ -381,15 +384,5 @@ public enum Opcode {
     this.type = type;
     this.mode = mode;
     this.cycles = cycles;
-
-    opcodes().put(opcode, this);
-  }
-
-  private static Map<Integer, Opcode> opcodes() {
-    if (opcodes == null) {
-      opcodes = new HashMap<Integer, Opcode>();
-    }
-
-    return opcodes;
   }
 }
