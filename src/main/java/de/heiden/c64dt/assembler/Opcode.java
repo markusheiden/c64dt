@@ -360,18 +360,6 @@ public enum Opcode {
     return result.toString();
   }
 
-//  public int[] toBytes(int addr) {
-//    int size = _mode.size();
-//    int[] result = new int[1 + size];
-//    result[0] = _opcode;
-//    for (int i = 1; i <= size; i++) {
-//      result[i] = addr & 0xFF;
-//      addr >>= 8;
-//    }
-//
-//    return result;
-//  }
-
   /**
    * Constructor.
    *
