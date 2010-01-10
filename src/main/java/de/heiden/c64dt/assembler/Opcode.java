@@ -332,11 +332,45 @@ public enum Opcode {
     return cycles;
   }
 
+  /**
+   * Size of the whole command.
+   */
+  public int getSize() {
+    return 1 + mode.getSize();
+  }
+
   public static Opcode opcode(int opcode) {
     Assert.isTrue(opcode >= 0x00 && opcode <= 0xFF, "Precondition: opcode >= 0x00 && opcode <= 0xFF");
 
     return opcodes().get(opcode);
   }
+
+  /**
+   * Disassembled representation.
+   *
+   * @param pc address of opcode
+   * @param addr argument of opcode
+   */
+  public String toString(int pc, int addr) {
+    StringBuffer result = new StringBuffer();
+//    result.append(_legal ? ' ' : '*');
+    result.append(type.toString());
+    result.append(' ');
+    result.append(mode.toString(pc, addr));
+    return result.toString();
+  }
+
+//  public int[] toBytes(int addr) {
+//    int size = _mode.size();
+//    int[] result = new int[1 + size];
+//    result[0] = _opcode;
+//    for (int i = 1; i <= size; i++) {
+//      result[i] = addr & 0xFF;
+//      addr >>= 8;
+//    }
+//
+//    return result;
+//  }
 
   /**
    * Constructor.

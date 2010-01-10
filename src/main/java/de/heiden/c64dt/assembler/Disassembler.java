@@ -70,20 +70,21 @@ public class Disassembler {
       OpcodeMode mode = opcode.getMode();
       int size = mode.getSize();
 
-      output.append(hexWordPlain(buffer.getCommandAddress()));
+      int pc = buffer.getCommandAddress();
+      output.append(hexWordPlain(pc));
       output.append(" ");
       output.append(hexBytePlain(opcode.getOpcode()));
 
       if (opcode.isLegal() && buffer.has(size)) {
         if (size > 0) {
-          int address = mode == OpcodeMode.REL? buffer.readRelative() : buffer.readAbsolute(size);
+          int argument = buffer.readAbsolute(mode.getSize());
 
-          output.append(size >= 1? " " + hexBytePlain(lo(address)) : "   ");
-          output.append(size >= 2? " " + hexBytePlain(hi(address)) : "   ");
+          output.append(size >= 1? " " + hexBytePlain(lo(argument)) : "   ");
+          output.append(size >= 2? " " + hexBytePlain(hi(argument)) : "   ");
           output.append(" ");
           output.append(opcode.getType().toString());
           output.append(" ");
-          output.append(mode.toString(address));
+          output.append(mode.toString(pc, argument));
         } else {
           output.append("       ");
           output.append(opcode.getType().toString());
