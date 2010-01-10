@@ -119,6 +119,7 @@ public class Reassembler {
               command = new OpcodeCommand(opcode);
             } else {
               // opcode with an argument
+              // TODO 2010-01-10 mh: is readRelative() functionality ok?
               int argument = mode == OpcodeMode.REL? code.readRelative() : code.readAbsolute(size);
               if (mode.isAddress() && code.hasAddress(argument)) {
                 // track references of opcodes
