@@ -41,7 +41,7 @@ public class ByteUtil {
   public static int hi(int word) {
     Assert.isTrue(word >= 0x0000 && word <= 0xFFFF, "Precondition: word >= 0x0000 && word <= 0xFFFF");
 
-    return (byte) (word >> 8);
+    return (word >> 8) & 0xFF;
   }
 
   /**
@@ -52,6 +52,6 @@ public class ByteUtil {
   public static int lo(int word) {
     Assert.isTrue(word >= 0x0000 && word <= 0xFFFF, "Precondition: word >= 0x0000 && word <= 0xFFFF");
 
-    return (byte) (word & 0xFF);
+    return word & 0xFF;
   }
 }
