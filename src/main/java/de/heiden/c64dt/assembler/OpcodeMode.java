@@ -22,10 +22,6 @@ public enum OpcodeMode {
 
   // #$00
   IMM(1, false) {
-    public String toString(int pc, int argument) {
-      return "#" + hexByte(argument);
-    }
-
     public String toString(String argument) {
       return "#" + argument;
     }
@@ -33,10 +29,6 @@ public enum OpcodeMode {
 
   // $00
   ZPD(1, true) {
-    public String toString(int pc, int argument) {
-      return hexByte(argument);
-    }
-
     public String toString(String argument) {
       return argument;
     }
@@ -44,10 +36,6 @@ public enum OpcodeMode {
 
   // $00,X
   ZPX(1, true) {
-    public String toString(int pc, int argument) {
-      return hexByte(argument) + ",X";
-    }
-
     public String toString(String argument) {
       return argument + ",X";
     }
@@ -55,10 +43,6 @@ public enum OpcodeMode {
 
   // $00,Y
   ZPY(1, true) {
-    public String toString(int pc, int argument) {
-      return hexByte(argument) + ",Y";
-    }
-
     public String toString(String argument) {
       return argument + ",Y";
     }
@@ -66,10 +50,6 @@ public enum OpcodeMode {
 
   // ($00,X)
   IZX(1, true) {
-    public String toString(int pc, int argument) {
-      return "(" + hexByte(argument) + ",X)";
-    }
-
     public String toString(String argument) {
       return "(" + argument + ",X)";
     }
@@ -77,10 +57,6 @@ public enum OpcodeMode {
 
   // ($00),Y
   IZY(1, true) {
-    public String toString(int pc, int argument) {
-      return "(" + hexByte(argument) + "),Y";
-    }
-
     public String toString(String argument) {
       return "(" + argument + "),Y";
     }
@@ -88,10 +64,6 @@ public enum OpcodeMode {
 
   // $0000
   ABS(2, true) {
-    public String toString(int pc, int argument) {
-      return hexWord(argument);
-    }
-
     public String toString(String argument) {
       return argument;
     }
@@ -99,10 +71,6 @@ public enum OpcodeMode {
 
   // $0000,X
   ABX(2, true) {
-    public String toString(int pc, int argument) {
-      return hexWord(argument) + ",X";
-    }
-
     public String toString(String argument) {
       return argument + ",X";
     }
@@ -110,10 +78,6 @@ public enum OpcodeMode {
 
   // $0000,Y
   ABY(2, true) {
-    public String toString(int pc, int argument) {
-      return hexWord(argument) + ",Y";
-    }
-
     public String toString(String argument) {
       return argument + ",Y";
     }
@@ -121,10 +85,6 @@ public enum OpcodeMode {
 
   // ($0000)
   IND(2, true) {
-    public String toString(int pc, int argument) {
-      return "(" + hexWord(argument) + ")";
-    }
-
     public String toString(String argument) {
       return "(" + argument + ")";
     }
@@ -134,7 +94,7 @@ public enum OpcodeMode {
   REL(1, true) {
     public String toString(int pc, int argument) {
       // argument is signed
-      return hexWord(pc + 2 + (byte) argument);
+      return toString(hexWord((pc + 2 + (byte) argument) & 0xFFFF));
     }
 
     public String toString(String argument) {
@@ -178,14 +138,20 @@ public enum OpcodeMode {
   }
 
   /**
-   * String representation for this address mode with a given numeric argument.
+   * String representation for this address mode with a given argument.
+   * This method is used for disassembling.
    *
-   * @param argument argument
+   * @param pc address of opcode
+   * @param argument argument of opcode
    */
-  public abstract String toString(int pc, int argument);
+  public String toString(int pc, int argument) {
+    // Default implementation, will be overridden by some modes
+    return getSize() == 1? toString(hexByte(argument)) : hexWord(argument);
+  }
 
   /**
    * String representation for this address mode with a given (generic) argument.
+   * This method is used for reassembling.
    *
    * @param argument argument
    */
