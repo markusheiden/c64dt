@@ -36,8 +36,13 @@ public class JC64TextArea extends JC64ScreenComponent
     _chars = new byte[rows][columns];
     _foregrounds = new Color[rows][columns];
     _backgrounds = new Color[rows][columns];
+  }
 
-    clear(Color.BLACK, Color.BLACK);
+  @Override
+  public void addNotify()
+  {
+    // Clear after add, because the colors aren't set before
+    clear();
   }
 
   /**
@@ -219,18 +224,9 @@ public class JC64TextArea extends JC64ScreenComponent
    */
   public void clear()
   {
-    clear(getForeground(), getBackground());
-  }
-
-  /**
-   * Clear component with background color.
-   */
-  private void clear(Color foreground, Color background)
-  {
-    assert foreground != null : "Check: foreground != null";
-    assert background != null : "Check: background != null";
-
     byte space = _charset.toBytes(" ")[0];
+    Color foreground = getForeground();
+    Color background = getBackground();
     for (int row = 0; row < _rows; row++)
     {
       byte[] charRow = _chars[row];

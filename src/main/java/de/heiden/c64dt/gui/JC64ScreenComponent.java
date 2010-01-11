@@ -1,7 +1,6 @@
 package de.heiden.c64dt.gui;
 
 import javax.swing.JComponent;
-import javax.swing.text.JTextComponent;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
@@ -52,7 +51,7 @@ public abstract class JC64ScreenComponent extends JComponent
   @Override
   public final void paintComponent(Graphics g)
   {
-    createScreenImage();
+    createImage(g);
     doPaintComponent(g);
     drawImage(g);
   }
@@ -97,7 +96,7 @@ public abstract class JC64ScreenComponent extends JComponent
   /**
    * Lazily create image for screen display.
    */
-  protected void createScreenImage()
+  private void createImage(Graphics g)
   {
     if (_image != null)
     {
