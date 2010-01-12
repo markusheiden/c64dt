@@ -150,7 +150,7 @@ public class JC64TextArea extends JC64ScreenComponent
       StringTokenizer tokenizer = new StringTokenizer(s , "\n");
       for (int r = row; tokenizer.hasMoreTokens() && r < _rows; r++)
       {
-        setText(column, r++, tokenizer.nextToken());
+        setText(column, r, tokenizer.nextToken());
       }
     }
   }
