@@ -8,99 +8,126 @@ import static de.heiden.c64dt.util.HexUtil.hexWord;
 /**
  * Opcode address mode.
  */
-public enum OpcodeMode {
+public enum OpcodeMode
+{
   // direct
-  DIR(0, false) {
-    public String toString(int pc, int argument) {
-      return "";
-    }
+  DIR(0, false)
+    {
+      public String toString(int pc, int argument)
+      {
+        return "";
+      }
 
-    public String toString(String argument) {
-      return "";
-    }
-  },
+      public String toString(String argument)
+      {
+        return "";
+      }
+    },
 
   // #$00
-  IMM(1, false) {
-    public String toString(String argument) {
-      return "#" + argument;
-    }
-  },
+  IMM(1, false)
+    {
+      public String toString(String argument)
+      {
+        return "#" + argument;
+      }
+    },
 
   // $00
-  ZPD(1, true) {
-    public String toString(String argument) {
-      return argument;
-    }
-  },
+  ZPD(1, true)
+    {
+      public String toString(String argument)
+      {
+        return argument;
+      }
+    },
 
   // $00,X
-  ZPX(1, true) {
-    public String toString(String argument) {
-      return argument + ",X";
-    }
-  },
+  ZPX(1, true)
+    {
+      public String toString(String argument)
+      {
+        return argument + ",X";
+      }
+    },
 
   // $00,Y
-  ZPY(1, true) {
-    public String toString(String argument) {
-      return argument + ",Y";
-    }
-  },
+  ZPY(1, true)
+    {
+      public String toString(String argument)
+      {
+        return argument + ",Y";
+      }
+    },
 
   // ($00,X)
-  IZX(1, true) {
-    public String toString(String argument) {
-      return "(" + argument + ",X)";
-    }
-  },
+  IZX(1, true)
+    {
+      public String toString(String argument)
+      {
+        return "(" + argument + ",X)";
+      }
+    },
 
   // ($00),Y
-  IZY(1, true) {
-    public String toString(String argument) {
-      return "(" + argument + "),Y";
-    }
-  },
+  IZY(1, true)
+    {
+      public String toString(String argument)
+      {
+        return "(" + argument + "),Y";
+      }
+    },
 
   // $0000
-  ABS(2, true) {
-    public String toString(String argument) {
-      return argument;
-    }
-  },
+  ABS(2, true)
+    {
+      public String toString(String argument)
+      {
+        return argument;
+      }
+    },
 
   // $0000,X
-  ABX(2, true) {
-    public String toString(String argument) {
-      return argument + ",X";
-    }
-  },
+  ABX(2, true)
+    {
+      public String toString(String argument)
+      {
+        return argument + ",X";
+      }
+    },
 
   // $0000,Y
-  ABY(2, true) {
-    public String toString(String argument) {
-      return argument + ",Y";
-    }
-  },
+  ABY(2, true)
+    {
+      public String toString(String argument)
+      {
+        return argument + ",Y";
+      }
+    },
 
   // ($0000)
-  IND(2, true) {
-    public String toString(String argument) {
-      return "(" + argument + ")";
-    }
-  },
+  IND(2, true)
+    {
+      public String toString(String argument)
+      {
+        return "(" + argument + ")";
+      }
+    },
 
   // $0000, PC-relative
-  REL(1, true) {
-    public String toString(int pc, int argument) {
-      // argument is signed
-      return toString(hexWord((pc + 2 + (byte) argument) & 0xFFFF));
-    }
+  REL(1, true)
+    {
+      public String toString(int pc, int argument)
+      {
+        // argument is signed
+        return toString(hexWord((pc + 2 + (byte) argument) & 0xFFFF));
+      }
 
-    public String toString(String argument) {
-      return argument;
-    }
-  };
+      public String toString(String argument)
+      {
+        return argument;
+      }
+    };
 
   private final int size;
   private final boolean isAddress;
@@ -108,7 +135,8 @@ public enum OpcodeMode {
   /**
    * Number of bytes this address mode uses.
    */
-  public int getSize() {
+  public int getSize()
+  {
     Assert.isTrue(size >= 0 && size <= 2, "Postcondition: result >= 0 && result <= 2");
     return size;
   }
@@ -116,14 +144,16 @@ public enum OpcodeMode {
   /**
    * Does this address mode use an address?.
    */
-  public boolean isAddress() {
+  public boolean isAddress()
+  {
     return isAddress;
   }
 
   /**
    * Does this address mode have an argument?.
    */
-  public final boolean hasArgument() {
+  public final boolean hasArgument()
+  {
     return size != 0;
   }
 
@@ -132,9 +162,10 @@ public enum OpcodeMode {
    *
    * @param argument argument
    */
-  public String toString(int argument) {
+  public String toString(int argument)
+  {
     Assert.isTrue(hasArgument(), "Precondition: hasArgument()");
-    return toString(size == 1? hexByte(argument) : hexWord(argument));
+    return toString(size == 1 ? hexByte(argument) : hexWord(argument));
   }
 
   /**
@@ -144,9 +175,10 @@ public enum OpcodeMode {
    * @param pc address of opcode
    * @param argument argument of opcode
    */
-  public String toString(int pc, int argument) {
+  public String toString(int pc, int argument)
+  {
     // Default implementation, will be overridden by some modes
-    return getSize() == 1? toString(hexByte(argument)) : hexWord(argument);
+    return toString(getSize() == 1 ? hexByte(argument) : hexWord(argument));
   }
 
   /**
@@ -163,7 +195,8 @@ public enum OpcodeMode {
    * @param size number of bytes the argument takes
    * @param isAddress is the argument a (non zero page) address?
    */
-  private OpcodeMode(int size, boolean isAddress) {
+  private OpcodeMode(int size, boolean isAddress)
+  {
     Assert.isTrue(size >= 0 && size <= 2, "Precondition: getSize >= 0 && getSize <= 2");
 
     this.size = size;
