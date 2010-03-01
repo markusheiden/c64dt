@@ -22,7 +22,8 @@ import static de.heiden.c64dt.assembler.OpcodeType.*;
 /**
  * 6502 series opcodes.
  */
-public enum Opcode {
+public enum Opcode
+{
   OPCODE_00(0x00, REG, BRK, DIR, 7),
   OPCODE_01(0x01, REG, ORA, IZX, 6),
   OPCODE_02(0x02, ILL, KIL, DIR, 0),
@@ -303,19 +304,23 @@ public enum Opcode {
   private final OpcodeMode mode;
   private final int cycles;
 
-  public int getOpcode() {
+  public int getOpcode()
+  {
     return opcode;
   }
 
-  public boolean isLegal() {
+  public boolean isLegal()
+  {
     return legal;
   }
 
-  public OpcodeType getType() {
+  public OpcodeType getType()
+  {
     return type;
   }
 
-  public OpcodeMode getMode() {
+  public OpcodeMode getMode()
+  {
     return mode;
   }
 
@@ -324,22 +329,26 @@ public enum Opcode {
    *
    * TODO rework detect all kinds of references, not just single location code references
    */
-  public boolean isCodeReference() {
+  public boolean isCodeReference()
+  {
     return type.isJump() && (mode == OpcodeMode.REL || mode == OpcodeMode.ABS);
   }
 
-  public int getCycles() {
+  public int getCycles()
+  {
     return cycles;
   }
 
   /**
    * Size of the whole command.
    */
-  public int getSize() {
+  public int getSize()
+  {
     return 1 + mode.getSize();
   }
 
-  public static Opcode opcode(int opcode) {
+  public static Opcode opcode(int opcode)
+  {
     Assert.isTrue(opcode >= 0x00 && opcode <= 0xFF, "Precondition: opcode >= 0x00 && opcode <= 0xFF");
 
     Opcode result = values()[opcode];
@@ -354,8 +363,9 @@ public enum Opcode {
    * @param pc address of opcode
    * @param addr argument of opcode
    */
-  public String toString(int pc, int addr) {
-    StringBuffer result = new StringBuffer();
+  public String toString(int pc, int addr)
+  {
+    StringBuilder result = new StringBuilder();
 //    result.append(_legal ? ' ' : '*');
     result.append(type.toString());
     result.append(' ');
@@ -372,7 +382,8 @@ public enum Opcode {
    * @param mode address mode
    * @param cycles number of cycles (without exceptional additional cycles)
    */
-  private Opcode(int opcode, boolean legal, OpcodeType type, OpcodeMode mode, int cycles) {
+  private Opcode(int opcode, boolean legal, OpcodeType type, OpcodeMode mode, int cycles)
+  {
     Assert.isTrue(opcode >= 0x00 && opcode <= 0xFF, "Precondition: opcode >= 0x00 && opcode <= 0xFF");
     Assert.notNull(type, "Precondition: type != null");
     Assert.notNull(mode, "Precondition: mode != null");
