@@ -24,7 +24,7 @@ public abstract class JC64ScreenComponent extends JComponent
     _height = height;
     _width = width;
     _factor = factor;
-    _colors = new Object[C64Color.values().length];
+    _colors = new int[C64Color.values().length][];
 
     Dimension size = new Dimension((int) Math.round(width * factor), (int) Math.round(height * factor));
     setPreferredSize(size);
@@ -43,7 +43,7 @@ public abstract class JC64ScreenComponent extends JComponent
    * Native color representations of the C64 colors.
    * For optimal drawing speed.
    */
-  public Object[] getColors()
+  public int[][] getColors()
   {
     return _colors;
   }
@@ -114,7 +114,7 @@ public abstract class JC64ScreenComponent extends JComponent
     C64Color[] colors = C64Color.values();
     for (int i = 0; i < colors.length; i++)
     {
-      _colors[i] = cm.getDataElements(colors[i].getColor().getRGB(), null);
+      _colors[i] = cm.getComponents(cm.getDataElements(colors[i].getColor().getRGB(), null), null, 0);
     }
   }
 
@@ -127,5 +127,5 @@ public abstract class JC64ScreenComponent extends JComponent
   private final double _factor;
 
   private BufferedImage _image;
-  private final Object[] _colors;
+  private final int[][] _colors;
 }
