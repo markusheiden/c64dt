@@ -4,8 +4,10 @@ import javax.swing.JComponent;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
+import java.awt.image.MemoryImageSource;
 
 /**
  * Base class for component displaying c64 content.
@@ -24,7 +26,7 @@ public abstract class JC64ScreenComponent extends JComponent
     _height = height;
     _width = width;
     _factor = factor;
-    _colors = new int[C64Color.values().length][];
+    _colors = new int[C64Color.values().length];
 
     Dimension size = new Dimension((int) Math.round(width * factor), (int) Math.round(height * factor));
     setPreferredSize(size);
@@ -34,7 +36,7 @@ public abstract class JC64ScreenComponent extends JComponent
   /**
    * Backing image.
    */
-  public BufferedImage getImage()
+  public Image getImage()
   {
     return _image;
   }
@@ -43,7 +45,7 @@ public abstract class JC64ScreenComponent extends JComponent
    * Native color representations of the C64 colors.
    * For optimal drawing speed.
    */
-  public int[][] getColors()
+  public int[] getColors()
   {
     return _colors;
   }
@@ -106,15 +108,19 @@ public abstract class JC64ScreenComponent extends JComponent
     GraphicsConfiguration gc = getGraphicsConfiguration();
 
     // create buffered image
-    _image = gc.createCompatibleImage(_width, _height);
+    _imageData = new int[_width * _height];
+    _imageSource = new MemoryImageSource(_width, _height, _imageData, 0, _width);
+    _imageSource.setAnimated(true);
+    _imageSource.setFullBufferUpdates(true);
+
+    _image = createImage(_imageSource);
     _image.setAccelerationPriority(1);
 
     // convert colors to device specific colors
-    ColorModel cm = gc.getColorModel();
     C64Color[] colors = C64Color.values();
     for (int i = 0; i < colors.length; i++)
     {
-      _colors[i] = cm.getComponents(cm.getDataElements(colors[i].getColor().getRGB(), null), null, 0);
+      _colors[i] = colors[i].getColor().getRGB();
     }
   }
 
@@ -126,6 +132,8 @@ public abstract class JC64ScreenComponent extends JComponent
   private final int _height;
   private final double _factor;
 
-  private BufferedImage _image;
-  private final int[][] _colors;
+  protected int[] _imageData;
+  protected MemoryImageSource _imageSource;
+  private Image _image;
+  private final int[] _colors;
 }

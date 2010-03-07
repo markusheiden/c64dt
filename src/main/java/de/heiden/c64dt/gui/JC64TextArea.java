@@ -147,7 +147,7 @@ public class JC64TextArea extends JC64ScreenComponent
     }
     else
     {
-      StringTokenizer tokenizer = new StringTokenizer(s , "\n");
+      StringTokenizer tokenizer = new StringTokenizer(s, "\n");
       for (int r = row; tokenizer.hasMoreTokens() && r < _rows; r++)
       {
         setText(column, r, tokenizer.nextToken());
@@ -272,21 +272,21 @@ public class JC64TextArea extends JC64ScreenComponent
     int y = row * 8;
     int x = column * 8;
 
-    ColorModel colorModel = getImage().getColorModel();
-    Object foreground = colorModel.getDataElements(_foregrounds[row][column].getRGB(), null);
-    Object background = colorModel.getDataElements(_backgrounds[row][column].getRGB(), null);
-
-    WritableRaster raster = getImage().getRaster();
-    int offset = _upper ? 0x0000 : 0x0800;
-    int charPtr = offset + (_chars[row][column] & 0xFF) * 8;
-    for (int dy = 0; dy < 8; dy++)
-    {
-      int data = _charsetROM[charPtr++];
-      for (int dx = 0, bit = 0x80; bit > 0; dx++, bit = bit >> 1)
-      {
-        raster.setDataElements(x + dx, y + dy, (data & bit) != 0 ? foreground : background);
-      }
-    }
+//    ColorModel colorModel = getImage().getColorModel();
+//    Object foreground = colorModel.getDataElements(_foregrounds[row][column].getRGB(), null);
+//    Object background = colorModel.getDataElements(_backgrounds[row][column].getRGB(), null);
+//
+//    WritableRaster raster = getImage().getRaster();
+//    int offset = _upper ? 0x0000 : 0x0800;
+//    int charPtr = offset + (_chars[row][column] & 0xFF) * 8;
+//    for (int dy = 0; dy < 8; dy++)
+//    {
+//      int data = _charsetROM[charPtr++];
+//      for (int dx = 0, bit = 0x80; bit > 0; dx++, bit = bit >> 1)
+//      {
+//        raster.setDataElements(x + dx, y + dy, (data & bit) != 0 ? foreground : background);
+//      }
+//    }
   }
 
   //
