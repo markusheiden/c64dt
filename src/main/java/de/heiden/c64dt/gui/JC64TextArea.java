@@ -11,7 +11,7 @@ import java.util.StringTokenizer;
 /**
  * Component for displaying C64 text.
  */
-public class JC64TextArea extends JC64ScreenComponent
+public class JC64TextArea extends JC64CommonComponent
 {
   /**
    * Constructor.
@@ -31,12 +31,9 @@ public class JC64TextArea extends JC64ScreenComponent
     setCharset(false);
     _charsetROM = getDefaultCharset();
 
-    _foreground = C64Color.LIGHT_BLUE.ordinal();
-    _background = C64Color.BLUE.ordinal();
-
     _chars = new byte[rows][columns];
-    _foregrounds = new byte[rows][columns];
-    _backgrounds = new byte[rows][columns];
+    _foregrounds = new Color[rows][columns];
+    _backgrounds = new Color[rows][columns];
   }
 
   @Override
@@ -80,60 +77,6 @@ public class JC64TextArea extends JC64ScreenComponent
   public int getColumns()
   {
     return _columns;
-  }
-
-  /**
-   * Set foreground color.
-   *
-   * @param foreground foreground color index
-   */
-  public void setForeground(byte foreground)
-  {
-    setForeground(C64Color.values()[foreground]);
-  }
-
-  /**
-   * Set foreground color.
-   *
-   * @param foreground foreground color
-   */
-  public void setForeground(C64Color foreground)
-  {
-    _foreground = (byte) foreground.ordinal();
-    super.setForeground(foreground.getColor());
-  }
-
-  @Override
-  public void setForeground(Color fg)
-  {
-    throw new UnsupportedOperationException("RGB colors not supported. Use C64 colors instead.");
-  }
-
-  /**
-   * Set background color.
-   *
-   * @param background background color index
-   */
-  public void setBackground(int background)
-  {
-    setBackground(C64Color.values()[background]);
-  }
-
-  /**
-   * Set background color.
-   *
-   * @param background background color
-   */
-  public void setBackground(C64Color background)
-  {
-    _background = background.ordinal();
-    super.setBackground(background.getColor());
-  }
-
-  @Override
-  public void setBackground(Color bg)
-  {
-    throw new UnsupportedOperationException("RGB colors not supported. Use C64 colors instead.");
   }
 
   /**
@@ -226,8 +169,8 @@ public class JC64TextArea extends JC64ScreenComponent
   protected void setTextInternal(int column, int row, byte c)
   {
     _chars[row][column] = c;
-    _foregrounds[row][column] = (byte) _foreground;
-    _backgrounds[row][column] = (byte) _background;
+    _foregrounds[row][column] = getForeground();
+    _backgrounds[row][column] = getBackground();
   }
 
   /**
@@ -236,13 +179,13 @@ public class JC64TextArea extends JC64ScreenComponent
   public void clear()
   {
     byte space = _charset.toBytes(" ")[0];
-    byte foreground = (byte) _foreground;
-    byte background = (byte) _background;
+    Color foreground = getForeground();
+    Color background = getBackground();
     for (int row = 0; row < _rows; row++)
     {
       byte[] charRow = _chars[row];
-      byte[] foregroundRow = _foregrounds[row];
-      byte[] backgroundRow = _backgrounds[row];
+      Color[] foregroundRow = _foregrounds[row];
+      Color[] backgroundRow = _backgrounds[row];
       for (int column = 0; column < _columns; column++)
       {
         charRow[column] = space;
@@ -281,9 +224,9 @@ public class JC64TextArea extends JC64ScreenComponent
    */
   private void paintCharacter(int column, int row)
   {
-    byte[] imageData = getImageData();
-    byte foreground = _foregrounds[row][column];
-    byte background = _backgrounds[row][column];
+    int[] imageData = getImageData();
+    int foreground = _foregrounds[row][column].getRGB();
+    int background = _backgrounds[row][column].getRGB();
 
     int charOffset = _upper ? 0x0000 : 0x0800;
     int charPtr = charOffset + (_chars[row][column] & 0xFF) * 8;
@@ -349,14 +292,11 @@ public class JC64TextArea extends JC64ScreenComponent
   // private attributes
   //
 
-  private int _foreground;
-  private int _background;
-
   private final int _columns;
   private final int _rows;
   private final byte[][] _chars;
-  private final byte[][] _foregrounds;
-  private final byte[][] _backgrounds;
+  private final Color[][] _foregrounds;
+  private final Color[][] _backgrounds;
 
   private boolean _upper;
   private C64Charset _charset;

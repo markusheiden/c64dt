@@ -12,9 +12,9 @@ import java.awt.image.IndexColorModel;
 import java.awt.image.MemoryImageSource;
 
 /**
- * Base class for component displaying c64 content.
+ * Base class for component displaying c64 indexed color content.
  */
-public abstract class JC64ScreenComponent extends JComponent
+public abstract class JC64ScreenComponent extends JC64Component
 {
   /**
    * Constructor.
@@ -25,51 +25,52 @@ public abstract class JC64ScreenComponent extends JComponent
    */
   protected JC64ScreenComponent(int width, int height, double factor)
   {
-    _height = height;
-    _width = width;
-    _factor = factor;
+    super(width, height, factor);
 
-    // create color model
-    C64Color[] colors = C64Color.values();
-    byte[] r = new byte[colors.length];
-    byte[] g = new byte[colors.length];
-    byte[] b = new byte[colors.length];
-    for (int i = 0; i < colors.length; i++)
-    {
-      Color color = colors[i].getColor();
-      r[i] = (byte) color.getRed();
-      g[i] = (byte) color.getGreen();
-      b[i] = (byte) color.getBlue();
-    }
-    _colorModel = new IndexColorModel(8, 16, r, g, b);
+    _colorModel = new C64IndexColorModel();
 
     // create image data
-    _imageData = new byte[_width * _height];
+    _imageData = new byte[getImageWidth() * getImageHeight()];
 
     // create image source
-    _imageSource = new MemoryImageSource(_width, _height, _colorModel, _imageData, 0, _width);
+    _imageSource = new MemoryImageSource(width, height, _colorModel, _imageData, 0, width);
     _imageSource.setAnimated(true);
     _imageSource.setFullBufferUpdates(true);
-
-    Dimension size = new Dimension((int) Math.round(width * factor), (int) Math.round(height * factor));
-    setPreferredSize(size);
-    setSize(size);
   }
 
   /**
-   * Width of backing image.
+   * Set foreground color.
+   *
+   * @param foreground foreground color
    */
-  public int getImageWidth()
+  @Override
+  public void setForeground(C64Color foreground)
   {
-    return _width;
+    _foreground = (byte) foreground.ordinal();
+    super.setForeground(foreground.getColor());
+  }
+
+  @Override
+  public void setForeground(Color fg)
+  {
+    throw new UnsupportedOperationException("RGB colors not supported. Use C64 colors instead.");
   }
 
   /**
-   * Height of backing image.
+   * Set background color.
+   *
+   * @param background background color
    */
-  public int getImageHeight()
+  public void setBackground(C64Color background)
   {
-    return _height;
+    _background = background.ordinal();
+    super.setBackground(background.getColor());
+  }
+
+  @Override
+  public void setBackground(Color bg)
+  {
+    throw new UnsupportedOperationException("RGB colors not supported. Use C64 colors instead.");
   }
 
   /**
@@ -78,14 +79,6 @@ public abstract class JC64ScreenComponent extends JComponent
   public byte[] getImageData()
   {
     return _imageData;
-  }
-
-  /**
-   * Notify image source that the backing image data has been changed.
-   */
-  protected void updateImageData()
-  {
-    _imageSource.newPixels();
   }
 
   /**
@@ -99,77 +92,16 @@ public abstract class JC64ScreenComponent extends JComponent
     assert imageData.length == getImageData().length : "Precondition: imageData.length == getImageData().length";
 
     _imageData = imageData;
-    _imageSource.newPixels(imageData, _colorModel, 0, _width);
-  }
-
-  @Override
-  public final void paintComponent(Graphics g)
-  {
-    if (_image == null)
-    {
-      createImage();
-    }
-    doPaintComponent(g);
-    drawImage(g);
-  }
-
-  /**
-   * Do custom updating.
-   *
-   * @param g graphics
-   */
-  protected abstract void doPaintComponent(Graphics g);
-
-  /**
-   * Draw backing image with the fixed defined size.
-   *
-   * @param g graphics
-   */
-  protected void drawImage(Graphics g)
-  {
-    drawImageFixed(g);
-  }
-
-  /**
-   * Draw backing image with the fixed defined size.
-   *
-   * @param g graphics
-   */
-  protected void drawImageFixed(Graphics g)
-  {
-    g.drawImage(_image, 0, 0, (int) Math.round(_width * _factor), (int) Math.round(_height * _factor), null);
-  }
-
-  /**
-   * Draw backing image fitting into the current component size.
-   *
-   * @param g graphics
-   */
-  protected void drawImageResized(Graphics g)
-  {
-    g.drawImage(_image, 0, 0, getWidth(), getHeight(), null);
-  }
-
-  /**
-   * Lazily create image for screen display.
-   */
-  private void createImage()
-  {
-    // create image
-    _image = createImage(_imageSource);
-    _image.setAccelerationPriority(1);
+    _imageSource.newPixels(imageData, _colorModel, 0, getImageWidth());
   }
 
   //
   // attributes
   //
 
-  private final int _width;
-  private final int _height;
-  private final double _factor;
+  protected int _foreground;
+  protected int _background;
 
   private ColorModel _colorModel;
   private byte[] _imageData;
-  private MemoryImageSource _imageSource;
-  private Image _image;
 }
