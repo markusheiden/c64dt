@@ -83,7 +83,7 @@ public class JC64TextArea extends JC64ScreenComponent
   }
 
   /**
-   * Set foreground color index.
+   * Set foreground color.
    *
    * @param foreground foreground color index
    */
@@ -93,7 +93,7 @@ public class JC64TextArea extends JC64ScreenComponent
   }
 
   /**
-   * Set foreground color index.
+   * Set foreground color.
    *
    * @param foreground foreground color
    */
@@ -110,7 +110,7 @@ public class JC64TextArea extends JC64ScreenComponent
   }
 
   /**
-   * Set background color index.
+   * Set background color.
    *
    * @param background background color index
    */
@@ -120,7 +120,7 @@ public class JC64TextArea extends JC64ScreenComponent
   }
 
   /**
-   * Set background color index.
+   * Set background color.
    *
    * @param background background color
    */
