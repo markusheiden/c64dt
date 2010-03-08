@@ -105,7 +105,7 @@ public abstract class JC64ScreenComponent extends JComponent
   @Override
   public final void paintComponent(Graphics g)
   {
-    createImage(g);
+    createImage();
     doPaintComponent(g);
     drawImage(g);
   }
@@ -150,7 +150,7 @@ public abstract class JC64ScreenComponent extends JComponent
   /**
    * Lazily create image for screen display.
    */
-  private void createImage(Graphics graphics)
+  private void createImage()
   {
     if (_image != null)
     {
