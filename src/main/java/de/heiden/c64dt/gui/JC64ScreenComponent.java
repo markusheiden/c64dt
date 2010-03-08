@@ -105,7 +105,10 @@ public abstract class JC64ScreenComponent extends JComponent
   @Override
   public final void paintComponent(Graphics g)
   {
-    createImage();
+    if (_image == null)
+    {
+      createImage();
+    }
     doPaintComponent(g);
     drawImage(g);
   }
@@ -152,11 +155,6 @@ public abstract class JC64ScreenComponent extends JComponent
    */
   private void createImage()
   {
-    if (_image != null)
-    {
-      return;
-    }
-
     // create image
     _image = createImage(_imageSource);
     _image.setAccelerationPriority(1);
@@ -170,8 +168,8 @@ public abstract class JC64ScreenComponent extends JComponent
   private final int _height;
   private final double _factor;
 
-  private final ColorModel _colorModel;
+  private ColorModel _colorModel;
   private byte[] _imageData;
-  private final MemoryImageSource _imageSource;
+  private MemoryImageSource _imageSource;
   private Image _image;
 }
