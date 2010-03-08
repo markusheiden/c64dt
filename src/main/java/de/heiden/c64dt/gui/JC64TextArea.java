@@ -31,9 +31,12 @@ public class JC64TextArea extends JC64ScreenComponent
     setCharset(false);
     _charsetROM = getDefaultCharset();
 
+    _foreground = C64Color.LIGHT_BLUE.ordinal();
+    _background = C64Color.BLUE.ordinal();
+
     _chars = new byte[rows][columns];
-    _foregrounds = new Color[rows][columns];
-    _backgrounds = new Color[rows][columns];
+    _foregrounds = new byte[rows][columns];
+    _backgrounds = new byte[rows][columns];
   }
 
   @Override
@@ -84,7 +87,7 @@ public class JC64TextArea extends JC64ScreenComponent
    *
    * @param foreground foreground color index
    */
-  public void setForeground(int foreground)
+  public void setForeground(byte foreground)
   {
     setForeground(C64Color.values()[foreground]);
   }
@@ -96,7 +99,14 @@ public class JC64TextArea extends JC64ScreenComponent
    */
   public void setForeground(C64Color foreground)
   {
-    setForeground(foreground.getColor());
+    _foreground = (byte) foreground.ordinal();
+    super.setForeground(foreground.getColor());
+  }
+
+  @Override
+  public void setForeground(Color fg)
+  {
+    throw new UnsupportedOperationException("RGB colors not supported. Use C64 colors instead.");
   }
 
   /**
@@ -116,7 +126,14 @@ public class JC64TextArea extends JC64ScreenComponent
    */
   public void setBackground(C64Color background)
   {
-    setBackground(background.getColor());
+    _background = background.ordinal();
+    super.setBackground(background.getColor());
+  }
+
+  @Override
+  public void setBackground(Color bg)
+  {
+    throw new UnsupportedOperationException("RGB colors not supported. Use C64 colors instead.");
   }
 
   /**
@@ -209,12 +226,8 @@ public class JC64TextArea extends JC64ScreenComponent
   protected void setTextInternal(int column, int row, byte c)
   {
     _chars[row][column] = c;
-    Color foreground = getForeground();
-    assert foreground != null : "Check: foreground != null";
-    _foregrounds[row][column] = foreground;
-    Color background = getBackground();
-    assert background != null : "Check: background != null";
-    _backgrounds[row][column] = background;
+    _foregrounds[row][column] = (byte) _foreground;
+    _backgrounds[row][column] = (byte) _background;
   }
 
   /**
@@ -223,13 +236,13 @@ public class JC64TextArea extends JC64ScreenComponent
   public void clear()
   {
     byte space = _charset.toBytes(" ")[0];
-    Color foreground = getForeground();
-    Color background = getBackground();
+    byte foreground = (byte) _foreground;
+    byte background = (byte) _background;
     for (int row = 0; row < _rows; row++)
     {
       byte[] charRow = _chars[row];
-      Color[] foregroundRow = _foregrounds[row];
-      Color[] backgroundRow = _backgrounds[row];
+      byte[] foregroundRow = _foregrounds[row];
+      byte[] backgroundRow = _backgrounds[row];
       for (int column = 0; column < _columns; column++)
       {
         charRow[column] = space;
@@ -269,8 +282,8 @@ public class JC64TextArea extends JC64ScreenComponent
   private void paintCharacter(int column, int row)
   {
     byte[] imageData = getImageData();
-    byte foreground = 0; //_FIXME foregrounds[row][column].getRGB();
-    byte background = 0; // FIXME _backgrounds[row][column].getRGB();
+    byte foreground = _foregrounds[row][column];
+    byte background = _backgrounds[row][column];
 
     int charOffset = _upper ? 0x0000 : 0x0800;
     int charPtr = charOffset + (_chars[row][column] & 0xFF) * 8;
@@ -336,11 +349,14 @@ public class JC64TextArea extends JC64ScreenComponent
   // private attributes
   //
 
+  private int _foreground;
+  private int _background;
+
   private final int _columns;
   private final int _rows;
   private final byte[][] _chars;
-  private final Color[][] _foregrounds;
-  private final Color[][] _backgrounds;
+  private final byte[][] _foregrounds;
+  private final byte[][] _backgrounds;
 
   private boolean _upper;
   private C64Charset _charset;
