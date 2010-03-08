@@ -270,9 +270,9 @@ public class JC64TextArea extends JC64ScreenComponent
    */
   private void paintCharacter(int column, int row)
   {
-    int[] imageData = getImageData();
-    int foreground = _foregrounds[row][column].getRGB();
-    int background = _backgrounds[row][column].getRGB();
+    byte[] imageData = getImageData();
+    byte foreground = 0; //_FIXME foregrounds[row][column].getRGB();
+    byte background = 0; // FIXME _backgrounds[row][column].getRGB();
 
     int charOffset = _upper ? 0x0000 : 0x0800;
     int charPtr = charOffset + (_chars[row][column] & 0xFF) * 8;

@@ -1,12 +1,14 @@
 package de.heiden.c64dt.gui;
 
 import javax.swing.JComponent;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
+import java.awt.image.IndexColorModel;
 import java.awt.image.MemoryImageSource;
 
 /**
@@ -26,11 +28,26 @@ public abstract class JC64ScreenComponent extends JComponent
     _height = height;
     _width = width;
     _factor = factor;
-    _colors = new int[C64Color.values().length];
+
+    // create color model
+    C64Color[] colors = C64Color.values();
+    byte[] r = new byte[colors.length];
+    byte[] g = new byte[colors.length];
+    byte[] b = new byte[colors.length];
+    for (int i = 0; i < colors.length; i++)
+    {
+      Color color = colors[i].getColor();
+      r[i] = (byte) color.getRed();
+      g[i] = (byte) color.getGreen();
+      b[i] = (byte) color.getBlue();
+    }
+    ColorModel colorModel = new IndexColorModel(8, 16, r, g, b);
+
+    // create image data
+    _imageData = new byte[_width * _height];
 
     // create image source
-    _imageData = new int[_width * _height];
-    _imageSource = new MemoryImageSource(_width, _height, _imageData, 0, _width);
+    _imageSource = new MemoryImageSource(_width, _height, colorModel, _imageData, 0, _width);
     _imageSource.setAnimated(true);
     _imageSource.setFullBufferUpdates(true);
 
@@ -58,17 +75,9 @@ public abstract class JC64ScreenComponent extends JComponent
   /**
    * Backing image.
    */
-  public int[] getImageData()
+  public byte[] getImageData()
   {
     return _imageData;
-  }
-
-  /**
-   * Color representations of the C64 colors.
-   */
-  public int[] getColors()
-  {
-    return _colors;
   }
 
   @Override
@@ -120,25 +129,16 @@ public abstract class JC64ScreenComponent extends JComponent
   /**
    * Lazily create image for screen display.
    */
-  private void createImage(Graphics g)
+  private void createImage(Graphics graphics)
   {
     if (_image != null)
     {
       return;
     }
 
-    GraphicsConfiguration gc = getGraphicsConfiguration();
-
     // create image
     _image = createImage(_imageSource);
     _image.setAccelerationPriority(1);
-
-    // convert colors to device specific colors
-    C64Color[] colors = C64Color.values();
-    for (int i = 0; i < colors.length; i++)
-    {
-      _colors[i] = colors[i].getColor().getRGB();
-    }
   }
 
   //
@@ -149,8 +149,7 @@ public abstract class JC64ScreenComponent extends JComponent
   private final int _height;
   private final double _factor;
 
-  private final int[] _colors;
-  private final int[] _imageData;
+  private final byte[] _imageData;
   private final MemoryImageSource _imageSource;
   private Image _image;
 }
