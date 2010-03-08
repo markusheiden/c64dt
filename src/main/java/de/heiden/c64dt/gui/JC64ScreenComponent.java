@@ -81,17 +81,19 @@ public abstract class JC64ScreenComponent extends JComponent
   }
 
   /**
-   * Replace backing image.
+   * Notify image source that the backing image data has been changed.
    */
-  protected void setImageData()
+  protected void updateImageData()
   {
     _imageSource.newPixels();
   }
 
   /**
-   * Replace backing image.
+   * Update backing image data at image source.
+   *
+   * @param imageData new backing image data
    */
-  protected void setImageData(byte[] imageData)
+  protected void updateImageData(byte[] imageData)
   {
     assert imageData != null : "Precondition: imageData != null";
     assert imageData.length == getImageData().length : "Precondition: imageData.length == getImageData().length";
@@ -106,14 +108,6 @@ public abstract class JC64ScreenComponent extends JComponent
     createImage(g);
     doPaintComponent(g);
     drawImage(g);
-  }
-
-  /**
-   * Notify image producer about update.
-   */
-  protected void doUpdateImage()
-  {
-    _imageSource.newPixels();
   }
 
   /**

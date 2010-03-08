@@ -4,11 +4,8 @@ import de.heiden.c64dt.charset.C64Charset;
 import de.heiden.c64dt.util.ResourceLoader;
 
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.ColorModel;
-import java.awt.image.WritableRaster;
 import java.util.StringTokenizer;
 
 /**
@@ -260,7 +257,7 @@ public class JC64TextArea extends JC64ScreenComponent
         paintCharacter(column, row);
       }
     }
-    setImageData();
+    updateImageData();
   }
 
   /**
