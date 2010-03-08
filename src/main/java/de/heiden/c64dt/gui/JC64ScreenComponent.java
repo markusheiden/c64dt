@@ -41,13 +41,13 @@ public abstract class JC64ScreenComponent extends JComponent
       g[i] = (byte) color.getGreen();
       b[i] = (byte) color.getBlue();
     }
-    ColorModel colorModel = new IndexColorModel(8, 16, r, g, b);
+    _colorModel = new IndexColorModel(8, 16, r, g, b);
 
     // create image data
     _imageData = new byte[_width * _height];
 
     // create image source
-    _imageSource = new MemoryImageSource(_width, _height, colorModel, _imageData, 0, _width);
+    _imageSource = new MemoryImageSource(_width, _height, _colorModel, _imageData, 0, _width);
     _imageSource.setAnimated(true);
     _imageSource.setFullBufferUpdates(true);
 
@@ -80,13 +80,40 @@ public abstract class JC64ScreenComponent extends JComponent
     return _imageData;
   }
 
+  /**
+   * Replace backing image.
+   */
+  protected void setImageData()
+  {
+    _imageSource.newPixels();
+  }
+
+  /**
+   * Replace backing image.
+   */
+  protected void setImageData(byte[] imageData)
+  {
+    assert imageData != null : "Precondition: imageData != null";
+    assert imageData.length == getImageData().length : "Precondition: imageData.length == getImageData().length";
+
+    _imageData = imageData;
+    _imageSource.newPixels(imageData, _colorModel, 0, _width);
+  }
+
   @Override
   public final void paintComponent(Graphics g)
   {
     createImage(g);
     doPaintComponent(g);
-    _imageSource.newPixels();
     drawImage(g);
+  }
+
+  /**
+   * Notify image producer about update.
+   */
+  protected void doUpdateImage()
+  {
+    _imageSource.newPixels();
   }
 
   /**
@@ -149,7 +176,8 @@ public abstract class JC64ScreenComponent extends JComponent
   private final int _height;
   private final double _factor;
 
-  private final byte[] _imageData;
+  private final ColorModel _colorModel;
+  private byte[] _imageData;
   private final MemoryImageSource _imageSource;
   private Image _image;
 }

@@ -260,6 +260,7 @@ public class JC64TextArea extends JC64ScreenComponent
         paintCharacter(column, row);
       }
     }
+    setImageData();
   }
 
   /**
