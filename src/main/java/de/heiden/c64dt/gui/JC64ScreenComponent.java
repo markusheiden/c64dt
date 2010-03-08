@@ -28,22 +28,43 @@ public abstract class JC64ScreenComponent extends JComponent
     _factor = factor;
     _colors = new int[C64Color.values().length];
 
+    // create image source
+    _imageData = new int[_width * _height];
+    _imageSource = new MemoryImageSource(_width, _height, _imageData, 0, _width);
+    _imageSource.setAnimated(true);
+    _imageSource.setFullBufferUpdates(true);
+
     Dimension size = new Dimension((int) Math.round(width * factor), (int) Math.round(height * factor));
     setPreferredSize(size);
     setSize(size);
   }
 
   /**
-   * Backing image.
+   * Width of backing image.
    */
-  public Image getImage()
+  public int getImageWidth()
   {
-    return _image;
+    return _width;
   }
 
   /**
-   * Native color representations of the C64 colors.
-   * For optimal drawing speed.
+   * Height of backing image.
+   */
+  public int getImageHeight()
+  {
+    return _height;
+  }
+
+  /**
+   * Backing image.
+   */
+  public int[] getImageData()
+  {
+    return _imageData;
+  }
+
+  /**
+   * Color representations of the C64 colors.
    */
   public int[] getColors()
   {
@@ -55,6 +76,7 @@ public abstract class JC64ScreenComponent extends JComponent
   {
     createImage(g);
     doPaintComponent(g);
+    _imageSource.newPixels();
     drawImage(g);
   }
 
@@ -107,12 +129,7 @@ public abstract class JC64ScreenComponent extends JComponent
 
     GraphicsConfiguration gc = getGraphicsConfiguration();
 
-    // create buffered image
-    _imageData = new int[_width * _height];
-    _imageSource = new MemoryImageSource(_width, _height, _imageData, 0, _width);
-    _imageSource.setAnimated(true);
-    _imageSource.setFullBufferUpdates(true);
-
+    // create image
     _image = createImage(_imageSource);
     _image.setAccelerationPriority(1);
 
@@ -132,8 +149,8 @@ public abstract class JC64ScreenComponent extends JComponent
   private final int _height;
   private final double _factor;
 
-  protected int[] _imageData;
-  protected MemoryImageSource _imageSource;
-  private Image _image;
   private final int[] _colors;
+  private final int[] _imageData;
+  private final MemoryImageSource _imageSource;
+  private Image _image;
 }

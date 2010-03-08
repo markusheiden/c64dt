@@ -4,6 +4,7 @@ import de.heiden.c64dt.charset.C64Charset;
 import de.heiden.c64dt.util.ResourceLoader;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.ColorModel;
@@ -269,24 +270,21 @@ public class JC64TextArea extends JC64ScreenComponent
    */
   private void paintCharacter(int column, int row)
   {
-    int y = row * 8;
-    int x = column * 8;
+    int[] imageData = getImageData();
+    int foreground = _foregrounds[row][column].getRGB();
+    int background = _backgrounds[row][column].getRGB();
 
-//    ColorModel colorModel = getImage().getColorModel();
-//    Object foreground = colorModel.getDataElements(_foregrounds[row][column].getRGB(), null);
-//    Object background = colorModel.getDataElements(_backgrounds[row][column].getRGB(), null);
-//
-//    WritableRaster raster = getImage().getRaster();
-//    int offset = _upper ? 0x0000 : 0x0800;
-//    int charPtr = offset + (_chars[row][column] & 0xFF) * 8;
-//    for (int dy = 0; dy < 8; dy++)
-//    {
-//      int data = _charsetROM[charPtr++];
-//      for (int dx = 0, bit = 0x80; bit > 0; dx++, bit = bit >> 1)
-//      {
-//        raster.setDataElements(x + dx, y + dy, (data & bit) != 0 ? foreground : background);
-//      }
-//    }
+    int charOffset = _upper ? 0x0000 : 0x0800;
+    int charPtr = charOffset + (_chars[row][column] & 0xFF) * 8;
+    for (int y = row * 8, lastY = y + 8; y < lastY; y++)
+    {
+      int offset = y * getImageWidth() + column * 8;
+      int data = _charsetROM[charPtr++];
+      for (int dx = 0, bit = 0x80; bit > 0; dx++, bit = bit >> 1)
+      {
+        imageData[offset + dx] = (data & bit) != 0 ? foreground : background;
+      }
+    }
   }
 
   //
@@ -331,6 +329,9 @@ public class JC64TextArea extends JC64ScreenComponent
         text.setText(x + 20, y + 8, c);
       }
     }
+
+    // TODO 2010-03-07 mh: why is this repaint() needed???
+    frame.repaint();
   }
 
   //
