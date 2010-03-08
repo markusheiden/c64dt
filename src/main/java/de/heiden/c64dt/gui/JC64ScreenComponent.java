@@ -102,6 +102,6 @@ public abstract class JC64ScreenComponent extends JC64Component
   protected int _foreground;
   protected int _background;
 
-  private ColorModel _colorModel;
+  private final ColorModel _colorModel;
   private byte[] _imageData;
 }

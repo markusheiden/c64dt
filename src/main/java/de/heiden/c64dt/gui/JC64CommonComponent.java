@@ -6,7 +6,7 @@ import java.awt.image.IndexColorModel;
 import java.awt.image.MemoryImageSource;
 
 /**
- * Base class for component displaying c64 rgb color content.
+ * Base class for component displaying default rgb color c64 content.
  */
 public abstract class JC64CommonComponent extends JC64Component
 {
