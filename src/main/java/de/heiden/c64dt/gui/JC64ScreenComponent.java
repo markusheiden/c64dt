@@ -1,14 +1,7 @@
 package de.heiden.c64dt.gui;
 
-import javax.swing.JComponent;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.GraphicsConfiguration;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
-import java.awt.image.IndexColorModel;
 import java.awt.image.MemoryImageSource;
 
 /**

@@ -2,7 +2,6 @@ package de.heiden.c64dt.assembler;
 
 import org.springframework.util.Assert;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static de.heiden.c64dt.assembler.OpcodeMode.ABS;

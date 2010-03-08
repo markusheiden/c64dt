@@ -1,7 +1,5 @@
 package de.heiden.c64dt.util;
 
-import de.heiden.c64dt.util.HexUtil;
-import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,7 +12,7 @@ public class HexUtil_Test
    * Default test.
    */
   @Test
-  public void testDefault ()
+  public void testDefault()
   {
     Assert.assertEquals("00", HexUtil.hexBytePlain(0x00));
     Assert.assertEquals("0F", HexUtil.hexBytePlain(0x0F));

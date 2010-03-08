@@ -1,6 +1,5 @@
 package de.heiden.c64dt.util;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 

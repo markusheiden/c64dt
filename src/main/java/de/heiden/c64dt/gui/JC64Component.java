@@ -1,7 +1,6 @@
 package de.heiden.c64dt.gui;
 
 import javax.swing.JComponent;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
