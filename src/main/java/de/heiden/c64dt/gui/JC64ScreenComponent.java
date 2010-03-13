@@ -16,17 +16,20 @@ public abstract class JC64ScreenComponent extends JC64Component
    * @param height height in pixel
    * @param factor zoom factor
    */
-  protected JC64ScreenComponent(int width, int height, double factor)
+  protected JC64ScreenComponent(int offset, int width, int lineLength, int height, double factor)
   {
     super(width, height, factor);
+
+    _offset = offset;
+    _lineLength = lineLength;
 
     _colorModel = new C64IndexColorModel();
 
     // create image data
-    _imageData = new byte[getImageWidth() * getImageHeight()];
+    _imageData = new byte[offset + lineLength * height];
 
     // create image source
-    _imageSource = new MemoryImageSource(width, height, _colorModel, _imageData, 0, width);
+    _imageSource = new MemoryImageSource(width, height, _colorModel, _imageData, offset, lineLength);
     _imageSource.setAnimated(true);
     _imageSource.setFullBufferUpdates(true);
   }
@@ -85,7 +88,7 @@ public abstract class JC64ScreenComponent extends JC64Component
     assert imageData.length == getImageData().length : "Precondition: imageData.length == getImageData().length";
 
     _imageData = imageData;
-    _imageSource.newPixels(imageData, _colorModel, 0, getImageWidth());
+    _imageSource.newPixels(imageData, _colorModel, _offset, _lineLength);
   }
 
   //
@@ -95,6 +98,8 @@ public abstract class JC64ScreenComponent extends JC64Component
   protected int _foreground;
   protected int _background;
 
+  private final int _offset;
+  private final int _lineLength;
   private final ColorModel _colorModel;
   private byte[] _imageData;
 }
