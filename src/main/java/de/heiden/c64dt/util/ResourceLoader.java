@@ -1,5 +1,6 @@
 package de.heiden.c64dt.util;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -13,7 +14,7 @@ public class ResourceLoader
    *
    * @param length of expected content
    * @param filename filename of content
-   * @throws Exception
+   * @throws IOException
    */
   public static int[] load(int length, String filename) throws IOException
   {
@@ -28,6 +29,29 @@ public class ResourceLoader
     }
 
     int[] result = new int[length];
+    for (int i = 0; i < result.length; i++)
+    {
+      result[i] = read[i] & 0xFF;
+    }
+
+    assert result != null : "result != null";
+    return result;
+  }
+
+  /**
+   * Load content from a file
+   *
+   * @param filename filename of content
+   * @throws IOException
+   */
+  public static int[] load(String filename) throws IOException
+  {
+    InputStream stream = new FileInputStream(filename);
+    byte[] read = new byte[65536];
+    int size = stream.read(read);
+    stream.close();
+
+    int[] result = new int[size];
     for (int i = 0; i < result.length; i++)
     {
       result[i] = read[i] & 0xFF;
