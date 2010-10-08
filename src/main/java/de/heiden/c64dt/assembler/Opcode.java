@@ -295,7 +295,7 @@ public enum Opcode
   OPCODE_FE(0xFE, REG, INC, ABX, 7),
   OPCODE_FF(0xFF, ILL, ISC, ABX, 7);
 
-  private static Map<Integer, Opcode> opcodes;
+  public static final Opcode[] OPCODES = values();
 
   private final int opcode;
   private final boolean legal;
