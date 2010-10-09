@@ -66,35 +66,46 @@ public class Disassembler {
     }
 
     while(buffer.has(1)) {
-      Opcode opcode = buffer.readOpcode();
-      OpcodeMode mode = opcode.getMode();
-      int size = mode.getSize();
-
-      int pc = buffer.getCommandAddress();
-      output.append(hexWordPlain(pc));
-      output.append(" ");
-      output.append(hexBytePlain(opcode.getOpcode()));
-
-      if (opcode.isLegal() && buffer.has(size)) {
-        if (size > 0) {
-          int argument = buffer.readAbsolute(mode.getSize());
-
-          output.append(size >= 1? " " + hexBytePlain(lo(argument)) : "   ");
-          output.append(size >= 2? " " + hexBytePlain(hi(argument)) : "   ");
-          output.append(" ");
-          output.append(opcode.getType().toString());
-          output.append(" ");
-          output.append(mode.toString(pc, argument));
-        } else {
-          output.append("       ");
-          output.append(opcode.getType().toString());
-        }
-      } else {
-        output.append("       ???");
-      }
-      output.append("\n");
+      disassemble(buffer, output);
     }
 
     output.flush();
+  }
+
+  /**
+   * Disassemble one opcode.
+   *
+   * @param buffer Code buffer
+   * @param output output for reassembled code
+   */
+  public void disassemble(CodeBuffer buffer, Writer output) throws IOException
+  {
+    Opcode opcode = buffer.readOpcode();
+    OpcodeMode mode = opcode.getMode();
+    int size = mode.getSize();
+
+    int pc = buffer.getCommandAddress();
+    output.append(hexWordPlain(pc));
+    output.append(" ");
+    output.append(hexBytePlain(opcode.getOpcode()));
+
+    if (opcode.isLegal() && buffer.has(size)) {
+      if (size > 0) {
+        int argument = buffer.readAbsolute(mode.getSize());
+
+        output.append(size >= 1? " " + hexBytePlain(lo(argument)) : "   ");
+        output.append(size >= 2? " " + hexBytePlain(hi(argument)) : "   ");
+        output.append(" ");
+        output.append(opcode.getType().toString());
+        output.append(" ");
+        output.append(mode.toString(pc, argument));
+      } else {
+        output.append("       ");
+        output.append(opcode.getType().toString());
+      }
+    } else {
+      output.append("       ???");
+    }
+    output.append("\n");
   }
 }
