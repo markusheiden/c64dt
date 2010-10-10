@@ -44,8 +44,8 @@ public abstract class JC64Component extends JComponent
         public void componentResized(ComponentEvent e)
         {
           // compute image size from new component size
-          _width = (int) Math.round(e.getComponent().getWidth() / _factor);
-          _height = (int) Math.round(e.getComponent().getHeight() / _factor);
+          _width = Math.max(0, (int) Math.round(e.getComponent().getWidth() / _factor));
+          _height = Math.max(0, (int) Math.round(e.getComponent().getHeight() / _factor));
 
           // the image needs to be rebuild, so reset it now. the sub class has to rebuild it.
           _imageSource = null;
