@@ -32,7 +32,7 @@ public abstract class JC64Component extends JComponent
     _width = width;
     _factor = factor;
 
-    Dimension size = new Dimension((int) Math.round(width * factor), (int) Math.round(height * factor));
+    Dimension size = new Dimension((int) Math.ceil(width * factor), (int) Math.ceil(height * factor));
     setPreferredSize(size);
     setSize(size);
     setMinimumSize(new Dimension(0, 0));
