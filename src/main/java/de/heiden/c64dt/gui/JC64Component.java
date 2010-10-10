@@ -1,9 +1,9 @@
 package de.heiden.c64dt.gui;
 
-import javax.swing.JComponent;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.image.MemoryImageSource;
 
 /**
@@ -11,14 +11,22 @@ import java.awt.image.MemoryImageSource;
  */
 public abstract class JC64Component extends JComponent
 {
+  private int _width;
+  private int _height;
+  private final double _factor;
+
+  protected MemoryImageSource _imageSource;
+  private Image _image;
+
   /**
    * Constructor.
    *
    * @param width width in pixel
    * @param height height in pixel
    * @param factor zoom factor
+   * @param resizable Is the backing image resizable?
    */
-  protected JC64Component(int width, int height, double factor)
+  protected JC64Component(int width, int height, double factor, boolean resizable)
   {
     _height = height;
     _width = width;
@@ -27,6 +35,24 @@ public abstract class JC64Component extends JComponent
     Dimension size = new Dimension((int) Math.round(width * factor), (int) Math.round(height * factor));
     setPreferredSize(size);
     setSize(size);
+
+    if (resizable)
+    {
+      addComponentListener(new ComponentAdapter()
+      {
+        @Override
+        public void componentResized(ComponentEvent e)
+        {
+          // compute image size from new component size
+          _width = (int) Math.round(e.getComponent().getWidth() / _factor);
+          _height = (int) Math.round(e.getComponent().getHeight() / _factor);
+
+          // the image needs to be rebuild, so reset it now. the sub class has to rebuild it.
+          _imageSource = null;
+          _image = null;
+        }
+      });
+    }
   }
 
   /**
@@ -150,15 +176,4 @@ public abstract class JC64Component extends JComponent
     _image = createImage(_imageSource);
     _image.setAccelerationPriority(1);
   }
-
-  //
-  // attributes
-  //
-
-  private final int _width;
-  private final int _height;
-  private final double _factor;
-
-  protected MemoryImageSource _imageSource;
-  private Image _image;
 }

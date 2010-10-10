@@ -18,7 +18,7 @@ public abstract class JC64ScreenComponent extends JC64Component
    */
   protected JC64ScreenComponent(int offset, int width, int lineLength, int height, double factor)
   {
-    super(width, height, factor);
+    super(width, height, factor, false);
 
     _offset = offset;
     _lineLength = lineLength;

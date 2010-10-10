@@ -6,6 +6,8 @@ import de.heiden.c64dt.util.ResourceLoader;
 import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.StringTokenizer;
 
 /**
@@ -13,6 +15,22 @@ import java.util.StringTokenizer;
  */
 public class JC64TextArea extends JC64CommonComponent
 {
+  private static final int ROW_HEIGHT = 8;
+  private static final int COLUMN_WIDTH = 8;
+
+  private int _columns;
+  private int _rows;
+  private final double _factor;
+  private byte[][] _chars;
+  private Color[][] _foregrounds;
+  private Color[][] _backgrounds;
+
+  private boolean _upper;
+  private C64Charset _charset;
+  private final int[] _charsetROM;
+
+  private static int[] _defaultCharsetROM;
+
   /**
    * Constructor.
    * The lower charset is used as default.
@@ -23,17 +41,39 @@ public class JC64TextArea extends JC64CommonComponent
    */
   public JC64TextArea(int columns, int rows, double factor)
   {
-    super(columns * 8, rows * 8, factor);
+    super(columns * COLUMN_WIDTH, rows * ROW_HEIGHT, factor, true);
 
     _columns = columns;
     _rows = rows;
+    _factor = factor;
 
     setCharset(false);
     _charsetROM = getDefaultCharset();
 
-    _chars = new byte[rows][columns];
-    _foregrounds = new Color[rows][columns];
-    _backgrounds = new Color[rows][columns];
+    buildBuffer();
+
+    addComponentListener(new ComponentAdapter()
+    {
+      @Override
+      public void componentResized(ComponentEvent e)
+      {
+        buildBuffer();
+      }
+    });
+  }
+
+  /**
+   * Build text buffer.
+   */
+  private void buildBuffer()
+  {
+    _columns = (int) Math.ceil(getImageWidth() / COLUMN_WIDTH);
+    _rows = (int) Math.ceil(getImageHeight() / ROW_HEIGHT);
+
+    _chars = new byte[_rows][_columns];
+    _foregrounds = new Color[_rows][_columns];
+    _backgrounds = new Color[_rows][_columns];
+    clear();
   }
 
   @Override
@@ -72,11 +112,27 @@ public class JC64TextArea extends JC64CommonComponent
   }
 
   /**
+   * Height of rows.
+   */
+  public int getRowHeight()
+  {
+    return (int) Math.round(ROW_HEIGHT * _factor);
+  }
+
+  /**
    * Number of character columns.
    */
   public int getColumns()
   {
     return _columns;
+  }
+
+  /**
+   * Height of rows.
+   */
+  public int getColumnWidth()
+  {
+    return (int) Math.round(COLUMN_WIDTH * _factor);
   }
 
   /**
@@ -101,15 +157,16 @@ public class JC64TextArea extends JC64CommonComponent
   {
     if (!s.contains("\n"))
     {
+      // optimization for single line text
       setText(column, row, _charset.toBytes(s));
+      return;
     }
-    else
+
+    // handle multiline text
+    StringTokenizer tokenizer = new StringTokenizer(s, "\n");
+    for (int r = row; tokenizer.hasMoreTokens() && r < _rows; r++)
     {
-      StringTokenizer tokenizer = new StringTokenizer(s, "\n");
-      for (int r = row; tokenizer.hasMoreTokens() && r < _rows; r++)
-      {
-        setText(column, r, tokenizer.nextToken());
-      }
+      setText(column, r, tokenizer.nextToken());
     }
   }
 
@@ -168,6 +225,13 @@ public class JC64TextArea extends JC64CommonComponent
    */
   protected void setTextInternal(int column, int row, byte c)
   {
+    if (column >= _columns || row >= _rows)
+    {
+      // early exit, when the text exceeds the buffer.
+      // this may happen, e.g. when the component has been resized to a smaller size than the initial size.
+      return;
+    }
+
     _chars[row][column] = c;
     _foregrounds[row][column] = getForeground();
     _backgrounds[row][column] = getBackground();
@@ -287,20 +351,4 @@ public class JC64TextArea extends JC64CommonComponent
     // TODO 2010-03-07 mh: why is this repaint() needed???
     frame.repaint();
   }
-
-  //
-  // private attributes
-  //
-
-  private final int _columns;
-  private final int _rows;
-  private final byte[][] _chars;
-  private final Color[][] _foregrounds;
-  private final Color[][] _backgrounds;
-
-  private boolean _upper;
-  private C64Charset _charset;
-  private final int[] _charsetROM;
-
-  private static int[] _defaultCharsetROM;
 }
