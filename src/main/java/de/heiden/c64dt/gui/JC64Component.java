@@ -35,6 +35,7 @@ public abstract class JC64Component extends JComponent
     Dimension size = new Dimension((int) Math.round(width * factor), (int) Math.round(height * factor));
     setPreferredSize(size);
     setSize(size);
+    setMinimumSize(new Dimension(0, 0));
 
     if (resizable)
     {
