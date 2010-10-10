@@ -78,7 +78,7 @@ public class Disassembler {
    * @param buffer Code buffer
    * @param output output for reassembled code
    */
-  public void disassemble(CodeBuffer buffer, Writer output) throws IOException
+  public void disassemble(ICodeBuffer buffer, Writer output) throws IOException
   {
     Opcode opcode = buffer.readOpcode();
     OpcodeMode mode = opcode.getMode();
