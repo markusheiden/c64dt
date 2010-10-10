@@ -38,10 +38,11 @@ public class JC64TextArea extends JC64CommonComponent
    * @param columns character columns to display
    * @param rows character rows to display
    * @param factor zoom factor
+   * @param resizable Is the backing image resizable?
    */
-  public JC64TextArea(int columns, int rows, double factor)
+  public JC64TextArea(int columns, int rows, double factor, boolean resizable)
   {
-    super(columns * COLUMN_WIDTH, rows * ROW_HEIGHT, factor, true);
+    super(columns * COLUMN_WIDTH, rows * ROW_HEIGHT, factor, resizable);
 
     _columns = columns;
     _rows = rows;
@@ -52,14 +53,17 @@ public class JC64TextArea extends JC64CommonComponent
 
     buildBuffer();
 
-    addComponentListener(new ComponentAdapter()
+    if (resizable)
     {
-      @Override
-      public void componentResized(ComponentEvent e)
+      addComponentListener(new ComponentAdapter()
       {
-        buildBuffer();
-      }
-    });
+        @Override
+        public void componentResized(ComponentEvent e)
+        {
+          buildBuffer();
+        }
+      });
+    }
   }
 
   /**
@@ -314,7 +318,7 @@ public class JC64TextArea extends JC64CommonComponent
     JFrame frame = new JFrame();
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    JC64TextArea text = new JC64TextArea(40, 25, 2);
+    JC64TextArea text = new JC64TextArea(40, 25, 2, false);
     frame.add(text);
 
     frame.pack();

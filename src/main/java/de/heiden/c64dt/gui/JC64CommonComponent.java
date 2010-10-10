@@ -30,14 +30,17 @@ public abstract class JC64CommonComponent extends JC64Component
 
     buildImage();
 
-    addComponentListener(new ComponentAdapter()
+    if (resizable)
     {
-      @Override
-      public void componentResized(ComponentEvent e)
+      addComponentListener(new ComponentAdapter()
       {
-        buildImage();
-      }
-    });
+        @Override
+        public void componentResized(ComponentEvent e)
+        {
+          buildImage();
+        }
+      });
+    }
   }
 
   /**

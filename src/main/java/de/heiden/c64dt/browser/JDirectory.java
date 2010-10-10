@@ -82,7 +82,7 @@ public class JDirectory extends JList {
           }
         }
 
-        JC64TextArea result = new JC64TextArea(text.length, 1, 2);
+        JC64TextArea result = new JC64TextArea(text.length, 1, 2, false);
         if (isSelected) {
           result.setForeground(getSelectionForeground());
           result.setBackground(getSelectionBackground());

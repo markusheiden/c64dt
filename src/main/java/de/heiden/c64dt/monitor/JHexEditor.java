@@ -38,7 +38,7 @@ public class JHexEditor extends JTable {
     setDefaultRenderer (byte[].class, new TableCellRenderer() {
       public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         byte[] text = (byte[]) value;
-        JC64TextArea renderer = new JC64TextArea(text.length, 1, 2);
+        JC64TextArea renderer = new JC64TextArea(text.length, 1, 2, false);
         if (isSelected) {
           renderer.setBackground(getSelectionBackground());
           renderer.setForeground(getSelectionForeground());
@@ -55,7 +55,7 @@ public class JHexEditor extends JTable {
 
       public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, final int row, final int column) {
         byte[] text = (byte[]) value;
-        JC64TextArea editor = new JC64TextArea(text.length, 1, 2);
+        JC64TextArea editor = new JC64TextArea(text.length, 1, 2, false);
         if (isSelected) {
           editor.setBackground(getSelectionBackground());
           editor.setForeground(getSelectionForeground());
