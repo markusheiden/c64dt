@@ -50,7 +50,7 @@ public class C64Connection extends AbstractConnection {
    * @param address address
    * @param data data
    */
-  protected synchronized boolean sendData(int address, byte[] data) throws IOException {
+  public synchronized boolean data(int address, byte... data) throws IOException {
     assertValidAddress(address);
     Assert.notNull(data, "Precondition: data != null");
     Assert.isTrue(4 + data.length <= getPacketSize(), "Precondition: 4 + data.length <= getPacketSize()");
@@ -74,7 +74,7 @@ public class C64Connection extends AbstractConnection {
    * @param length length of memory area
    * @param fill fill byte
    */
-  protected synchronized boolean sendFill(int address, int length, byte fill) throws IOException {
+  public synchronized boolean fill(int address, int length, byte fill) throws IOException {
     assertValidAddress(address);
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
@@ -87,7 +87,7 @@ public class C64Connection extends AbstractConnection {
    *
    * @param address address
    */
-  protected synchronized boolean sendJump(int address) throws IOException {
+  public synchronized boolean jump(int address) throws IOException {
     assertValidAddress(address);
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
@@ -98,7 +98,7 @@ public class C64Connection extends AbstractConnection {
   /**
    * Execute code at PC.
    */
-  protected synchronized boolean sendExecute() throws IOException {
+  public synchronized boolean execute() throws IOException {
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
     sendPacket(7);
@@ -116,7 +116,10 @@ public class C64Connection extends AbstractConnection {
     writeMagic();
     output[IDX_SEQUENCE] = sequence;
     output[IDX_SERVICE] = (byte) service;
-    System.arraycopy(data, 0, output, IDX_DATA, data.length);
+    for (int i = 0; i < data.length; i++)
+    {
+      output[IDX_DATA + i] = (byte) data[i];
+    }
 
     sendPacket(IDX_DATA + data.length);
   }
