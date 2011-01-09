@@ -22,7 +22,6 @@ public abstract class AbstractConnection {
   private DatagramSocket socket;
   protected final byte[] input;
   private DatagramPacket lastInput;
-  protected final byte[] output;
   private DatagramPacket lastOutput;
   protected byte sequence;
 
@@ -39,7 +38,6 @@ public abstract class AbstractConnection {
     socket = null;
     input = new byte[packetSize];
     lastInput = null;
-    output = new byte[packetSize];
     lastOutput = null;
     sequence = 0;
   }
@@ -85,6 +83,15 @@ public abstract class AbstractConnection {
   }
 
   /**
+   * Send a packet.
+   */
+  public synchronized void sendPacket(Packet packet) throws IOException {
+    byte[] data = packet.getData();
+    lastOutput = new DatagramPacket(data, data.length, destination != null? destination : lastDestination);
+    socket.send(lastOutput);
+  }
+
+  /**
    * Receive a packet.
    */
   public synchronized void receivePacket() throws IOException {
@@ -94,14 +101,6 @@ public abstract class AbstractConnection {
     if (!isValid()) {
       throw new IOException("Invalid packet");
     }
-  }
-
-  /**
-   * Send a packet.
-   */
-  public synchronized void sendPacket(int length) throws IOException {
-    lastOutput = new DatagramPacket(output, length, destination != null? destination : lastDestination);
-    socket.send(lastOutput);
   }
 
   /**
@@ -116,14 +115,6 @@ public abstract class AbstractConnection {
    */
   protected boolean isValid() {
     return input[IDX_MAGIC1] == magic1 && input[IDX_MAGIC2] == magic2;
-  }
-
-  /**
-   * Write magic bytes.
-   */
-  protected void writeMagic() throws IOException {
-    output[IDX_MAGIC1] = magic1;
-    output[IDX_MAGIC2] = magic2;
   }
 
   /**

@@ -1,13 +1,11 @@
 package de.heiden.c64dt.net.code;
 
-import de.heiden.c64dt.net.code.C64Connection;
+import de.heiden.c64dt.net.Packet;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.net.InetAddress;
 
-import static de.heiden.c64dt.util.ByteUtil.hi;
-import static de.heiden.c64dt.util.ByteUtil.lo;
 import static junit.framework.Assert.assertEquals;
 
 /**
@@ -28,33 +26,33 @@ public class C64ConnectionTest
     // 6, 7: Length (hi, lo)
     // 8   : Fill byte
     // 9   : Padding
-    connection.assertSentData(0xCA, 0x1F, 1, 5, 0x12, 0x34, 0x01, 0x02, 0x06, 0x00);
+    assertSentData(0xCA, 0x1F, 1, 5, 0x12, 0x34, 0x01, 0x02, 0x06, 0x00);
     connection.close();
   }
 
-  private static class TestConnection extends C64Connection
+  public void assertSentData(int... expected)
   {
-    private int length = -1;
+    assertEquals(outputData.length, expected.length);
+    for (int i = 0; i < expected.length; i++)
+    {
+      assertEquals("Byte " + i, (byte) expected[i], outputData[i]);
+    }
+  }
 
+  private byte[] outputData;
+
+  private class TestConnection extends C64Connection
+  {
     public TestConnection() throws IOException
     {
       super(InetAddress.getLocalHost());
     }
 
     @Override
-    public void sendPacket(int length) throws IOException
+    public void sendPacket(Packet packet) throws IOException
     {
-      this.length = length;
-      super.sendPacket(length);
-    }
-
-    public void assertSentData(int... data)
-    {
-      assertEquals(length, data.length);
-      for (int i = 0; i < data.length; i++)
-      {
-        assertEquals("Byte " + i, (byte) data[i], output[i]);
-      }
+      outputData = packet.getData();
+      super.sendPacket(packet);
     }
   }
 }

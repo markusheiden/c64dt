@@ -1,6 +1,7 @@
 package de.heiden.c64dt.net.code;
 
 import de.heiden.c64dt.net.AbstractConnection;
+import de.heiden.c64dt.net.Packet;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
@@ -23,12 +24,14 @@ public class C64Connection extends AbstractConnection {
 
   private static final int IDX_REPLY = 3; // TODO correct?
 
+  private static final int MAGIC1 = 0xCA;
+  private static final int MAGIC2 = 0x1F;
   private static final int MAX_PACKET = 0x90;
 
-  private final InetAddress address;
-
   /**
-   * Constructor.
+   * Constructor using default ports.
+   *
+   * @param address Remote address of C64
    */
   public C64Connection(InetAddress address) throws IOException {
     this(DEFAULT_PORT, address, DEFAULT_PORT);
@@ -36,12 +39,14 @@ public class C64Connection extends AbstractConnection {
 
   /**
    * Constructor.
+   *
+   * @param sourcePort Port on this machine
+   * @param address Remote address of C64
+   * @param destinationPort Port of C64
    */
   public C64Connection(int sourcePort, InetAddress address, int destinationPort) throws IOException {
-    super(new InetSocketAddress(InetAddress.getLocalHost(), sourcePort), new InetSocketAddress(address, destinationPort), MAX_PACKET, 0xCA, 0x1F);
+    super(new InetSocketAddress(InetAddress.getLocalHost(), sourcePort), new InetSocketAddress(address, destinationPort), MAX_PACKET, MAGIC1, MAGIC2);
     Assert.notNull(address, "Precondition: address != null");
-
-    this.address = address;
   }
 
   /**
@@ -56,15 +61,9 @@ public class C64Connection extends AbstractConnection {
     Assert.isTrue(4 + data.length <= getPacketSize(), "Precondition: 4 + data.length <= getPacketSize()");
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
-    sendPacket(4, hi(address), lo(address), hi(data.length), lo(data.length));
-    System.arraycopy(data, 0, output, IDX_DATA, data.length);
-    // Align to 16 bit words
-    if (data.length % 2 != 0) {
-      output[IDX_DATA + data.length] = 0x00;
-    }
-    sendPacket(IDX_DATA + data.length); // TODO pad!!!
-
-    return receiveReply();
+    Packet packet = createPacket(4, hi(address), lo(address), hi(data.length), lo(data.length));
+    packet.add(data);
+    return sendReceivePacket(packet);
   }
 
   /**
@@ -78,8 +77,8 @@ public class C64Connection extends AbstractConnection {
     assertValidAddress(address);
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
-    sendPacket(5, hi(address), lo(address), hi(length), lo(length), fill, (byte) 0x00);
-    return receiveReply();
+    Packet packet = createPacket(5, hi(address), lo(address), hi(length), lo(length), fill, (byte) 0x00);
+    return sendReceivePacket(packet);
   }
 
   /**
@@ -91,8 +90,8 @@ public class C64Connection extends AbstractConnection {
     assertValidAddress(address);
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
-    sendPacket(6, hi(address), lo(address));
-    return receiveReply();
+    Packet packet = createPacket(6, hi(address), lo(address));
+    return sendReceivePacket(packet);
   }
 
   /**
@@ -101,8 +100,8 @@ public class C64Connection extends AbstractConnection {
   public synchronized boolean execute() throws IOException {
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
-    sendPacket(7);
-    return receiveReply();
+    Packet packet = createPacket(7);
+    return sendReceivePacket(packet);
   }
 
   /**
@@ -111,30 +110,56 @@ public class C64Connection extends AbstractConnection {
    * @param service Service
    * @param data data of the packet
    */
-  protected synchronized void sendPacket(int service, int... data) throws IOException {
+  protected synchronized Packet createPacket(int service, int... data) throws IOException {
     sequence++;
-    writeMagic();
-    output[IDX_SEQUENCE] = sequence;
-    output[IDX_SERVICE] = (byte) service;
-    for (int i = 0; i < data.length; i++)
-    {
-      output[IDX_DATA + i] = (byte) data[i];
-    }
+    Packet result = new Packet(MAX_PACKET);
+    result.add(MAGIC1);
+    result.add(MAGIC2);
+    result.add(sequence);
+    result.add(service);
+    result.add(data);
 
-    sendPacket(IDX_DATA + data.length);
+    return result;
   }
 
   /**
-   * Send packet and receive immediate reply.
+   * Receive packet reply with retries.
    */
-  protected synchronized boolean receiveReply() throws IOException {
+  protected synchronized boolean sendReceivePacket(Packet packet) throws IOException
+  {
+    for (int i = 0; i < 3; i++)
+    {
+      sendPacket(packet);
+      if (receiveReplyPacket()) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Receive packet reply.
+   */
+  protected synchronized boolean receiveReplyPacket() throws IOException
+  {
     receivePacket();
     byte reply = input[IDX_REPLY];
-    // TODO check packet.length?
     if (!isValid() || input[IDX_SEQUENCE] != sequence) {
       throw new IOException("Wrong reply");
     }
 
-    return reply == 0;
+    return reply <= 2;
+  }
+
+  /**
+   * Manual test.
+   */
+  public static void main(String[] args) throws Exception
+  {
+    C64Connection connection = new C64Connection(InetAddress.getByName("192.168.2.64"));
+    connection.open();
+    connection.fill(0x0400, 999, (byte) 0x31);
+    connection.close();
   }
 }

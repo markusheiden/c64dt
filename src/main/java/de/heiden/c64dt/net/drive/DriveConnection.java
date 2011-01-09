@@ -1,6 +1,7 @@
 package de.heiden.c64dt.net.drive;
 
 import de.heiden.c64dt.net.AbstractConnection;
+import de.heiden.c64dt.net.Packet;
 import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 
@@ -132,12 +133,13 @@ public class DriveConnection extends AbstractConnection {
   public synchronized void sendReply(Error error) throws IOException {
     sequence = input[IDX_SEQUENCE];
 
-    System.arraycopy(input, 0, output, 0, IDX_SIZE);
-    output[IDX_SIZE] = 0x01;
-    output[IDX_DATA] = error.getResult();
-    output[9] = 0x00; // padding byte
+    Packet packet = new Packet(MAX_PACKET);
+    packet.add(input, IDX_SIZE);
+    packet.add(0x01);
+    packet.add(error.getResult());
+    packet.pad();
 
-    sendPacket(10);
+    sendPacket(packet);
   }
 
   /**
@@ -155,14 +157,13 @@ public class DriveConnection extends AbstractConnection {
 
     sequence = input[IDX_SEQUENCE];
 
-    System.arraycopy(input, 0, output, 0, IDX_SIZE);
-    output[IDX_SERVICE] = SERVICE_DATA;
-    output[IDX_SIZE] = size;
-    System.arraycopy(data, 0, output, IDX_DATA, data.length);
-    if (data.length % 2 != 0) {
-      output[IDX_DATA + data.length] = 0x00;
-    }
+    Packet packet = new Packet(MAX_PACKET);
+    packet.add(input, IDX_SIZE);
+    packet.add(SERVICE_DATA);
+    packet.add(size);
+    packet.add(data);
+    packet.pad();
 
-    sendPacket(IDX_DATA + data.length);
+    sendPacket(packet);
   }
 }
