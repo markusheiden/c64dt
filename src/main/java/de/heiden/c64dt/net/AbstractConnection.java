@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketAddress;
+import java.util.Arrays;
 
 /**
  * Common code for connections.
  */
 public abstract class AbstractConnection {
+  public static final int MAX_PACKET = 150;
+
   private static final int IDX_MAGIC1 = 0;
   private static final int IDX_MAGIC2 = 1;
 
@@ -20,7 +23,7 @@ public abstract class AbstractConnection {
   private final byte magic2;
 
   private DatagramSocket socket;
-  protected final byte[] input;
+  private final byte[] input;
   private DatagramPacket lastInput;
   private DatagramPacket lastOutput;
   protected byte sequence;
@@ -94,13 +97,17 @@ public abstract class AbstractConnection {
   /**
    * Receive a packet.
    */
-  public synchronized void receivePacket() throws IOException {
+  public synchronized Packet receivePacket() throws IOException {
     lastInput = new DatagramPacket(input, input.length);
     socket.receive(lastInput);
     lastDestination = lastInput.getSocketAddress();
-    if (!isValid()) {
+
+    Packet result = new Packet(Arrays.copyOf(lastInput.getData(), lastInput.getLength()));
+    if (!isValid(result)) {
       throw new IOException("Invalid packet");
     }
+
+    return result;
   }
 
   /**
@@ -113,8 +120,9 @@ public abstract class AbstractConnection {
   /**
    * Check magic bytes.
    */
-  protected boolean isValid() {
-    return input[IDX_MAGIC1] == magic1 && input[IDX_MAGIC2] == magic2;
+  protected boolean isValid(Packet packet) {
+    byte[] data = packet.getData();
+    return data[IDX_MAGIC1] == magic1 && data[IDX_MAGIC2] == magic2;
   }
 
   /**

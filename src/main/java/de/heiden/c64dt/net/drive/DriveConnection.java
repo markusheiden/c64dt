@@ -22,17 +22,7 @@ public class DriveConnection extends AbstractConnection {
   public static final byte SERVICE_WRITE = 0x05;
   public static final byte SERVICE_DATA = 0x20;
 
-  private static final int IDX_SERVICE = 2;
-  private static final int IDX_SEQUENCE = 3;
-  private static final int IDX_LOGICAL_FILE = 4;
-  private static final int IDX_CHANNEL = 5;
-  private static final int IDX_DEVICE = 6;
-  private static final int IDX_SIZE = 7;
-  private static final int IDX_DATA = 8;
-
-  private static final int MAX_PACKET = 0x90;
-
-  private int received;
+  private DrivePacket request = null;
 
   /**
    * Constructor.
@@ -49,80 +39,18 @@ public class DriveConnection extends AbstractConnection {
   }
 
   /**
-   * Number of the requested service.
+   * Wait for a request from the C64.
+   * Handles resend request automatically.
    */
-  public byte getService() {
-    return input[IDX_SERVICE];
-  }
-
-  /**
-   * Number of the requested service.
-   */
-  public void setService(byte service) {
-    input[IDX_SERVICE] = service;
-  }
-
-  /**
-   * Is this a request a request to resend the last reply?.
-   */
-  public boolean isResendRequest() {
-    return input[IDX_SEQUENCE] == sequence;
-  }
-
-  /**
-   * Logical file number.
-   */
-  public int getLogicalFile() {
-    return ByteUtil.toByte(input[IDX_LOGICAL_FILE]);
-  }
-
-  /**
-   * Channel number.
-   * 0-15
-   */
-  public int getChannel() {
-    return ByteUtil.toByte(input[IDX_CHANNEL] & 0x0F);
-  }
-
-  /**
-   * Device number.
-   */
-  public int getDevice() {
-    return ByteUtil.toByte(input[IDX_DEVICE]);
-  }
-
-  /**
-   * Get size of payload data.
-   */
-  public int getSize() {
-    return ByteUtil.toByte(input[IDX_SIZE]);
-  }
-
-  /**
-   * Get first byte of payload data.
-   */
-  public int getData0() throws IOException {
-    if (getSize() != 1) {
-      throw new IOException("Invalid packet getSize");
+  public synchronized DrivePacket waitForRequest() throws IOException
+  {
+    request = new DrivePacket(receivePacket().getData());
+    if (sequence == request.getSequence()) {
+      // TODO 2011-01-09 mh: check, if at least one packet has been sent
+      resendPacket();
     }
 
-    return ByteUtil.toByte(input[IDX_DATA]);
-  }
-
-  /**
-   * Get payload data.
-   */
-  public byte[] getData() throws IOException {
-    int size = getSize();
-    if (size >= MAX_PACKET) {
-      throw new IOException("Invalid packet getSize");
-    }
-
-    byte[] result = new byte[size];
-    System.arraycopy(input, IDX_DATA, result, 0, result.length);
-
-    Assert.notNull(result, "Postcondition: result != null");
-    return result;
+    return request;
   }
 
   /**
@@ -131,10 +59,11 @@ public class DriveConnection extends AbstractConnection {
    * @param error error code
    */
   public synchronized void sendReply(Error error) throws IOException {
-    sequence = input[IDX_SEQUENCE];
+    sequence = request.getSequence();
 
+    // TODO 2011-01-09 mh: check packet creation
     Packet packet = new Packet(MAX_PACKET);
-    packet.add(input, IDX_SIZE);
+    packet.add(request.getSize());
     packet.add(0x01);
     packet.add(error.getResult());
     packet.pad();
@@ -151,14 +80,15 @@ public class DriveConnection extends AbstractConnection {
     Assert.notNull(data, "Precondition: data != null");
 
     byte size = (byte) data.length;
-    if (IDX_DATA + size >= MAX_PACKET) {
-      throw new IOException("Invalid packet getSize");
-    }
+//    if (IDX_DATA + size >= MAX_PACKET) {
+//      throw new IOException("Invalid packet size");
+//    }
 
-    sequence = input[IDX_SEQUENCE];
+    sequence = request.getSequence();
 
+    // TODO 2011-01-09 mh: check packet creation
     Packet packet = new Packet(MAX_PACKET);
-    packet.add(input, IDX_SIZE);
+    packet.add(request.getSize());
     packet.add(SERVICE_DATA);
     packet.add(size);
     packet.add(data);

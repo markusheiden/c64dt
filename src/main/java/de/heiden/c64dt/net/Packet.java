@@ -12,12 +12,24 @@ public class Packet
 
   /**
    * Constructor for empty packet.
+   *
    * @param max
    */
   public Packet(int max)
   {
     this.data = new byte[max];
     this.length = 0;
+  }
+
+  /**
+   * Constructor for packet with given data.
+   *
+   * @param data
+   */
+  public Packet(byte[] data)
+  {
+    this.data = data;
+    this.length = data.length;
   }
 
   /**

@@ -1,5 +1,6 @@
 package de.heiden.c64dt.net.drive;
 
+import de.heiden.c64dt.net.Packet;
 import org.apache.log4j.Logger;
 import org.springframework.util.Assert;
 
@@ -91,67 +92,62 @@ public class NetDrive {
           connection.open();
           while (isRunning) {
             try {
-              connection.receivePacket();
+              DrivePacket received = connection.waitForRequest();
               logger.debug("Received packet from " + connection.getDestination());
-              if (connection.isResendRequest()) {
-                connection.resendPacket();
-                logger.info("Resend last reply");
-              } else {
-                switch (connection.getService()) {
-                  case DriveConnection.SERVICE_OPEN: {
-                    logger.info("OPEN " + connection.getLogicalFile() + "," + connection.getDevice() + "," + connection.getChannel());
-                    try {
-                      device.open(connection.getChannel(), strip0(connection.getData()));
-                      connection.sendReply(Error.OK);
-                    } catch (DeviceException e) {
-                      connection.sendReply(e.getError());
-                    }
-                    break;
+              switch (received.getService()) {
+                case DriveConnection.SERVICE_OPEN: {
+                  logger.info("OPEN " + received.getLogicalFile() + "," + received.getDevice() + "," + received.getChannel());
+                  try {
+                    device.open(received.getChannel(), strip0(received.getData()));
+                    connection.sendReply(Error.OK);
+                  } catch (DeviceException e) {
+                    connection.sendReply(e.getError());
                   }
-                  case DriveConnection.SERVICE_CHKIN: {
-                    logger.info("CHKIN " + connection.getLogicalFile() + "," + connection.getDevice() + "," + connection.getChannel());
-                    try {
-                      device.incrementPosition(connection.getChannel(), connection.getData0());
-                      connection.sendReply(Error.OK);
-                    } catch (DeviceException e) {
-                      connection.sendReply(e.getError());
-                    }
-                    break;
+                  break;
+                }
+                case DriveConnection.SERVICE_CHKIN: {
+                  logger.info("CHKIN " + received.getLogicalFile() + "," + received.getDevice() + "," + received.getChannel());
+                  try {
+                    device.incrementPosition(received.getChannel(), received.getData0());
+                    connection.sendReply(Error.OK);
+                  } catch (DeviceException e) {
+                    connection.sendReply(e.getError());
                   }
-                  case DriveConnection.SERVICE_READ: {
-                    logger.info("READ " + connection.getLogicalFile() + "," + connection.getDevice() + "," + connection.getChannel());
-                    try {
-                      byte[] data = device.read(connection.getChannel(), connection.getData0());
-                      connection.sendReply(data);
-                    } catch (DeviceException e) {
-                      // TODO correct?
-                      connection.sendReply(e.getError());
-                    }
-                    break;
+                  break;
+                }
+                case DriveConnection.SERVICE_READ: {
+                  logger.info("READ " + received.getLogicalFile() + "," + received.getDevice() + "," + received.getChannel());
+                  try {
+                    byte[] data = device.read(received.getChannel(), received.getData0());
+                    connection.sendReply(data);
+                  } catch (DeviceException e) {
+                    // TODO correct?
+                    connection.sendReply(e.getError());
                   }
-                  case DriveConnection.SERVICE_WRITE: {
-                    logger.info("WRITE " + connection.getLogicalFile() + "," + connection.getDevice() + "," + connection.getChannel());
-                    try {
-                      device.write(connection.getChannel(), connection.getData());
-                      connection.sendReply(Error.OK);
-                    } catch (DeviceException e) {
-                      connection.sendReply(e.getError());
-                    }
-                    break;
+                  break;
+                }
+                case DriveConnection.SERVICE_WRITE: {
+                  logger.info("WRITE " + received.getLogicalFile() + "," + received.getDevice() + "," + received.getChannel());
+                  try {
+                    device.write(received.getChannel(), received.getData());
+                    connection.sendReply(Error.OK);
+                  } catch (DeviceException e) {
+                    connection.sendReply(e.getError());
                   }
-                  case DriveConnection.SERVICE_CLOSE: {
-                    logger.info("CLOSE " + connection.getLogicalFile() + "," + connection.getDevice() + "," + connection.getChannel());
-                    try {
-                      device.close(connection.getChannel());
-                      connection.sendReply(Error.OK);
-                    } catch (DeviceException e) {
-                      connection.sendReply(e.getError());
-                    }
-                    break;
+                  break;
+                }
+                case DriveConnection.SERVICE_CLOSE: {
+                  logger.info("CLOSE " + received.getLogicalFile() + "," + received.getDevice() + "," + received.getChannel());
+                  try {
+                    device.close(received.getChannel());
+                    connection.sendReply(Error.OK);
+                  } catch (DeviceException e) {
+                    connection.sendReply(e.getError());
                   }
-                  default: {
-                    logger.error("Unknown service " + Integer.toHexString(connection.getService()));
-                  }
+                  break;
+                }
+                default: {
+                  logger.error("Unknown service " + Integer.toHexString(received.getService()));
                 }
               }
             } catch (IOException e) {

@@ -1,4 +1,4 @@
-package de.heiden.c64dt;
+package de.heiden.c64dt.net.drive;
 
 import de.heiden.c64dt.net.drive.NetDrive;
 

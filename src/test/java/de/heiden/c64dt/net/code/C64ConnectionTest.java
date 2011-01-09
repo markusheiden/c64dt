@@ -30,6 +30,19 @@ public class C64ConnectionTest
     connection.close();
   }
 
+  @Test
+  public void testRun() throws Exception
+  {
+    TestConnection connection = new TestConnection();
+    connection.open();
+    connection.run();
+    // 0, 1: Magic
+    // 2   : Sequence (starts with 1)
+    // 3   : Service (7: Fill)
+    assertSentData(0xCA, 0x1F, 1, 7);
+    connection.close();
+  }
+
   public void assertSentData(int... expected)
   {
     assertEquals(outputData.length, expected.length);
@@ -53,6 +66,17 @@ public class C64ConnectionTest
     {
       outputData = packet.getData();
       super.sendPacket(packet);
+    }
+
+    @Override
+    public Packet receivePacket() throws IOException
+    {
+      // Always acknowledge OK
+      Packet ack = new Packet(C64Connection.MAX_PACKET);
+      ack.add(outputData, 3);
+      ack.add(0x00); // OK
+
+      return ack;
     }
   }
 }

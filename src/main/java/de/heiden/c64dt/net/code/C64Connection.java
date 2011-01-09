@@ -7,6 +7,7 @@ import org.springframework.util.Assert;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.util.Arrays;
 
 import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
 import static de.heiden.c64dt.util.ByteUtil.hi;
@@ -26,7 +27,6 @@ public class C64Connection extends AbstractConnection {
 
   private static final int MAGIC1 = 0xCA;
   private static final int MAGIC2 = 0x1F;
-  private static final int MAX_PACKET = 0x90;
 
   /**
    * Constructor using default ports.
@@ -55,7 +55,7 @@ public class C64Connection extends AbstractConnection {
    * @param address address
    * @param data data
    */
-  public synchronized boolean data(int address, byte... data) throws IOException {
+  public synchronized void write(int address, byte... data) throws IOException {
     assertValidAddress(address);
     Assert.notNull(data, "Precondition: data != null");
     Assert.isTrue(4 + data.length <= getPacketSize(), "Precondition: 4 + data.length <= getPacketSize()");
@@ -63,7 +63,7 @@ public class C64Connection extends AbstractConnection {
 
     Packet packet = createPacket(4, hi(address), lo(address), hi(data.length), lo(data.length));
     packet.add(data);
-    return sendReceivePacket(packet);
+    sendPacketGetReply(packet);
   }
 
   /**
@@ -73,12 +73,12 @@ public class C64Connection extends AbstractConnection {
    * @param length length of memory area
    * @param fill fill byte
    */
-  public synchronized boolean fill(int address, int length, byte fill) throws IOException {
+  public synchronized void fill(int address, int length, byte fill) throws IOException {
     assertValidAddress(address);
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
     Packet packet = createPacket(5, hi(address), lo(address), hi(length), lo(length), fill, (byte) 0x00);
-    return sendReceivePacket(packet);
+    sendPacketGetReply(packet);
   }
 
   /**
@@ -86,22 +86,45 @@ public class C64Connection extends AbstractConnection {
    *
    * @param address address
    */
-  public synchronized boolean jump(int address) throws IOException {
+  public synchronized void jump(int address) throws IOException {
     assertValidAddress(address);
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
     Packet packet = createPacket(6, hi(address), lo(address));
-    return sendReceivePacket(packet);
+    sendPacketGetReply(packet);
   }
 
   /**
-   * Execute code at PC.
+   * Execute basic program by "RUN".
    */
-  public synchronized boolean execute() throws IOException {
+  public synchronized void run() throws IOException {
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
     Packet packet = createPacket(7);
-    return sendReceivePacket(packet);
+    sendPacketGetReply(packet);
+  }
+
+  /**
+   * Read data from memory location ???.
+   * Command defined but not implemented in in CodeNet client.
+   * This method is currently broken!
+   * TODO 2011-01-09 mh: Fix this
+   *
+   * @param address address
+   * @param length number of bytes to read
+   * @return read data
+   */
+  public synchronized byte[] read(int address, int length) throws IOException {
+    assertValidAddress(address);
+    Assert.isTrue(isOpen(), "Precondition: isOpen()");
+
+    Packet packet = createPacket(8, hi(address), lo(address), hi(length), lo(length));
+    Packet answer = sendPacketGetReply(packet);
+    byte[] result = new byte[length];
+    // TODO 2011-01-09 mh: C64 currently just gets returns an ack
+    System.arraycopy(answer.getData(), IDX_DATA, result, 0, length);
+
+    return result;
   }
 
   /**
@@ -126,31 +149,45 @@ public class C64Connection extends AbstractConnection {
    * Send packet and receive reply with retries.
    *
    * @param packet packet
+   * @return received packet (e.g. ack)
    */
-  protected synchronized boolean sendReceivePacket(Packet packet) throws IOException
+  protected synchronized Packet sendPacketGetReply(Packet packet) throws IOException
   {
+    Packet ack = null;
     for (int i = 0; i < 3; i++)
     {
       sendPacket(packet);
-      if (receiveReplyPacket()) {
-        return true;
+      ack = receivePacket();
+      if (isAck(ack)) {
+        return ack;
       }
     }
 
-    return false;
+    if (ack == null) {
+      throw new IOException("C64 not reachable");
+    }
+
+    throw new IOException("Command failed with error " + ack.getData()[IDX_REPLY]);
   }
 
   /**
-   * Receive packet reply.
+   * Check packet for a valid acknowledge.
+   *
+   * @param ack packet
    */
-  protected synchronized boolean receiveReplyPacket() throws IOException
+  protected boolean isAck(Packet ack) throws IOException
   {
-    receivePacket();
-    byte reply = input[IDX_REPLY];
-    if (!isValid() || input[IDX_SEQUENCE] != sequence) {
-      throw new IOException("Wrong reply");
+    byte[] data = ack.getData();
+    byte reply = data[IDX_REPLY];
+    if (!isValid(ack))
+    {
+      throw new IOException("Invalid reply");
+    }
+    if (data[IDX_SEQUENCE] != sequence)
+    {
+      throw new IOException("Wrong sequence number");
     }
 
-    return reply <= 2;
+    return reply < 2;
   }
 }
