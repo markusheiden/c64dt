@@ -123,7 +123,9 @@ public class C64Connection extends AbstractConnection {
   }
 
   /**
-   * Receive packet reply with retries.
+   * Send packet and receive reply with retries.
+   *
+   * @param packet packet
    */
   protected synchronized boolean sendReceivePacket(Packet packet) throws IOException
   {
@@ -150,16 +152,5 @@ public class C64Connection extends AbstractConnection {
     }
 
     return reply <= 2;
-  }
-
-  /**
-   * Manual test.
-   */
-  public static void main(String[] args) throws Exception
-  {
-    C64Connection connection = new C64Connection(InetAddress.getByName("192.168.2.64"));
-    connection.open();
-    connection.fill(0x0400, 999, (byte) 0x31);
-    connection.close();
   }
 }
