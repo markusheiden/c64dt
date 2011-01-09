@@ -55,7 +55,7 @@ public class C64Connection extends AbstractConnection {
    * @param address address
    * @param data data
    */
-  public synchronized void write(int address, byte... data) throws IOException {
+  public synchronized void write(int address, int... data) throws IOException {
     assertValidAddress(address);
     Assert.notNull(data, "Precondition: data != null");
     Assert.isTrue(4 + data.length <= getPacketSize(), "Precondition: 4 + data.length <= getPacketSize()");
@@ -63,6 +63,7 @@ public class C64Connection extends AbstractConnection {
 
     Packet packet = createPacket(4, hi(address), lo(address), hi(data.length), lo(data.length));
     packet.add(data);
+    packet.pad();
     sendPacketGetReply(packet);
   }
 
