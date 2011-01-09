@@ -66,7 +66,6 @@ public class DriveConnection extends AbstractConnection {
     packet.add(request.getSize());
     packet.add(0x01);
     packet.add(error.getResult());
-    packet.pad();
 
     sendPacket(packet);
   }
@@ -92,7 +91,6 @@ public class DriveConnection extends AbstractConnection {
     packet.add(SERVICE_DATA);
     packet.add(size);
     packet.add(data);
-    packet.pad();
 
     sendPacket(packet);
   }

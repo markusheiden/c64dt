@@ -63,7 +63,6 @@ public class C64Connection extends AbstractConnection {
 
     Packet packet = createPacket(4, hi(address), lo(address), hi(data.length), lo(data.length));
     packet.add(data);
-    packet.pad();
     sendPacketGetReply(packet);
   }
 

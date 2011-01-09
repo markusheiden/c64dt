@@ -81,8 +81,9 @@ public class C64ConnectionTest
     @Override
     public void sendPacket(Packet packet) throws IOException
     {
-      outputData = packet.getData();
       super.sendPacket(packet);
+      // Capture after sending, because packet may have been padded now
+      outputData = packet.getData();
     }
 
     @Override

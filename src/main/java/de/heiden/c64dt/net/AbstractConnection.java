@@ -89,6 +89,7 @@ public abstract class AbstractConnection {
    * Send a packet.
    */
   public synchronized void sendPacket(Packet packet) throws IOException {
+    packet.pad();
     byte[] data = packet.getData();
     lastOutput = new DatagramPacket(data, data.length, destination != null? destination : lastDestination);
     socket.send(lastOutput);
