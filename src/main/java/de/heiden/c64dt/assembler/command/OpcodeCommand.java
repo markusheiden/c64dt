@@ -82,7 +82,7 @@ public class OpcodeCommand extends AbstractCommand {
   }
 
   public List<Integer> toBytes() {
-    List<Integer> result = new ArrayList(getSize());
+    List<Integer> result = new ArrayList<Integer>(getSize());
     result.add(opcode.getOpcode());
     if (opcode.getMode().getSize() == 1) {
       result.add(argument);
