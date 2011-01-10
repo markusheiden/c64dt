@@ -1,5 +1,8 @@
 package de.heiden.c64dt.net;
 
+import static de.heiden.c64dt.util.ByteUtil.hi;
+import static de.heiden.c64dt.util.ByteUtil.lo;
+
 import java.util.Arrays;
 
 /**
@@ -37,7 +40,7 @@ public class Packet
    *
    * @param data data
    */
-  public void add(int data)
+  public void addByte(int data)
   {
     this.data[length++] = (byte) data;
   }
@@ -47,7 +50,7 @@ public class Packet
    *
    * @param data data
    */
-  public void add(int... data)
+  public void addByte(int... data)
   {
     for (int i = 0; i < data.length; i++)
     {
@@ -60,9 +63,9 @@ public class Packet
    *
    * @param data data
    */
-  public void add(byte... data)
+  public void addData(byte... data)
   {
-    add(data, data.length);
+    addData(data, data.length);
   }
 
   /**
@@ -70,7 +73,7 @@ public class Packet
    *
    * @param data data
    */
-  public void add(byte[] data, int length)
+  public void addData(byte[] data, int length)
   {
     System.arraycopy(data, 0, this.data, this.length, length);
     this.length += length;
@@ -81,7 +84,7 @@ public class Packet
    */
   public void pad() {
     if (length % 2 != 0) {
-      add(0x00);
+      addByte(0x00);
     }
   }
 

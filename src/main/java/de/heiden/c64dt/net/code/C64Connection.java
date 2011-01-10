@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
-import java.util.Arrays;
 
 import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
 import static de.heiden.c64dt.util.ByteUtil.hi;
@@ -78,7 +77,7 @@ public class C64Connection extends AbstractConnection {
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
     Packet packet = createPacket(4, hi(address), lo(address), hi(data.length), lo(data.length));
-    packet.add(data);
+    packet.addByte(data);
     sendPacketGetReply(packet);
   }
 
@@ -138,7 +137,7 @@ public class C64Connection extends AbstractConnection {
     Packet answer = sendPacketGetReply(packet);
     byte[] result = new byte[length];
     // TODO 2011-01-09 mh: C64 currently just gets returns an ack
-//    System.arraycopy(answer.getData(), IDX_DATA, result, 0, length);
+    System.arraycopy(answer.getData(), IDX_DATA, result, 0, length);
 
     return result;
   }
@@ -152,11 +151,11 @@ public class C64Connection extends AbstractConnection {
   protected synchronized Packet createPacket(int service, int... data) throws IOException {
     sequence++;
     Packet result = new Packet(MAX_PACKET);
-    result.add(MAGIC1);
-    result.add(MAGIC2);
-    result.add(sequence);
-    result.add(service);
-    result.add(data);
+    result.addByte(MAGIC1);
+    result.addByte(MAGIC2);
+    result.addByte(sequence);
+    result.addByte(service);
+    result.addByte(data);
 
     return result;
   }

@@ -2,7 +2,6 @@ package de.heiden.c64dt.net.drive;
 
 import de.heiden.c64dt.net.AbstractConnection;
 import de.heiden.c64dt.net.Packet;
-import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
@@ -63,9 +62,9 @@ public class DriveConnection extends AbstractConnection {
 
     // TODO 2011-01-09 mh: check packet creation
     Packet packet = new Packet(MAX_PACKET);
-    packet.add(request.getSize());
-    packet.add(0x01);
-    packet.add(error.getResult());
+    packet.addByte(request.getSize());
+    packet.addByte(0x01);
+    packet.addByte(error.getResult());
 
     sendPacket(packet);
   }
@@ -87,10 +86,10 @@ public class DriveConnection extends AbstractConnection {
 
     // TODO 2011-01-09 mh: check packet creation
     Packet packet = new Packet(MAX_PACKET);
-    packet.add(request.getSize());
-    packet.add(SERVICE_DATA);
-    packet.add(size);
-    packet.add(data);
+    packet.addByte(request.getSize());
+    packet.addByte(SERVICE_DATA);
+    packet.addByte(size);
+    packet.addData(data);
 
     sendPacket(packet);
   }

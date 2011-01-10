@@ -118,7 +118,7 @@ public class C64ConnectionTest
     {
       // Always acknowledge OK
       Packet ack = new Packet(4);
-      ack.add(0xCA,0x1F, 1, 1); // ACK OK
+      ack.addByte(0xCA, 0x1F, 1, 1); // ACK OK
 
       return ack;
     }
