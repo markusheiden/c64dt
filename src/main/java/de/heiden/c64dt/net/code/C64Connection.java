@@ -7,6 +7,7 @@ import org.springframework.util.Assert;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketTimeoutException;
 import java.util.Arrays;
 
 import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
@@ -46,6 +47,22 @@ public class C64Connection extends AbstractConnection {
   public C64Connection(int sourcePort, InetAddress address, int destinationPort) throws IOException {
     super(new InetSocketAddress(InetAddress.getLocalHost(), sourcePort), new InetSocketAddress(address, destinationPort), MAX_PACKET, MAGIC1, MAGIC2);
     Assert.notNull(address, "Precondition: address != null");
+  }
+
+  /**
+   * Ping C64.
+   */
+  public synchronized boolean ping() {
+    try
+    {
+      Packet packet = createPacket(0);
+      sendPacket(packet);
+      return isAck(receivePacket());
+    }
+    catch (IOException e)
+    {
+      return false;
+    }
   }
 
   /**
@@ -153,13 +170,20 @@ public class C64Connection extends AbstractConnection {
   protected synchronized Packet sendPacketGetReply(Packet packet) throws IOException
   {
     Packet ack = null;
-    for (int i = 0; i < 3; i++)
+    try
     {
-      sendPacket(packet);
-      ack = receivePacket();
-      if (isAck(ack)) {
-        return ack;
+      for (int i = 0; i < 3; i++)
+      {
+        sendPacket(packet);
+        ack = receivePacket();
+        if (isAck(ack)) {
+          return ack;
+        }
       }
+    }
+    catch (SocketTimeoutException e)
+    {
+      throw new IOException("C64 does not answer");
     }
 
     if (ack == null) {

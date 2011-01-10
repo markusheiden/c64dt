@@ -83,6 +83,7 @@ public abstract class AbstractConnection {
     socket = new DatagramSocket(source);
     socket.setSendBufferSize(256);
     socket.setReceiveBufferSize(256);
+    socket.setSoTimeout(1000);
   }
 
   /**

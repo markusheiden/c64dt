@@ -14,6 +14,19 @@ import static junit.framework.Assert.assertEquals;
 public class C64ConnectionTest
 {
   @Test
+  public void testPing() throws Exception
+  {
+    TestConnection connection = new TestConnection();
+    connection.open();
+    connection.ping();
+    // 0, 1: Magic
+    // 2   : Sequence (starts with 1)
+    // 3   : Service (0: Ping)
+    assertSentData(0xCA, 0x1F, 1, 0);
+    connection.close();
+  }
+
+  @Test
   public void testWrite() throws Exception
   {
     TestConnection connection = new TestConnection();
@@ -44,6 +57,20 @@ public class C64ConnectionTest
     // 8   : Fill byte
     // 9   : Padding
     assertSentData(0xCA, 0x1F, 1, 5, 0x12, 0x34, 0x01, 0x02, 0x06, 0x00);
+    connection.close();
+  }
+
+  @Test
+  public void testJump() throws Exception
+  {
+    TestConnection connection = new TestConnection();
+    connection.open();
+    connection.jump(0x1234);
+    // 0, 1: Magic
+    // 2   : Sequence (starts with 1)
+    // 3   : Service (6: Jump)
+    // 4, 5: Address (hi, lo)
+    assertSentData(0xCA, 0x1F, 1, 6, 0x12, 0x34);
     connection.close();
   }
 
