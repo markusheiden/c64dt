@@ -90,9 +90,8 @@ public class C64ConnectionTest
     public Packet receivePacket() throws IOException
     {
       // Always acknowledge OK
-      Packet ack = new Packet(C64Connection.MAX_PACKET);
-      ack.add(outputData, 3);
-      ack.add(0x00); // OK
+      Packet ack = new Packet(4);
+      ack.add(0xCA,0x1F, 1, 1); // ACK OK
 
       return ack;
     }

@@ -21,9 +21,8 @@ public class C64Connection extends AbstractConnection {
 
   private static final int IDX_SEQUENCE = 2;
   private static final int IDX_SERVICE = 3;
+  private static final int IDX_REPLY = 3;
   private static final int IDX_DATA = 4;
-
-  private static final int IDX_REPLY = 3; // TODO correct?
 
   private static final int MAGIC1 = 0xCA;
   private static final int MAGIC2 = 0x1F;
@@ -122,7 +121,7 @@ public class C64Connection extends AbstractConnection {
     Packet answer = sendPacketGetReply(packet);
     byte[] result = new byte[length];
     // TODO 2011-01-09 mh: C64 currently just gets returns an ack
-    System.arraycopy(answer.getData(), IDX_DATA, result, 0, length);
+//    System.arraycopy(answer.getData(), IDX_DATA, result, 0, length);
 
     return result;
   }
@@ -178,16 +177,20 @@ public class C64Connection extends AbstractConnection {
   protected boolean isAck(Packet ack) throws IOException
   {
     byte[] data = ack.getData();
-    byte reply = data[IDX_REPLY];
+
     if (!isValid(ack))
     {
-      throw new IOException("Invalid reply");
+      throw new IOException("Invalid packet");
     }
     if (data[IDX_SEQUENCE] != sequence)
     {
       throw new IOException("Wrong sequence number");
     }
+    if (data[IDX_SERVICE] != 1)
+    {
+      throw new IOException("Invalid ACK");
+    }
 
-    return reply < 2;
+    return data[IDX_REPLY] < 2;
   }
 }
