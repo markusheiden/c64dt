@@ -24,7 +24,7 @@ public class DriveConnection extends AbstractConnection {
   private DrivePacket request = null;
 
   /**
-   * Constructor.
+   * Constructor using the default port.
    */
   public DriveConnection() throws IOException {
     this(DEFAULT_PORT);
@@ -32,6 +32,8 @@ public class DriveConnection extends AbstractConnection {
 
   /**
    * Constructor.
+   *
+   * @param port port to use
    */
   public DriveConnection(int port) throws IOException {
     super(new InetSocketAddress(InetAddress.getLocalHost(), port), null, MAX_PACKET, 0xAD, 0xF8);
