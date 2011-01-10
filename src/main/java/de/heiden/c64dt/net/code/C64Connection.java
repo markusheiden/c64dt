@@ -5,6 +5,7 @@ import de.heiden.c64dt.net.Packet;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
@@ -70,15 +71,18 @@ public class C64Connection extends AbstractConnection {
    * @param address address
    * @param data data
    */
-  public synchronized void write(int address, int... data) throws IOException {
+  public synchronized void write(int address, byte... data) throws IOException {
     assertValidAddress(address);
     Assert.notNull(data, "Precondition: data != null");
     Assert.isTrue(4 + data.length <= getPacketSize(), "Precondition: 4 + data.length <= getPacketSize()");
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
-    Packet packet = createPacket(4, hi(address), lo(address), hi(data.length), lo(data.length));
-    packet.addByte(data);
-    sendPacketGetReply(packet);
+    for (int ptr = 0, remain = data.length; remain > 0; ptr += 128, remain -= 128) {
+      int length = remain > 128? 128 : remain;
+      Packet packet = createPacket(4, hi(address), lo(address), hi(length), lo(length));
+      packet.addData(data, ptr, length);
+      sendPacketGetReply(packet);
+    }
   }
 
   /**
@@ -88,7 +92,7 @@ public class C64Connection extends AbstractConnection {
    * @param length length of memory area
    * @param fill fill byte
    */
-  public synchronized void fill(int address, int length, byte fill) throws IOException {
+  public synchronized void fill(int address, int length, int fill) throws IOException {
     assertValidAddress(address);
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 

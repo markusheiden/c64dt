@@ -65,7 +65,7 @@ public class Packet
    */
   public void addData(byte... data)
   {
-    addData(data, data.length);
+    addData(data, 0, data.length);
   }
 
   /**
@@ -73,9 +73,9 @@ public class Packet
    *
    * @param data data
    */
-  public void addData(byte[] data, int length)
+  public void addData(byte[] data, int offset, int length)
   {
-    System.arraycopy(data, 0, this.data, this.length, length);
+    System.arraycopy(data, offset, this.data, this.length, length);
     this.length += length;
   }
 

@@ -31,7 +31,7 @@ public class C64ConnectionTest
   {
     TestConnection connection = new TestConnection();
     connection.open();
-    connection.write(0x1234, 5, 6, 7);
+    connection.write(0x1234, (byte) 5, (byte) 6, (byte) 7);
     // 0, 1: Magic
     // 2   : Sequence (starts with 1)
     // 3   : Service (4: Write)
@@ -48,7 +48,7 @@ public class C64ConnectionTest
   {
     TestConnection connection = new TestConnection();
     connection.open();
-    connection.fill(0x1234, 0x0102, (byte) 6);
+    connection.fill(0x1234, 0x0102, 6);
     // 0, 1: Magic
     // 2   : Sequence (starts with 1)
     // 3   : Service (5: Fill)
