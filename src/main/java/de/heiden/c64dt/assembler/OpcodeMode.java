@@ -121,13 +121,12 @@ public enum OpcodeMode
       public int getAddress(int pc, int argument)
       {
         // argument is a signed byte
-        return pc + ((byte) argument);
+        return (pc + 2 + (byte) argument) & 0xFFFF;
       }
 
       public String toString(int pc, int argument)
       {
-        // argument is signed
-        return toString(hexWord((pc + 2 + (byte) argument) & 0xFFFF));
+        return toString(hexWord(getAddress(pc, argument)));
       }
 
       public String toString(String argument)
@@ -177,19 +176,7 @@ public enum OpcodeMode
   }
 
   /**
-   * String representation for this address mode with a given numeric argument.
-   *
-   * @param argument argument
-   */
-  public String toString(int argument)
-  {
-    Assert.isTrue(hasArgument(), "Precondition: hasArgument()");
-    return toString(size == 1 ? hexByte(argument) : hexWord(argument));
-  }
-
-  /**
    * String representation for this address mode with a given argument.
-   * This method is used for disassembling.
    *
    * @param pc address of opcode
    * @param argument argument of opcode
@@ -202,7 +189,7 @@ public enum OpcodeMode
 
   /**
    * String representation for this address mode with a given (generic) argument.
-   * This method is used for reassembling.
+   * This method is used for reassembling, if the argument is label.
    *
    * @param argument argument
    */

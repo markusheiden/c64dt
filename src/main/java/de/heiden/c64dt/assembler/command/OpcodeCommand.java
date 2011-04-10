@@ -77,7 +77,7 @@ public class OpcodeCommand extends AbstractCommand {
     if (opcode.getMode().getSize() > 0) {
       output.append(" ");
       ILabel label = buffer.getLabel(argument);
-      output.append(label != null? opcode.getMode().toString(label.toString()) :  opcode.getMode().toString(argument));
+      output.append(label != null? opcode.getMode().toString(label.toString()) :  opcode.getMode().toString(getAddress(), argument));
     }
   }
 

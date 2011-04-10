@@ -147,12 +147,11 @@ public class Reassembler {
               commands.addCommand(new OpcodeCommand(opcode));
             } else {
               // opcode with an argument
-              pc = code.getCurrentAddress();
               int argument = code.read(mode.getSize());
               commands.addCommand(new OpcodeCommand(opcode, argument));
               if (mode.isAddress()) {
                 int address = mode.getAddress(pc, argument);
-                if (code.hasAddress(argument)) {
+                if (code.hasAddress(address)) {
                   // track references of opcodes
                   commands.addReference(opcode.getType().isJump(), pc, address);
                 }
