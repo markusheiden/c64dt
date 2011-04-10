@@ -78,38 +78,38 @@ public class Reassembler {
     Assert.notNull(code, "Precondition: code != null");
     Assert.notNull(output, "Precondition: output != null");
 
-    CodeBuffer codeBuffer = new CodeBuffer(startAddress, code);
 
     if (startAddress == 0x0801) {
       // TODO check for basic header
     }
 
-    reassemble(codeBuffer, output);
+    reassemble(new CommandBuffer(startAddress), code, output);
   }
 
   /**
    * Reassemble.
    *
-   * @param code program
+   * @param commands command buffer
+   * @param code program without start address
    * @param output output for reassembled code
    */
-  public void  reassemble(CodeBuffer code, Writer output) throws IOException {
+  public void reassemble(CommandBuffer commands, byte[] code, Writer output) throws IOException {
     Assert.notNull(code, "Precondition: code != null");
     Assert.notNull(output, "Precondition: output != null");
 
 
-    CommandBuffer commands = new CommandBuffer(code.getStartAddress());
+    CodeBuffer buffer = new CodeBuffer(commands.getStartAddress(), code);
 
     boolean change = true;
     for (int count = 0; change && count < 100; count++) {
       commands.clear();
-      tokenize(code, commands);
+      tokenize(buffer, commands);
       change =
         reachability(commands) ||
-        detectCodeType(code, commands);
+        detectCodeType(buffer, commands);
     }
     combine(commands);
-    write(commands, new BufferedWriter(output, code.getLength() * 80));
+    write(commands, new BufferedWriter(output, code.length * 80));
   }
 
   /**
@@ -117,7 +117,6 @@ public class Reassembler {
    *
    * @param code code buffer
    * @param commands reassembled commands
-   * @return buffer with command tokens
    */
   private void tokenize(CodeBuffer code, CommandBuffer commands) {
     Assert.notNull(code, "Precondition: code != null");
@@ -130,9 +129,10 @@ public class Reassembler {
         // TODO read multiple data bytes at once?
         commands.addCommand(new DataCommand(code.readByte()));
       } else if (type == CodeType.ABSOLUTE_ADDRESS) {
+        int pc = code.getCurrentAddress();
         int address = code.read(2);
         commands.addCommand(new AddressCommand(address));
-        commands.addReference(true, address);
+        commands.addCodeReference(pc, address);
       } else {
         // unknown or code -> try to disassemble an opcode
         Opcode opcode = code.readOpcode();
@@ -154,7 +154,7 @@ public class Reassembler {
                 int address = mode.getAddress(pc, argument);
                 if (code.hasAddress(argument)) {
                   // track references of opcodes
-                  commands.addReference(opcode.getType().isJump(), address);
+                  commands.addReference(opcode.getType().isJump(), pc, address);
                 }
               }
             }

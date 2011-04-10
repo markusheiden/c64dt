@@ -106,13 +106,14 @@ public class CommandBuffer {
    * This will add a label if no label exists for the given address.
    *
    * @param code is it a code reference?
-   * @param address address
+   * @param from address of command referencing
+   * @param to referenced address
    */
-  public void addReference(boolean code, int address) {
+  public void addReference(boolean code, int from, int to) {
     if (code) {
-      addCodeReference(address);
+      addCodeReference(from, to);
     } else {
-      addDataReference(address);
+      addDataReference(from, to);
     }
   }
 
@@ -120,26 +121,34 @@ public class CommandBuffer {
    * Add a code reference from the current address to a given address.
    * This will add a label if no label exists for the given address.
    *
-   * @param address address
+   * @param from address of command referencing
+   * @param to referenced address
    */
-  public void addCodeReference(int address) {
-    assertValidAddress(address);
+  public void addCodeReference(int from, int to) {
+    assertValidAddress(from);
+    assertValidAddress(to);
 
-    codeLabels.put(address, new CodeLabel(address));
-    codeReferences.put(current.getAddress(), address);
+    // add label for address "to"
+    codeLabels.put(to, new CodeLabel(to));
+    // add reference
+    codeReferences.put(from, to);
   }
 
   /**
    * Add a data reference from the current address to a given address.
    * This will add a label if no label exists for the given address.
    *
-   * @param address address
+   * @param from address of command referencing
+   * @param to referenced address
    */
-  public void addDataReference(int address) {
-    assertValidAddress(address);
+  public void addDataReference(int from, int to) {
+    assertValidAddress(from);
+    assertValidAddress(to);
 
-    dataLabels.put(address, new DataLabel(address));
-    dataReferences.put(current.getAddress(), address);
+    // add label for address "to"
+    dataLabels.put(to, new DataLabel(to));
+    // add reference
+    dataReferences.put(from, to);
   }
 
   /**
