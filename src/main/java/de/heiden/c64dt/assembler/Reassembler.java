@@ -123,13 +123,13 @@ public class Reassembler {
 
     code.restart();
     while(code.has(1)) {
-      CodeType type = code.getType();
+      int pc = code.getCurrentAddress();
+      CodeType type = commands.getType(pc);
       if (type.isData()) {
         // data
         // TODO read multiple data bytes at once?
         commands.addCommand(new DataCommand(code.readByte()));
       } else if (type == CodeType.ABSOLUTE_ADDRESS) {
-        int pc = code.getCurrentAddress();
         int address = code.read(2);
         commands.addCommand(new AddressCommand(address));
         commands.addCodeReference(pc, address);
@@ -147,7 +147,7 @@ public class Reassembler {
               commands.addCommand(new OpcodeCommand(opcode));
             } else {
               // opcode with an argument
-              int pc = code.getCurrentAddress();
+              pc = code.getCurrentAddress();
               int argument = code.read(mode.getSize());
               commands.addCommand(new OpcodeCommand(opcode, argument));
               if (mode.isAddress()) {
@@ -220,26 +220,26 @@ public class Reassembler {
   /**
    * Detect type of code.
    *
-   * @param buffer command buffer
+   * @param commands command commands
    * @return whether a code label has been altered
    */
-  private boolean detectCodeType(CodeBuffer code, CommandBuffer buffer) {
+  private boolean detectCodeType(CodeBuffer code, CommandBuffer commands) {
     boolean result = false;
 
     // Mark all code label positions as a start of an opcode
-    buffer.restart();
-    while(buffer.hasNextCommand()) {
-      ICommand command = buffer.nextCommand();
-      if (buffer.hasCodeLabel()) {
-        code.setType(command.getAddress(), CodeType.OPCODE);
+    commands.restart();
+    while(commands.hasNextCommand()) {
+      ICommand command = commands.nextCommand();
+      if (commands.hasCodeLabel()) {
+        commands.setType(command.getAddress(), CodeType.OPCODE);
       }
       if (command instanceof OpcodeCommand) {
         int address = command.getAddress();
         for (int pc = address + 1; pc < address + command.getSize(); pc++) {
-          if (buffer.hasCodeLabel(address)) {
+          if (commands.hasCodeLabel(address)) {
             // TODO set data
             // TODO set opcode
-            code.setType(pc, CodeType.OPCODE);
+            commands.setType(pc, CodeType.OPCODE);
           }
         }
       }

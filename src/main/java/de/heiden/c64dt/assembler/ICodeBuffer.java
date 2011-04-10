@@ -31,8 +31,4 @@ public interface ICodeBuffer
   Opcode readOpcode();
 
   int read(int number);
-
-  CodeType getType();
-
-  void setType(int address, CodeType type);
 }

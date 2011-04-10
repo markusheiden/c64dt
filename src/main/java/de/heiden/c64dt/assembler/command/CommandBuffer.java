@@ -1,6 +1,7 @@
 package de.heiden.c64dt.assembler.command;
 
 import de.heiden.c64dt.assembler.CodeLabel;
+import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.DataLabel;
 import de.heiden.c64dt.assembler.ILabel;
 import org.springframework.util.Assert;
@@ -16,6 +17,7 @@ import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
  * Input stream for code.
  */
 public class CommandBuffer {
+  private final Map<Integer, CodeType> codeTypes;
   private final Map<Integer, CodeLabel> codeLabels;
   private final Map<Integer, DataLabel> dataLabels;
   private final Map<Integer, Integer> codeReferences;
@@ -33,6 +35,7 @@ public class CommandBuffer {
   public CommandBuffer(int startAddress) {
     Assert.isTrue(startAddress >= 0, "Precondition: startAddress >= 0");
 
+    this.codeTypes = new HashMap<Integer, CodeType>();
     this.codeLabels = new HashMap<Integer, CodeLabel>();
     this.dataLabels = new HashMap<Integer, DataLabel>();
     this.codeReferences = new HashMap<Integer, Integer>();
@@ -48,6 +51,47 @@ public class CommandBuffer {
    */
   public int getStartAddress() {
     return startAddress;
+  }
+
+  //
+  // code type specific stuff ("model")
+  //
+
+  /**
+   * Get code type at current position.
+   */
+  public CodeType getType(int address) {
+    CodeType result = codeTypes.get(address);
+    return result != null? result : CodeType.UNKNOWN;
+  }
+
+  /**
+   * Set code type for a given address.
+   *
+   * @param startAddress first address (incl.)
+   * @param endAddress last address (excl.)
+   * @param type code type
+   */
+  public void setType(int startAddress, int endAddress, CodeType type) {
+    Assert.isTrue(startAddress <= endAddress, "Precondition: startAddress <= endAddress");
+    Assert.notNull(type, "Precondition: type != null");
+
+    for (int address = startAddress; address < endAddress; address++)
+    {
+      setType(address, type);
+    }
+  }
+
+  /**
+   * Set code type for a given address.
+   *
+   * @param address address
+   * @param type code type
+   */
+  public void setType(int address, CodeType type) {
+    Assert.notNull(type, "Precondition: type != null");
+
+    codeTypes.put(address, type);
   }
 
   //
