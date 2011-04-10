@@ -117,6 +117,13 @@ public enum OpcodeMode
   // $0000, PC-relative
   REL(1, true)
     {
+      @Override
+      public int getAddress(int pc, int argument)
+      {
+        // argument is a signed byte
+        return pc + ((byte) argument);
+      }
+
       public String toString(int pc, int argument)
       {
         // argument is signed
@@ -155,6 +162,18 @@ public enum OpcodeMode
   public final boolean hasArgument()
   {
     return size != 0;
+  }
+
+  /**
+   * Compute absolute address.
+   *
+   * @param pc 
+   */
+  public int getAddress(int pc, int argument)
+  {
+    Assert.isTrue(isAddress(), "Precondition: isAddress()");
+
+    return argument;
   }
 
   /**

@@ -100,7 +100,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer
   public final boolean has(int number) {
     Assert.isTrue(number >= 0, "Precondition: number >= 0");
 
-    return startAddress + position + number <= endAddress;
+    return getCurrentAddress() + number <= endAddress;
   }
 
   /**
@@ -115,20 +115,11 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer
 
   /**
    * Read 'number' bytes as one word.
-   */
-  @Override
-  public final int readRelative() {
-    // read signed(!) offset
-    return ((byte) readByte()) + getCurrentAddress();
-  }
-
-  /**
-   * Read 'number' bytes as one word.
    *
    * @param number number of bytes to read
    */
   @Override
-  public final int readAbsolute(int number) {
+  public final int read(int number) {
     Assert.isTrue(number == 1 || number == 2, "Precondition: number == 1 || number == 2");
 
     return number == 1? readByte() : readByte() + (readByte() << 8);

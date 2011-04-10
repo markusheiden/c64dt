@@ -30,9 +30,7 @@ public interface ICodeBuffer
 
   Opcode readOpcode();
 
-  int readRelative();
-
-  int readAbsolute(int number);
+  int read(int number);
 
   CodeType getType();
 

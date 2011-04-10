@@ -91,7 +91,7 @@ public class Disassembler {
 
     if (opcode.isLegal() && buffer.has(size)) {
       if (size > 0) {
-        int argument = buffer.readAbsolute(mode.getSize());
+        int argument = buffer.read(mode.getSize());
 
         output.append(size >= 1? " " + hexBytePlain(lo(argument)) : "   ");
         output.append(size >= 2? " " + hexBytePlain(hi(argument)) : "   ");

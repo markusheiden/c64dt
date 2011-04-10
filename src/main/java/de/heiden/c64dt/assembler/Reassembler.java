@@ -133,14 +133,14 @@ public class Reassembler {
               command = new OpcodeCommand(opcode);
             } else {
               // opcode with an argument
-              // TODO 2010-01-10 mh: is readRelative() functionality ok?
-              if (code.getCurrentAddress() + mode.getSize() > code.getEndAddress()) {
-                System.out.println("ERROR");
-              }
-              int argument = mode == OpcodeMode.REL? code.readRelative() : code.readAbsolute(size);
-              if (mode.isAddress() && code.hasAddress(argument)) {
-                // track references of opcodes
-                result.addReference(opcode.getType().isJump(), argument);
+              int pc = code.getCurrentAddress();
+              int argument = code.read(mode.getSize());
+              if (mode.isAddress()) {
+                int address = mode.getAddress(pc, argument);
+                if (code.hasAddress(argument)) {
+                  // track references of opcodes
+                  result.addReference(opcode.getType().isJump(), address);
+                }
               }
               command = new OpcodeCommand(opcode, argument);
             }
@@ -162,7 +162,7 @@ public class Reassembler {
   }
 
   /**
-   * Compute reachbility of commands.
+   * Compute reachability of commands.
    *
    * @param buffer command buffer
    * @return whether a code label has been altered
