@@ -195,6 +195,9 @@ public class CommandBuffer {
    */
   public void clear() {
     commands.clear();
+    iter = null;
+    current = null;
+
   }
 
   /**

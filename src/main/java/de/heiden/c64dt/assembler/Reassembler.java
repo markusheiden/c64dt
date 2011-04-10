@@ -97,28 +97,30 @@ public class Reassembler {
     Assert.notNull(code, "Precondition: code != null");
     Assert.notNull(output, "Precondition: output != null");
 
-    CommandBuffer commandBuffer = tokenize(code);
+
+    CommandBuffer commands = new CommandBuffer(code.getStartAddress());
 
     boolean change = true;
     for (int count = 0; change && count < 100; count++) {
+      commands.clear();
+      tokenize(code, commands);
       change =
-        reachability(commandBuffer) ||
-        detectCodeType(code, commandBuffer);
+        reachability(commands) ||
+        detectCodeType(code, commands);
     }
-    combine(commandBuffer);
-    write(commandBuffer, new BufferedWriter(output, code.getLength() * 80));
+    combine(commands);
+    write(commands, new BufferedWriter(output, code.getLength() * 80));
   }
 
   /**
    * Tokenize code.
    *
    * @param code code buffer
+   * @param commands reassembled commands
    * @return buffer with command tokens
    */
-  private CommandBuffer tokenize(CodeBuffer code) {
+  private void tokenize(CodeBuffer code, CommandBuffer commands) {
     Assert.notNull(code, "Precondition: code != null");
-
-    CommandBuffer result = new CommandBuffer(code.getStartAddress());
 
     code.restart();
     while(code.has(1)) {
@@ -126,11 +128,11 @@ public class Reassembler {
       if (type.isData()) {
         // data
         // TODO read multiple data bytes at once?
-        result.addCommand(new DataCommand(code.readByte()));
+        commands.addCommand(new DataCommand(code.readByte()));
       } else if (type == CodeType.ABSOLUTE_ADDRESS) {
         int address = code.read(2);
-        result.addCommand(new AddressCommand(address));
-        result.addReference(true, address);
+        commands.addCommand(new AddressCommand(address));
+        commands.addReference(true, address);
       } else {
         // unknown or code -> try to disassemble an opcode
         Opcode opcode = code.readOpcode();
@@ -142,33 +144,31 @@ public class Reassembler {
             // TODO log error if illegal opcode and type is OPCODE?
             if (size == 0) {
               // opcode without argument
-              result.addCommand(new OpcodeCommand(opcode));
+              commands.addCommand(new OpcodeCommand(opcode));
             } else {
               // opcode with an argument
               int pc = code.getCurrentAddress();
               int argument = code.read(mode.getSize());
-              result.addCommand(new OpcodeCommand(opcode, argument));
+              commands.addCommand(new OpcodeCommand(opcode, argument));
               if (mode.isAddress()) {
                 int address = mode.getAddress(pc, argument);
                 if (code.hasAddress(argument)) {
                   // track references of opcodes
-                  result.addReference(opcode.getType().isJump(), address);
+                  commands.addReference(opcode.getType().isJump(), address);
                 }
               }
             }
           } else {
             // no valid opcode -> assume data
-            result.addCommand(new DataCommand(opcode.getOpcode()));
+            commands.addCommand(new DataCommand(opcode.getOpcode()));
           }
         } else {
           // not enough argument bytes for opcode -> assume data
           // TODO log error, when type != UNKNOWN?
-          result.addCommand(new DataCommand(opcode.getOpcode()));
+          commands.addCommand(new DataCommand(opcode.getOpcode()));
         }
       }
     }
-
-    return result;
   }
 
   /**
