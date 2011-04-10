@@ -100,7 +100,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer
   public final boolean has(int number) {
     Assert.isTrue(number >= 0, "Precondition: number >= 0");
 
-    return position + number <= endAddress;
+    return startAddress + position + number <= endAddress;
   }
 
   /**
