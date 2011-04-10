@@ -83,20 +83,33 @@ public class Reassembler {
       // TODO check for basic header
     }
 
+    reassemble(codeBuffer, output);
+  }
+
+  /**
+   * Reassemble.
+   *
+   * @param code program
+   * @param output output for reassembled code
+   */
+  public void  reassemble(CodeBuffer code, Writer output) throws IOException {
+    Assert.notNull(code, "Precondition: code != null");
+    Assert.notNull(output, "Precondition: output != null");
+
     int count = 0;
 
     CommandBuffer commandBuffer;
     boolean change;
     do {
-      commandBuffer = tokenize(codeBuffer);
+      commandBuffer = tokenize(code);
       change = false;
       change |= reachability(commandBuffer);
-      change |= detectCodeType(codeBuffer, commandBuffer);
+      change |= detectCodeType(code, commandBuffer);
 
       count++;
     } while(change && count < 100);
     combine(commandBuffer);
-    write(commandBuffer, new BufferedWriter(output, code.length * 80));
+    write(commandBuffer, new BufferedWriter(output, code.getLength() * 80));
   }
 
   /**

@@ -87,6 +87,13 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer
     return endAddress;
   }
 
+  /**
+   * Length of code.
+   */
+  public int getLength() {
+    return getEndAddress() - getStartAddress();
+  }
+
   //
   // code specific interface
   //
@@ -136,6 +143,23 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer
   public CodeType getType() {
     // TODO checks / contracts
     return types[position];
+  }
+
+  /**
+   * Set code type for a given address.
+   *
+   * @param startAddress first address (incl.)
+   * @param endAddress last address (excl.)
+   * @param type code type
+   */
+  public void setType(int startAddress, int endAddress, CodeType type) {
+    Assert.isTrue(startAddress <= endAddress, "Precondition: startAddress <= endAddress");
+    Assert.notNull(type, "Precondition: type != null");
+
+    for (int address = startAddress; address < endAddress; address++)
+    {
+      setType(address, type);
+    }
   }
 
   /**
