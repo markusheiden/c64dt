@@ -1,5 +1,6 @@
 package de.heiden.c64dt.assembler;
 
+import de.heiden.c64dt.assembler.command.AddressCommand;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.DataCommand;
 import de.heiden.c64dt.assembler.command.ICommand;
@@ -132,6 +133,8 @@ public class Reassembler {
         // data
         // TODO read multiple data bytes at once?
         command = new DataCommand(code.readByte());
+      } else if (type == CodeType.ABSOLUTE_ADDRESS) {
+        command = new AddressCommand(code.read(2));
       } else {
         // unknown or code -> try to disassemble an opcode
         Opcode opcode = code.readOpcode();

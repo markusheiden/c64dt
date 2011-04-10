@@ -1,60 +1,60 @@
 package de.heiden.c64dt.assembler.command;
 
+import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static de.heiden.c64dt.util.HexUtil.hexByte;
+import static de.heiden.c64dt.util.HexUtil.hexWord;
 
 /**
  * Command for data.
  */
-public class DataCommand extends AbstractCommand {
-  private List<Integer> data;
+public class AddressCommand extends AbstractCommand {
+  private int address;
 
-  public DataCommand(int data) {
+  /**
+   * Command for absolute address.
+   *
+   * @param address address
+   */
+  public AddressCommand(int address) {
     super(false);
 
-    this.data = new ArrayList<Integer>(8);
-    this.data.add(data);
-
-    setReachable(false);
+    this.address = address;
   }
 
+  @Override
   public final int getSize() {
-    return data.size();
+    return 2;
   }
 
+  @Override
   public final boolean isEnd() {
     return true;
   }
 
+  @Override
   public boolean combineWith(ICommand command) {
-    if (!(command instanceof DataCommand)) {
-      return false;
-    }
-
-    data.addAll(((DataCommand) command).data);
-    return true;
+    return false;
   }
 
+  @Override
   public void toString(CommandBuffer buffer, Writer output) throws IOException {
     Assert.notNull(buffer, "Precondition: buffer != null");
     Assert.notNull(output, "Precondition: output != null");
 
-    output.append("!BYTE ");
-    output.append(hexByte(data.get(0)));
-    for (int i = 1; i < data.size(); i++) {
-      output.append(", ");
-      output.append(hexByte(data.get(i)));
-    }
+    output.append("!WORD " + hexWord(address));
   }
 
+  @Override
   public List<Integer> toBytes() {
-    return Collections.unmodifiableList(data);
+    return Arrays.asList(ByteUtil.lo(address), ByteUtil.hi(address));
   }
 }

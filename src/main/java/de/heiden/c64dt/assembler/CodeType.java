@@ -22,7 +22,12 @@ public enum CodeType {
   /**
    * Data.
    */
-  DATA;
+  DATA,
+
+  /**
+   * Absolute Address.
+   */
+  ABSOLUTE_ADDRESS;
 
   public final boolean isCode() {
     return this == OPCODE || this == CODE;
