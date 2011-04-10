@@ -97,18 +97,14 @@ public class Reassembler {
     Assert.notNull(code, "Precondition: code != null");
     Assert.notNull(output, "Precondition: output != null");
 
-    int count = 0;
+    CommandBuffer commandBuffer = tokenize(code);
 
-    CommandBuffer commandBuffer;
-    boolean change;
-    do {
-      commandBuffer = tokenize(code);
-      change = false;
-      change |= reachability(commandBuffer);
-      change |= detectCodeType(code, commandBuffer);
-
-      count++;
-    } while(change && count < 100);
+    boolean change = true;
+    for (int count = 0; change && count < 100; count++) {
+      change =
+        reachability(commandBuffer) ||
+        detectCodeType(code, commandBuffer);
+    }
     combine(commandBuffer);
     write(commandBuffer, new BufferedWriter(output, code.getLength() * 80));
   }
