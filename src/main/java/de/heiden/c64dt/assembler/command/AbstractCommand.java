@@ -12,7 +12,7 @@ public abstract class AbstractCommand implements ICommand {
   /**
    * Constructor.
    *
-   * @param reachable default value for reachbility
+   * @param reachable default value for reachability
    */
   protected AbstractCommand(boolean reachable) {
     this.address = -1;
