@@ -55,7 +55,21 @@ public class Reassembler {
    * Reassemble.
    *
    * @param startAddress start address of code
-   * @param code code
+   * @param code program without start address
+   * @param output output for reassembled code
+   */
+  public void  reassemble(int startAddress, InputStream code, Writer output) throws IOException {
+    Assert.notNull(code, "Precondition: input != null");
+    Assert.notNull(output, "Precondition: output != null");
+
+    reassemble(startAddress, FileCopyUtils.copyToByteArray(code), output);
+  }
+
+  /**
+   * Reassemble.
+   *
+   * @param startAddress start address of code
+   * @param code program without start address
    * @param output output for reassembled code
    */
   public void  reassemble(int startAddress, byte[] code, Writer output) throws IOException {
@@ -111,7 +125,7 @@ public class Reassembler {
         OpcodeMode mode = opcode.getMode();
         int size = mode.getSize();
 
-        if (code.has(size)) {
+        if (code.has(1 + size)) {
           if (opcode.isLegal() || type == CodeType.OPCODE) {
             // TODO log error if illegal opcode and type is OPCODE?
             if (size == 0) {
@@ -120,6 +134,9 @@ public class Reassembler {
             } else {
               // opcode with an argument
               // TODO 2010-01-10 mh: is readRelative() functionality ok?
+              if (code.getCurrentAddress() + mode.getSize() > code.getEndAddress()) {
+                System.out.println("ERROR");
+              }
               int argument = mode == OpcodeMode.REL? code.readRelative() : code.readAbsolute(size);
               if (mode.isAddress() && code.hasAddress(argument)) {
                 // track references of opcodes
