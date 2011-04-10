@@ -356,6 +356,16 @@ public enum Opcode
     return result;
   }
 
+
+  /**
+   * Just for debugging purposes!
+   */
+  @Override
+  public String toString()
+  {
+    return toString(0, 0);
+  }
+
   /**
    * Disassembled representation.
    *
