@@ -122,15 +122,15 @@ public class Reassembler {
 
     code.restart();
     while(code.has(1)) {
-      ICommand command;
-
       CodeType type = code.getType();
       if (type.isData()) {
         // data
         // TODO read multiple data bytes at once?
-        command = new DataCommand(code.readByte());
+        result.addCommand(new DataCommand(code.readByte()));
       } else if (type == CodeType.ABSOLUTE_ADDRESS) {
-        command = new AddressCommand(code.read(2));
+        int address = code.read(2);
+        result.addCommand(new AddressCommand(address));
+        result.addReference(true, address);
       } else {
         // unknown or code -> try to disassemble an opcode
         Opcode opcode = code.readOpcode();
@@ -142,11 +142,12 @@ public class Reassembler {
             // TODO log error if illegal opcode and type is OPCODE?
             if (size == 0) {
               // opcode without argument
-              command = new OpcodeCommand(opcode);
+              result.addCommand(new OpcodeCommand(opcode));
             } else {
               // opcode with an argument
               int pc = code.getCurrentAddress();
               int argument = code.read(mode.getSize());
+              result.addCommand(new OpcodeCommand(opcode, argument));
               if (mode.isAddress()) {
                 int address = mode.getAddress(pc, argument);
                 if (code.hasAddress(argument)) {
@@ -154,20 +155,17 @@ public class Reassembler {
                   result.addReference(opcode.getType().isJump(), address);
                 }
               }
-              command = new OpcodeCommand(opcode, argument);
             }
           } else {
             // no valid opcode -> assume data
-            command = new DataCommand(opcode.getOpcode());
+            result.addCommand(new DataCommand(opcode.getOpcode()));
           }
         } else {
           // not enough argument bytes for opcode -> assume data
           // TODO log error, when type != UNKNOWN?
-          command = new DataCommand(opcode.getOpcode());
+          result.addCommand(new DataCommand(opcode.getOpcode()));
         }
       }
-
-      result.addCommand(command);
     }
 
     return result;
