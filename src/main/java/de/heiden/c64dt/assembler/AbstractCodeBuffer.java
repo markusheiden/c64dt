@@ -68,7 +68,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer
    */
   @Override
   public final boolean hasAddress(int address) {
-    return startAddress <= address && address <= endAddress;
+    return startAddress <= address && address < endAddress;
   }
 
   /**
