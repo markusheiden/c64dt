@@ -30,6 +30,7 @@ public class OpcodeCommand extends AbstractCommand {
 
   /**
    * Constructor for opcodes with an argument.
+   * All opcodes are reachable for first.
    *
    * @param opcode opcode
    * @param argument argument
