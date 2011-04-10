@@ -99,6 +99,15 @@ public class CommandBuffer {
   //
 
   /**
+   * Is a label at the current opcode / command?
+   */
+  public boolean hasLabel() {
+    CodeType type = getType(current.getAddress());
+    return type != CodeType.UNKNOWN && type.isCode()?
+      hasCodeLabel(current.getAddress()) : hasDataLabel(current.getAddress());
+  }
+
+  /**
    * Is a code label at the current opcode / command?
    */
   public boolean hasCodeLabel() {

@@ -261,7 +261,7 @@ public class Reassembler {
     ICommand lastCommand = null;
     while (buffer.hasNextCommand()) {
       ICommand command = buffer.nextCommand();
-      if (lastCommand != null && lastCommand.combineWith(command)) {
+      if (!buffer.hasLabel() && lastCommand != null && lastCommand.combineWith(command)) {
         // TODO let command buffer handle this functionality?
         buffer.removeCurrentCommand();
       } else {
