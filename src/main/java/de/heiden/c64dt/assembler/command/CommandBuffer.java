@@ -83,6 +83,15 @@ public class CommandBuffer {
   }
 
   /**
+   * Set code type for the current opcode / command.
+   *
+   * @param type code type
+   */
+  public void setType(CodeType type) {
+    setType(current.getAddress(), type);
+  }
+
+  /**
    * Set code type for a given address.
    *
    * @param address address
