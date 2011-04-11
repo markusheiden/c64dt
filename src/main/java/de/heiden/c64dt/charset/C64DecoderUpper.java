@@ -15,8 +15,9 @@ public class C64DecoderUpper extends AbstractDecoder {
   }
 
   protected char toChar(byte b) throws UnmappableCharacterException {
-    if (b >= 0x01 && b <= 0x1A) {
-      return (char) (b - 0x01 + 'A');
+    int c = b & 0x7F; // accept inverted chars too
+    if (c >= 0x01 && c <= 0x1A) {
+      return (char) (c - 0x01 + 'A');
     } else {
       return toSymbolChar(b);
     }

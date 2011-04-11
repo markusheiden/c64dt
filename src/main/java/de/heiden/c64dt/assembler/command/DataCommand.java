@@ -1,5 +1,6 @@
 package de.heiden.c64dt.assembler.command;
 
+import de.heiden.c64dt.charset.C64Charset;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
@@ -50,6 +51,13 @@ public class DataCommand extends AbstractCommand {
       output.append(", ");
       output.append(hexByte(data.get(i)));
     }
+    output.append("; '");
+    byte[] string = new byte[data.size()];
+    for (int i = 0; i < data.size(); i++) {
+      string[i] = data.get(i).byteValue();
+    }
+    output.append(C64Charset.LOWER.toString(string));
+    output.append("'");
   }
 
   public List<Integer> toBytes() {
