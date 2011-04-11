@@ -309,4 +309,21 @@ public class CommandBuffer {
     iter.remove();
     // TODO check / assert consistency
   }
+
+  /**
+   * Replace the current command.
+   *
+   * @param replacements Replacement commands
+   */
+  public void replaceCurrentCommand(ICommand... replacements) {
+    int address = current.getAddress();
+    iter.remove();
+    int size = 0;
+    for (ICommand replacement : replacements) {
+      replacement.setAddress(address + size);
+      iter.add(replacement);
+      size += replacement.getSize();
+    }
+    Assert.isTrue(current.getSize() == size, "Precondition: The size of the replacements is equal to the size of the removed command");
+  }
 }

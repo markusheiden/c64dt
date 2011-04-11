@@ -1,6 +1,7 @@
 package de.heiden.c64dt.assembler;
 
 import de.heiden.c64dt.assembler.command.AddressCommand;
+import de.heiden.c64dt.assembler.command.BitCommand;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.DataCommand;
 import de.heiden.c64dt.assembler.command.ICommand;
@@ -226,20 +227,20 @@ public class Reassembler {
     boolean result = false;
 
     // Mark all code label positions as a start of an opcode
-//    commands.restart();
-//    while (commands.hasNextCommand()) {
-//      ICommand command = commands.nextCommand();
-//      if (command instanceof OpcodeCommand) {
-//        OpcodeCommand opcode = (OpcodeCommand) command;
-//        if (opcode.getOpcode().equals(Opcode.OPCODE_2C) && commands.hasCodeLabel(opcode.getAddress() + 1)) {
-//          // TODO mh: check, if the next two bytes contain a valid opcode, rework
-//          int argument = opcode.getArgument();
-//          commands.removeCurrentCommand();
-//          commands.addCommand(new DataCommand(0x2C));
-//          commands.addCommand(new OpcodeCommand(Opcode.opcode(ByteUtil.lo(argument)), ByteUtil.hi(argument)));
-//        }
-//      }
-
+    commands.restart();
+    while (commands.hasNextCommand()) {
+      ICommand command = commands.nextCommand();
+      if (command instanceof OpcodeCommand) {
+        OpcodeCommand opcode = (OpcodeCommand) command;
+        if (opcode.getOpcode().equals(Opcode.OPCODE_2C) && commands.hasCodeLabel(opcode.getAddress() + 1)) {
+          // TODO mh: check, if the next two bytes contain a valid opcode, rework
+          int argument = opcode.getArgument();
+          commands.replaceCurrentCommand(
+            new BitCommand(0x2C),
+            new OpcodeCommand(Opcode.opcode(ByteUtil.lo(argument)), ByteUtil.hi(argument)));
+        }
+      }
+    }
 
 //      if (commands.hasCodeLabel()) {
 //        commands.setType(command.getAddress(), CodeType.OPCODE);
@@ -254,7 +255,6 @@ public class Reassembler {
 //          }
 //        }
 //      }
-//    }
 
     return result;
   }
