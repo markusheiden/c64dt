@@ -2,6 +2,7 @@ package de.heiden.c64dt.assembler.command;
 
 import de.heiden.c64dt.assembler.ILabel;
 import de.heiden.c64dt.assembler.Opcode;
+import de.heiden.c64dt.assembler.OpcodeMode;
 import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 
@@ -75,10 +76,11 @@ public class OpcodeCommand extends AbstractCommand {
     Assert.notNull(output, "Precondition: output != null");
 
     output.append(opcode.getType().toString());
-    if (opcode.getMode().getSize() > 0) {
+    OpcodeMode mode = opcode.getMode();
+    if (mode.getSize() > 0) {
       output.append(" ");
-      ILabel label = buffer.getLabel(argument);
-      output.append(label != null? opcode.getMode().toString(label.toString()) :  opcode.getMode().toString(getAddress(), argument));
+      ILabel label = mode.isAddress()? buffer.getLabel(mode.getAddress(getAddress(), argument)) : null;
+      output.append(label != null? mode.toString(label.toString()) :  mode.toString(getAddress(), argument));
     }
   }
 

@@ -164,6 +164,13 @@ public class CommandBuffer {
   }
 
   /**
+   * Is a code label at the current opcode / command?
+   */
+  public boolean hasDataLabel() {
+    return hasDataLabel(current.getAddress());
+  }
+
+  /**
    * Is a code label at the given address?
    *
    * @param address address
@@ -274,10 +281,14 @@ public class CommandBuffer {
   //
 
   /**
-   * Clear all commands.
+   * Clear all commands, references and labels.
    */
   public void clear() {
     commands.clear();
+    codeReferences.clear();
+    codeLabels.clear();
+    dataReferences.clear();
+    dataLabels.clear();
     iter = null;
     current = null;
 

@@ -195,9 +195,10 @@ public class Reassembler {
         ICommand command =  buffer.nextCommand();
         /*
          * A command is not reachable, if the previous command is not reachable or is an ending command (e.g. JMP) and
-         * there is no code label for the command.
+         * there is no code label for the command and the command has not already been detected as an opcode.
          */
-        if (command.isReachable() && !buffer.hasCodeLabel() && (!lastCommand.isReachable() || lastCommand.isEnd())) {
+        if (command.isReachable() && !buffer.hasCodeLabel() && buffer.getType() != CodeType.OPCODE &&
+            (!lastCommand.isReachable() || lastCommand.isEnd())) {
           command.setReachable(false);
           // restart, if reference caused a wrong label in the already scanned code
           change |= buffer.removeReference();
@@ -212,8 +213,10 @@ public class Reassembler {
         ICommand command =  buffer.previousCommand();
         /*
          * A code command is not reachable, if it leads to unreachable code.
+         * Exception: JSR which may be followed by argument data.
          */
-        if (!lastCommand.isReachable() && command.isReachable() && !command.isEnd()) {
+        if (!lastCommand.isReachable() &&
+            command.isReachable() && !isJsr(command) && !command.isEnd() && buffer.getType() != CodeType.OPCODE) {
           command.setReachable(false);
           // restart, if reference caused a wrong label in the already scanned code
           change |= buffer.removeReference();
@@ -225,6 +228,10 @@ public class Reassembler {
     } while(change);
   }
 
+  private boolean isJsr(ICommand command) {
+    return command instanceof OpcodeCommand && ((OpcodeCommand) command).getOpcode().getType() == OpcodeType.JSR;
+  }
+
   /**
    * Detect type of code.
    *
@@ -233,6 +240,17 @@ public class Reassembler {
    */
   private boolean detectCodeType(CodeBuffer code, CommandBuffer commands) {
     boolean result = false;
+
+    // Set code type for commands with labels
+    commands.restart();
+    while (commands.hasNextCommand()) {
+      commands.nextCommand();
+      if (commands.hasCodeLabel()) {
+        commands.setType(CodeType.OPCODE);
+      } else if (commands.getType() != CodeType.UNKNOWN && commands.hasDataLabel()) {
+        commands.setType(CodeType.DATA);
+      }
+    }
 
     // Mark all code label positions as a start of an opcode
     commands.restart();
