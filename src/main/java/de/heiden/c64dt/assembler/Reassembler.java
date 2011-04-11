@@ -5,9 +5,11 @@ import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.DataCommand;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
+import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
+import javax.swing.text.ChangedCharSetException;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -101,13 +103,14 @@ public class Reassembler {
     CodeBuffer buffer = new CodeBuffer(commands.getStartAddress(), code);
 
     boolean change = true;
-    for (int count = 0; change && count < 100; count++) {
+    for (int count = 0; change && count < 3; count++) {
       commands.clear();
       tokenize(buffer, commands);
-      change =
-        reachability(commands) ||
-        detectCodeType(buffer, commands);
+      reachability(commands);
+      change = detectCodeType(buffer, commands);
+      System.out.println(count);
     }
+
     combine(commands);
     write(commands, new BufferedWriter(output, code.length * 80));
   }
@@ -171,49 +174,48 @@ public class Reassembler {
   }
 
   /**
-   * Compute reachability of commands.
+   * Compute transitive unreachability of commands.
    *
    * @param buffer command buffer
    * @return whether a code label has been altered
    */
-  private boolean reachability(CommandBuffer buffer) {
-    // transitive unreachability
-    boolean result = false;
+  private void reachability(CommandBuffer buffer) {
+    boolean change;
+    do {
+      buffer.restart();
+      change = false;
 
-    buffer.restart();
-
-    ICommand lastCommand = null;
-    while (buffer.hasNextCommand()) {
-      ICommand command =  buffer.nextCommand();
-      if (command.isReachable() && commandIsNotReachable(buffer, lastCommand)) {
-        command.setReachable(false);
-        if (buffer.removeReference()) {
-          // restart, because reference caused a wrong label in the already scanned code
-          result = true;
+      ICommand lastCommand = null;
+      while (buffer.hasNextCommand()) {
+        ICommand command =  buffer.nextCommand();
+        if (command.isReachable() && commandIsNotReachable(buffer, lastCommand)) {
+          command.setReachable(false);
+          if (buffer.removeReference()) {
+            // restart, because reference caused a wrong label in the already scanned code
+            change = true;
+          }
         }
+
+        lastCommand = command;
       }
-
-      lastCommand = command;
-    }
-
-    return result;
+    } while(change);
   }
 
   /**
-   * Compute if command is reachable
+   * Check if command is not reachable.
    *
    * @param buffer command buffer
    * @param lastCommand last command
    */
   private boolean commandIsNotReachable(CommandBuffer buffer, ICommand lastCommand) {
-    if (lastCommand == null || lastCommand.isEnd() || !lastCommand.isReachable()) {
-      // if there is no chance, that this command can be reached from the previous command,
-      // then check, if there is a code label, which may make this command reachable
-      return !buffer.hasCodeLabel();
-    } else {
-      // this command can be reached
+    if (lastCommand != null && lastCommand.isReachable() && !lastCommand.isEnd()) {
+      // this command can be reached via the previous command
       return false;
     }
+
+    // if there is no chance, that this command can be reached from the previous command,
+    // then check, if there is a code label, which may make this command reachable
+    return !buffer.hasCodeLabel();
   }
 
   /**
@@ -226,23 +228,35 @@ public class Reassembler {
     boolean result = false;
 
     // Mark all code label positions as a start of an opcode
-    commands.restart();
-    while(commands.hasNextCommand()) {
-      ICommand command = commands.nextCommand();
-      if (commands.hasCodeLabel()) {
-        commands.setType(command.getAddress(), CodeType.OPCODE);
-      }
-      if (command instanceof OpcodeCommand) {
-        int address = command.getAddress();
-        for (int pc = address + 1; pc < address + command.getSize(); pc++) {
-          if (commands.hasCodeLabel(address)) {
-            // TODO set data
-            // TODO set opcode
-            commands.setType(pc, CodeType.OPCODE);
-          }
-        }
-      }
-    }
+//    commands.restart();
+//    while (commands.hasNextCommand()) {
+//      ICommand command = commands.nextCommand();
+//      if (command instanceof OpcodeCommand) {
+//        OpcodeCommand opcode = (OpcodeCommand) command;
+//        if (opcode.getOpcode().equals(Opcode.OPCODE_2C) && commands.hasCodeLabel(opcode.getAddress() + 1)) {
+//          // TODO mh: check, if the next two bytes contain a valid opcode, rework
+//          int argument = opcode.getArgument();
+//          commands.removeCurrentCommand();
+//          commands.addCommand(new DataCommand(0x2C));
+//          commands.addCommand(new OpcodeCommand(Opcode.opcode(ByteUtil.lo(argument)), ByteUtil.hi(argument)));
+//        }
+//      }
+
+
+//      if (commands.hasCodeLabel()) {
+//        commands.setType(command.getAddress(), CodeType.OPCODE);
+//      }
+//      if (command instanceof OpcodeCommand) {
+//        int address = command.getAddress();
+//        for (int pc = address + 1; pc < address + command.getSize(); pc++) {
+//          if (commands.hasCodeLabel(address)) {
+//            // TODO set data
+//            // TODO set opcode
+//            commands.setType(pc, CodeType.OPCODE);
+//          }
+//        }
+//      }
+//    }
 
     return result;
   }
