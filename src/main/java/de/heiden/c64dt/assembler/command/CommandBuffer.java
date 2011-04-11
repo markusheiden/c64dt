@@ -305,6 +305,17 @@ public class CommandBuffer {
     return current;
   }
 
+  public boolean hasPreviousCommand() {
+    return iter.hasPrevious();
+  }
+
+  public ICommand previousCommand() {
+    current = iter.previous();
+
+    Assert.notNull(current, "Postcondition: result != null");
+    return current;
+  }
+
   public void removeCurrentCommand() {
     iter.remove();
     // TODO check / assert consistency

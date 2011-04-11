@@ -4,6 +4,7 @@ import de.heiden.c64dt.assembler.command.AddressCommand;
 import de.heiden.c64dt.assembler.command.BitCommand;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.DataCommand;
+import de.heiden.c64dt.assembler.command.DummyCommand;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 import de.heiden.c64dt.util.ByteUtil;
@@ -186,10 +187,31 @@ public class Reassembler {
       buffer.restart();
       change = false;
 
-      ICommand lastCommand = null;
+      // tracing forward from one unreachable command to the next
+      ICommand lastCommand = new DummyCommand();
       while (buffer.hasNextCommand()) {
         ICommand command =  buffer.nextCommand();
-        if (command.isReachable() && commandIsNotReachable(buffer, lastCommand)) {
+        /*
+         * A command is not reachable, if the previous command is not reachable or is an ending command (e.g. JMP) and
+         * there is no code label for the command.
+         */
+        if (command.isReachable() && !buffer.hasCodeLabel() && (!lastCommand.isReachable() || lastCommand.isEnd())) {
+          command.setReachable(false);
+          // restart, if reference caused a wrong label in the already scanned code
+          change |= buffer.removeReference();
+        }
+
+        lastCommand = command;
+      }
+
+      // trace backward from unreachable command to the previous
+      lastCommand = new DummyCommand();
+      while (buffer.hasPreviousCommand()) {
+        ICommand command =  buffer.previousCommand();
+        /*
+         * A code command is not reachable, if it leads to unreachable code.
+         */
+        if (!lastCommand.isReachable() && command.isReachable() && !command.isEnd()) {
           command.setReachable(false);
           // restart, if reference caused a wrong label in the already scanned code
           change |= buffer.removeReference();
@@ -198,23 +220,6 @@ public class Reassembler {
         lastCommand = command;
       }
     } while(change);
-  }
-
-  /**
-   * Check if command is not reachable.
-   *
-   * @param buffer command buffer
-   * @param lastCommand last command
-   */
-  private boolean commandIsNotReachable(CommandBuffer buffer, ICommand lastCommand) {
-    if (lastCommand != null && lastCommand.isReachable() && !lastCommand.isEnd()) {
-      // this command can be reached via the previous command
-      return false;
-    }
-
-    // if there is no chance, that this command can be reached from the previous command,
-    // then check, if there is a code label, which may make this command reachable
-    return !buffer.hasCodeLabel();
   }
 
   /**
