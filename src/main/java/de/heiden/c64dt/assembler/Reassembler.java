@@ -190,10 +190,8 @@ public class Reassembler {
         ICommand command =  buffer.nextCommand();
         if (command.isReachable() && commandIsNotReachable(buffer, lastCommand)) {
           command.setReachable(false);
-          if (buffer.removeReference()) {
-            // restart, because reference caused a wrong label in the already scanned code
-            change = true;
-          }
+          // restart, if reference caused a wrong label in the already scanned code
+          change |= buffer.removeReference();
         }
 
         lastCommand = command;
