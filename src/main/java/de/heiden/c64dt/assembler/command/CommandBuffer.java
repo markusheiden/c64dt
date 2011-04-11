@@ -58,7 +58,16 @@ public class CommandBuffer {
   //
 
   /**
-   * Get code type at current position.
+   * Get code type of the current opcode / command.
+   */
+  public CodeType getType() {
+    return getType(current.getAddress());
+  }
+
+  /**
+   * Get code type of the command at the given address.
+   *
+   * @param address Address
    */
   public CodeType getType(int address) {
     CodeType result = codeTypes.get(address);
@@ -111,7 +120,7 @@ public class CommandBuffer {
    * Is a label at the current opcode / command?
    */
   public boolean hasLabel() {
-    CodeType type = getType(current.getAddress());
+    CodeType type = getType();
     return type != CodeType.UNKNOWN && type.isCode()?
       hasCodeLabel(current.getAddress()) : hasDataLabel(current.getAddress());
   }

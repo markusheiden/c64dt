@@ -130,14 +130,16 @@ public class Reassembler {
     while(code.has(1)) {
       int pc = code.getCurrentAddress();
       CodeType type = commands.getType(pc);
-      if (type.isData()) {
-        // data
-        // TODO read multiple data bytes at once?
-        commands.addCommand(new DataCommand(code.readByte()));
-      } else if (type == CodeType.ABSOLUTE_ADDRESS) {
+      if (type == CodeType.ABSOLUTE_ADDRESS) {
+        // absolute address as data
         int address = code.read(2);
         commands.addCommand(new AddressCommand(address));
         commands.addCodeReference(pc, address);
+
+      } else if (type.isData()) {
+        // plain data
+        commands.addCommand(new DataCommand(code.readByte()));
+
       } else {
         // unknown or code -> try to disassemble an opcode
         Opcode opcode = code.readOpcode();
@@ -215,6 +217,7 @@ public class Reassembler {
           command.setReachable(false);
           // restart, if reference caused a wrong label in the already scanned code
           change |= buffer.removeReference();
+          // TODO mh: Change code type to data?
         }
 
         lastCommand = command;
