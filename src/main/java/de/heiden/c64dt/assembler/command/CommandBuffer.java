@@ -216,21 +216,24 @@ public class CommandBuffer {
   /**
    * Remove a reference from the current address.
    *
-   * @return whether a code label before the current position has been removed due to reference removal
+   * @return whether a label has been removed
    */
   public boolean removeReference() {
-    Integer removedDataLabel = dataReferences.remove(current.getAddress());
-    if (removedDataLabel != null && !dataReferences.containsValue(removedDataLabel)) {
-      dataLabels.remove(removedDataLabel);
+    boolean result = false;
+
+    Integer referencedDataLabel = dataReferences.remove(current.getAddress());
+    if (!dataReferences.containsValue(referencedDataLabel)) {
+      dataLabels.remove(referencedDataLabel);
+      result = true;
     }
 
-    Integer removedCodeLabel = codeReferences.remove(current.getAddress());
-    if (removedCodeLabel != null && !codeReferences.containsValue(removedCodeLabel)) {
-      codeLabels.remove(removedCodeLabel);
-      return removedCodeLabel <= current.getAddress();
+    Integer referencedCodeLabel = codeReferences.remove(current.getAddress());
+    if (!codeReferences.containsValue(referencedCodeLabel)) {
+      codeLabels.remove(referencedCodeLabel);
+      result = true;
     }
 
-    return false;
+    return result;
   }
 
   /**
