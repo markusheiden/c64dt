@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import static de.heiden.c64dt.util.ByteUtil.toWord;
+import static de.heiden.c64dt.util.HexUtil.hex;
 import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
 import static de.heiden.c64dt.util.HexUtil.hexWord;
 import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
@@ -325,7 +326,7 @@ public class Reassembler {
     // external labels
     Collection<ExternalLabel> externalReferences = new TreeSet<ExternalLabel>(buffer.getExternalLabels());
     for (ExternalLabel externalReference : externalReferences) {
-      output.append(externalReference.toString()).append(" = ").append(hexWord(externalReference.getAddress())).append("\n");
+      output.append(externalReference.toString()).append(" = ").append(hex(externalReference.getAddress())).append("\n");
     }
     output.append("\n");
 

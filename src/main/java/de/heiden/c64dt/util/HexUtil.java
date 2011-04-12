@@ -1,5 +1,7 @@
 package de.heiden.c64dt.util;
 
+import static de.heiden.c64dt.util.AddressUtil.*;
+
 /**
  * Helper class for handling hexadecimal values.
  */
@@ -14,7 +16,7 @@ public class HexUtil {
     assert value >= 0: "Precondition: value >= 0";
     assert value < 0x100: "Precondition: value < 0x100";
 
-    StringBuffer result = new StringBuffer(Long.toHexString(value + 0x100).toUpperCase());
+    StringBuilder result = new StringBuilder(Long.toHexString(value + 0x100).toUpperCase());
     return result.substring(1);
   }
 
@@ -28,7 +30,7 @@ public class HexUtil {
     assert value >= 0: "Precondition: value >= 0";
     assert value < 0x100: "Precondition: value < 0x100";
 
-    StringBuffer result = new StringBuffer(Long.toHexString(value + 0x100).toUpperCase());
+    StringBuilder result = new StringBuilder(Long.toHexString(value + 0x100).toUpperCase());
     result.setCharAt(0, '$');
     return result.toString();
   }
@@ -43,8 +45,8 @@ public class HexUtil {
     assert value >= 0: "Precondition: value >= 0";
     assert value < 0x10000: "value < 0x10000";
 
-    StringBuffer result = new StringBuffer(Long.toHexString(value + 0x10000).toUpperCase());
-    return result.substring(1, 5);
+    StringBuilder result = new StringBuilder(Long.toHexString(value + 0x10000).toUpperCase());
+    return result.substring(1);
   }
 
   /**
@@ -57,8 +59,34 @@ public class HexUtil {
     assert value >= 0: "Precondition: value >= 0";
     assert value < 0x10000: "value < 0x10000";
 
-    StringBuffer result = new StringBuffer(Long.toHexString(value + 0x10000).toUpperCase());
+    StringBuilder result = new StringBuilder(Long.toHexString(value + 0x10000).toUpperCase());
     result.setCharAt(0, '$');
     return result.toString();
+  }
+
+  /**
+   * String representation of a byte or a word with leading '$'.
+   *
+   * @require value < 0x10000
+   */
+  public static String hexPlain (int value)
+  {
+    assert value >= 0: "Precondition: value >= 0";
+    assert value < 0x10000: "value < 0x10000";
+
+    return value < 0x100? hexBytePlain(value) : hexWordPlain(value);
+  }
+
+  /**
+   * String representation of a byte or a word with leading '$'.
+   *
+   * @require value < 0x10000
+   */
+  public static String hex (int value)
+  {
+    assert value >= 0: "Precondition: value >= 0";
+    assert value < 0x10000: "value < 0x10000";
+
+    return value < 0x100? hexByte(value) : hexWord(value);
   }
 }
