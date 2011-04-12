@@ -3,6 +3,7 @@ package de.heiden.c64dt.assembler.command;
 import de.heiden.c64dt.assembler.CodeLabel;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.DataLabel;
+import de.heiden.c64dt.assembler.ExternalLabel;
 import de.heiden.c64dt.assembler.ILabel;
 import org.springframework.util.Assert;
 
@@ -23,7 +24,7 @@ public class CommandBuffer {
   private final Map<Integer, DataLabel> dataLabels;
   private final Map<Integer, Integer> codeReferences;
   private final Map<Integer, Integer> dataReferences;
-  private final Map<Integer, Integer> externalReferences;
+  private final Map<Integer, ExternalLabel> externalLabels;
   private final LinkedList<ICommand> commands;
   private ListIterator<ICommand> iter;
   private ICommand current;
@@ -44,7 +45,7 @@ public class CommandBuffer {
     this.dataLabels = new HashMap<Integer, DataLabel>();
     this.codeReferences = new HashMap<Integer, Integer>();
     this.dataReferences = new HashMap<Integer, Integer>();
-    this.externalReferences = new HashMap<Integer, Integer>();
+    this.externalLabels = new HashMap<Integer, ExternalLabel>();
     this.commands = new LinkedList<ICommand>();
     this.iter = null;
     this.current = null;
@@ -207,7 +208,7 @@ public class CommandBuffer {
     Assert.isTrue(hasAddress(from), "Precondition: hasAddress(from)");
 
     if (!hasAddress(to)) {
-      externalReferences.put(from, to);
+      externalLabels.put(to, new ExternalLabel(to));
     } else if (code) {
       addCodeReference(from, to);
     } else {
@@ -291,6 +292,8 @@ public class CommandBuffer {
     ILabel result = codeLabels.get(address);
     if (result == null) {
       result = dataLabels.get(address);
+    } else if (result == null) {
+      result = externalLabels.get(address);
     }
 
     return result;
@@ -299,8 +302,8 @@ public class CommandBuffer {
   /**
    * All referenced addresses which do not point to this code.
    */
-  public Collection<Integer> getExternalReferences() {
-    return externalReferences.values();
+  public Collection<ExternalLabel> getExternalLabels() {
+    return externalLabels.values();
   }
 
   //
@@ -316,7 +319,7 @@ public class CommandBuffer {
     codeLabels.clear();
     dataReferences.clear();
     dataLabels.clear();
-    externalReferences.clear();
+    externalLabels.clear();
     iter = null;
     current = null;
 

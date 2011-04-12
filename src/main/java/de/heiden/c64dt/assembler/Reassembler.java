@@ -11,7 +11,6 @@ import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
-import javax.swing.text.ChangedCharSetException;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.TreeSet;
 
 import static de.heiden.c64dt.util.ByteUtil.toWord;
-import static de.heiden.c64dt.util.HexUtil.hexByte;
 import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
 import static de.heiden.c64dt.util.HexUtil.hexWord;
 import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
@@ -325,9 +323,9 @@ public class Reassembler {
     output.append("\n");
 
     // external labels
-    Collection<Integer> externalReferences = new TreeSet<Integer>(buffer.getExternalReferences());
-    for (Integer externalReference : externalReferences) {
-      output.append(externalLabel(externalReference)).append(" = ").append(hexWord(externalReference)).append("\n");
+    Collection<ExternalLabel> externalReferences = new TreeSet<ExternalLabel>(buffer.getExternalLabels());
+    for (ExternalLabel externalReference : externalReferences) {
+      output.append(externalReference.toString()).append(" = ").append(hexWord(externalReference.getAddress())).append("\n");
     }
     output.append("\n");
 
@@ -398,9 +396,5 @@ public class Reassembler {
     }
 
     output.flush();
-  }
-
-  private String externalLabel(Integer externalReference) {
-    return externalReference < 0x100? "Z" + hexBytePlain(externalReference) : "X" + hexWordPlain(externalReference);
   }
 }

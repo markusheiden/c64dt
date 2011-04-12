@@ -24,6 +24,12 @@ public abstract class AbstractLabel implements ILabel {
     return address;
   }
 
+  @Override
+  public int compareTo(ILabel label)
+  {
+    return getAddress() - label.getAddress();
+  }
+
   public String toString() {
     return getLabelPrefix() + hexWordPlain(address);
   }
