@@ -16,10 +16,14 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
+import java.util.Collection;
 import java.util.List;
+import java.util.TreeSet;
 
 import static de.heiden.c64dt.util.ByteUtil.toWord;
+import static de.heiden.c64dt.util.HexUtil.hexByte;
 import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
+import static de.heiden.c64dt.util.HexUtil.hexWord;
 import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
 
 /**
@@ -87,7 +91,7 @@ public class Reassembler {
       // TODO check for basic header
     }
 
-    reassemble(new CommandBuffer(startAddress), code, output);
+    reassemble(new CommandBuffer(code.length, startAddress), code, output);
   }
 
   /**
@@ -158,10 +162,8 @@ public class Reassembler {
               commands.addCommand(new OpcodeCommand(opcode, argument));
               if (mode.isAddress()) {
                 int address = mode.getAddress(pc, argument);
-                if (code.hasAddress(address)) {
-                  // track references of opcodes
-                  commands.addReference(opcode.getType().isJump(), pc, address);
-                }
+                // track references of opcodes
+                commands.addReference(opcode.getType().isJump(), pc, address);
               }
             }
           } else {
@@ -318,6 +320,18 @@ public class Reassembler {
 
     buffer.restart();
 
+    // start address
+    output.append("*=").append(hexWord(buffer.getStartAddress())).append("\n");
+    output.append("\n");
+
+    // external labels
+    Collection<Integer> externalReferences = new TreeSet<Integer>(buffer.getExternalReferences());
+    for (Integer externalReference : externalReferences) {
+      output.append(externalLabel(externalReference)).append(" = ").append(hexWord(externalReference)).append("\n");
+    }
+    output.append("\n");
+
+    // code
     while (buffer.hasNextCommand()) {
       ICommand command = buffer.nextCommand();
 
@@ -384,5 +398,9 @@ public class Reassembler {
     }
 
     output.flush();
+  }
+
+  private String externalLabel(Integer externalReference) {
+    return externalReference < 0x100? "Z" + hexBytePlain(externalReference) : "X" + hexWordPlain(externalReference);
   }
 }

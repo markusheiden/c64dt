@@ -6,6 +6,7 @@ import de.heiden.c64dt.assembler.DataLabel;
 import de.heiden.c64dt.assembler.ILabel;
 import org.springframework.util.Assert;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -22,17 +23,20 @@ public class CommandBuffer {
   private final Map<Integer, DataLabel> dataLabels;
   private final Map<Integer, Integer> codeReferences;
   private final Map<Integer, Integer> dataReferences;
+  private final Map<Integer, Integer> externalReferences;
   private final LinkedList<ICommand> commands;
   private ListIterator<ICommand> iter;
   private ICommand current;
+  private final int length;
   private final int startAddress;
 
   /**
    * Constructor.
    *
+   * @param length legnth of code
    * @param startAddress address of the code
    */
-  public CommandBuffer(int startAddress) {
+  public CommandBuffer(int length, int startAddress) {
     Assert.isTrue(startAddress >= 0, "Precondition: startAddress >= 0");
 
     this.codeTypes = new HashMap<Integer, CodeType>();
@@ -40,9 +44,12 @@ public class CommandBuffer {
     this.dataLabels = new HashMap<Integer, DataLabel>();
     this.codeReferences = new HashMap<Integer, Integer>();
     this.dataReferences = new HashMap<Integer, Integer>();
+    this.externalReferences = new HashMap<Integer, Integer>();
     this.commands = new LinkedList<ICommand>();
     this.iter = null;
     this.current = null;
+
+    this.length = length;
     this.startAddress = startAddress;
   }
 
@@ -180,6 +187,15 @@ public class CommandBuffer {
   }
 
   /**
+   * Is the given address within the code?.
+   *
+   * @param address address
+   */
+  public boolean hasAddress(int address) {
+    return startAddress <= address && address < startAddress + length;
+  }
+
+  /**
    * Add a reference from the current address to a given address.
    * This will add a label if no label exists for the given address.
    *
@@ -188,7 +204,11 @@ public class CommandBuffer {
    * @param to referenced address
    */
   public void addReference(boolean code, int from, int to) {
-    if (code) {
+    Assert.isTrue(hasAddress(from), "Precondition: hasAddress(from)");
+
+    if (!hasAddress(to)) {
+      externalReferences.put(from, to);
+    } else if (code) {
       addCodeReference(from, to);
     } else {
       addDataReference(from, to);
@@ -276,6 +296,13 @@ public class CommandBuffer {
     return result;
   }
 
+  /**
+   * All referenced addresses which do not point to this code.
+   */
+  public Collection<Integer> getExternalReferences() {
+    return externalReferences.values();
+  }
+
   //
   // command specific interface
   //
@@ -289,6 +316,7 @@ public class CommandBuffer {
     codeLabels.clear();
     dataReferences.clear();
     dataLabels.clear();
+    externalReferences.clear();
     iter = null;
     current = null;
 
