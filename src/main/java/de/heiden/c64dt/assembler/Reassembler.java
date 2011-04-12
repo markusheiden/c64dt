@@ -263,7 +263,7 @@ public class Reassembler {
           // TODO mh: check, if the next two bytes contain a valid opcode, rework
           int argument = opcode.getArgument();
           commands.replaceCurrentCommand(
-            new BitCommand(0x2C),
+            new BitCommand(opcode.getOpcode(), opcode.getArgument()),
             new OpcodeCommand(Opcode.opcode(ByteUtil.lo(argument)), ByteUtil.hi(argument)));
         }
       }
@@ -331,65 +331,57 @@ public class Reassembler {
     output.append("\n");
 
     // code
+    StringBuilder line = new StringBuilder(80);
     while (buffer.hasNextCommand()) {
       ICommand command = buffer.nextCommand();
+      int pc = command.getAddress();
+
+      line.setLength(0);
 
       // debug output: prefixes
-      int pc = command.getAddress();
-      int prefixes = 0;
       if (command == null) {
-        output.append("?");
-        prefixes++;
+        line.append("?");
       } else {
         if (!command.isReachable()) {
-          output.append("U");
-          prefixes++;
+          line.append("U");
         }
         for (int i = 1; i < command.getSize(); i++) {
           if (buffer.hasCodeLabel(pc + i)) {
-            output.append("C");
-            prefixes++;
+            line.append("C");
           }
           if (buffer.hasDataLabel(pc + i)) {
-            output.append("D");
-            prefixes++;
+            line.append("D");
           }
         }
       }
-
-      // fill remaining prefix space
-      for (; prefixes < 5; prefixes++) {
-        output.append(" ");
-      }
+      fillSpaces(line, 5);
+      line.append(" | ");
 
       // debug output: byte representation of command
-      output.append(" | ");
-      output.append(hexWordPlain(pc));
+      line.append(hexWordPlain(pc));
       List<Integer> data = command.toBytes();
       for (int i = 0; i < data.size() && i < 3; i++) {
-        output.append(" ");
-        output.append(hexBytePlain(data.get(i)));
+        line.append(" ");
+        line.append(hexBytePlain(data.get(i)));
       }
-      for (int i = data.size(); i < 3; i++) {
-        output.append("   ");
-      }
-      output.append(data.size() > 3? "..." : "   ");
-      output.append(" | ");
+      fillSpaces(line, 21);
+      line.append(data.size() > 3? "..." : "   ");
+      line.append(" | ");
 
       // reassembler output
       ILabel label = buffer.getLabel();
       if (label != null) {
-        // TODO check length of label
-        output.append(label.toString());
-        output.append(":    ");
-      } else {
-        output.append("          ");
+        // TODO mh: check length of label?
+        line.append(label.toString()).append(":");
       }
+
+      fillSpaces(line, 40);
+      output.write(line.toString());
 
       if (command != null) {
         command.toString(buffer, output);
       } else {
-        // TODO log error?
+        // TODO mh: log error?
         output.append("???");
       }
 
@@ -397,5 +389,17 @@ public class Reassembler {
     }
 
     output.flush();
+  }
+
+  /**
+   * Fill line with spaces up to a limit.
+   *
+   * @param line line
+   * @param num limit
+   */
+  private void fillSpaces(StringBuilder line, int num) {
+    while (line.length() < num) {
+      line.append(' ');
+    }
   }
 }

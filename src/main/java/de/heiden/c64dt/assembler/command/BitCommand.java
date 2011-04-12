@@ -1,5 +1,6 @@
 package de.heiden.c64dt.assembler.command;
 
+import de.heiden.c64dt.assembler.Opcode;
 import de.heiden.c64dt.charset.C64Charset;
 import org.springframework.util.Assert;
 
@@ -15,12 +16,20 @@ import static de.heiden.c64dt.util.HexUtil.hexByte;
  * Command for using bit to skip the next opcode.
  */
 public class BitCommand extends AbstractCommand {
-  private int opcode;
+  private final Opcode opcode;
+  private final int argument;
 
-  public BitCommand(int opcode) {
+  /**
+   * Constructor.
+   *
+   * @param opcode Opcode
+   * @param argument argument for opcode
+   */
+  public BitCommand(Opcode opcode, int argument) {
     super(true);
 
     this.opcode = opcode;
+    this.argument = argument;
   }
 
   public final int getSize() {
@@ -39,12 +48,10 @@ public class BitCommand extends AbstractCommand {
     Assert.notNull(buffer, "Precondition: buffer != null");
     Assert.notNull(output, "Precondition: output != null");
 
-    output.append("!BYTE ");
-    output.append(hexByte(opcode));
-    output.append("; BIT");
+    output.append("!BYTE ").append(hexByte(opcode.getOpcode())).append("; ").append(opcode.toString(getAddress(), argument));
   }
 
   public List<Integer> toBytes() {
-    return Collections.singletonList(opcode);
+    return Collections.singletonList(opcode.getOpcode());
   }
 }
