@@ -22,9 +22,10 @@ public class CommandBuffer {
   private final Map<Integer, CodeType> codeTypes;
   private final Map<Integer, CodeLabel> codeLabels;
   private final Map<Integer, DataLabel> dataLabels;
+  private final Map<Integer, ExternalLabel> externalLabels;
   private final Map<Integer, Integer> codeReferences;
   private final Map<Integer, Integer> dataReferences;
-  private final Map<Integer, ExternalLabel> externalLabels;
+  private final Map<Integer, Integer> externalReferences;
   private final LinkedList<ICommand> commands;
   private ListIterator<ICommand> iter;
   private ICommand current;
@@ -43,9 +44,10 @@ public class CommandBuffer {
     this.codeTypes = new HashMap<Integer, CodeType>();
     this.codeLabels = new HashMap<Integer, CodeLabel>();
     this.dataLabels = new HashMap<Integer, DataLabel>();
+    this.externalLabels = new HashMap<Integer, ExternalLabel>();
     this.codeReferences = new HashMap<Integer, Integer>();
     this.dataReferences = new HashMap<Integer, Integer>();
-    this.externalLabels = new HashMap<Integer, ExternalLabel>();
+    this.externalReferences = new HashMap<Integer, Integer>();
     this.commands = new LinkedList<ICommand>();
     this.iter = null;
     this.current = null;
@@ -208,7 +210,7 @@ public class CommandBuffer {
     Assert.isTrue(hasAddress(from), "Precondition: hasAddress(from)");
 
     if (!hasAddress(to)) {
-      externalLabels.put(to, new ExternalLabel(to));
+      addExternalReference(from, to);
     } else if (code) {
       addCodeReference(from, to);
     } else {
@@ -251,6 +253,23 @@ public class CommandBuffer {
   }
 
   /**
+   * Add an external code or data reference from the current address to a given address.
+   * This will add a label if no label exists for the given address.
+   *
+   * @param from address of command referencing
+   * @param to referenced address
+   */
+  public void addExternalReference(int from, int to) {
+    assertValidAddress(from);
+    assertValidAddress(to);
+
+    // add label for address "to"
+    externalLabels.put(to, new ExternalLabel(to));
+    // add reference
+    externalReferences.put(from, to);
+  }
+
+  /**
    * Remove a reference from the current address.
    *
    * @return whether a label has been removed
@@ -258,15 +277,23 @@ public class CommandBuffer {
   public boolean removeReference() {
     boolean result = false;
 
-    Integer referencedDataLabel = dataReferences.remove(current.getAddress());
-    if (!dataReferences.containsValue(referencedDataLabel)) {
-      dataLabels.remove(referencedDataLabel);
+    int address = current.getAddress();
+
+    Integer codeReference = codeReferences.remove(address);
+    if (!codeReferences.containsValue(codeReference)) {
+      codeLabels.remove(codeReference);
       result = true;
     }
 
-    Integer referencedCodeLabel = codeReferences.remove(current.getAddress());
-    if (!codeReferences.containsValue(referencedCodeLabel)) {
-      codeLabels.remove(referencedCodeLabel);
+    Integer dataReference = dataReferences.remove(address);
+    if (!dataReferences.containsValue(dataReference)) {
+      dataLabels.remove(dataReference);
+      result = true;
+    }
+
+    Integer externalReference = externalReferences.remove(address);
+    if (!externalReferences.containsValue(externalReference)) {
+      externalLabels.remove(externalReference);
       result = true;
     }
 
@@ -292,7 +319,8 @@ public class CommandBuffer {
     ILabel result = codeLabels.get(address);
     if (result == null) {
       result = dataLabels.get(address);
-    } else if (result == null) {
+    }
+    if (result == null) {
       result = externalLabels.get(address);
     }
 
