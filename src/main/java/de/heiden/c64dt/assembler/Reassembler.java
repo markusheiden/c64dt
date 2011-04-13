@@ -105,7 +105,7 @@ public class Reassembler {
     Assert.notNull(output, "Precondition: output != null");
 
 
-    CodeBuffer buffer = new CodeBuffer(commands.getStartAddress(), code);
+    CodeBuffer buffer = new CodeBuffer(code);
 
     boolean change = true;
     for (int count = 0; change && count < 3; count++) {
@@ -131,7 +131,7 @@ public class Reassembler {
 
     code.restart();
     while(code.has(1)) {
-      int pc = code.getCurrentAddress();
+      int pc = commands.getCurrentAddress();
       CodeType type = commands.getType(pc);
       if (type == CodeType.ABSOLUTE_ADDRESS) {
         // absolute address as data

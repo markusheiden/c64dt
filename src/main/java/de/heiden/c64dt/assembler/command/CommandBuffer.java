@@ -65,6 +65,22 @@ public class CommandBuffer {
   }
 
   /**
+   * The current address.
+   * This is the address where the next program will be added.
+   */
+  public int getCurrentAddress() {
+    return addressForIndex(getCurrentIndex());
+  }
+
+  /**
+   * The current index.
+   * This is the index where the next program will be added.
+   */
+  public int getCurrentIndex() {
+    return current.getIndex() + current.getSize();
+  }
+
+  /**
    * Start address of code (incl.).
    */
   public int getStartAddress() {
@@ -414,7 +430,7 @@ public class CommandBuffer {
     Assert.notNull(command, "Precondition: command != null");
     Assert.isTrue(!command.hasAddress(), "Precondition: !command.hasAddress()");
 
-    int index = current.getIndex() + current.getSize();
+    int index = getCurrentIndex();
 
     Integer address = addressForIndex(index);
     Assert.isTrue(address >= 0, "Precondition: address >= 0");

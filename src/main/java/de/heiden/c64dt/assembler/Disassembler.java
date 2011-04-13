@@ -59,7 +59,7 @@ public class Disassembler {
     Assert.notNull(code, "Precondition: code != null");
     Assert.notNull(output, "Precondition: output != null");
 
-    CodeBuffer buffer = new CodeBuffer(startAddress, code);
+    CodeBuffer buffer = new CodeBuffer(code);
 
     if (startAddress == 0x0801) {
       // TODO check for basic header
@@ -84,7 +84,7 @@ public class Disassembler {
     OpcodeMode mode = opcode.getMode();
     int size = mode.getSize();
 
-    int pc = buffer.getCommandAddress();
+    int pc = buffer.getCommandIndex();
     output.append(hexWordPlain(pc));
     output.append(" ");
     output.append(hexBytePlain(opcode.getOpcode()));

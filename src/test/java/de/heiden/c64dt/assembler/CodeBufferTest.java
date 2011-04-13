@@ -12,7 +12,7 @@ public class CodeBufferTest
   @Test
   public void testHas()
   {
-    CodeBuffer buffer = new CodeBuffer(0x8000, new byte[2]);
+    CodeBuffer buffer = new CodeBuffer(new byte[2]);
     assertTrue(buffer.has(0));
     assertTrue(buffer.has(1));
     assertTrue(buffer.has(2));

@@ -13,106 +13,44 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer
   protected int position;
   private int mark;
   private final CodeType[] types;
-  private final int startAddress;
-  private final int endAddress;
 
   /**
    * Constructor.
    *
-   * @param startAddress start address of the code
-   * @param endAddress end address of the code
+   * @param length length of the code
    */
-  public AbstractCodeBuffer(int startAddress, int endAddress) {
-    Assert.isTrue(startAddress >= 0, "Precondition: startAddress >= 0");
-    Assert.isTrue(endAddress >= 0, "Precondition: endAddress >= 0");
-    Assert.isTrue(startAddress < endAddress, "Precondition: < endAddress");
+  public AbstractCodeBuffer(int length) {
+    Assert.isTrue(length >= 0, "Precondition: length >= 0");
 
-    this.position = 0;
     this.mark = -1;
-    this.startAddress = startAddress;
-    this.endAddress = endAddress;
-    this.types = new CodeType[endAddress - startAddress];
+    this.position = 0;
+    this.types = new CodeType[length];
     Arrays.fill(this.types, CodeType.UNKNOWN);
   }
 
-  /**
-   * Restart.
-   * Sets the current position to the start of the code / commands.
-   */
   @Override
   public void restart() {
     position = 0;
     mark = -1;
   }
 
-  /**
-   * The address of the current command.
-   */
   @Override
-  public final int getCommandAddress() {
-    return startAddress + mark;
+  public final int getCommandIndex() {
+    return mark;
   }
 
-  /**
-   * The current address.
-   */
   @Override
-  public final int getCurrentAddress() {
-    return startAddress + position;
+  public final int getCurrentIndex() {
+    return position;
   }
 
-  /**
-   * Is the given address in the code?.
-   *
-   * @param address address
-   */
-  @Override
-  public final boolean hasAddress(int address) {
-    return startAddress <= address && address < endAddress;
-  }
-
-  /**
-   * Start address of code (incl.).
-   */
-  @Override
-  public int getStartAddress() {
-    return startAddress;
-  }
-
-  /**
-   * End address of code (excl.).
-   */
-  @Override
-  public int getEndAddress() {
-    return endAddress;
-  }
-
-  /**
-   * Length of code.
-   */
-  public int getLength() {
-    return getEndAddress() - getStartAddress();
-  }
-
-  //
-  // code specific interface
-  //
-
-  /**
-   * Are there 'number' bytes left to read?
-   *
-   * @param number number of bytes
-   */
   @Override
   public final boolean has(int number) {
     Assert.isTrue(number >= 0, "Precondition: number >= 0");
 
-    return getCurrentAddress() + number <= endAddress;
+    return position + number <= types.length;
   }
 
-  /**
-   * Read an opcode.
-   */
   @Override
   public final Opcode readOpcode() {
     // remember position of last read opcode
@@ -120,11 +58,6 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer
     return Opcode.opcode(readByte());
   }
 
-  /**
-   * Read 'number' bytes as one word.
-   *
-   * @param number number of bytes to read
-   */
   @Override
   public final int read(int number) {
     Assert.isTrue(number == 1 || number == 2, "Precondition: number == 1 || number == 2");

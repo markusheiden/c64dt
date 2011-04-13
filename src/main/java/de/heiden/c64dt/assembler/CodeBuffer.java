@@ -14,11 +14,10 @@ public class CodeBuffer extends AbstractCodeBuffer {
   /**
    * Constructor.
    *
-   * @param startAddress address of the code
    * @param code code
    */
-  public CodeBuffer(int startAddress, byte[] code) {
-    super(startAddress, startAddress + code.length);
+  public CodeBuffer(byte[] code) {
+    super(code.length);
 
     this.code = code;
   }

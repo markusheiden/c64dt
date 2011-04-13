@@ -1,34 +1,51 @@
 package de.heiden.c64dt.assembler;
 
 /**
- * Created by IntelliJ IDEA.
- * User: markus
- * Date: Oct 9, 2010
- * Time: 1:50:43 PM
- * To change this template use File | Settings | File Templates.
+ * Interface for code buffers.
  */
 public interface ICodeBuffer
 {
-  void restart();
+  /**
+   * Restart.
+   * Sets the current position to the start of the code / commands.
+   */
+  public void restart();
 
-  int getCommandAddress();
+  /**
+   * The index of the current command.
+   */
+  public int getCommandIndex();
 
-  int getCurrentAddress();
+  /**
+   * The current index.
+   */
+  public int getCurrentIndex();
 
-  boolean hasAddress(int address);
+  //
+  // code specific interface
+  //
 
-  int getStartAddress();
-
-  int getEndAddress();
-
-  boolean has(int number);
+  /**
+   * Are there 'number' bytes left to read?
+   *
+   * @param number number of bytes
+   */
+  public boolean has(int number);
 
   /**
    * Read a byte from the code at the current position and advance.
    */
-  int readByte();
+  public int readByte();
 
-  Opcode readOpcode();
+  /**
+   * Read an opcode.
+   */
+  public Opcode readOpcode();
 
-  int read(int number);
+  /**
+   * Read 'number' bytes as one word.
+   *
+   * @param number number of bytes to read
+   */
+  public int read(int number);
 }

@@ -20,8 +20,17 @@ public class DummyCommand extends AbstractCommand {
    * Constructor.
    */
   public DummyCommand() {
+    this(0);
+  }
+
+  /**
+   * Constructor.
+   *
+   * @param address address
+   */
+  public DummyCommand(int address) {
     super(false);
-    setAddress(0, 0);
+    setAddress(0, address);
   }
 
   @Override
