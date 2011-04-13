@@ -1,5 +1,6 @@
 package de.heiden.c64dt.assembler.command;
 
+import de.heiden.c64dt.assembler.ILabel;
 import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 
@@ -50,7 +51,8 @@ public class AddressCommand extends AbstractCommand {
     Assert.notNull(buffer, "Precondition: buffer != null");
     Assert.notNull(output, "Precondition: output != null");
 
-    output.append("!WORD " + hexWord(address));
+    ILabel label = buffer.getLabel(address);
+    output.append("!WORD ").append(label != null? label.toString() : hexWord(address));
   }
 
   @Override
