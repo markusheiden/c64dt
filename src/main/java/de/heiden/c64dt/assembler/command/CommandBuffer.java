@@ -9,9 +9,13 @@ import org.springframework.util.Assert;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
 
@@ -26,11 +30,11 @@ public class CommandBuffer {
   private final Map<Integer, Integer> codeReferences;
   private final Map<Integer, Integer> dataReferences;
   private final Map<Integer, Integer> externalReferences;
+  private final SortedMap<Integer, Integer> startAddresses;
   private final LinkedList<ICommand> commands;
   private ListIterator<ICommand> iter;
   private ICommand current;
   private final int length;
-  private final int startAddress;
 
   /**
    * Constructor.
@@ -48,19 +52,21 @@ public class CommandBuffer {
     this.codeReferences = new HashMap<Integer, Integer>();
     this.dataReferences = new HashMap<Integer, Integer>();
     this.externalReferences = new HashMap<Integer, Integer>();
+    this.startAddresses = new TreeMap<Integer, Integer>();
     this.commands = new LinkedList<ICommand>();
     this.iter = null;
     this.current = null;
 
     this.length = length;
-    this.startAddress = startAddress;
+    this.startAddresses.put(0, startAddress);
+    this.startAddresses.put(length, startAddress + length);
   }
 
   /**
    * Start address of code (incl.).
    */
   public int getStartAddress() {
-    return startAddress;
+    return startAddresses.get(0);
   }
 
   //
@@ -195,7 +201,18 @@ public class CommandBuffer {
    * @param address address
    */
   public boolean hasAddress(int address) {
-    return startAddress <= address && address < startAddress + length;
+    Iterator<Entry<Integer, Integer>> iter = startAddresses.entrySet().iterator();
+    Entry<Integer, Integer> lastAddressEntry = iter.next();
+    while (iter.hasNext()) {
+      Entry<Integer, Integer> addressEntry = iter.next();
+      if (address >= lastAddressEntry.getValue() + lastAddressEntry.getKey() &&
+          address <  lastAddressEntry.getValue() + addressEntry.getKey()) {
+        return true;
+      }
+      lastAddressEntry = addressEntry;
+    }
+
+    return false;
   }
 
   /**
@@ -372,7 +389,7 @@ public class CommandBuffer {
    * Compute next address to add command to.
    */
   private int nextAddress() {
-    return current == null? startAddress : current.getNextAddress();
+    return current == null? startAddresses.get(0) : current.getNextAddress();
   }
 
   public void restart() {
