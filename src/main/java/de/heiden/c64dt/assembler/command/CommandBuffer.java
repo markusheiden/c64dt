@@ -362,10 +362,17 @@ public class CommandBuffer {
     Assert.notNull(command, "Precondition: command != null");
     Assert.isTrue(!command.hasAddress(), "Precondition: !command.hasAddress()");
 
-    command.setAddress(commands.isEmpty()? startAddress : commands.getLast().getNextAddress());
+    command.setAddress(nextAddress());
     commands.add(command);
     current = command;
     // TODO check / assert consistency; check that no iteration is in progress
+  }
+
+  /**
+   * Compute next address to add command to.
+   */
+  private int nextAddress() {
+    return current == null? startAddress : current.getNextAddress();
   }
 
   public void restart() {
