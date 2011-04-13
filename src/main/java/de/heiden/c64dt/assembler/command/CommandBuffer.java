@@ -71,6 +71,20 @@ public class CommandBuffer {
     return startAddresses.get(0);
   }
 
+  /**
+   * Change the base address of the code starting at the given index.
+   *
+   * @param startIndex Index from which the new base address should be used
+   * @param baseAddress new base address
+   */
+  public void rebase(int startIndex, int baseAddress) {
+    Assert.isTrue(startIndex > 0 && startIndex < length, "Precondition: startIndex > 0 && startIndex < length");
+    assertValidAddress(baseAddress);
+
+    Integer removed = startAddresses.put(startIndex, baseAddress);
+    Assert.isNull(removed, "Precondition: Not rebased the same index twice");
+  }
+
   //
   // code type specific stuff ("model")
   //
@@ -221,14 +235,19 @@ public class CommandBuffer {
    * @param index relative address
    * @return absolute address
    */
-  private int addressForIndex(int index) {
+  protected int addressForIndex(int index) {
+    Assert.isTrue(index >= 0 && index < length, "Precondition: index >= 0 && index < length");
+
+    int lastStartIndex = startAddresses.firstKey();
     for (int startIndex : startAddresses.keySet()) {
-      if (index >= startIndex) {
-        return startAddresses.get(startIndex) + index;
+      if (index < startIndex) {
+        return startAddresses.get(lastStartIndex) + index;
       }
+
+      lastStartIndex = startIndex;
     }
 
-    return -1;
+    throw new IllegalArgumentException("May not happen");
   }
 
   /**
