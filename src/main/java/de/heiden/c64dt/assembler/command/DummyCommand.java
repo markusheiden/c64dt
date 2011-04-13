@@ -14,11 +14,14 @@ import java.util.List;
  * Dummy command as replacement for null in the reassembler.
  */
 public class DummyCommand extends AbstractCommand {
+  public static final ICommand DUMMY_COMMAND = new DummyCommand();
+
   /**
    * Constructor.
    */
   public DummyCommand() {
     super(false);
+    setAddress(0, 0);
   }
 
   @Override

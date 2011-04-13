@@ -1,5 +1,7 @@
 package de.heiden.c64dt.assembler.command;
 
+import static de.heiden.c64dt.assembler.command.DummyCommand.DUMMY_COMMAND;
+
 import de.heiden.c64dt.assembler.CodeLabel;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.DataLabel;
@@ -39,7 +41,7 @@ public class CommandBuffer {
   /**
    * Constructor.
    *
-   * @param length legnth of code
+   * @param length length of code
    * @param startAddress address of the code
    */
   public CommandBuffer(int length, int startAddress) {
@@ -55,7 +57,7 @@ public class CommandBuffer {
     this.startAddresses = new TreeMap<Integer, Integer>();
     this.commands = new LinkedList<ICommand>();
     this.iter = null;
-    this.current = null;
+    this.current = DUMMY_COMMAND;
 
     this.length = length;
     this.startAddresses.put(0, startAddress);
@@ -91,6 +93,15 @@ public class CommandBuffer {
   }
 
   /**
+   * Set code type for the current opcode / command.
+   *
+   * @param type code type
+   */
+  public void setType(CodeType type) {
+    setType(current.getAddress(), type);
+  }
+
+  /**
    * Set code type for a given address.
    *
    * @param startAddress first address (incl.)
@@ -101,19 +112,9 @@ public class CommandBuffer {
     Assert.isTrue(startAddress <= endAddress, "Precondition: startAddress <= endAddress");
     Assert.notNull(type, "Precondition: type != null");
 
-    for (int address = startAddress; address < endAddress; address++)
-    {
+    for (int address = startAddress; address < endAddress; address++) {
       setType(address, type);
     }
-  }
-
-  /**
-   * Set code type for the current opcode / command.
-   *
-   * @param type code type
-   */
-  public void setType(CodeType type) {
-    setType(current.getAddress(), type);
   }
 
   /**
@@ -137,8 +138,7 @@ public class CommandBuffer {
    */
   public boolean hasLabel() {
     CodeType type = getType();
-    return type != CodeType.UNKNOWN && type.isCode()?
-      hasCodeLabel(current.getAddress()) : hasDataLabel(current.getAddress());
+    return type.isCode()? hasCodeLabel(current.getAddress()) : hasDataLabel(current.getAddress());
   }
 
   /**
@@ -213,6 +213,22 @@ public class CommandBuffer {
     }
 
     return false;
+  }
+
+  /**
+   * Compute absolute address from relative address.
+   *
+   * @param index relative address
+   * @return absolute address
+   */
+  private int addressForIndex(int index) {
+    for (int startIndex : startAddresses.keySet()) {
+      if (index >= startIndex) {
+        return startAddresses.get(startIndex) + index;
+      }
+    }
+
+    return -1;
   }
 
   /**
@@ -366,7 +382,7 @@ public class CommandBuffer {
     dataLabels.clear();
     externalLabels.clear();
     iter = null;
-    current = null;
+    current = DUMMY_COMMAND;
 
   }
 
@@ -379,22 +395,20 @@ public class CommandBuffer {
     Assert.notNull(command, "Precondition: command != null");
     Assert.isTrue(!command.hasAddress(), "Precondition: !command.hasAddress()");
 
-    command.setAddress(nextAddress());
+    int index = current.getIndex() + current.getSize();
+
+    Integer address = addressForIndex(index);
+    Assert.isTrue(address >= 0, "Precondition: address >= 0");
+
+    command.setAddress(index, address);
     commands.add(command);
     current = command;
     // TODO check / assert consistency; check that no iteration is in progress
   }
 
-  /**
-   * Compute next address to add command to.
-   */
-  private int nextAddress() {
-    return current == null? startAddresses.get(0) : current.getNextAddress();
-  }
-
   public void restart() {
     iter = commands.listIterator();
-    current = null;
+    current = DUMMY_COMMAND;
   }
 
   public boolean hasNextCommand() {
@@ -430,11 +444,12 @@ public class CommandBuffer {
    * @param replacements Replacement commands
    */
   public void replaceCurrentCommand(ICommand... replacements) {
+    int index = current.getIndex();
     int address = current.getAddress();
     iter.remove();
     int size = 0;
     for (ICommand replacement : replacements) {
-      replacement.setAddress(address + size);
+      replacement.setAddress(index + size, address + size);
       iter.add(replacement);
       size += replacement.getSize();
     }
