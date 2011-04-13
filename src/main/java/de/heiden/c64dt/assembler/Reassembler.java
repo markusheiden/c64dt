@@ -258,13 +258,21 @@ public class Reassembler {
     while (commands.hasNextCommand()) {
       ICommand command = commands.nextCommand();
       if (command instanceof OpcodeCommand) {
-        OpcodeCommand opcode = (OpcodeCommand) command;
-        if (opcode.getOpcode().equals(Opcode.OPCODE_2C) && commands.hasCodeLabel(opcode.getAddress() + 1)) {
-          // TODO mh: check, if the next two bytes contain a valid opcode, rework
-          int argument = opcode.getArgument();
-          commands.replaceCurrentCommand(
-            new BitCommand(opcode.getOpcode(), opcode.getArgument()),
-            new OpcodeCommand(Opcode.opcode(ByteUtil.lo(argument)), ByteUtil.hi(argument)));
+        OpcodeCommand opcodeCommand = (OpcodeCommand) command;
+        Opcode opcode = opcodeCommand.getOpcode();
+        int size = opcodeCommand.getSize();
+
+        if (opcode.getType().equals(OpcodeType.BIT) && size > 1 && commands.hasCodeLabel(opcodeCommand.getAddress() + 1)) {
+          List<Integer> bytes = opcodeCommand.toBytes();
+          Opcode skippedOpcode = Opcode.opcode(bytes.get(1));
+
+          if (skippedOpcode.isLegal() && skippedOpcode.getSize() == size - 1) {
+            // Bit command, size = 1
+            BitCommand bit = new BitCommand(opcodeCommand.getOpcode(), opcodeCommand.getArgument());
+            // Argument of bit -> skipped opcode with argument
+            OpcodeCommand skipped = size == 2? new OpcodeCommand(skippedOpcode) : new OpcodeCommand(skippedOpcode, bytes.get(2));
+            commands.replaceCurrentCommand(bit, skipped);
+          }
         }
       }
     }
