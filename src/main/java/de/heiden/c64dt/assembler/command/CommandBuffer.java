@@ -9,6 +9,7 @@ import de.heiden.c64dt.assembler.ExternalLabel;
 import de.heiden.c64dt.assembler.ILabel;
 import org.springframework.util.Assert;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,13 +26,13 @@ import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
  * Input stream for code.
  */
 public class CommandBuffer {
-  private final Map<Integer, CodeType> codeTypes;
+  private final CodeType[] codeTypes;
+  private final Integer[] codeReferences;
+  private final Integer[] dataReferences;
+  private final Integer[] externalReferences;
   private final Map<Integer, CodeLabel> codeLabels;
   private final Map<Integer, DataLabel> dataLabels;
   private final Map<Integer, ExternalLabel> externalLabels;
-  private final Map<Integer, Integer> codeReferences;
-  private final Map<Integer, Integer> dataReferences;
-  private final Map<Integer, Integer> externalReferences;
   private final SortedMap<Integer, Integer> startAddresses;
   private final LinkedList<ICommand> commands;
   private ListIterator<ICommand> iter;
@@ -47,13 +48,18 @@ public class CommandBuffer {
   public CommandBuffer(int length, int startAddress) {
     Assert.isTrue(startAddress >= 0, "Precondition: startAddress >= 0");
 
-    this.codeTypes = new HashMap<Integer, CodeType>();
+    this.codeTypes = new CodeType[length];
+    Arrays.fill(this.codeTypes, CodeType.UNKNOWN);
+    this.codeReferences = new Integer[length];
+    Arrays.fill(this.codeReferences, -1);
+    this.dataReferences = new Integer[length];
+    Arrays.fill(this.dataReferences, -1);
+    this.externalReferences = new Integer[length];
+    Arrays.fill(this.externalReferences, -1);
+
     this.codeLabels = new HashMap<Integer, CodeLabel>();
     this.dataLabels = new HashMap<Integer, DataLabel>();
     this.externalLabels = new HashMap<Integer, ExternalLabel>();
-    this.codeReferences = new HashMap<Integer, Integer>();
-    this.dataReferences = new HashMap<Integer, Integer>();
-    this.externalReferences = new HashMap<Integer, Integer>();
     this.startAddresses = new TreeMap<Integer, Integer>();
     this.commands = new LinkedList<ICommand>();
     this.iter = null;
@@ -65,15 +71,16 @@ public class CommandBuffer {
   }
 
   /**
-   * The current address.
-   * This is the address where the next program will be added.
+   * Is the given relative address valid?.
+   *
+   * @param index relative address
    */
-  public int getCurrentAddress() {
-    return addressForIndex(getCurrentIndex());
+  public boolean isValidIndex(int index) {
+    return index >= 0 && index <= length;
   }
 
   /**
-   * The current index.
+   * The current relative address.
    * This is the index where the next program will be added.
    */
   public int getCurrentIndex() {
@@ -94,7 +101,7 @@ public class CommandBuffer {
    * @param baseAddress new base address
    */
   public void rebase(int startIndex, int baseAddress) {
-    Assert.isTrue(startIndex > 0 && startIndex < length, "Precondition: startIndex > 0 && startIndex < length");
+    Assert.isTrue(isValidIndex(startIndex), "Precondition: isValidIndex(startIndex)");
     assertValidAddress(baseAddress);
 
     Integer removed = startAddresses.put(startIndex, baseAddress);
@@ -109,17 +116,18 @@ public class CommandBuffer {
    * Get code type of the current opcode / command.
    */
   public CodeType getType() {
-    return getType(current.getAddress());
+    return getType(current.getIndex());
   }
 
   /**
-   * Get code type of the command at the given address.
+   * Get code type of the command at the given index.
    *
-   * @param address Address
+   * @param index relative address
    */
-  public CodeType getType(int address) {
-    CodeType result = codeTypes.get(address);
-    return result != null? result : CodeType.UNKNOWN;
+  public CodeType getType(int index) {
+    Assert.isTrue(isValidIndex(index), "Precondition: isValidIndex(index)");
+
+    return codeTypes[index];
   }
 
   /**
@@ -128,35 +136,38 @@ public class CommandBuffer {
    * @param type code type
    */
   public void setType(CodeType type) {
-    setType(current.getAddress(), type);
+    setType(current.getIndex(), type);
   }
 
   /**
-   * Set code type for a given address.
+   * Set code type for a given relative address range.
    *
-   * @param startAddress first address (incl.)
-   * @param endAddress last address (excl.)
+   * @param startIndex first relative address (incl.)
+   * @param endIndex last relative address (excl.)
    * @param type code type
    */
-  public void setType(int startAddress, int endAddress, CodeType type) {
-    Assert.isTrue(startAddress <= endAddress, "Precondition: startAddress <= endAddress");
+  public void setType(int startIndex, int endIndex, CodeType type) {
+    Assert.isTrue(isValidIndex(startIndex), "Precondition: isValidIndex(startIndex)");
+    Assert.isTrue(isValidIndex(endIndex), "Precondition: isValidIndex(endIndex)");
+    Assert.isTrue(startIndex <= endIndex, "Precondition: startIndex <= endIndex");
     Assert.notNull(type, "Precondition: type != null");
 
-    for (int address = startAddress; address < endAddress; address++) {
-      setType(address, type);
+    for (int index = startIndex; index < endIndex; index++) {
+      setType(index, type);
     }
   }
 
   /**
-   * Set code type for a given address.
+   * Set code type for a given relative address.
    *
-   * @param address address
+   * @param index relative address
    * @param type code type
    */
-  public void setType(int address, CodeType type) {
+  public void setType(int index, CodeType type) {
+    Assert.isTrue(isValidIndex(index), "Precondition: isValidIndex(index)");
     Assert.notNull(type, "Precondition: type != null");
 
-    codeTypes.put(address, type);
+    codeTypes[index] = type;
   }
 
   //
@@ -185,28 +196,6 @@ public class CommandBuffer {
    */
   public boolean hasCodeLabel(int address) {
     return codeLabels.containsKey(address);
-  }
-
-  /**
-   * Has the given command a conflict with following code labels?
-   *
-   * @param address address of the command
-   * @param lookAhead number of bytes to look ahead for a conflict
-   */
-  public boolean hasConflict(int address, int lookAhead) {
-    if (hasCodeLabel(address)) {
-      // if there is a code label for the command assume the command to be correct
-      return false;
-    }
-
-    // otherwise look for code labels "into" the command
-    for (int i = 1; i <= lookAhead; i++) {
-      if (hasCodeLabel(address + i)) {
-        return true;
-      }
-    }
-
-    return false;
   }
 
   /**
@@ -251,8 +240,8 @@ public class CommandBuffer {
    * @param index relative address
    * @return absolute address
    */
-  protected int addressForIndex(int index) {
-    Assert.isTrue(index >= 0 && index < length, "Precondition: index >= 0 && index < length");
+  public int addressForIndex(int index) {
+    Assert.isTrue(isValidIndex(index), "Precondition: isValidIndex(index)");
 
     int lastStartIndex = startAddresses.firstKey();
     for (int startIndex : startAddresses.keySet()) {
@@ -267,22 +256,22 @@ public class CommandBuffer {
   }
 
   /**
-   * Add a reference from the current address to a given address.
+   * Add a reference from the given relative address to a given address.
    * This will add a label if no label exists for the given address.
    *
    * @param code is it a code reference?
-   * @param from address of command referencing
-   * @param to referenced address
+   * @param fromIndex relative address of command referencing
+   * @param to referenced absolute address
    */
-  public void addReference(boolean code, int from, int to) {
-    Assert.isTrue(hasAddress(from), "Precondition: hasAddress(from)");
+  public void addReference(boolean code, int fromIndex, int to) {
+    Assert.isTrue(isValidIndex(fromIndex), "Precondition: isValidIndex(fromIndex)");
 
     if (!hasAddress(to)) {
-      addExternalReference(from, to);
+      addExternalReference(fromIndex, to);
     } else if (code) {
-      addCodeReference(from, to);
+      addCodeReference(fromIndex, to);
     } else {
-      addDataReference(from, to);
+      addDataReference(fromIndex, to);
     }
   }
 
@@ -290,51 +279,51 @@ public class CommandBuffer {
    * Add a code reference from the current address to a given address.
    * This will add a label if no label exists for the given address.
    *
-   * @param from address of command referencing
-   * @param to referenced address
+   * @param fromIndex relative address of command referencing
+   * @param to referenced absolute address
    */
-  public void addCodeReference(int from, int to) {
-    assertValidAddress(from);
-    assertValidAddress(to);
+  public void addCodeReference(int fromIndex, int to) {
+    Assert.isTrue(isValidIndex(fromIndex), "Precondition: isValidIndex(fromIndex)");
+    Assert.isTrue(hasAddress(to), "Precondition: hasAddress(to)");
 
     // add label for address "to"
     codeLabels.put(to, new CodeLabel(to));
     // add reference
-    codeReferences.put(from, to);
+    codeReferences[fromIndex] = to;
   }
 
   /**
    * Add a data reference from the current address to a given address.
    * This will add a label if no label exists for the given address.
    *
-   * @param from address of command referencing
-   * @param to referenced address
+   * @param fromIndex relative address of command referencing
+   * @param to referenced absolute address
    */
-  public void addDataReference(int from, int to) {
-    assertValidAddress(from);
-    assertValidAddress(to);
+  public void addDataReference(int fromIndex, int to) {
+    Assert.isTrue(isValidIndex(fromIndex), "Precondition: isValidIndex(fromIndex)");
+    Assert.isTrue(hasAddress(to), "Precondition: hasAddress(to)");
 
     // add label for address "to"
     dataLabels.put(to, new DataLabel(to));
     // add reference
-    dataReferences.put(from, to);
+    dataReferences[fromIndex] = to;
   }
 
   /**
    * Add an external code or data reference from the current address to a given address.
    * This will add a label if no label exists for the given address.
    *
-   * @param from address of command referencing
-   * @param to referenced address
+   * @param fromIndex relative address of command referencing
+   * @param to referenced absolute address
    */
-  public void addExternalReference(int from, int to) {
-    assertValidAddress(from);
-    assertValidAddress(to);
+  public void addExternalReference(int fromIndex, int to) {
+    Assert.isTrue(isValidIndex(fromIndex), "Precondition: isValidIndex(fromIndex)");
+    Assert.isTrue(!hasAddress(to), "Precondition: !hasAddress(to)");
 
     // add label for address "to"
     externalLabels.put(to, new ExternalLabel(to));
     // add reference
-    externalReferences.put(from, to);
+    externalReferences[fromIndex] = to;
   }
 
   /**
@@ -345,27 +334,38 @@ public class CommandBuffer {
   public boolean removeReference() {
     boolean result = false;
 
-    int address = current.getAddress();
+    int index = current.getIndex();
 
-    Integer codeReference = codeReferences.remove(address);
-    if (!codeReferences.containsValue(codeReference)) {
+    Integer codeReference = codeReferences[index];
+    Integer dataReference = dataReferences[index];
+    Integer externalReference = externalReferences[index];
+
+    codeReferences[index] = null;
+    dataReferences[index] = null;
+    externalReferences[index] = null;
+
+    boolean codeFound = false;
+    boolean dataFound = false;
+    boolean externalFound = false;
+    for (int i = 0; i < length; i++) {
+      codeFound |= codeReference.equals(codeReferences[i]);
+      dataFound |= dataReference.equals(dataReferences[i]);
+      externalFound |= externalReference.equals(externalReferences[i]);
+    }
+
+    if (!codeFound) {
       codeLabels.remove(codeReference);
-      result = true;
     }
 
-    Integer dataReference = dataReferences.remove(address);
-    if (!dataReferences.containsValue(dataReference)) {
+    if (!dataFound) {
       dataLabels.remove(dataReference);
-      result = true;
     }
 
-    Integer externalReference = externalReferences.remove(address);
-    if (!externalReferences.containsValue(externalReference)) {
+    if (!externalFound) {
       externalLabels.remove(externalReference);
-      result = true;
     }
 
-    return result;
+    return !codeFound || !dataFound || !externalFound;
   }
 
   /**
@@ -410,10 +410,12 @@ public class CommandBuffer {
    * Clear all commands, references and labels.
    */
   public void clear() {
+    Arrays.fill(codeReferences, -1);
+    Arrays.fill(dataReferences, -1);
+    Arrays.fill(externalReferences, -1);
+
     commands.clear();
-    codeReferences.clear();
     codeLabels.clear();
-    dataReferences.clear();
     dataLabels.clear();
     externalLabels.clear();
     iter = null;

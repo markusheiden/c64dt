@@ -7,7 +7,6 @@ import de.heiden.c64dt.assembler.command.DataCommand;
 import de.heiden.c64dt.assembler.command.DummyCommand;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
-import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
@@ -131,13 +130,14 @@ public class Reassembler {
 
     code.restart();
     while(code.has(1)) {
-      int pc = commands.getCurrentAddress();
-      CodeType type = commands.getType(pc);
+      int index = commands.getCurrentIndex();
+      int pc = commands.addressForIndex(index);
+      CodeType type = commands.getType(index);
       if (type == CodeType.ABSOLUTE_ADDRESS) {
         // absolute address as data
         int address = code.read(2);
         commands.addCommand(new AddressCommand(address));
-        commands.addCodeReference(pc, address);
+        commands.addCodeReference(index, address);
 
       } else if (type.isData()) {
         // plain data
@@ -162,7 +162,7 @@ public class Reassembler {
               if (mode.isAddress()) {
                 int address = mode.getAddress(pc, argument);
                 // track references of opcodes
-                commands.addReference(opcode.getType().isJump(), pc, address);
+                commands.addReference(opcode.getType().isJump(), index, address);
               }
             }
           } else {
