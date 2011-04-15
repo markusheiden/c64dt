@@ -148,7 +148,7 @@ public class CommandBuffer
   }
 
   /**
-   * Change the base address of the code starting at the given index.
+   * Change the absolute base address of the code starting at the given index.
    *
    * @param startIndex relative address from which the new absolute base address should be used
    * @param baseAddress new absolute base address
@@ -159,6 +159,21 @@ public class CommandBuffer
     assertValidAddress(baseAddress);
 
     Integer removed = startAddresses.put(startIndex, baseAddress);
+    Assert.isNull(removed, "Precondition: Not rebased the same index twice");
+  }
+
+  /**
+   * Change the absolute address of the code starting at the given index.
+   *
+   * @param startIndex relative address from which the new absolute address should be used
+   * @param address new absolute address
+   */
+  public void base(int startIndex, int address)
+  {
+    Assert.isTrue(isValidIndex(startIndex), "Precondition: isValidIndex(startIndex)");
+    assertValidAddress(address);
+
+    Integer removed = startAddresses.put(startIndex, address - startIndex);
     Assert.isNull(removed, "Precondition: Not rebased the same index twice");
   }
 
