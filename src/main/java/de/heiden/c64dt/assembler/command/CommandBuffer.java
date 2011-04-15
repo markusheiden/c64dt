@@ -26,18 +26,75 @@ import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
  */
 public class CommandBuffer
 {
+  /**
+   * Index to type of code.
+   */
   private final CodeType[] types;
+
+  /**
+   * Index to referenced absolute address.
+   * Target is code, e.g. if the reference is from a jmp $xxxx.
+   */
   private final int[] codeReferences;
+
+  /**
+   * Index to referenced absolute address.
+   * Target is data, e.g. if the reference is from a sta $xxxx.
+   */
   private final int[] dataReferences;
+
+
+  /**
+   * Index to referenced absolute address.
+   * This references point to outside of the code.
+   */
   private final int[] externalReferences;
+
+  /**
+   * Absolute address to code label.
+   * If there is at least one reference to an address a label for it exists.
+   */
   private final Map<Integer, CodeLabel> codeLabels;
+
+  /**
+   * Absolute address to data label.
+   * If there is at least one reference to an address a label for it exists.
+   */
   private final Map<Integer, DataLabel> dataLabels;
+
+  /**
+   * Absolute address to external label.
+   * If there is at least one reference to an address a label for it exists.
+   */
   private final Map<Integer, ExternalLabel> externalLabels;
+
+  /**
+   * Index to absolute base address.
+   * First entry is always 0 -> initial start address.
+   * Last entry is always length -> initial start address + length.
+   */
   private final SortedMap<Integer, Integer> startAddresses;
-  private final LinkedList<ICommand> commands;
-  private ListIterator<ICommand> iter;
-  private ICommand current;
+
+  /**
+   * Total length of code.
+   */
   private final int length;
+
+  /**
+   * Commands as detected by the reassembler.
+   */
+  private final LinkedList<ICommand> commands;
+
+  /**
+   * Current iterator over {@link #commands}.
+   */
+  private ListIterator<ICommand> iter;
+
+  /**
+   * The current command.
+   * The last added command or the current command {@link #iter} is pointing to.
+   */
+  private ICommand current;
 
   /**
    * Constructor.
