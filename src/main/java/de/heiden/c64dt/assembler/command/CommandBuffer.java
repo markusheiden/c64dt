@@ -547,7 +547,6 @@ public class CommandBuffer
     command.setAddress(index, address);
     commands.add(command);
     current = command;
-    // TODO check / assert consistency; check that no iteration is in progress
   }
 
   //
