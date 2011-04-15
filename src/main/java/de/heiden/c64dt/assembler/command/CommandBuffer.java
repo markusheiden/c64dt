@@ -11,14 +11,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import static de.heiden.c64dt.assembler.command.DummyCommand.DUMMY_COMMAND;
 import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
 
 /**
@@ -435,20 +432,20 @@ public class CommandBuffer
   private boolean remove(int index, int[] references, Map<Integer, ?> labels)
   {
     // get referenced absolute address
-    int reference = references[index];
+    int referenced = references[index];
     // delete reference
     references[index] = -1;
 
-    if (reference < 0)
+    if (referenced < 0)
     {
       // if nothing has been referenced, no label needs to be removed
       return false;
     }
 
     // check if referenced address is referenced from elsewhere too
-    for (int i = 0; i < references.length; i++)
+    for (int reference : references)
     {
-      if (references[i] == reference)
+      if (reference == referenced)
       {
         // referenced address is still referenced, no label needs to be removed
         return false;
@@ -456,7 +453,7 @@ public class CommandBuffer
     }
 
     // remove label, because the address is no more referenced
-    Object removed = labels.remove(reference);
+    Object removed = labels.remove(referenced);
     Assert.notNull(removed, "Check: There need to be a label if there had been a reference");
 
     // label has been removed
@@ -587,6 +584,7 @@ public class CommandBuffer
     return index > 0;
   }
 
+  @SuppressWarnings({"StatementWithEmptyBody"})
   public ICommand previousCommand()
   {
     // get start of current command for consistency check
