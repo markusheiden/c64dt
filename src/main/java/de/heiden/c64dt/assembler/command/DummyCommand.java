@@ -27,7 +27,7 @@ public class DummyCommand extends AbstractCommand
   public DummyCommand(int address)
   {
     super(false);
-    setAddress(0, address);
+    setAddress(address);
   }
 
   @Override

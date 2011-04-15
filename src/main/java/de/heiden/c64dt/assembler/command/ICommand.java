@@ -20,11 +20,6 @@ public interface ICommand
   public boolean hasAddress();
 
   /**
-   * The relative address of the command.
-   */
-  public int getIndex();
-
-  /**
    * The absolute address of the command.
    */
   public int getAddress();
@@ -32,10 +27,9 @@ public interface ICommand
   /**
    * Set the address.
    *
-   * @param index relative address to start of reassembled code
    * @param address absolute address
    */
-  public void setAddress(int index, int address);
+  public void setAddress(int address);
 
   /**
    * The first address after this command.

@@ -7,7 +7,6 @@ import org.springframework.util.Assert;
  */
 public abstract class AbstractCommand implements ICommand
 {
-  private int index;
   private int address;
   private boolean reachable;
 
@@ -29,13 +28,6 @@ public abstract class AbstractCommand implements ICommand
   }
 
   @Override
-  public int getIndex()
-  {
-    Assert.isTrue(hasAddress(), "Precondition: hasAddress()");
-    return index;
-  }
-
-  @Override
   public int getAddress()
   {
     Assert.isTrue(hasAddress(), "Precondition: hasAddress()");
@@ -43,12 +35,10 @@ public abstract class AbstractCommand implements ICommand
   }
 
   @Override
-  public void setAddress(int index, int address)
+  public void setAddress(int address)
   {
-    Assert.isTrue(index >= 0, "Precondition: !hasAddress()");
     Assert.isTrue(!hasAddress(), "Precondition: !hasAddress()");
 
-    this.index = index;
     this.address = address;
   }
 

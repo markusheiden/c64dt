@@ -83,18 +83,12 @@ public class CommandBuffer
   /**
    * Commands as detected by the reassembler.
    */
-  private final LinkedList<ICommand> commands;
+  private final ICommand[] commands;
 
   /**
    * Current iterator over {@link #commands}.
    */
-  private ListIterator<ICommand> iter;
-
-  /**
-   * The current command.
-   * The last added command or the current command {@link #iter} is pointing to.
-   */
-  private ICommand current;
+  private int index;
 
   /**
    * Constructor.
@@ -119,9 +113,9 @@ public class CommandBuffer
     this.dataLabels = new HashMap<Integer, DataLabel>();
     this.externalLabels = new HashMap<Integer, ExternalLabel>();
     this.startAddresses = new TreeMap<Integer, Integer>();
-    this.commands = new LinkedList<ICommand>();
-    this.iter = null;
-    this.current = DUMMY_COMMAND;
+    this.commands = new ICommand[length];
+    this.commands[0] = new DummyCommand();
+    this.index = 0;
 
     this.length = length;
     this.startAddresses.put(0, startAddress);
@@ -144,7 +138,8 @@ public class CommandBuffer
    */
   public int getCurrentIndex()
   {
-    return current.getIndex() + current.getSize();
+    ICommand current = commands[index];
+    return index + current.getSize();
   }
 
   /**
@@ -179,7 +174,7 @@ public class CommandBuffer
    */
   public CodeType getType()
   {
-    return getType(current.getIndex());
+    return getType(index);
   }
 
   /**
@@ -201,7 +196,7 @@ public class CommandBuffer
    */
   public void setType(CodeType type)
   {
-    setType(current.getIndex(), type);
+    setType(index, type);
   }
 
   /**
@@ -247,6 +242,7 @@ public class CommandBuffer
    */
   public boolean hasLabel()
   {
+    ICommand current = commands[index];
     return getType().isCode() ? hasCodeLabel(current.getAddress()) : hasDataLabel(current.getAddress());
   }
 
@@ -255,6 +251,7 @@ public class CommandBuffer
    */
   public boolean hasCodeLabel()
   {
+    ICommand current = commands[index];
     return hasCodeLabel(current.getAddress());
   }
 
@@ -273,6 +270,7 @@ public class CommandBuffer
    */
   public boolean hasDataLabel()
   {
+    ICommand current = commands[index];
     return hasDataLabel(current.getAddress());
   }
 
@@ -420,8 +418,6 @@ public class CommandBuffer
    */
   public boolean removeReference()
   {
-    int index = current.getIndex();
-
     return
       remove(index, codeReferences, codeLabels) |
         remove(index, dataReferences, dataLabels) |
@@ -474,6 +470,7 @@ public class CommandBuffer
    */
   public ILabel getLabel()
   {
+    ICommand current = commands[index];
     return getLabel(current.getAddress());
   }
 
@@ -518,13 +515,12 @@ public class CommandBuffer
     Arrays.fill(codeReferences, -1);
     Arrays.fill(dataReferences, -1);
     Arrays.fill(externalReferences, -1);
-
-    commands.clear();
     codeLabels.clear();
     dataLabels.clear();
     externalLabels.clear();
-    iter = null;
-    current = DUMMY_COMMAND;
+    Arrays.fill(commands, null);
+    commands[0] = new DummyCommand();
+    index = 0;
 
   }
 
@@ -537,16 +533,27 @@ public class CommandBuffer
   {
     Assert.notNull(command, "Precondition: command != null");
     Assert.isTrue(!command.hasAddress(), "Precondition: !command.hasAddress()");
-    Assert.isNull(iter, "Precondition: iter != null: no iteration is in progress");
 
-    int index = getCurrentIndex();
+    index = getCurrentIndex();
+    addCommand(index, command);
+  }
 
-    Integer address = addressForIndex(index);
+  /**
+   * Add a command at a given relative address.
+   *
+   * @param index relative address
+   * @param command command
+   */
+  private void addCommand(int index, ICommand command)
+  {
+    Assert.notNull(command, "Precondition: command != null");
+    Assert.isTrue(!command.hasAddress(), "Precondition: !command.hasAddress()");
+
+    int address = addressForIndex(index);
     Assert.isTrue(address >= 0, "Precondition: address >= 0");
 
-    command.setAddress(index, address);
-    commands.add(command);
-    current = command;
+    command.setAddress(address);
+    commands[index] = command;
   }
 
   //
@@ -558,40 +565,54 @@ public class CommandBuffer
    */
   public void restart()
   {
-    iter = commands.listIterator();
-    current = DUMMY_COMMAND;
+    index = 0;
   }
 
   public boolean hasNextCommand()
   {
-    return iter.hasNext();
+    return getCurrentIndex() < length;
   }
 
   public ICommand nextCommand()
   {
-    current = iter.next();
+    index = getCurrentIndex();
+    ICommand result = commands[index];
 
-    Assert.notNull(current, "Postcondition: result != null");
-    return current;
+    Assert.notNull(result, "Postcondition: result != null");
+    return result;
   }
 
   public boolean hasPreviousCommand()
   {
-    return iter.hasPrevious();
+    return index > 0;
   }
 
   public ICommand previousCommand()
   {
-    current = iter.previous();
+    // get start of current command for consistency check
+    int endIndex = index;
+    // trace back for previous command
+    while (index > 0 && commands[--index] == null);
+    ICommand result = commands[index];
 
-    Assert.notNull(current, "Postcondition: result != null");
-    return current;
+    Assert.notNull(result, "Postcondition: result != null");
+    Assert.isTrue(getCurrentIndex() == endIndex, "Precondition: The previous commands ends at the start of the current command");
+    return result;
   }
 
+  /**
+   * Removes the current command.
+   * Traces back to the previous commands afterwards.
+   */
   public void removeCurrentCommand()
   {
-    iter.remove();
-    // TODO check / assert consistency
+    int remove = index;
+    // skip current command
+    index = getCurrentIndex();
+    // delete current command
+    commands[remove] = null;
+    // trace back to previous command
+    previousCommand();
   }
 
   /**
@@ -601,16 +622,21 @@ public class CommandBuffer
    */
   public void replaceCurrentCommand(ICommand... replacements)
   {
-    int index = current.getIndex();
-    int address = current.getAddress();
-    iter.remove();
-    int size = 0;
+    // get end of command for consistency check
+    int endIndex = getCurrentIndex();
+
+    // delete old command
+    commands[index] = null;
+
+    // add new commands
     for (ICommand replacement : replacements)
     {
-      replacement.setAddress(index + size, address + size);
-      iter.add(replacement);
-      size += replacement.getSize();
+      addCommand(index, replacement);
+      index += replacement.getSize();
     }
-    Assert.isTrue(current.getSize() == size, "Precondition: The size of the replacements is equal to the size of the removed command");
+    previousCommand();
+
+    // check consistency
+    Assert.isTrue(getCurrentIndex() == endIndex, "Precondition: The size of the replacements is equal to the size of the removed command");
   }
 }
