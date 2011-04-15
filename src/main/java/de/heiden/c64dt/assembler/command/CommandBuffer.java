@@ -537,6 +537,7 @@ public class CommandBuffer
   {
     Assert.notNull(command, "Precondition: command != null");
     Assert.isTrue(!command.hasAddress(), "Precondition: !command.hasAddress()");
+    Assert.isNull(iter, "Precondition: iter != null: no iteration is in progress");
 
     int index = getCurrentIndex();
 
