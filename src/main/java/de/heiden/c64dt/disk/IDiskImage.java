@@ -3,7 +3,8 @@ package de.heiden.c64dt.disk;
 /**
  * Disk image.
  */
-public interface IDiskImage extends ISectorModel {
+public interface IDiskImage extends ISectorModel
+{
   /**
    * Get sector content.
    *

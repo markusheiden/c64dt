@@ -7,7 +7,8 @@ import java.util.List;
 /**
  * Command.
  */
-public interface ICommand {
+public interface ICommand
+{
   /**
    * Size in bytes of this command.
    */

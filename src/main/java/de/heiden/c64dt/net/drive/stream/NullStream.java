@@ -3,25 +3,32 @@ package de.heiden.c64dt.net.drive.stream;
 /**
  * Stream for not used stream.
  */
-public class NullStream implements IStream {
-  public boolean isOpen() {
+public class NullStream implements IStream
+{
+  public boolean isOpen()
+  {
     // stream is always closed
     return false;
   }
 
-  public void open(byte[] data) {
+  public void open(byte[] data)
+  {
   }
 
-  public void incrementPosition(int increment) {
+  public void incrementPosition(int increment)
+  {
   }
 
-  public byte[] read(int length) {
+  public byte[] read(int length)
+  {
     return null;
   }
 
-  public void write(byte[] data) {
+  public void write(byte[] data)
+  {
   }
 
-  public void close() {
+  public void close()
+  {
   }
 }

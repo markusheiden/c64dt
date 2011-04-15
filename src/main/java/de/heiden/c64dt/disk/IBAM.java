@@ -3,7 +3,8 @@ package de.heiden.c64dt.disk;
 /**
  * Block allocation map implementation.
  */
-public interface IBAM {
+public interface IBAM
+{
   /**
    * Is the sector marked as free?
    *

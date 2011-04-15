@@ -3,9 +3,8 @@ package de.heiden.c64dt.gui;
 import de.heiden.c64dt.charset.C64Charset;
 import de.heiden.c64dt.util.ResourceLoader;
 
-import javax.swing.JFrame;
-import java.awt.Color;
-import java.awt.Graphics;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.StringTokenizer;

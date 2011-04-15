@@ -1,6 +1,6 @@
 package de.heiden.c64dt.gui;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.ColorModel;
 import java.awt.image.MemoryImageSource;
 

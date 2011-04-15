@@ -3,7 +3,8 @@ package de.heiden.c64dt.assembler;
 /**
  * Label.
  */
-public interface ILabel extends Comparable<ILabel> {
+public interface ILabel extends Comparable<ILabel>
+{
   /**
    * Address the label points to.
    */

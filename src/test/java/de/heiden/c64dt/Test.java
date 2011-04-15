@@ -7,7 +7,7 @@ import de.heiden.c64dt.disk.SectorInputStream;
 import de.heiden.c64dt.disk.d64.D64Reader;
 import org.springframework.util.FileCopyUtils;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -17,8 +17,10 @@ import java.io.InputStreamReader;
 /**
  * Test.
  */
-public class Test {
-  public static void main(String[] args) throws Exception {
+public class Test
+{
+  public static void main(String[] args) throws Exception
+  {
     BufferedReader r = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(new byte[]{0x01, 0x70, 0x02, 0x03}), C64Charset.UPPER));
     System.out.println(r.readLine());
     r.close();

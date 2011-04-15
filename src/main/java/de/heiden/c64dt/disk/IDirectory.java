@@ -5,7 +5,8 @@ import java.util.List;
 /**
  * Directory.
  */
-public interface IDirectory {
+public interface IDirectory
+{
   /**
    * Disk name in C64 encoding.
    */

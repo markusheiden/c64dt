@@ -21,32 +21,37 @@ import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
 /**
  * Path to a directory.
  */
-public class Path extends AbstractPath {
+public class Path extends AbstractPath
+{
   private static final byte SPACE = encode(' ');
 
   private File directory;
 
-  public Path(IPath parent, File directory) throws FileNotFoundException {
+  public Path(IPath parent, File directory) throws FileNotFoundException
+  {
     super(parent);
 
     Assert.notNull(directory, "Precondition: directory != null");
-    if (!directory.isDirectory()) {
+    if (!directory.isDirectory())
+    {
       throw new FileNotFoundException(directory.getPath() + " is no directory");
     }
 
     this.directory = directory;
   }
 
-  protected IDirectory doDirectory() {
+  protected IDirectory doDirectory()
+  {
     List<IFile> entries = new ArrayList<IFile>();
     File[] files = directory.listFiles();
-    for (int i = 0; i < files.length; i++) {
+    for (int i = 0; i < files.length; i++)
+    {
       File file = files[i];
       int extensionPos = file.getName().lastIndexOf('.');
-      String extension = extensionPos >= 0? file.getName().substring(extensionPos + 1) : "";
-      FileMode mode = new FileMode(file.isDirectory()? FileType.DIR : FileType.fileType(extension));
+      String extension = extensionPos >= 0 ? file.getName().substring(extensionPos + 1) : "";
+      FileMode mode = new FileMode(file.isDirectory() ? FileType.DIR : FileType.fileType(extension));
       byte[] filename = encode(trimTo16(file.getName()));
-      int size = file.isDirectory ()? 0 : (int) ((file.length() + 253) / 254);
+      int size = file.isDirectory() ? 0 : (int) ((file.length() + 253) / 254);
       entries.add(new de.heiden.c64dt.disk.File(mode, 1, 0, filename, size));
     }
     byte[] trimmedName = new byte[16];
@@ -61,32 +66,42 @@ public class Path extends AbstractPath {
    *
    * @param filename
    */
-  protected String trimTo16(String filename) {
-    if (filename.length() <= 16) {
+  protected String trimTo16(String filename)
+  {
+    if (filename.length() <= 16)
+    {
       return filename;
     }
 
     return filename.substring(0, 16);
   }
 
-  protected IPath doChangePath(byte[] path) throws FileNotFoundException {
+  protected IPath doChangePath(byte[] path) throws FileNotFoundException
+  {
     String decodedPath = decode(path);
     // TODO implement wildcard search
     File newPath = new File(directory, decodedPath);
 
-    if (!newPath.exists()) {
+    if (!newPath.exists())
+    {
       throw new FileNotFoundException(newPath.getPath() + " not found");
-    } else if (newPath.isFile()) {
-      if (!newPath.getName().toLowerCase().endsWith("d64")) {
+    }
+    else if (newPath.isFile())
+    {
+      if (!newPath.getName().toLowerCase().endsWith("d64"))
+      {
         throw new FileNotFoundException(newPath + " is no directory");
       }
       return new D64Path(this, newPath);
-    } else {
+    }
+    else
+    {
       return new Path(this, newPath);
     }
   }
 
-  protected IStream doFile(byte[] filename) throws FileNotFoundException {
+  protected IStream doFile(byte[] filename) throws FileNotFoundException
+  {
     String decodedFilename = decode(filename);
     // TODO implement wildcard search
     File file = new File(directory, decodedFilename);

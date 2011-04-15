@@ -2,20 +2,7 @@ package de.heiden.c64dt.assembler;
 
 import org.springframework.util.Assert;
 
-import java.util.Map;
-
-import static de.heiden.c64dt.assembler.OpcodeMode.ABS;
-import static de.heiden.c64dt.assembler.OpcodeMode.ABX;
-import static de.heiden.c64dt.assembler.OpcodeMode.ABY;
-import static de.heiden.c64dt.assembler.OpcodeMode.DIR;
-import static de.heiden.c64dt.assembler.OpcodeMode.IMM;
-import static de.heiden.c64dt.assembler.OpcodeMode.IND;
-import static de.heiden.c64dt.assembler.OpcodeMode.IZX;
-import static de.heiden.c64dt.assembler.OpcodeMode.IZY;
-import static de.heiden.c64dt.assembler.OpcodeMode.REL;
-import static de.heiden.c64dt.assembler.OpcodeMode.ZPD;
-import static de.heiden.c64dt.assembler.OpcodeMode.ZPX;
-import static de.heiden.c64dt.assembler.OpcodeMode.ZPY;
+import static de.heiden.c64dt.assembler.OpcodeMode.*;
 import static de.heiden.c64dt.assembler.OpcodeType.*;
 
 /**
@@ -325,7 +312,7 @@ public enum Opcode
 
   /**
    * Is the argument of the opcode a reference to a code location?.
-   *
+   * <p/>
    * TODO rework detect all kinds of references, not just single location code references
    */
   public boolean isCodeReference()

@@ -15,7 +15,8 @@ import java.io.IOException;
 /**
  * Simulated device.
  */
-public class Device {
+public class Device
+{
   private static final byte COMMAND_CHANNEL = 15;
 
   private IStream[] streams;
@@ -25,12 +26,14 @@ public class Device {
   /**
    * Constructor.
    */
-  public Device(File root) throws FileNotFoundException {
+  public Device(File root) throws FileNotFoundException
+  {
     Assert.notNull(root, "Precondition: root != null");
     Assert.isTrue(root.isDirectory(), "Precondition: root.isDirectory()");
 
     streams = new IStream[16];
-    for (int i = 0; i < streams.length; i++) {
+    for (int i = 0; i < streams.length; i++)
+    {
       streams[i] = new NullStream();
     }
 
@@ -41,25 +44,32 @@ public class Device {
     path = new Path(null, root);
   }
 
-  public boolean isOpen(int channel) {
+  public boolean isOpen(int channel)
+  {
     assertValidChannel(channel);
 
     return streams[channel].isOpen();
   }
 
-  public void open(int channel, byte[] file) throws DeviceException {
+  public void open(int channel, byte[] file) throws DeviceException
+  {
     assertValidChannel(channel);
     Assert.notNull(file, "Precondition: file != null");
 
     // create new channel from path
-    if (channel != COMMAND_CHANNEL) {
-      if (streams[channel].isOpen()) {
+    if (channel != COMMAND_CHANNEL)
+    {
+      if (streams[channel].isOpen())
+      {
         close(channel);
       }
 
-      try {
+      try
+      {
         streams[channel] = path.getFile(file);
-      } catch (FileNotFoundException e) {
+      }
+      catch (FileNotFoundException e)
+      {
         error = Error.NOTFOUND.toBytes(0, 0);
         throw new DeviceException(Error.NOTFOUND);
       }
@@ -68,44 +78,57 @@ public class Device {
     streams[channel].open(file);
   }
 
-  public void incrementPosition(int channel, int increment) throws DeviceException {
+  public void incrementPosition(int channel, int increment) throws DeviceException
+  {
     assertOpen(channel);
 
     streams[channel].incrementPosition(increment);
   }
 
-  public byte[] read(int channel, int length) throws DeviceException {
+  public byte[] read(int channel, int length) throws DeviceException
+  {
     assertOpen(channel);
 
-    try {
+    try
+    {
       return streams[channel].read(length);
-    } catch (IOException e) {
+    }
+    catch (IOException e)
+    {
       throw new DeviceException(Error.NOTFOUND);
     }
   }
 
-  public void write(int channel, byte[] data) throws DeviceException {
+  public void write(int channel, byte[] data) throws DeviceException
+  {
     assertOpen(channel);
 
-    try {
+    try
+    {
       streams[channel].write(data);
-    } catch (IOException e) {
+    }
+    catch (IOException e)
+    {
       throw new DeviceException(Error.NOTFOUND);
     }
   }
 
-  public void close(int channel) throws DeviceException {
+  public void close(int channel) throws DeviceException
+  {
     assertValidChannel(channel);
 
     streams[channel].close();
   }
 
-  protected final void assertValidChannel(int channel) {
+  protected final void assertValidChannel(int channel)
+  {
     Assert.isTrue(channel >= 0 && channel <= 15, "Precondition: channel >= 0 && channel <= 15");
   }
 
-  protected final void assertOpen(int channel) throws DeviceException {
-    if (!isOpen(channel)) {
+  protected final void assertOpen(int channel) throws DeviceException
+  {
+    if (!isOpen(channel))
+    {
       throw new DeviceException(Error.FILENOTOPEN);
     }
   }
@@ -113,23 +136,29 @@ public class Device {
   /**
    * Stream for handling commands.
    */
-  private class CommandStream extends AbstractStream {
-    public boolean isOpen() {
+  private class CommandStream extends AbstractStream
+  {
+    public boolean isOpen()
+    {
       // the command channel is always open
       return true;
     }
 
-    public void open(byte[] data) {
+    public void open(byte[] data)
+    {
       String command = C64Charset.LOWER.toString(data);
-      if (command.toLowerCase().startsWith("cd:")) {
+      if (command.toLowerCase().startsWith("cd:"))
+      {
         String path = command.substring(3);
         // TODO change path
       }
     }
 
-    public byte[] doRead(int length) {
+    public byte[] doRead(int length)
+    {
       // reset error to OK when last error has been completely read
-      if (getPosition() >= error.length) {
+      if (getPosition() >= error.length)
+      {
         error = Error.OK.toBytes(0, 0);
         return new byte[0];
       }
@@ -143,7 +172,8 @@ public class Device {
       return result;
     }
 
-    public void doWrite(byte[] data) {
+    public void doWrite(byte[] data)
+    {
       // nothing to do
     }
   }

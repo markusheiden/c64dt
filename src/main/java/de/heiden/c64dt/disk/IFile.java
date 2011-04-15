@@ -3,7 +3,8 @@ package de.heiden.c64dt.disk;
 /**
  * File.
  */
-public interface IFile {
+public interface IFile
+{
   /**
    * Get file mode.
    */

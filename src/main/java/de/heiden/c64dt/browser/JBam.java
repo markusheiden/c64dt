@@ -4,19 +4,15 @@ import de.heiden.c64dt.disk.IBAM;
 import de.heiden.c64dt.disk.IDiskImage;
 import org.springframework.util.Assert;
 
-import javax.swing.JComponent;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 /**
  * Component for displaying a bam.
  */
-public class JBam extends JComponent {
+public class JBam extends JComponent
+{
   private Color free;
   private Color used;
   private Color error;
@@ -32,7 +28,8 @@ public class JBam extends JComponent {
   /**
    * Constructor.
    */
-  public JBam() {
+  public JBam()
+  {
     free = Color.GREEN;
     used = Color.BLUE;
     error = Color.RED;
@@ -45,7 +42,8 @@ public class JBam extends JComponent {
    *
    * @param diskImage disk image
    */
-  public void setDiskImage(IDiskImage diskImage) {
+  public void setDiskImage(IDiskImage diskImage)
+  {
     Assert.notNull(diskImage, "Precondition: diskImage != null");
 
     this.diskImage = diskImage;
@@ -61,7 +59,8 @@ public class JBam extends JComponent {
     topSpace = (int) Math.ceil(height / 2);
     box = (int) Math.ceil(height / 2);
     border = box / 10;
-    if (border == 0) {
+    if (border == 0)
+    {
       border = 1;
     }
 
@@ -73,7 +72,8 @@ public class JBam extends JComponent {
   }
 
   @Override
-  protected void paintComponent(Graphics g) {
+  protected void paintComponent(Graphics g)
+  {
     Assert.notNull(g, "Precondition: g != null");
 
     IBAM bam = diskImage.getBAM();
@@ -81,7 +81,8 @@ public class JBam extends JComponent {
     g.setColor(getBackground());
     g.fillRect(0, 0, getWidth(), getHeight());
 
-    if (diskImage == null) {
+    if (diskImage == null)
+    {
       return;
     }
 
@@ -92,7 +93,8 @@ public class JBam extends JComponent {
     g.setColor(getForeground());
     int x = leftSpace + left + border + box / 2; // center of first horizontal box
     int y = topSpace / 2 + height - descent; // base line of top space
-    for (int track = 1; track < diskImage.getTracks(); track += 10) {
+    for (int track = 1; track < diskImage.getTracks(); track += 10)
+    {
       String description = Integer.toString(track);
       // draw centered regarding to box
       Rectangle2D bounds = fontMetrics.getStringBounds(description, g);
@@ -103,7 +105,8 @@ public class JBam extends JComponent {
     // sector numbers
     g.setColor(getForeground());
     y = topSpace + height + border + box / 2; // center of first vertical box
-    for (int sector = 0; sector < diskImage.getSectors(); sector += 10) {
+    for (int sector = 0; sector < diskImage.getSectors(); sector += 10)
+    {
       String description = Integer.toString(sector);
       // draw centered regarding to box
       Rectangle2D bounds = fontMetrics.getStringBounds(description, g);
@@ -113,16 +116,21 @@ public class JBam extends JComponent {
 
     // bam map
     x = leftSpace + left;
-    for (int track = 1; track <= diskImage.getTracks(); track++) {
+    for (int track = 1; track <= diskImage.getTracks(); track++)
+    {
       y = topSpace + height;
       int spt = diskImage.getSectors(track);
       g.setColor(Color.BLACK);
       g.fillRect(x, y, border + box + border, border + spt * (box + border));
-      for (int sector = 0; sector < spt; sector++) {
+      for (int sector = 0; sector < spt; sector++)
+      {
         Color color = used;
-        if (diskImage.hasError(track, sector)) {
+        if (diskImage.hasError(track, sector))
+        {
           color = error;
-        } else if (bam.isFree(track, sector)) {
+        }
+        else if (bam.isFree(track, sector))
+        {
           color = free;
         }
 

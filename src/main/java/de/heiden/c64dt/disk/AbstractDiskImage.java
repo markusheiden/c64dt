@@ -12,7 +12,8 @@ import static de.heiden.c64dt.disk.SectorModelUtil.assertSector;
 /**
  * Abstract disk image implementation.
  */
-public abstract class AbstractDiskImage implements IDiskImage {
+public abstract class AbstractDiskImage implements IDiskImage
+{
   private int sides;
   private int tracks;
   private int tracksPerSide;
@@ -27,7 +28,8 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param tracks number of tracks
    * @param hasErrors support error informations?
    */
-  public AbstractDiskImage(int sides, int tracks, boolean hasErrors) {
+  public AbstractDiskImage(int sides, int tracks, boolean hasErrors)
+  {
     Assert.isTrue(sides >= 1 && sides <= 2, "Precondition: sides >= 1 && sides <= 2");
     Assert.isTrue(tracks >= 0, "Precondition: tracks >= 0");
     Assert.isTrue(tracks % sides == 0, "Precondition: tracks % sides == 0");
@@ -39,11 +41,13 @@ public abstract class AbstractDiskImage implements IDiskImage {
 
     sectors = new byte[tracks][][];
     errors = new Error[tracks][];
-    for (int track = 1; track <= tracks; track++) {
+    for (int track = 1; track <= tracks; track++)
+    {
       int spt = getSectors(track);
       sectors[track - 1] = new byte[spt][];
       errors[track - 1] = new Error[spt];
-      for (int sector = 0; sector < spt; sector++) {
+      for (int sector = 0; sector < spt; sector++)
+      {
         sectors[track - 1][sector] = new byte[256];
         errors[track - 1][sector] = Error.NO_ERROR;
       }
@@ -54,15 +58,18 @@ public abstract class AbstractDiskImage implements IDiskImage {
   // ISectorModel
   //
 
-  public int getSides() {
+  public int getSides()
+  {
     return sides;
   }
 
-  public int getTracks() {
+  public int getTracks()
+  {
     return tracks;
   }
 
-  public int getTracksPerSide() {
+  public int getTracksPerSide()
+  {
     return tracksPerSide;
   }
 
@@ -70,16 +77,19 @@ public abstract class AbstractDiskImage implements IDiskImage {
   //
   //
 
-  public byte[] getSector(int track, int sector) {
+  public byte[] getSector(int track, int sector)
+  {
     assertSector(this, track, sector);
 
     return sectors[track - 1][sector];
   }
 
-  public void setSector(int track, int sector, byte[] content) {
-    assertSector(this,  track, sector);
+  public void setSector(int track, int sector, byte[] content)
+  {
+    assertSector(this, track, sector);
 
-    if (content.length != 256) {
+    if (content.length != 256)
+    {
       throw new IllegalArgumentException("Illegal sector content");
     }
 
@@ -90,22 +100,26 @@ public abstract class AbstractDiskImage implements IDiskImage {
   // error support
   //
 
-  public boolean hasErrors() {
+  public boolean hasErrors()
+  {
     return hasErrors;
   }
 
-  public boolean hasError(int track, int sector) {
+  public boolean hasError(int track, int sector)
+  {
     return hasErrors() && getError(track, sector).isError();
   }
 
-  public Error getError(int track, int sector) {
+  public Error getError(int track, int sector)
+  {
     Assert.isTrue(hasErrors(), "Precondition: hasErrors()");
     assertSector(this, track, sector);
 
     return errors[track - 1][sector];
   }
 
-  public void setError(int track, int sector, Error error) {
+  public void setError(int track, int sector, Error error)
+  {
     Assert.isTrue(hasErrors(), "Precondition: hasErrors()");
     assertSector(this, track, sector);
     Assert.notNull(error, "Precondition: error != null");
@@ -130,13 +144,15 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param content sector buffer
    * @param pos position in sector buffer
    */
-  protected void readBAM(IBAM bam, int track, byte[] content, int pos) {
+  protected void readBAM(IBAM bam, int track, byte[] content, int pos)
+  {
     Assert.notNull(bam, "Precondition: bam != null");
     Assert.notNull(content, "Precondition: content != null");
 
     int free = ByteUtil.toByte(content[pos + 0x00]);
     bam.setFreeSectors(track, free);
-    for (int i = 1, sector = 0; i < getBamEntrySize(); i++, sector += 8) {
+    for (int i = 1, sector = 0; i < getBamEntrySize(); i++, sector += 8)
+    {
       readBAM(bam, track, sector, content[pos + i]);
     }
   }
@@ -149,26 +165,31 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param sector current sector
    * @param b byte to read
    */
-  protected void readBAM(IBAM bam, int track, int sector, byte b) {
+  protected void readBAM(IBAM bam, int track, int sector, byte b)
+  {
     Assert.notNull(bam, "Precondition: bam != null");
 
     int map = ByteUtil.toByte(b);
-    for (int i = 0; i < 8 && sector < getSectors(track); i++, sector++) {
+    for (int i = 0; i < 8 && sector < getSectors(track); i++, sector++)
+    {
       bam.setFree(track, sector, (map & 0x01) != 0);
       map = map >> 1;
     }
   }
 
-  public IDirectory getDirectory() {
+  public IDirectory getDirectory()
+  {
     byte[] name = new byte[16];
     System.arraycopy(getSector(18, 0), 0x90, name, 0, 16);
     byte[] idAndType = new byte[5];
     System.arraycopy(getSector(18, 0), 0xA2, idAndType, 0, 5);
 
     List<IFile> files = new ArrayList<IFile>(18 * 8);
-    for (SectorIterator iter = new SectorIterator(this, 18, 1); iter.hasNext();) {
+    for (SectorIterator iter = new SectorIterator(this, 18, 1); iter.hasNext();)
+    {
       byte[] content = iter.next();
-      for (int pos = 0; pos < 256; pos += 0x20) {
+      for (int pos = 0; pos < 256; pos += 0x20)
+      {
         files.add(getFile(content, pos));
       }
     }
@@ -182,7 +203,8 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param content sector buffer
    * @param pos position in sector buffer
    */
-  protected IFile getFile(byte[] content, int pos) {
+  protected IFile getFile(byte[] content, int pos)
+  {
     // TODO evaluate all attributes
     FileMode mode = FileMode.fileMode(content[pos + 0x02]);
     int track = ByteUtil.toByte(content, pos + 0x03);

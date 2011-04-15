@@ -9,7 +9,8 @@ import java.util.Map;
 /**
  * D64 error codes.
  */
-public enum Error {
+public enum Error
+{
   /**
    * No error recorded.
    */
@@ -89,14 +90,16 @@ public enum Error {
   /**
    * Get error code.
    */
-  public byte getError() {
+  public byte getError()
+  {
     return error;
   }
 
   /**
    * Represents this error an error.
    */
-  public boolean isError() {
+  public boolean isError()
+  {
     return !this.equals(OK) && !this.equals(NO_ERROR);
   }
 
@@ -105,9 +108,11 @@ public enum Error {
    *
    * @param error error code
    */
-  public static Error error(int error) {
+  public static Error error(int error)
+  {
     Error result = errors.get((byte) error);
-    if (result == null) {
+    if (result == null)
+    {
       logger.info("Unknow error code " + Integer.toHexString(error));
       result = UNKNOWN;
     }
@@ -121,7 +126,8 @@ public enum Error {
    *
    * @param error error code
    */
-  private Error(int error) {
+  private Error(int error)
+  {
     this.error = (byte) error;
     errors().put((byte) error, this);
   }
@@ -129,8 +135,10 @@ public enum Error {
   /**
    * Map with all known error instances.
    */
-  private Map<Byte, Error> errors() {
-    if (errors == null) {
+  private Map<Byte, Error> errors()
+  {
+    if (errors == null)
+    {
       errors = new HashMap<Byte, Error>();
     }
 

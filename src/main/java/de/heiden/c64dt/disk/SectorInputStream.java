@@ -11,7 +11,8 @@ import static de.heiden.c64dt.disk.SectorModelUtil.assertSector;
 /**
  * Reads a file from a chain of sectors.
  */
-public class SectorInputStream extends InputStream {
+public class SectorInputStream extends InputStream
+{
   private IDiskImage diskImage;
   private int track;
   private int sector;
@@ -26,7 +27,8 @@ public class SectorInputStream extends InputStream {
    * @param diskImage disk image
    * @param file file
    */
-  public SectorInputStream(IDiskImage diskImage, IFile file) {
+  public SectorInputStream(IDiskImage diskImage, IFile file)
+  {
     this(diskImage, file.getTrack(), file.getSector());
   }
 
@@ -37,7 +39,8 @@ public class SectorInputStream extends InputStream {
    * @param track start track
    * @param sector start sector
    */
-  public SectorInputStream(IDiskImage diskImage, int track, int sector) {
+  public SectorInputStream(IDiskImage diskImage, int track, int sector)
+  {
     Assert.notNull(diskImage, "Precondition: diskImage != null");
     assertSector(diskImage, track, sector);
 
@@ -50,17 +53,20 @@ public class SectorInputStream extends InputStream {
     this.remaining = 0;
   }
 
-  public int read() throws IOException {
-    if (remaining == 0) {
-      if (track == 0x00) {
+  public int read() throws IOException
+  {
+    if (remaining == 0)
+    {
+      if (track == 0x00)
+      {
         return -1;
       }
 
       currentSector = diskImage.getSector(track, sector);
       track = ByteUtil.toByte(currentSector[0]);
-      sector =  ByteUtil.toByte(currentSector[1]);
+      sector = ByteUtil.toByte(currentSector[1]);
       pos = 0x02;
-      remaining = track == 0x00? sector : 0xFE;
+      remaining = track == 0x00 ? sector : 0xFE;
     }
 
     --remaining;

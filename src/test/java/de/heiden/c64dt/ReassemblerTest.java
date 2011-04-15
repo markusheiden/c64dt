@@ -12,32 +12,39 @@ import java.io.StringWriter;
 /**
  * Reassembler test startup.
  */
-public class ReassemblerTest {
-  public static void main(String[] args) throws Exception {
+public class ReassemblerTest
+{
+  public static void main(String[] args) throws Exception
+  {
     disassemble();
   }
 
-  public static void disassemble() throws Exception {
+  public static void disassemble() throws Exception
+  {
     byte[] data = FileCopyUtils.copyToByteArray(new File("./dummy2.prg"));
     Disassembler disassembler = new Disassembler();
     disassembler.disassemble(data, new OutputStreamWriter(System.out));
   }
 
-  public static void reassemble() throws Exception {
+  public static void reassemble() throws Exception
+  {
     byte[] data = FileCopyUtils.copyToByteArray(new File("./dummy2.prg"));
     Reassembler reassembler = new Reassembler();
     reassembler.reassemble(data, new OutputStreamWriter(System.out));
   }
 
-  public static void reassemblerPerformanceTest() throws Exception {
+  public static void reassemblerPerformanceTest() throws Exception
+  {
     byte[] data = FileCopyUtils.copyToByteArray(new File("./dummy2.prg"));
     Reassembler reassembler = new Reassembler();
-    for (int i = 0; i < 64; i++) {
+    for (int i = 0; i < 64; i++)
+    {
       reassembler.reassemble(data, new StringWriter(data.length * 80));
     }
   }
 
-  public static void strip() throws IOException {
+  public static void strip() throws IOException
+  {
     byte[] data = FileCopyUtils.copyToByteArray(new File("./dummy.prg"));
     byte[] result = new byte[data.length - 0xFF];
     result[0] = 0x00;

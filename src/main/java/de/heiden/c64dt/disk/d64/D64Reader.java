@@ -9,7 +9,8 @@ import org.springframework.util.Assert;
 /**
  * Reads a D64 image from a file.
  */
-public class D64Reader extends AbstractDiskImageReader {
+public class D64Reader extends AbstractDiskImageReader
+{
   private final Logger logger = Logger.getLogger(getClass());
 
   public static final int SIZE_35_TRACKS_NO_ERRORS = 174848;
@@ -17,20 +18,35 @@ public class D64Reader extends AbstractDiskImageReader {
   public static final int SIZE_40_TRACKS_NO_ERRORS = 196608;
   public static final int SIZE_40_TRACKS_WITH_ERRORS = 197376;
 
-  public IDiskImage read(byte[] data) throws WrongDiskImageFormatException {
+  public IDiskImage read(byte[] data) throws WrongDiskImageFormatException
+  {
     Assert.notNull(data, "Precondition: data != null");
 
     int tracks;
     boolean hasErrors;
-    switch (data.length) {
-      case SIZE_35_TRACKS_NO_ERRORS: tracks = 35; hasErrors = false; break;
-      case SIZE_35_TRACKS_WITH_ERRORS: tracks = 35; hasErrors = true; break;
-      case SIZE_40_TRACKS_NO_ERRORS: tracks = 40; hasErrors = false; break;
-      case SIZE_40_TRACKS_WITH_ERRORS: tracks = 40; hasErrors = true; break;
-      default: throw new WrongDiskImageFormatException(data.length);
+    switch (data.length)
+    {
+      case SIZE_35_TRACKS_NO_ERRORS:
+        tracks = 35;
+        hasErrors = false;
+        break;
+      case SIZE_35_TRACKS_WITH_ERRORS:
+        tracks = 35;
+        hasErrors = true;
+        break;
+      case SIZE_40_TRACKS_NO_ERRORS:
+        tracks = 40;
+        hasErrors = false;
+        break;
+      case SIZE_40_TRACKS_WITH_ERRORS:
+        tracks = 40;
+        hasErrors = true;
+        break;
+      default:
+        throw new WrongDiskImageFormatException(data.length);
     }
 
-    logger.info("Detected " + tracks + " tracks image " + (hasErrors? "with" : "without") + " error informations");
+    logger.info("Detected " + tracks + " tracks image " + (hasErrors ? "with" : "without") + " error informations");
 
     return read(data, new D64(tracks, hasErrors));
   }

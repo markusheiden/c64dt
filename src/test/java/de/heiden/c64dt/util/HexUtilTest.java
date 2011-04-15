@@ -1,7 +1,8 @@
 package de.heiden.c64dt.util;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test for {@link HexUtil}.

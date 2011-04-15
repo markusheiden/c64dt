@@ -1,7 +1,5 @@
 package de.heiden.c64dt.assembler.command;
 
-import static de.heiden.c64dt.assembler.command.DummyCommand.DUMMY_COMMAND;
-
 import de.heiden.c64dt.assembler.CodeLabel;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.DataLabel;
@@ -20,12 +18,14 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import static de.heiden.c64dt.assembler.command.DummyCommand.DUMMY_COMMAND;
 import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
 
 /**
  * Input stream for code.
  */
-public class CommandBuffer {
+public class CommandBuffer
+{
   private final CodeType[] types;
   private final int[] codeReferences;
   private final int[] dataReferences;
@@ -45,7 +45,8 @@ public class CommandBuffer {
    * @param length length of code
    * @param startAddress address of the code
    */
-  public CommandBuffer(int length, int startAddress) {
+  public CommandBuffer(int length, int startAddress)
+  {
     Assert.isTrue(startAddress >= 0, "Precondition: startAddress >= 0");
 
     this.types = new CodeType[length];
@@ -75,7 +76,8 @@ public class CommandBuffer {
    *
    * @param index relative address
    */
-  public boolean isValidIndex(int index) {
+  public boolean isValidIndex(int index)
+  {
     return index >= 0 && index <= length;
   }
 
@@ -83,14 +85,16 @@ public class CommandBuffer {
    * The current relative address.
    * This is the index where the next command will be added.
    */
-  public int getCurrentIndex() {
+  public int getCurrentIndex()
+  {
     return current.getIndex() + current.getSize();
   }
 
   /**
    * Start address of code (incl.).
    */
-  public int getStartAddress() {
+  public int getStartAddress()
+  {
     return startAddresses.get(0);
   }
 
@@ -100,7 +104,8 @@ public class CommandBuffer {
    * @param startIndex relative address from which the new absolute base address should be used
    * @param baseAddress new absolute base address
    */
-  public void rebase(int startIndex, int baseAddress) {
+  public void rebase(int startIndex, int baseAddress)
+  {
     Assert.isTrue(isValidIndex(startIndex), "Precondition: isValidIndex(startIndex)");
     assertValidAddress(baseAddress);
 
@@ -115,7 +120,8 @@ public class CommandBuffer {
   /**
    * Get code type of the current opcode / command.
    */
-  public CodeType getType() {
+  public CodeType getType()
+  {
     return getType(current.getIndex());
   }
 
@@ -124,7 +130,8 @@ public class CommandBuffer {
    *
    * @param index relative address
    */
-  public CodeType getType(int index) {
+  public CodeType getType(int index)
+  {
     Assert.isTrue(isValidIndex(index), "Precondition: isValidIndex(index)");
 
     return types[index];
@@ -135,7 +142,8 @@ public class CommandBuffer {
    *
    * @param type code type
    */
-  public void setType(CodeType type) {
+  public void setType(CodeType type)
+  {
     setType(current.getIndex(), type);
   }
 
@@ -146,13 +154,15 @@ public class CommandBuffer {
    * @param endIndex last relative address (excl.)
    * @param type code type
    */
-  public void setType(int startIndex, int endIndex, CodeType type) {
+  public void setType(int startIndex, int endIndex, CodeType type)
+  {
     Assert.isTrue(isValidIndex(startIndex), "Precondition: isValidIndex(startIndex)");
     Assert.isTrue(isValidIndex(endIndex), "Precondition: isValidIndex(endIndex)");
     Assert.isTrue(startIndex <= endIndex, "Precondition: startIndex <= endIndex");
     Assert.notNull(type, "Precondition: type != null");
 
-    for (int index = startIndex; index < endIndex; index++) {
+    for (int index = startIndex; index < endIndex; index++)
+    {
       setType(index, type);
     }
   }
@@ -163,7 +173,8 @@ public class CommandBuffer {
    * @param index relative address
    * @param type code type
    */
-  public void setType(int index, CodeType type) {
+  public void setType(int index, CodeType type)
+  {
     Assert.isTrue(isValidIndex(index), "Precondition: isValidIndex(index)");
     Assert.notNull(type, "Precondition: type != null");
 
@@ -177,14 +188,16 @@ public class CommandBuffer {
   /**
    * Is a label at the current opcode / command?
    */
-  public boolean hasLabel() {
-    return getType().isCode()? hasCodeLabel(current.getAddress()) : hasDataLabel(current.getAddress());
+  public boolean hasLabel()
+  {
+    return getType().isCode() ? hasCodeLabel(current.getAddress()) : hasDataLabel(current.getAddress());
   }
 
   /**
    * Is a code label at the current opcode / command?
    */
-  public boolean hasCodeLabel() {
+  public boolean hasCodeLabel()
+  {
     return hasCodeLabel(current.getAddress());
   }
 
@@ -193,14 +206,16 @@ public class CommandBuffer {
    *
    * @param address absolute address
    */
-  public boolean hasCodeLabel(int address) {
+  public boolean hasCodeLabel(int address)
+  {
     return codeLabels.containsKey(address);
   }
 
   /**
    * Is a data label at the current opcode / command?
    */
-  public boolean hasDataLabel() {
+  public boolean hasDataLabel()
+  {
     return hasDataLabel(current.getAddress());
   }
 
@@ -209,7 +224,8 @@ public class CommandBuffer {
    *
    * @param address absolute address
    */
-  public boolean hasDataLabel(int address) {
+  public boolean hasDataLabel(int address)
+  {
     return dataLabels.containsKey(address);
   }
 
@@ -218,13 +234,16 @@ public class CommandBuffer {
    *
    * @param address absolute address
    */
-  public boolean hasAddress(int address) {
+  public boolean hasAddress(int address)
+  {
     Iterator<Entry<Integer, Integer>> iter = startAddresses.entrySet().iterator();
     Entry<Integer, Integer> lastAddressEntry = iter.next();
-    while (iter.hasNext()) {
+    while (iter.hasNext())
+    {
       Entry<Integer, Integer> addressEntry = iter.next();
       if (address >= lastAddressEntry.getValue() + lastAddressEntry.getKey() &&
-          address <  lastAddressEntry.getValue() + addressEntry.getKey()) {
+        address < lastAddressEntry.getValue() + addressEntry.getKey())
+      {
         return true;
       }
       lastAddressEntry = addressEntry;
@@ -239,12 +258,15 @@ public class CommandBuffer {
    * @param index relative address
    * @return absolute address
    */
-  public int addressForIndex(int index) {
+  public int addressForIndex(int index)
+  {
     Assert.isTrue(isValidIndex(index), "Precondition: isValidIndex(index)");
 
     int lastStartIndex = startAddresses.firstKey();
-    for (int startIndex : startAddresses.keySet()) {
-      if (index < startIndex) {
+    for (int startIndex : startAddresses.keySet())
+    {
+      if (index < startIndex)
+      {
         return startAddresses.get(lastStartIndex) + index;
       }
 
@@ -262,14 +284,20 @@ public class CommandBuffer {
    * @param fromIndex relative address of the command referencing
    * @param to referenced absolute address
    */
-  public void addReference(boolean code, int fromIndex, int to) {
+  public void addReference(boolean code, int fromIndex, int to)
+  {
     Assert.isTrue(isValidIndex(fromIndex), "Precondition: isValidIndex(fromIndex)");
 
-    if (!hasAddress(to)) {
+    if (!hasAddress(to))
+    {
       addExternalReference(fromIndex, to);
-    } else if (code) {
+    }
+    else if (code)
+    {
       addCodeReference(fromIndex, to);
-    } else {
+    }
+    else
+    {
       addDataReference(fromIndex, to);
     }
   }
@@ -281,7 +309,8 @@ public class CommandBuffer {
    * @param fromIndex relative address of the command referencing
    * @param to referenced absolute address
    */
-  public void addCodeReference(int fromIndex, int to) {
+  public void addCodeReference(int fromIndex, int to)
+  {
     Assert.isTrue(isValidIndex(fromIndex), "Precondition: isValidIndex(fromIndex)");
     Assert.isTrue(hasAddress(to), "Precondition: hasAddress(to)");
 
@@ -298,7 +327,8 @@ public class CommandBuffer {
    * @param fromIndex relative address of the command referencing
    * @param to referenced absolute address
    */
-  public void addDataReference(int fromIndex, int to) {
+  public void addDataReference(int fromIndex, int to)
+  {
     Assert.isTrue(isValidIndex(fromIndex), "Precondition: isValidIndex(fromIndex)");
     Assert.isTrue(hasAddress(to), "Precondition: hasAddress(to)");
 
@@ -315,7 +345,8 @@ public class CommandBuffer {
    * @param fromIndex relative address of the command referencing
    * @param to referenced absolute address
    */
-  public void addExternalReference(int fromIndex, int to) {
+  public void addExternalReference(int fromIndex, int to)
+  {
     Assert.isTrue(isValidIndex(fromIndex), "Precondition: isValidIndex(fromIndex)");
     Assert.isTrue(!hasAddress(to), "Precondition: !hasAddress(to)");
 
@@ -330,13 +361,14 @@ public class CommandBuffer {
    *
    * @return whether a label has been removed
    */
-  public boolean removeReference() {
+  public boolean removeReference()
+  {
     int index = current.getIndex();
 
     return
       remove(index, codeReferences, codeLabels) |
-      remove(index, dataReferences, dataLabels) |
-      remove(index, externalReferences, externalLabels);
+        remove(index, dataReferences, dataLabels) |
+        remove(index, externalReferences, externalLabels);
   }
 
   /**
@@ -347,13 +379,15 @@ public class CommandBuffer {
    * @param labels all labels
    * @return whether a label has been removed
    */
-  private boolean remove(int index, int[] references, Map<Integer, ?> labels) {
+  private boolean remove(int index, int[] references, Map<Integer, ?> labels)
+  {
     // get referenced absolute address
     int reference = references[index];
     // delete reference
     references[index] = -1;
 
-    if (reference < 0) {
+    if (reference < 0)
+    {
       // if nothing has been referenced, no label needs to be removed
       return false;
     }
@@ -361,7 +395,8 @@ public class CommandBuffer {
     // check if referenced address is referenced from elsewhere too
     for (int i = 0; i < references.length; i++)
     {
-      if (references[i] == reference) {
+      if (references[i] == reference)
+      {
         // referenced address is still referenced, no label needs to be removed
         return false;
       }
@@ -380,7 +415,8 @@ public class CommandBuffer {
    *
    * @return label representation or null if no label exists for the current address
    */
-  public ILabel getLabel() {
+  public ILabel getLabel()
+  {
     return getLabel(current.getAddress());
   }
 
@@ -390,12 +426,15 @@ public class CommandBuffer {
    * @param address absolute address
    * @return label or null if no label exists for this address
    */
-  public ILabel getLabel(int address) {
+  public ILabel getLabel(int address)
+  {
     ILabel result = codeLabels.get(address);
-    if (result == null) {
+    if (result == null)
+    {
       result = dataLabels.get(address);
     }
-    if (result == null) {
+    if (result == null)
+    {
       result = externalLabels.get(address);
     }
 
@@ -405,7 +444,8 @@ public class CommandBuffer {
   /**
    * All referenced addresses which do not point to this code.
    */
-  public Collection<ExternalLabel> getExternalLabels() {
+  public Collection<ExternalLabel> getExternalLabels()
+  {
     return externalLabels.values();
   }
 
@@ -416,7 +456,8 @@ public class CommandBuffer {
   /**
    * Clear all commands, references and labels.
    */
-  public void clear() {
+  public void clear()
+  {
     Arrays.fill(codeReferences, -1);
     Arrays.fill(dataReferences, -1);
     Arrays.fill(externalReferences, -1);
@@ -435,7 +476,8 @@ public class CommandBuffer {
    *
    * @param command command
    */
-  public void addCommand(ICommand command) {
+  public void addCommand(ICommand command)
+  {
     Assert.notNull(command, "Precondition: command != null");
     Assert.isTrue(!command.hasAddress(), "Precondition: !command.hasAddress()");
 
@@ -457,34 +499,40 @@ public class CommandBuffer {
   /**
    * (Re)start iteration.
    */
-  public void restart() {
+  public void restart()
+  {
     iter = commands.listIterator();
     current = DUMMY_COMMAND;
   }
 
-  public boolean hasNextCommand() {
+  public boolean hasNextCommand()
+  {
     return iter.hasNext();
   }
 
-  public ICommand nextCommand() {
+  public ICommand nextCommand()
+  {
     current = iter.next();
 
     Assert.notNull(current, "Postcondition: result != null");
     return current;
   }
 
-  public boolean hasPreviousCommand() {
+  public boolean hasPreviousCommand()
+  {
     return iter.hasPrevious();
   }
 
-  public ICommand previousCommand() {
+  public ICommand previousCommand()
+  {
     current = iter.previous();
 
     Assert.notNull(current, "Postcondition: result != null");
     return current;
   }
 
-  public void removeCurrentCommand() {
+  public void removeCurrentCommand()
+  {
     iter.remove();
     // TODO check / assert consistency
   }
@@ -494,12 +542,14 @@ public class CommandBuffer {
    *
    * @param replacements Replacement commands
    */
-  public void replaceCurrentCommand(ICommand... replacements) {
+  public void replaceCurrentCommand(ICommand... replacements)
+  {
     int index = current.getIndex();
     int address = current.getAddress();
     iter.remove();
     int size = 0;
-    for (ICommand replacement : replacements) {
+    for (ICommand replacement : replacements)
+    {
       replacement.setAddress(index + size, address + size);
       iter.add(replacement);
       size += replacement.getSize();

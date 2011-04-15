@@ -166,7 +166,7 @@ public enum OpcodeMode
   /**
    * Compute absolute address.
    *
-   * @param pc 
+   * @param pc
    */
   public int getAddress(int pc, int argument)
   {

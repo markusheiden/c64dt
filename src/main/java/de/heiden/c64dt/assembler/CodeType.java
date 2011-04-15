@@ -3,7 +3,8 @@ package de.heiden.c64dt.assembler;
 /**
  * Types for code classification.
  */
-public enum CodeType {
+public enum CodeType
+{
   /**
    * Type of code is not known yet.
    */
@@ -29,11 +30,13 @@ public enum CodeType {
    */
   ABSOLUTE_ADDRESS;
 
-  public final boolean isCode() {
+  public final boolean isCode()
+  {
     return this == OPCODE || this == CODE;
   }
 
-  public final boolean isData() {
+  public final boolean isData()
+  {
     return this == DATA;
   }
 }

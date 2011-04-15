@@ -14,26 +14,32 @@ import static de.heiden.c64dt.util.HexUtil.hexByte;
 /**
  * Command for data.
  */
-public class DataCommand extends AbstractCommand {
+public class DataCommand extends AbstractCommand
+{
   private List<Integer> data;
 
-  public DataCommand(int data) {
+  public DataCommand(int data)
+  {
     super(false);
 
     this.data = new ArrayList<Integer>(8);
     this.data.add(data);
   }
 
-  public final int getSize() {
+  public final int getSize()
+  {
     return data.size();
   }
 
-  public final boolean isEnd() {
+  public final boolean isEnd()
+  {
     return true;
   }
 
-  public boolean combineWith(ICommand command) {
-    if (!(command instanceof DataCommand)) {
+  public boolean combineWith(ICommand command)
+  {
+    if (!(command instanceof DataCommand))
+    {
       return false;
     }
 
@@ -41,26 +47,30 @@ public class DataCommand extends AbstractCommand {
     return true;
   }
 
-  public void toString(CommandBuffer buffer, Writer output) throws IOException {
+  public void toString(CommandBuffer buffer, Writer output) throws IOException
+  {
     Assert.notNull(buffer, "Precondition: buffer != null");
     Assert.notNull(output, "Precondition: output != null");
 
     output.append("!BYTE ");
     output.append(hexByte(data.get(0)));
-    for (int i = 1; i < data.size(); i++) {
+    for (int i = 1; i < data.size(); i++)
+    {
       output.append(", ");
       output.append(hexByte(data.get(i)));
     }
     output.append("; '");
     byte[] string = new byte[data.size()];
-    for (int i = 0; i < data.size(); i++) {
+    for (int i = 0; i < data.size(); i++)
+    {
       string[i] = data.get(i).byteValue();
     }
     output.append(C64Charset.LOWER.toString(string));
     output.append("'");
   }
 
-  public List<Integer> toBytes() {
+  public List<Integer> toBytes()
+  {
     return Collections.unmodifiableList(data);
   }
 }

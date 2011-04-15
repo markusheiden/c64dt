@@ -3,13 +3,15 @@ package de.heiden.c64dt.disk;
 /**
  * Exception thrown when an invalid track or sector number is detected.
  */
-public class IllegalSectorException extends IllegalArgumentException {
+public class IllegalSectorException extends IllegalArgumentException
+{
   /**
    * Constructor for illegal tracks.
    *
    * @param track track
    */
-  public IllegalSectorException(int track) {
+  public IllegalSectorException(int track)
+  {
     super("Illegal track " + track);
   }
 
@@ -19,7 +21,8 @@ public class IllegalSectorException extends IllegalArgumentException {
    * @param track track
    * @param sector sector
    */
-  public IllegalSectorException(int track, int sector) {
+  public IllegalSectorException(int track, int sector)
+  {
     super("Illegal sector " + track + " / " + sector);
   }
 }

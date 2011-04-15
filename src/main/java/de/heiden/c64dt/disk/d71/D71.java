@@ -10,48 +10,62 @@ import static de.heiden.c64dt.disk.SectorModelUtil.assertTrack;
 /**
  * D71 (1571) disk image implementation.
  */
-public class D71 extends AbstractDiskImage {
+public class D71 extends AbstractDiskImage
+{
   /**
    * Constructor.
    *
    * @param hasErrors support error informations?
    */
-  public D71(int tracks, boolean hasErrors) {
+  public D71(int tracks, boolean hasErrors)
+  {
     super(2, tracks, hasErrors);
   }
 
-  public int getSectors() {
+  public int getSectors()
+  {
     return 21;
   }
 
-  public int getSectors(int track) {
+  public int getSectors(int track)
+  {
     assertTrack(this, track);
 
     // Both sides always share the same sector model
     int tps = getTracksPerSide();
-    if (track > tps) {
+    if (track > tps)
+    {
       track -= tps;
     }
 
-    if (track < 18) {
+    if (track < 18)
+    {
       return 21;
-    } else if (track < 25) {
+    }
+    else if (track < 25)
+    {
       return 19;
-    } else if (track < 31) {
+    }
+    else if (track < 31)
+    {
       return 18;
-    } else {
+    }
+    else
+    {
       return 17;
     }
   }
 
   @Override
-  public IBAM getBAM() {
+  public IBAM getBAM()
+  {
     BAM result = new BAM(this);
 
     byte[] bam = getSector(18, 0);
     byte[] bam2 = getSector(53, 0);
     int tps = getTracksPerSide();
-    for (int track = 1, pos = 0x04; track <= tps; track++, pos += 4) {
+    for (int track = 1, pos = 0x04; track <= tps; track++, pos += 4)
+    {
       readBAM(result, track, bam, pos);
       readBAM(result, track + tps, bam2, pos);
       // TODO implement extra free sector count informations from $DD-$FF?
@@ -61,7 +75,8 @@ public class D71 extends AbstractDiskImage {
     return result;
   }
 
-  protected int getBamEntrySize() {
+  protected int getBamEntrySize()
+  {
     return 4;
   }
 }

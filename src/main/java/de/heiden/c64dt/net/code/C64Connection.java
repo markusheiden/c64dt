@@ -5,7 +5,6 @@ import de.heiden.c64dt.net.Packet;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
@@ -17,7 +16,8 @@ import static de.heiden.c64dt.util.ByteUtil.lo;
 /**
  * IP connection to a c64.
  */
-public class C64Connection extends AbstractConnection {
+public class C64Connection extends AbstractConnection
+{
   public static final int DEFAULT_PORT = 6462;
 
   private static final int IDX_SEQUENCE = 2;
@@ -33,7 +33,8 @@ public class C64Connection extends AbstractConnection {
    *
    * @param address Remote address of C64
    */
-  public C64Connection(InetAddress address) throws IOException {
+  public C64Connection(InetAddress address) throws IOException
+  {
     this(DEFAULT_PORT, address, DEFAULT_PORT);
   }
 
@@ -44,7 +45,8 @@ public class C64Connection extends AbstractConnection {
    * @param address Remote address of C64
    * @param destinationPort Port of C64
    */
-  public C64Connection(int sourcePort, InetAddress address, int destinationPort) throws IOException {
+  public C64Connection(int sourcePort, InetAddress address, int destinationPort) throws IOException
+  {
     super(new InetSocketAddress(InetAddress.getLocalHost(), sourcePort), new InetSocketAddress(address, destinationPort), MAX_PACKET, MAGIC1, MAGIC2);
     Assert.notNull(address, "Precondition: address != null");
   }
@@ -52,7 +54,8 @@ public class C64Connection extends AbstractConnection {
   /**
    * Ping C64.
    */
-  public synchronized boolean ping() {
+  public synchronized boolean ping()
+  {
     try
     {
       Packet packet = createPacket(0);
@@ -71,14 +74,16 @@ public class C64Connection extends AbstractConnection {
    * @param address address
    * @param data data
    */
-  public synchronized void write(int address, byte... data) throws IOException {
+  public synchronized void write(int address, byte... data) throws IOException
+  {
     assertValidAddress(address);
     Assert.notNull(data, "Precondition: data != null");
     Assert.isTrue(4 + data.length <= getPacketSize(), "Precondition: 4 + data.length <= getPacketSize()");
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
-    for (int ptr = 0, remain = data.length; remain > 0; ptr += 128, remain -= 128) {
-      int length = remain > 128? 128 : remain;
+    for (int ptr = 0, remain = data.length; remain > 0; ptr += 128, remain -= 128)
+    {
+      int length = remain > 128 ? 128 : remain;
       Packet packet = createPacket(4, hi(address), lo(address), hi(length), lo(length));
       packet.addData(data, ptr, length);
       sendPacketGetReply(packet);
@@ -92,7 +97,8 @@ public class C64Connection extends AbstractConnection {
    * @param length length of memory area
    * @param fill fill byte
    */
-  public synchronized void fill(int address, int length, int fill) throws IOException {
+  public synchronized void fill(int address, int length, int fill) throws IOException
+  {
     assertValidAddress(address);
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
@@ -105,7 +111,8 @@ public class C64Connection extends AbstractConnection {
    *
    * @param address address
    */
-  public synchronized void jump(int address) throws IOException {
+  public synchronized void jump(int address) throws IOException
+  {
     assertValidAddress(address);
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
@@ -116,7 +123,8 @@ public class C64Connection extends AbstractConnection {
   /**
    * Execute basic program by "RUN".
    */
-  public synchronized void run() throws IOException {
+  public synchronized void run() throws IOException
+  {
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
     Packet packet = createPacket(7);
@@ -133,7 +141,8 @@ public class C64Connection extends AbstractConnection {
    * @param length number of bytes to read
    * @return read data
    */
-  public synchronized byte[] read(int address, int length) throws IOException {
+  public synchronized byte[] read(int address, int length) throws IOException
+  {
     assertValidAddress(address);
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
 
@@ -152,7 +161,8 @@ public class C64Connection extends AbstractConnection {
    * @param service Service
    * @param data data of the packet
    */
-  protected synchronized Packet createPacket(int service, int... data) throws IOException {
+  protected synchronized Packet createPacket(int service, int... data) throws IOException
+  {
     sequence++;
     Packet result = new Packet(MAX_PACKET);
     result.addByte(MAGIC1);
@@ -179,7 +189,8 @@ public class C64Connection extends AbstractConnection {
       {
         sendPacket(packet);
         ack = receivePacket();
-        if (isAck(ack)) {
+        if (isAck(ack))
+        {
           return ack;
         }
       }
@@ -189,7 +200,8 @@ public class C64Connection extends AbstractConnection {
       throw new IOException("C64 does not answer");
     }
 
-    if (ack == null) {
+    if (ack == null)
+    {
       throw new IOException("C64 not reachable");
     }
 

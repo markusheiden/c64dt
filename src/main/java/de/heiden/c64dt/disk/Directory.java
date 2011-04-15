@@ -7,7 +7,8 @@ import java.util.List;
 /**
  * Directory implementation.
  */
-public class Directory implements IDirectory {
+public class Directory implements IDirectory
+{
   private byte[] name;
   private byte[] idAndType;
   private byte[] id;
@@ -22,7 +23,8 @@ public class Directory implements IDirectory {
    * @param idAndType id (2 bytes), 0xA0 and dos type (2 bytes)
    * @param files files
    */
-  public Directory(byte[] name, byte[] idAndType, List<IFile> files, int freeBlocks) {
+  public Directory(byte[] name, byte[] idAndType, List<IFile> files, int freeBlocks)
+  {
     Assert.notNull(name, "Precondition: name != null");
     Assert.isTrue(name.length == 16, "Precondition: name.length == 16");
     Assert.notNull(idAndType, "Precondition: idAndType != null");
@@ -40,35 +42,41 @@ public class Directory implements IDirectory {
     this.freeBlocks = freeBlocks;
   }
 
-  public byte[] getName() {
+  public byte[] getName()
+  {
     Assert.notNull(name, "Postcondition: result != null");
     Assert.isTrue(name.length == 16, "Postcondition: name.length == 16");
     return name;
   }
 
-  public byte[] getIdAndType() {
+  public byte[] getIdAndType()
+  {
     Assert.notNull(idAndType, "Postcondition: result != null");
     Assert.isTrue(idAndType.length == 5, "Postcondition: result.length == 5");
     return idAndType;
   }
 
-  public byte[] getId() {
+  public byte[] getId()
+  {
     Assert.notNull(id, "Postcondition: result != null");
     Assert.isTrue(id.length == 2, "Postcondition: result.length == 2");
     return id;
   }
 
-  public byte[] getDosType() {
+  public byte[] getDosType()
+  {
     Assert.notNull(dosType, "Postcondition: result != null");
     Assert.isTrue(dosType.length == 2, "Postcondition: result.length == 2");
     return dosType;
   }
 
-  public List<IFile> getFiles() {
+  public List<IFile> getFiles()
+  {
     return files;
   }
 
-  public int getFreeBlocks() {
+  public int getFreeBlocks()
+  {
     return freeBlocks;
   }
 }

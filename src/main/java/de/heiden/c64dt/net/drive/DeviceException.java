@@ -5,10 +5,12 @@ import org.springframework.util.Assert;
 /**
  * Exception for device operations.
  */
-public class DeviceException extends Exception {
+public class DeviceException extends Exception
+{
   private Error error;
 
-  public DeviceException(Error error) {
+  public DeviceException(Error error)
+  {
     super(error.toString());
 
     this.error = error;
@@ -17,7 +19,8 @@ public class DeviceException extends Exception {
   /**
    * Error.
    */
-  public Error getError() {
+  public Error getError()
+  {
     Assert.notNull(error, "Postcondition: result != null");
     return error;
   }

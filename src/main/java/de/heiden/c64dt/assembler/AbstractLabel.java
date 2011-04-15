@@ -1,12 +1,13 @@
 package de.heiden.c64dt.assembler;
 
 import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
-import static de.heiden.c64dt.util.HexUtil.*;
+import static de.heiden.c64dt.util.HexUtil.hexPlain;
 
 /**
  * Base implementation of labels.
  */
-public abstract class AbstractLabel implements ILabel {
+public abstract class AbstractLabel implements ILabel
+{
   private int address;
 
   /**
@@ -14,13 +15,15 @@ public abstract class AbstractLabel implements ILabel {
    *
    * @param address address the label points to.
    */
-  public AbstractLabel(int address) {
+  public AbstractLabel(int address)
+  {
     assertValidAddress(address);
 
     this.address = address;
   }
 
-  public int getAddress() {
+  public int getAddress()
+  {
     return address;
   }
 
@@ -30,7 +33,8 @@ public abstract class AbstractLabel implements ILabel {
     return getAddress() - label.getAddress();
   }
 
-  public String toString() {
+  public String toString()
+  {
     return getLabelPrefix() + hexPlain(address);
   }
 

@@ -1,8 +1,5 @@
 package de.heiden.c64dt.net;
 
-import static de.heiden.c64dt.util.ByteUtil.hi;
-import static de.heiden.c64dt.util.ByteUtil.lo;
-
 import java.util.Arrays;
 
 /**
@@ -82,8 +79,10 @@ public class Packet
   /**
    * Add padding byte to packet if packet length is not even.
    */
-  public void pad() {
-    if (length % 2 != 0) {
+  public void pad()
+  {
+    if (length % 2 != 0)
+    {
       addByte(0x00);
     }
   }

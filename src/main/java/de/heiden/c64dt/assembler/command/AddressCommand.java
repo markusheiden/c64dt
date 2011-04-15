@@ -6,18 +6,16 @@ import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import static de.heiden.c64dt.util.HexUtil.hexByte;
 import static de.heiden.c64dt.util.HexUtil.hexWord;
 
 /**
  * Command for data.
  */
-public class AddressCommand extends AbstractCommand {
+public class AddressCommand extends AbstractCommand
+{
   private int address;
 
   /**
@@ -25,38 +23,44 @@ public class AddressCommand extends AbstractCommand {
    *
    * @param address address
    */
-  public AddressCommand(int address) {
+  public AddressCommand(int address)
+  {
     super(false);
 
     this.address = address;
   }
 
   @Override
-  public final int getSize() {
+  public final int getSize()
+  {
     return 2;
   }
 
   @Override
-  public final boolean isEnd() {
+  public final boolean isEnd()
+  {
     return true;
   }
 
   @Override
-  public boolean combineWith(ICommand command) {
+  public boolean combineWith(ICommand command)
+  {
     return false;
   }
 
   @Override
-  public void toString(CommandBuffer buffer, Writer output) throws IOException {
+  public void toString(CommandBuffer buffer, Writer output) throws IOException
+  {
     Assert.notNull(buffer, "Precondition: buffer != null");
     Assert.notNull(output, "Precondition: output != null");
 
     ILabel label = buffer.getLabel(address);
-    output.append("!WORD ").append(label != null? label.toString() : hexWord(address));
+    output.append("!WORD ").append(label != null ? label.toString() : hexWord(address));
   }
 
   @Override
-  public List<Integer> toBytes() {
+  public List<Integer> toBytes()
+  {
     return Arrays.asList(ByteUtil.lo(address), ByteUtil.hi(address));
   }
 }

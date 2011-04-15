@@ -6,17 +6,17 @@ import java.util.Arrays;
 
 /**
  * GCR codec.
- *
+ * <p/>
  * GCR 5 to 4 scheme:
  * 11111222 22333334 44445555 56666677 77788888
  */
 public class GCR
 {
   public static final int[] GCR = {
-    0x0A,0x0B,0x12,0x13,
-    0x0E,0x0F,0x16,0x17,
-    0x09,0x19,0x1A,0x1B,
-    0x0D,0x1D,0x1E,0x15
+    0x0A, 0x0B, 0x12, 0x13,
+    0x0E, 0x0F, 0x16, 0x17,
+    0x09, 0x19, 0x1A, 0x1B,
+    0x0D, 0x1D, 0x1E, 0x15
   };
 
   public static void main(String[] args)
@@ -37,18 +37,19 @@ public class GCR
     System.out.println(toString(result));
   }
 
-  private int[] calculate() {
+  private int[] calculate()
+  {
     int[][] nibbles = new int[][]
-    {
-      generate(0), // nibble1
-      generate(5), // nibble2
-      generate(2), // nibble3
-      generate(7), // nibble4
-      generate(4), // nibble5
-      generate(1), // nibble6
-      generate(6), // nibble7
-      generate(3)  // nibble8
-    };
+      {
+        generate(0), // nibble1
+        generate(5), // nibble2
+        generate(2), // nibble3
+        generate(7), // nibble4
+        generate(4), // nibble5
+        generate(1), // nibble6
+        generate(6), // nibble7
+        generate(3)  // nibble8
+      };
 
     return calculate(nibbles);
   }
@@ -59,16 +60,16 @@ public class GCR
     int min = Integer.MAX_VALUE;
 
     int[][] nibbles = new int[][]
-    {
-      generate(0), // nibble1
-      generate(5), // nibble2
-      generate(2), // nibble3
-      generate(7), // nibble4
-      generate(4), // nibble5
-      generate(1), // nibble6
-      generate(6), // nibble7
-      generate(3)  // nibble8
-    };
+      {
+        generate(0), // nibble1
+        generate(5), // nibble2
+        generate(2), // nibble3
+        generate(7), // nibble4
+        generate(4), // nibble5
+        generate(1), // nibble6
+        generate(6), // nibble7
+        generate(3)  // nibble8
+      };
 
     int[][] permutate = new int[8][];
     for (int i = 0; i < (1 << 3) * 8; i++)
@@ -207,7 +208,8 @@ public class GCR
    *
    * @param table gcr table
    */
-  private static int length(int[] table) {
+  private static int length(int[] table)
+  {
     int first = first(table);
 
     int last = table.length - 1;
@@ -250,7 +252,7 @@ public class GCR
       out.append(": ");
       for (int j = 0; j < 16; i++, j++)
       {
-        out.append(table[i] >= 0? HexUtil.hexByte(table[i]) : "---");
+        out.append(table[i] >= 0 ? HexUtil.hexByte(table[i]) : "---");
         out.append(", ");
       }
       out.append("\n");

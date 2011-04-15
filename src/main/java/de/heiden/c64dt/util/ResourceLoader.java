@@ -14,7 +14,7 @@ public class ResourceLoader
    *
    * @param length of expected content
    * @param filename filename of content
-   * @throws IOException
+   * @exception IOException
    */
   public static int[] load(int length, String filename) throws IOException
   {
@@ -42,7 +42,7 @@ public class ResourceLoader
    * Load content from a file
    *
    * @param filename filename of content
-   * @throws IOException
+   * @exception IOException
    */
   public static int[] load(String filename) throws IOException
   {

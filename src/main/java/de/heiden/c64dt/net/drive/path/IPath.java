@@ -7,7 +7,8 @@ import java.io.FileNotFoundException;
 /**
  * Net drive path.
  */
-public interface IPath {
+public interface IPath
+{
   /**
    * Parent path.
    */

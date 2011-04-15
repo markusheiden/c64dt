@@ -9,7 +9,8 @@ import java.util.Map;
 /**
  * Value type for file type.
  */
-public enum FileType {
+public enum FileType
+{
   /**
    * Deleted file.
    */
@@ -70,14 +71,16 @@ public enum FileType {
   /**
    * Get type code.
    */
-  public byte getCode() {
+  public byte getCode()
+  {
     return (byte) (code & 0x0F);
   }
 
   /**
    * Get type string description.
    */
-  public String getExtension() {
+  public String getExtension()
+  {
     return extension;
   }
 
@@ -86,9 +89,11 @@ public enum FileType {
    *
    * @param code type code
    */
-  public static FileType fileType(int code) {
+  public static FileType fileType(int code)
+  {
     FileType result = types.get((byte) code);
-    if (result == null) {
+    if (result == null)
+    {
       logger.info("Unknown file type code " + Integer.toHexString(code));
       result = UNKNOWN;
     }
@@ -103,11 +108,13 @@ public enum FileType {
    * @param extension extension
    * @return matching file type or ANY for undefined extensions
    */
-  public static FileType fileType(String extension) {
+  public static FileType fileType(String extension)
+  {
     Assert.notNull(extension, "Precondition: extension != null");
 
     FileType result = extensions.get(extension.toUpperCase());
-    if (result == null || result.code < 0) {
+    if (result == null || result.code < 0)
+    {
       logger.debug("Unknown file extension " + extension);
       result = ANY;
     }
@@ -121,14 +128,16 @@ public enum FileType {
    *
    * @param code type code, -1 if none defined
    */
-  private FileType(int code, String extension) {
+  private FileType(int code, String extension)
+  {
     Assert.notNull(extension, "Precondition: extension != null");
     Assert.isTrue(extension.length() == 3, "Precondition: extension.length() == 3");
 
     this.code = (byte) code;
     this.extension = extension;
 
-    if (code >= 0) {
+    if (code >= 0)
+    {
       FileType removed = types().put((byte) code, this);
       Assert.isNull(removed, "Postcondition: no doubled codes");
     }
@@ -139,8 +148,10 @@ public enum FileType {
   /**
    * Map with all known defined type instances.
    */
-  private Map<Byte, FileType> types() {
-    if (types == null) {
+  private Map<Byte, FileType> types()
+  {
+    if (types == null)
+    {
       types = new HashMap<Byte, FileType>();
     }
 
@@ -150,8 +161,10 @@ public enum FileType {
   /**
    * Map with all known type instances.
    */
-  private Map<String, FileType> extensions() {
-    if (extensions == null) {
+  private Map<String, FileType> extensions()
+  {
+    if (extensions == null)
+    {
       extensions = new HashMap<String, FileType>();
     }
 

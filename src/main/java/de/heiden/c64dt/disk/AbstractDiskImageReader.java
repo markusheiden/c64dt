@@ -11,7 +11,8 @@ import java.io.InputStream;
 /**
  * Abstract base class for disk image readers.
  */
-public abstract class AbstractDiskImageReader {
+public abstract class AbstractDiskImageReader
+{
   private final Logger logger = Logger.getLogger(getClass());
 
   /**
@@ -19,7 +20,8 @@ public abstract class AbstractDiskImageReader {
    *
    * @param file file
    */
-  public IDiskImage read(File file) throws IOException, WrongDiskImageFormatException {
+  public IDiskImage read(File file) throws IOException, WrongDiskImageFormatException
+  {
     Assert.notNull(file, "Precondition: file != null");
 
     return read(FileCopyUtils.copyToByteArray(file));
@@ -31,7 +33,8 @@ public abstract class AbstractDiskImageReader {
    *
    * @param stream stream
    */
-  public IDiskImage read(InputStream stream) throws IOException, WrongDiskImageFormatException {
+  public IDiskImage read(InputStream stream) throws IOException, WrongDiskImageFormatException
+  {
     Assert.notNull(stream, "Precondition: stream != null");
 
     return read(FileCopyUtils.copyToByteArray(stream));
@@ -51,7 +54,8 @@ public abstract class AbstractDiskImageReader {
    * @param diskImage disk image
    * @return diskImage for method chaining
    */
-  protected IDiskImage read(byte[] data, IDiskImage diskImage) {
+  protected IDiskImage read(byte[] data, IDiskImage diskImage)
+  {
     Assert.notNull(data, "Precondition: data != null");
     Assert.notNull(diskImage, "Precondition: diskImage != null");
 
@@ -59,9 +63,11 @@ public abstract class AbstractDiskImageReader {
 
     // read sector contents
     byte[] content = new byte[256];
-    for (int track = 1; track <= diskImage.getTracks(); track++) {
+    for (int track = 1; track <= diskImage.getTracks(); track++)
+    {
       logger.debug("Reading track " + track);
-      for (int sector = 0; sector < diskImage.getSectors(track); sector++) {
+      for (int sector = 0; sector < diskImage.getSectors(track); sector++)
+      {
         logger.debug("Reading sector " + sector + " from " + Integer.toHexString(i));
         System.arraycopy(data, i, content, 0, content.length);
         diskImage.setSector(track, sector, content);
@@ -70,10 +76,13 @@ public abstract class AbstractDiskImageReader {
     }
 
     // read errors
-    if (diskImage.hasErrors()) {
+    if (diskImage.hasErrors())
+    {
       logger.debug("Reading errors");
-      for (int track = 1; track <= diskImage.getTracks(); track++) {
-        for (int sector = 0; sector < diskImage.getSectors(track); sector++) {
+      for (int track = 1; track <= diskImage.getTracks(); track++)
+      {
+        for (int sector = 0; sector < diskImage.getSectors(track); sector++)
+        {
           diskImage.setError(track, sector, Error.error(data[i]));
           i++;
         }

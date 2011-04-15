@@ -16,14 +16,16 @@ import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
 /**
  * Reassembler.
  */
-public class Disassembler {
+public class Disassembler
+{
   /**
    * Reassemble program.
    *
    * @param input program with start address
    * @param output output for reassembled code
    */
-  public void disassemble(InputStream input, Writer output) throws IOException {
+  public void disassemble(InputStream input, Writer output) throws IOException
+  {
     Assert.notNull(input, "Precondition: input != null");
     Assert.notNull(output, "Precondition: output != null");
 
@@ -36,7 +38,8 @@ public class Disassembler {
    * @param program program with start address
    * @param output output for reassembled code
    */
-  public void disassemble(byte[] program, Writer output) throws IOException {
+  public void disassemble(byte[] program, Writer output) throws IOException
+  {
     Assert.notNull(program, "Precondition: program != null");
     Assert.isTrue(program.length >= 2, "Precondition: program.length >= 2");
     Assert.notNull(output, "Precondition: output != null");
@@ -54,18 +57,21 @@ public class Disassembler {
    * @param code code
    * @param output output for reassembled code
    */
-  public void disassemble(int startAddress, byte[] code, Writer output) throws IOException {
+  public void disassemble(int startAddress, byte[] code, Writer output) throws IOException
+  {
     Assert.isTrue(startAddress >= 0, "Precondition: startAddress >= 0");
     Assert.notNull(code, "Precondition: code != null");
     Assert.notNull(output, "Precondition: output != null");
 
     CodeBuffer buffer = new CodeBuffer(code);
 
-    if (startAddress == 0x0801) {
+    if (startAddress == 0x0801)
+    {
       // TODO check for basic header
     }
 
-    while(buffer.has(1)) {
+    while (buffer.has(1))
+    {
       disassemble(buffer, output);
     }
 
@@ -89,21 +95,27 @@ public class Disassembler {
     output.append(" ");
     output.append(hexBytePlain(opcode.getOpcode()));
 
-    if (opcode.isLegal() && buffer.has(size)) {
-      if (size > 0) {
+    if (opcode.isLegal() && buffer.has(size))
+    {
+      if (size > 0)
+      {
         int argument = buffer.read(mode.getSize());
 
-        output.append(size >= 1? " " + hexBytePlain(lo(argument)) : "   ");
-        output.append(size >= 2? " " + hexBytePlain(hi(argument)) : "   ");
+        output.append(size >= 1 ? " " + hexBytePlain(lo(argument)) : "   ");
+        output.append(size >= 2 ? " " + hexBytePlain(hi(argument)) : "   ");
         output.append(" ");
         output.append(opcode.getType().toString());
         output.append(" ");
         output.append(mode.toString(pc, argument));
-      } else {
+      }
+      else
+      {
         output.append("       ");
         output.append(opcode.getType().toString());
       }
-    } else {
+    }
+    else
+    {
       output.append("       ???");
     }
     output.append("\n");
