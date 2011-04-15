@@ -600,12 +600,17 @@ public class CommandBuffer
     return result;
   }
 
+  //
+  // modifying operations during iteration
+  //
+
   /**
    * Removes the current command.
    * Traces back to the previous commands afterwards.
    */
   public void removeCurrentCommand()
   {
+    // remember position of current command
     int remove = index;
     // skip current command
     index = getCurrentIndex();
