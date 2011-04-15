@@ -145,7 +145,7 @@ public class Reassembler
       CodeType type = commands.getType(index);
       if (type == CodeType.ABSOLUTE_ADDRESS)
       {
-        // absolute address as data
+        // absolute address reference as data
         int address = code.read(2);
         commands.addCommand(new AddressCommand(address));
         commands.addCodeReference(index, address);
@@ -155,7 +155,6 @@ public class Reassembler
       {
         // plain data
         commands.addCommand(new DataCommand(code.readByte()));
-
       }
       else
       {
