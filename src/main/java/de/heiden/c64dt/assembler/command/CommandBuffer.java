@@ -86,7 +86,7 @@ public class CommandBuffer
   private final ICommand[] commands;
 
   /**
-   * Current iterator over {@link #commands}.
+   * Index of the last added command.
    */
   private int index;
 
