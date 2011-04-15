@@ -378,9 +378,9 @@ public class CommandBuffer {
   }
 
   /**
-   * Label representation for an address.
+   * Label representation for an absolute address.
    *
-   * @param address address
+   * @param address absolute address
    * @return label or null if no label exists for this address
    */
   public ILabel getLabel(int address) {
@@ -443,6 +443,13 @@ public class CommandBuffer {
     // TODO check / assert consistency; check that no iteration is in progress
   }
 
+  //
+  // Iterator
+  //
+
+  /**
+   * (Re)start iteration.
+   */
   public void restart() {
     iter = commands.listIterator();
     current = DUMMY_COMMAND;
