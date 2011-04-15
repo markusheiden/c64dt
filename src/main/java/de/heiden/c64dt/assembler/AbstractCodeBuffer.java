@@ -9,9 +9,9 @@ import java.util.Arrays;
  */
 public abstract class AbstractCodeBuffer implements ICodeBuffer
 {
+  private int length;
   protected int position;
-  private int mark;
-  private final CodeType[] types;
+  private int opcode;
 
   /**
    * Constructor.
@@ -22,23 +22,22 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer
   {
     Assert.isTrue(length >= 0, "Precondition: length >= 0");
 
-    this.mark = -1;
+    this.length = length;
     this.position = 0;
-    this.types = new CodeType[length];
-    Arrays.fill(this.types, CodeType.UNKNOWN);
+    this.opcode = -1;
   }
 
   @Override
   public void restart()
   {
     position = 0;
-    mark = -1;
+    opcode = -1;
   }
 
   @Override
   public final int getCommandIndex()
   {
-    return mark;
+    return opcode;
   }
 
   @Override
@@ -52,14 +51,14 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer
   {
     Assert.isTrue(number >= 0, "Precondition: number >= 0");
 
-    return position + number <= types.length;
+    return position + number <= length;
   }
 
   @Override
   public final Opcode readOpcode()
   {
     // remember position of last read opcode
-    mark = position;
+    opcode = position;
     return Opcode.opcode(readByte());
   }
 
