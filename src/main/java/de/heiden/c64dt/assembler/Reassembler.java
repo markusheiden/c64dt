@@ -95,17 +95,17 @@ public class Reassembler
       // TODO check for basic header
     }
 
-    reassemble(new CommandBuffer(code.length, startAddress), code, output);
+    reassemble(code, new CommandBuffer(code.length, startAddress), output);
   }
 
   /**
    * Reassemble.
    *
-   * @param commands command buffer
    * @param code program without start address
+   * @param commands command buffer
    * @param output output for reassembled code
    */
-  public void reassemble(CommandBuffer commands, byte[] code, Writer output) throws IOException
+  public void reassemble(byte[] code, CommandBuffer commands, Writer output) throws IOException
   {
     Assert.notNull(code, "Precondition: code != null");
     Assert.notNull(output, "Precondition: output != null");
@@ -131,7 +131,7 @@ public class Reassembler
    * Tokenize code.
    *
    * @param code code buffer
-   * @param commands reassembled commands
+   * @param commands command buffer
    */
   private void tokenize(CodeBuffer code, CommandBuffer commands)
   {
@@ -205,32 +205,31 @@ public class Reassembler
   /**
    * Compute transitive unreachability of commands.
    *
-   * @param buffer command buffer
-   * @return whether a code label has been altered
+   * @param commands command buffer
    */
-  private void reachability(CommandBuffer buffer)
+  private void reachability(CommandBuffer commands)
   {
     boolean change;
     do
     {
-      buffer.restart();
+      commands.restart();
       change = false;
 
       // tracing forward from one unreachable command to the next
       ICommand lastCommand = new DummyCommand();
-      while (buffer.hasNextCommand())
+      while (commands.hasNextCommand())
       {
-        ICommand command = buffer.nextCommand();
+        ICommand command = commands.nextCommand();
         /*
          * A command is not reachable, if the previous command is not reachable or is an ending command (e.g. JMP) and
          * there is no code label for the command and the command has not already been detected as an opcode.
          */
-        if (command.isReachable() && !buffer.hasCodeLabel() && buffer.getType() != CodeType.OPCODE &&
+        if (command.isReachable() && !commands.hasCodeLabel() && commands.getType() != CodeType.OPCODE &&
           (!lastCommand.isReachable() || lastCommand.isEnd()))
         {
           command.setReachable(false);
           // restart, if reference caused a wrong label in the already scanned code
-          change |= buffer.removeReference();
+          change |= commands.removeReference();
         }
 
         lastCommand = command;
@@ -238,19 +237,19 @@ public class Reassembler
 
       // trace backward from unreachable command to the previous
       lastCommand = new DummyCommand();
-      while (buffer.hasPreviousCommand())
+      while (commands.hasPreviousCommand())
       {
-        ICommand command = buffer.previousCommand();
+        ICommand command = commands.previousCommand();
         /*
          * A code command is not reachable, if it leads to unreachable code.
          * Exception: JSR which may be followed by argument data.
          */
         if (!lastCommand.isReachable() &&
-          command.isReachable() && !isJsr(command) && !command.isEnd() && buffer.getType() != CodeType.OPCODE)
+          command.isReachable() && !isJsr(command) && !command.isEnd() && commands.getType() != CodeType.OPCODE)
         {
           command.setReachable(false);
           // restart, if reference caused a wrong label in the already scanned code
-          change |= buffer.removeReference();
+          change |= commands.removeReference();
           // TODO mh: Change code type to data?
         }
 
@@ -267,6 +266,7 @@ public class Reassembler
   /**
    * Detect type of code.
    *
+   * @param commands command buffer
    * @return whether a code label has been altered
    */
   private boolean detectCodeType(CommandBuffer commands)
@@ -327,22 +327,22 @@ public class Reassembler
   /**
    * Combine commands, if possible.
    *
-   * @param buffer command buffer
+   * @param commands command buffer
    */
-  private void combine(CommandBuffer buffer)
+  private void combine(CommandBuffer commands)
   {
-    Assert.notNull(buffer, "Precondition: buffer != null");
+    Assert.notNull(commands, "Precondition: buffer != null");
 
-    buffer.restart();
+    commands.restart();
 
     ICommand lastCommand = null;
-    while (buffer.hasNextCommand())
+    while (commands.hasNextCommand())
     {
-      ICommand command = buffer.nextCommand();
-      if (!buffer.hasLabel() && lastCommand != null && lastCommand.combineWith(command))
+      ICommand command = commands.nextCommand();
+      if (!commands.hasLabel() && lastCommand != null && lastCommand.combineWith(command))
       {
         // TODO let command buffer handle this functionality?
-        buffer.removeCurrentCommand();
+        commands.removeCurrentCommand();
       }
       else
       {
@@ -354,21 +354,21 @@ public class Reassembler
   /**
    * Write commands to output writer.
    *
-   * @param buffer command buffer
+   * @param commands command buffer
    * @param output writer to write output to
    */
-  private void write(CommandBuffer buffer, Writer output) throws IOException
+  private void write(CommandBuffer commands, Writer output) throws IOException
   {
-    Assert.notNull(buffer, "Precondition: buffer != null");
+    Assert.notNull(commands, "Precondition: buffer != null");
 
-    buffer.restart();
+    commands.restart();
 
     // start address
-    output.append("*=").append(hexWord(buffer.getStartAddress())).append("\n");
+    output.append("*=").append(hexWord(commands.getStartAddress())).append("\n");
     output.append("\n");
 
     // external labels
-    Collection<ExternalLabel> externalReferences = new TreeSet<ExternalLabel>(buffer.getExternalLabels());
+    Collection<ExternalLabel> externalReferences = new TreeSet<ExternalLabel>(commands.getExternalLabels());
     for (ExternalLabel externalReference : externalReferences)
     {
       output.append(externalReference.toString()).append(" = ").append(hex(externalReference.getAddress())).append("\n");
@@ -377,9 +377,9 @@ public class Reassembler
 
     // code
     StringBuilder line = new StringBuilder(80);
-    while (buffer.hasNextCommand())
+    while (commands.hasNextCommand())
     {
-      ICommand command = buffer.nextCommand();
+      ICommand command = commands.nextCommand();
       int pc = command.getAddress();
 
       line.setLength(0);
@@ -397,11 +397,11 @@ public class Reassembler
         }
         for (int i = 1; i < command.getSize(); i++)
         {
-          if (buffer.hasCodeLabel(pc + i))
+          if (commands.hasCodeLabel(pc + i))
           {
             line.append("C");
           }
-          if (buffer.hasDataLabel(pc + i))
+          if (commands.hasDataLabel(pc + i))
           {
             line.append("D");
           }
@@ -423,7 +423,7 @@ public class Reassembler
       line.append(" | ");
 
       // reassembler output
-      ILabel label = buffer.getLabel();
+      ILabel label = commands.getLabel();
       if (label != null)
       {
         // TODO mh: check length of label?
@@ -435,7 +435,7 @@ public class Reassembler
 
       if (command != null)
       {
-        command.toString(buffer, output);
+        command.toString(commands, output);
       }
       else
       {
