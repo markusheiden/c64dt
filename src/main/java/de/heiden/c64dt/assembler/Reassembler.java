@@ -116,7 +116,6 @@ public class Reassembler
     boolean change = true;
     for (int count = 0; change && count < 3; count++)
     {
-      commands.clear();
       tokenize(buffer, commands);
       reachability(commands);
       change = detectCodeType(commands);
@@ -138,6 +137,7 @@ public class Reassembler
     Assert.notNull(code, "Precondition: code != null");
 
     code.restart();
+    commands.clear();
     while (code.has(1))
     {
       int index = commands.getCurrentIndex();
@@ -360,6 +360,7 @@ public class Reassembler
   private void write(CommandBuffer commands, Writer output) throws IOException
   {
     Assert.notNull(commands, "Precondition: buffer != null");
+    Assert.notNull(output, "Precondition: output != null");
 
     commands.restart();
 
