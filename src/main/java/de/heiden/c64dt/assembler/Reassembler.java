@@ -7,6 +7,9 @@ import de.heiden.c64dt.assembler.command.DataCommand;
 import de.heiden.c64dt.assembler.command.DummyCommand;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
+import de.heiden.c64dt.assembler.detector.BitDetector;
+import de.heiden.c64dt.assembler.detector.IDetector;
+import de.heiden.c64dt.assembler.detector.LabelDetector;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
@@ -14,6 +17,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
@@ -29,6 +33,28 @@ import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
  */
 public class Reassembler
 {
+  private final List<IDetector> detectors = new ArrayList<IDetector>();
+
+  /**
+   * Constructor.
+   */
+  public Reassembler() {
+    // add default detectors
+    detectors.add(new LabelDetector());
+    detectors.add(new BitDetector());
+  }
+
+  /**
+   * Add code type detector to use.
+   *
+   * @param detector code type detector
+   */
+  public void add(IDetector detector) {
+    Assert.notNull(detector, "Precondition: detector != null");
+
+    detectors.add(detector);
+  }
+
   /**
    * Reassemble program.
    *
@@ -272,47 +298,9 @@ public class Reassembler
   {
     boolean result = false;
 
-    // Set code type for commands with labels
-    commands.restart();
-    while (commands.hasNextCommand())
+    for (IDetector detector : detectors)
     {
-      commands.nextCommand();
-      if (commands.hasCodeLabel())
-      {
-        commands.setType(CodeType.OPCODE);
-      }
-      else if (commands.getType() != CodeType.UNKNOWN && commands.hasDataLabel())
-      {
-        commands.setType(CodeType.DATA);
-      }
-    }
-
-    // Mark all code label positions as a start of an opcode
-    commands.restart();
-    while (commands.hasNextCommand())
-    {
-      ICommand command = commands.nextCommand();
-      if (command instanceof OpcodeCommand)
-      {
-        OpcodeCommand opcodeCommand = (OpcodeCommand) command;
-        Opcode opcode = opcodeCommand.getOpcode();
-        int size = opcodeCommand.getSize();
-
-        if (opcode.getType().equals(OpcodeType.BIT) && size > 1 && commands.hasCodeLabel(opcodeCommand.getAddress() + 1))
-        {
-          List<Integer> bytes = opcodeCommand.toBytes();
-          Opcode skippedOpcode = Opcode.opcode(bytes.get(1));
-
-          if (skippedOpcode.isLegal() && skippedOpcode.getSize() == size - 1)
-          {
-            // Bit command, size = 1
-            BitCommand bit = new BitCommand(opcodeCommand.getOpcode(), opcodeCommand.getArgument());
-            // Argument of bit -> skipped opcode with argument
-            OpcodeCommand skipped = size == 2 ? new OpcodeCommand(skippedOpcode) : new OpcodeCommand(skippedOpcode, bytes.get(2));
-            commands.replaceCurrentCommand(bit, skipped);
-          }
-        }
-      }
+      result |= detector.detect(commands);
     }
 
     // TODO iseahe: setType() for label locations?
