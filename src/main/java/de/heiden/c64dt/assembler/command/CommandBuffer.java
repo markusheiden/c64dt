@@ -27,9 +27,9 @@ import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
  */
 public class CommandBuffer {
   private final CodeType[] types;
-  private final Integer[] codeReferences;
-  private final Integer[] dataReferences;
-  private final Integer[] externalReferences;
+  private final int[] codeReferences;
+  private final int[] dataReferences;
+  private final int[] externalReferences;
   private final Map<Integer, CodeLabel> codeLabels;
   private final Map<Integer, DataLabel> dataLabels;
   private final Map<Integer, ExternalLabel> externalLabels;
@@ -50,11 +50,11 @@ public class CommandBuffer {
 
     this.types = new CodeType[length];
     Arrays.fill(this.types, CodeType.UNKNOWN);
-    this.codeReferences = new Integer[length];
+    this.codeReferences = new int[length];
     Arrays.fill(this.codeReferences, -1);
-    this.dataReferences = new Integer[length];
+    this.dataReferences = new int[length];
     Arrays.fill(this.dataReferences, -1);
-    this.externalReferences = new Integer[length];
+    this.externalReferences = new int[length];
     Arrays.fill(this.externalReferences, -1);
 
     this.codeLabels = new HashMap<Integer, CodeLabel>();
@@ -333,36 +333,46 @@ public class CommandBuffer {
   public boolean removeReference() {
     int index = current.getIndex();
 
-    Integer codeReference = codeReferences[index];
-    Integer dataReference = dataReferences[index];
-    Integer externalReference = externalReferences[index];
+    return
+      remove(index, codeReferences, codeLabels) |
+      remove(index, dataReferences, dataLabels) |
+      remove(index, externalReferences, externalLabels);
+  }
 
-    codeReferences[index] = null;
-    dataReferences[index] = null;
-    externalReferences[index] = null;
+  /**
+   * Remove a reference from the given relative address
+   *
+   * @param index relative address
+   * @param references all references
+   * @param labels all labels
+   * @return whether a label has been removed
+   */
+  private boolean remove(int index, int[] references, Map<Integer, ?> labels) {
+    // get referenced absolute address
+    int reference = references[index];
+    // delete reference
+    references[index] = -1;
 
-    boolean codeFound = false;
-    boolean dataFound = false;
-    boolean externalFound = false;
-    for (int i = 0; i < length; i++) {
-      codeFound |= codeReference.equals(codeReferences[i]);
-      dataFound |= dataReference.equals(dataReferences[i]);
-      externalFound |= externalReference.equals(externalReferences[i]);
+    if (reference < 0) {
+      // if nothing has been referenced, no label needs to be removed
+      return false;
     }
 
-    if (!codeFound) {
-      codeLabels.remove(codeReference);
+    // check if referenced address is referenced from elsewhere too
+    for (int i = 0; i < references.length; i++)
+    {
+      if (references[i] == reference) {
+        // referenced address is still referenced, no label needs to be removed
+        return false;
+      }
     }
 
-    if (!dataFound) {
-      dataLabels.remove(dataReference);
-    }
+    // remove label, because the address is no more referenced
+    Object removed = labels.remove(reference);
+    Assert.notNull(removed, "Check: There need to be a label if there had been a reference");
 
-    if (!externalFound) {
-      externalLabels.remove(externalReference);
-    }
-
-    return !codeFound || !dataFound || !externalFound;
+    // label has been removed
+    return true;
   }
 
   /**
