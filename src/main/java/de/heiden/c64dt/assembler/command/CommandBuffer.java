@@ -26,7 +26,7 @@ import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
  * Input stream for code.
  */
 public class CommandBuffer {
-  private final CodeType[] codeTypes;
+  private final CodeType[] types;
   private final Integer[] codeReferences;
   private final Integer[] dataReferences;
   private final Integer[] externalReferences;
@@ -48,8 +48,8 @@ public class CommandBuffer {
   public CommandBuffer(int length, int startAddress) {
     Assert.isTrue(startAddress >= 0, "Precondition: startAddress >= 0");
 
-    this.codeTypes = new CodeType[length];
-    Arrays.fill(this.codeTypes, CodeType.UNKNOWN);
+    this.types = new CodeType[length];
+    Arrays.fill(this.types, CodeType.UNKNOWN);
     this.codeReferences = new Integer[length];
     Arrays.fill(this.codeReferences, -1);
     this.dataReferences = new Integer[length];
@@ -81,7 +81,7 @@ public class CommandBuffer {
 
   /**
    * The current relative address.
-   * This is the index where the next program will be added.
+   * This is the index where the next command will be added.
    */
   public int getCurrentIndex() {
     return current.getIndex() + current.getSize();
@@ -97,8 +97,8 @@ public class CommandBuffer {
   /**
    * Change the base address of the code starting at the given index.
    *
-   * @param startIndex Index from which the new base address should be used
-   * @param baseAddress new base address
+   * @param startIndex relative address from which the new absolute base address should be used
+   * @param baseAddress new absolute base address
    */
   public void rebase(int startIndex, int baseAddress) {
     Assert.isTrue(isValidIndex(startIndex), "Precondition: isValidIndex(startIndex)");
@@ -120,14 +120,14 @@ public class CommandBuffer {
   }
 
   /**
-   * Get code type of the command at the given index.
+   * Get code type of the command at the given relative address.
    *
    * @param index relative address
    */
   public CodeType getType(int index) {
     Assert.isTrue(isValidIndex(index), "Precondition: isValidIndex(index)");
 
-    return codeTypes[index];
+    return types[index];
   }
 
   /**
@@ -167,7 +167,7 @@ public class CommandBuffer {
     Assert.isTrue(isValidIndex(index), "Precondition: isValidIndex(index)");
     Assert.notNull(type, "Precondition: type != null");
 
-    codeTypes[index] = type;
+    types[index] = type;
   }
 
   //
@@ -178,8 +178,7 @@ public class CommandBuffer {
    * Is a label at the current opcode / command?
    */
   public boolean hasLabel() {
-    CodeType type = getType();
-    return type.isCode()? hasCodeLabel(current.getAddress()) : hasDataLabel(current.getAddress());
+    return getType().isCode()? hasCodeLabel(current.getAddress()) : hasDataLabel(current.getAddress());
   }
 
   /**
@@ -190,34 +189,34 @@ public class CommandBuffer {
   }
 
   /**
-   * Is a code label at the given address?
+   * Is a code label at the given absolute address?
    *
-   * @param address address
+   * @param address absolute address
    */
   public boolean hasCodeLabel(int address) {
     return codeLabels.containsKey(address);
   }
 
   /**
-   * Is a code label at the current opcode / command?
+   * Is a data label at the current opcode / command?
    */
   public boolean hasDataLabel() {
     return hasDataLabel(current.getAddress());
   }
 
   /**
-   * Is a code label at the given address?
+   * Is a data label at the given absolute address?
    *
-   * @param address address
+   * @param address absolute address
    */
   public boolean hasDataLabel(int address) {
     return dataLabels.containsKey(address);
   }
 
   /**
-   * Is the given address within the code?.
+   * Is the given absolute address within the code?.
    *
-   * @param address address
+   * @param address absolute address
    */
   public boolean hasAddress(int address) {
     Iterator<Entry<Integer, Integer>> iter = startAddresses.entrySet().iterator();
@@ -260,7 +259,7 @@ public class CommandBuffer {
    * This will add a label if no label exists for the given address.
    *
    * @param code is it a code reference?
-   * @param fromIndex relative address of command referencing
+   * @param fromIndex relative address of the command referencing
    * @param to referenced absolute address
    */
   public void addReference(boolean code, int fromIndex, int to) {
@@ -279,7 +278,7 @@ public class CommandBuffer {
    * Add a code reference from the current address to a given address.
    * This will add a label if no label exists for the given address.
    *
-   * @param fromIndex relative address of command referencing
+   * @param fromIndex relative address of the command referencing
    * @param to referenced absolute address
    */
   public void addCodeReference(int fromIndex, int to) {
@@ -296,7 +295,7 @@ public class CommandBuffer {
    * Add a data reference from the current address to a given address.
    * This will add a label if no label exists for the given address.
    *
-   * @param fromIndex relative address of command referencing
+   * @param fromIndex relative address of the command referencing
    * @param to referenced absolute address
    */
   public void addDataReference(int fromIndex, int to) {
@@ -313,7 +312,7 @@ public class CommandBuffer {
    * Add an external code or data reference from the current address to a given address.
    * This will add a label if no label exists for the given address.
    *
-   * @param fromIndex relative address of command referencing
+   * @param fromIndex relative address of the command referencing
    * @param to referenced absolute address
    */
   public void addExternalReference(int fromIndex, int to) {
@@ -332,8 +331,6 @@ public class CommandBuffer {
    * @return whether a label has been removed
    */
   public boolean removeReference() {
-    boolean result = false;
-
     int index = current.getIndex();
 
     Integer codeReference = codeReferences[index];
