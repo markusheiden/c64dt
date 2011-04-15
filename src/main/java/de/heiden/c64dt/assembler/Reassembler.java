@@ -110,7 +110,6 @@ public class Reassembler
     Assert.notNull(code, "Precondition: code != null");
     Assert.notNull(output, "Precondition: output != null");
 
-
     CodeBuffer buffer = new CodeBuffer(code);
 
     boolean change = true;
