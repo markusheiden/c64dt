@@ -119,7 +119,7 @@ public class Reassembler
       commands.clear();
       tokenize(buffer, commands);
       reachability(commands);
-      change = detectCodeType(buffer, commands);
+      change = detectCodeType(commands);
       System.out.println(count);
     }
 
@@ -268,10 +268,9 @@ public class Reassembler
   /**
    * Detect type of code.
    *
-   * @param commands command commands
    * @return whether a code label has been altered
    */
-  private boolean detectCodeType(CodeBuffer code, CommandBuffer commands)
+  private boolean detectCodeType(CommandBuffer commands)
   {
     boolean result = false;
 
@@ -318,19 +317,10 @@ public class Reassembler
       }
     }
 
-//      if (commands.hasCodeLabel()) {
-//        commands.setType(command.getAddress(), CodeType.OPCODE);
-//      }
-//      if (command instanceof OpcodeCommand) {
-//        int address = command.getAddress();
-//        for (int pc = address + 1; pc < address + command.getSize(); pc++) {
-//          if (commands.hasCodeLabel(address)) {
-//            // TODO set data
-//            // TODO set opcode
-//            commands.setType(pc, CodeType.OPCODE);
-//          }
-//        }
-//      }
+    // TODO iseahe: setType() for label locations?
+    // TODO iseahe: setType(OPCODE/CODE) for OpcodeCommands?
+    // TODO iseahe: detect self modifying code
+    // TODO iseahe: detect JSR with parameters afterwards
 
     return result;
   }
