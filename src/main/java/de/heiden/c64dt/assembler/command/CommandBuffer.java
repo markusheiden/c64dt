@@ -263,7 +263,17 @@ public class CommandBuffer
   public boolean hasLabel()
   {
     ICommand current = commands[index];
-    return getType().isCode() ? hasCodeLabel(current.getAddress()) : hasDataLabel(current.getAddress());
+    return hasLabel(current.getAddress());
+  }
+
+  /**
+   * Is a label at the given absolute address?
+   */
+  public boolean hasLabel(int address)
+  {
+    Assert.isTrue(hasAddress(address), "Precondition: hasAddress(address)");
+
+    return hasCodeLabel(address) || hasDataLabel(address);
   }
 
   /**

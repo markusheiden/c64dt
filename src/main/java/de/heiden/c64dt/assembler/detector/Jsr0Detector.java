@@ -16,6 +16,11 @@ import java.util.List;
  */
 public class Jsr0Detector implements IDetector
 {
+  /**
+   * Maximum length of zero-terminated argument after JSR opcode.
+   */
+  private final int maxLength = 256;
+
   @Override
   public boolean detect(CommandBuffer commands)
   {
@@ -66,17 +71,20 @@ public class Jsr0Detector implements IDetector
     Assert.notNull(commands, "Precondition: commands != null");
 
     byte[] code = commands.getCode();
-    for (int index = startIndex, count = 0; index < code.length && count < 256; index++)
+    for (int index = startIndex, count = 0; index < code.length && count < maxLength; index++)
     {
-      if (commands.hasCodeLabel(commands.addressForIndex(index))) {
-        // Stop search at labels
+      if (commands.hasLabel(commands.addressForIndex(index))) {
+        // stop search at any label
         return -1;
       }
+
       if (code[index] == 0) {
+        // terminating zero found, return index of following code
         return index + 1;
       }
     }
 
+    // no valid zero-terminated argument found
     return -1;
   }
 }
