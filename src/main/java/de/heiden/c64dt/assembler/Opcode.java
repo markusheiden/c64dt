@@ -8,6 +8,7 @@ import static de.heiden.c64dt.assembler.OpcodeType.*;
 /**
  * 6502 series opcodes.
  */
+@SuppressWarnings("unused")
 public enum Opcode
 {
   OPCODE_00(0x00, REG, BRK, DIR, 7),
@@ -290,21 +291,33 @@ public enum Opcode
   private final OpcodeMode mode;
   private final int cycles;
 
+  /**
+   * The byte representation of the opcode.
+   */
   public int getOpcode()
   {
     return opcode;
   }
 
+  /**
+   * Is the opcode a legal one?.
+   */
   public boolean isLegal()
   {
     return legal;
   }
 
+  /**
+   * Type of opcode (mnemonic).
+   */
   public OpcodeType getType()
   {
     return type;
   }
 
+  /**
+   * Addressing mode of opcode.
+   */
   public OpcodeMode getMode()
   {
     return mode;
@@ -320,6 +333,10 @@ public enum Opcode
     return type.isJump() && (mode == OpcodeMode.REL || mode == OpcodeMode.ABS);
   }
 
+  /**
+   * Cycles the opcode (normally) needs.
+   * Does not consider varying execution times.
+   */
   public int getCycles()
   {
     return cycles;
@@ -333,6 +350,11 @@ public enum Opcode
     return 1 + mode.getSize();
   }
 
+  /**
+   * Get opcode for byte representation of opcode.
+   *
+   * @param opcode byte representation of opcode
+   */
   public static Opcode opcode(int opcode)
   {
     Assert.isTrue(opcode >= 0x00 && opcode <= 0xFF, "Precondition: opcode >= 0x00 && opcode <= 0xFF");
@@ -342,7 +364,6 @@ public enum Opcode
     Assert.isTrue(result.getOpcode() == opcode, "Postcondition: result.getOpcode() == opcode");
     return result;
   }
-
 
   /**
    * Just for debugging purposes!
