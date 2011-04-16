@@ -35,7 +35,7 @@ public abstract class AbstractLabel implements ILabel
 
   public String toString()
   {
-    return getLabelPrefix() + hexPlain(address);
+    return getLabelPrefix() + "_" + hexPlain(address);
   }
 
   /**
