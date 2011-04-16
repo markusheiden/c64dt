@@ -24,12 +24,12 @@ public class LabelDetector implements IDetector
         commands.setType(CodeType.OPCODE);
         change = true;
       }
-      else if (commands.hasDataLabel() && commands.getType().isUnknown())
-      {
-        // Mark all data label positions as data
-        commands.setType(CodeType.DATA);
-        change = true;
-      }
+//      else if (commands.hasDataLabel() && commands.getType().isUnknown())
+//      {
+//        // Mark all data label positions as data
+//        commands.setType(CodeType.DATA);
+//        change = true;
+//      }
     }
 
     return change;
