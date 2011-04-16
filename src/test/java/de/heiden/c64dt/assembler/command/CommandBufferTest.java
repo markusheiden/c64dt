@@ -14,7 +14,7 @@ public class CommandBufferTest
   @Test
   public void testHasAddress() throws Exception
   {
-    CommandBuffer commands = new CommandBuffer(0x2000, 0x8000);
+    CommandBuffer commands = new CommandBuffer(new byte[0x2000], 0x8000);
 
     assertFalse(commands.hasAddress(0x7FFF));
     assertTrue(commands.hasAddress(0x8000));
@@ -25,7 +25,7 @@ public class CommandBufferTest
   @Test
   public void testRebase() throws Exception
   {
-    CommandBuffer commands = new CommandBuffer(0x2000, 0x8000);
+    CommandBuffer commands = new CommandBuffer(new byte[0x2000], 0x8000);
     commands.rebase(0x1E00, 0xC000);
 
     assertFalse(commands.hasAddress(0x7FFF));
@@ -41,7 +41,7 @@ public class CommandBufferTest
   @Test
   public void testAddressForIndex() throws Exception
   {
-    CommandBuffer commands = new CommandBuffer(0x2000, 0x8000);
+    CommandBuffer commands = new CommandBuffer(new byte[0x2000], 0x8000);
     commands.rebase(0x1E00, 0xC000);
 
     assertEquals(0x8000, commands.addressForIndex(0x0000));

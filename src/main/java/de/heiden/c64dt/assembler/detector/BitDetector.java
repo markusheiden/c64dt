@@ -10,7 +10,7 @@ import de.heiden.c64dt.assembler.command.OpcodeCommand;
 import java.util.List;
 
 /**
- * Detect bit commands which are intended to just skip the next opcode.
+ * Detects bit commands which are intended to just skip the next opcode.
  */
 public class BitDetector implements IDetector
 {

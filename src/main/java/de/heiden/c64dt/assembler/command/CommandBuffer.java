@@ -24,6 +24,11 @@ import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
 public class CommandBuffer
 {
   /**
+   * Code to be reassembled.
+   */
+  private final byte[] code;
+
+  /**
    * Index to type of code.
    */
   private final CodeType[] types;
@@ -68,14 +73,9 @@ public class CommandBuffer
   /**
    * Index to absolute base address.
    * First entry is always 0 -> initial start address.
-   * Last entry is always length -> initial start address + length.
+   * Last entry is always length -> initial start address.
    */
   private final SortedMap<Integer, Integer> startAddresses;
-
-  /**
-   * Total length of code.
-   */
-  private final int length;
 
   /**
    * Commands as detected by the reassembler.
@@ -90,33 +90,41 @@ public class CommandBuffer
   /**
    * Constructor.
    *
-   * @param length length of code
+   * @param code code
    * @param startAddress address of the code
    */
-  public CommandBuffer(int length, int startAddress)
+  public CommandBuffer(byte[] code, int startAddress)
   {
     Assert.isTrue(startAddress >= 0, "Precondition: startAddress >= 0");
 
-    this.types = new CodeType[length];
+    this.code = code;
+    this.types = new CodeType[code.length];
     Arrays.fill(this.types, CodeType.UNKNOWN);
-    this.codeReferences = new int[length];
+    this.codeReferences = new int[code.length];
     Arrays.fill(this.codeReferences, -1);
-    this.dataReferences = new int[length];
+    this.dataReferences = new int[code.length];
     Arrays.fill(this.dataReferences, -1);
-    this.externalReferences = new int[length];
+    this.externalReferences = new int[code.length];
     Arrays.fill(this.externalReferences, -1);
 
     this.codeLabels = new HashMap<Integer, CodeLabel>();
     this.dataLabels = new HashMap<Integer, DataLabel>();
     this.externalLabels = new HashMap<Integer, ExternalLabel>();
     this.startAddresses = new TreeMap<Integer, Integer>();
-    this.commands = new ICommand[length];
+    this.commands = new ICommand[code.length];
     this.commands[0] = new DummyCommand();
     this.index = 0;
 
-    this.length = length;
     this.startAddresses.put(0, startAddress);
-    this.startAddresses.put(length, startAddress + length);
+    this.startAddresses.put(code.length, startAddress);
+  }
+
+  /**
+   * Code to be reassembled.
+   */
+  public byte[] getCode()
+  {
+    return code;
   }
 
   /**
@@ -126,7 +134,7 @@ public class CommandBuffer
    */
   public boolean isValidIndex(int index)
   {
-    return index >= 0 && index <= length;
+    return index >= 0 && index <= code.length;
   }
 
   /**
@@ -582,7 +590,7 @@ public class CommandBuffer
 
   public boolean hasNextCommand()
   {
-    return getCurrentIndex() < length;
+    return getCurrentIndex() < code.length;
   }
 
   public ICommand nextCommand()
