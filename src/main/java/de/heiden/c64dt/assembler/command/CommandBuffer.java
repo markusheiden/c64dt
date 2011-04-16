@@ -182,7 +182,7 @@ public class CommandBuffer
     assertValidAddress(address);
 
     Integer removed = startAddresses.put(startIndex, address - startIndex);
-    Assert.isNull(removed, "Precondition: Not rebased the same index twice");
+    Assert.isNull(removed, "Precondition: Not based the same index twice");
   }
 
   //
