@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.SortedMap;
+import java.util.NavigableMap;
 import java.util.TreeMap;
 
 import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
@@ -75,7 +75,7 @@ public class CommandBuffer
    * First entry is always 0 -> initial start address.
    * Last entry is always length -> initial start address.
    */
-  private final SortedMap<Integer, Integer> startAddresses;
+  private final NavigableMap<Integer, Integer> startAddresses;
 
   /**
    * Commands as detected by the reassembler.
@@ -337,18 +337,11 @@ public class CommandBuffer
   {
     Assert.isTrue(isValidIndex(index), "Precondition: isValidIndex(index)");
 
-    int lastStartIndex = startAddresses.firstKey();
-    for (int startIndex : startAddresses.keySet())
-    {
-      if (index < startIndex)
-      {
-        return startAddresses.get(lastStartIndex) + index;
-      }
+    // Compute start index for address range index belongs to
+    Integer startIndex = startAddresses.floorKey(index);
+    Assert.notNull(startIndex, "Check: lastStartIndex != null");
 
-      lastStartIndex = startIndex;
-    }
-
-    throw new IllegalArgumentException("May not happen");
+    return startAddresses.get(startIndex) + index;
   }
 
   /**
