@@ -8,17 +8,13 @@ import org.springframework.util.StringUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.*;
 import java.util.List;
 
 import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
@@ -141,14 +137,8 @@ public class ReassemblerGUI extends JFrame
 
         model.addRow(new Object[]{flags, hexWordPlain(addr), bytes, labelString, code});
       }
-      String code = "" ; // init();
-      String[] lines = StringUtils.tokenizeToStringArray(code, "\n", false, false);
-      for (String line : lines) {
-        String[] lineParts = StringUtils.tokenizeToStringArray(line, "|", false, false);
-        model.addRow(lineParts);
-      }
 
-      model.fireTableDataChanged();
+//      model.fireTableDataChanged();
     }
     catch (Exception e)
     {
@@ -168,6 +158,12 @@ public class ReassemblerGUI extends JFrame
     {
       line.append(' ');
     }
+  }
+
+  public static void main(String[] args)
+  {
+    ReassemblerGUI gui = new ReassemblerGUI();
+    gui.setVisible(true);
   }
 
   private static final String BASEDIR = "retro replay";
@@ -203,11 +199,5 @@ public class ReassemblerGUI extends JFrame
     reassembler.reassemble(code, commands, writer);
 
     return commands;
-  }
-
-  public static void main(String[] args)
-  {
-    ReassemblerGUI gui = new ReassemblerGUI();
-    gui.setVisible(true);
   }
 }
