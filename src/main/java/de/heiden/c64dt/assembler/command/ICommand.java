@@ -65,9 +65,8 @@ public interface ICommand
    * Write string representation of this command.
    *
    * @param buffer command buffer
-   * @param output writer to write ti
    */
-  public void toString(CommandBuffer buffer, Writer output) throws IOException;
+  public String toString(CommandBuffer buffer) throws IOException;
 
   /**
    * Byte representation of this command.

@@ -4,7 +4,6 @@ import de.heiden.c64dt.charset.C64Charset;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -57,11 +56,11 @@ public class DataCommand extends AbstractCommand
   }
 
   @Override
-  public void toString(CommandBuffer buffer, Writer output) throws IOException
+  public String toString(CommandBuffer buffer) throws IOException
   {
     Assert.notNull(buffer, "Precondition: buffer != null");
-    Assert.notNull(output, "Precondition: output != null");
 
+    StringBuilder output = new StringBuilder(16 + data.size() * 8);
     if (data.size() > 8 && isSameByte()) {
       // special case: the data consists of the same byte over and over again
 
@@ -89,6 +88,8 @@ public class DataCommand extends AbstractCommand
       output.append(C64Charset.LOWER.toString(string));
       output.append("'");
     }
+
+    return output.toString();
   }
 
   /**

@@ -49,13 +49,12 @@ public class AddressCommand extends AbstractCommand
   }
 
   @Override
-  public void toString(CommandBuffer buffer, Writer output) throws IOException
+  public String toString(CommandBuffer buffer) throws IOException
   {
     Assert.notNull(buffer, "Precondition: buffer != null");
-    Assert.notNull(output, "Precondition: output != null");
 
     ILabel label = buffer.getLabel(address);
-    output.append("!WORD ").append(label != null ? label.toString() : hexWord(address));
+    return "!WORD " + (label != null ? label.toString() : hexWord(address));
   }
 
   @Override

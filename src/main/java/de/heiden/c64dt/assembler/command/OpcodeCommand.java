@@ -79,19 +79,21 @@ public class OpcodeCommand extends AbstractCommand
     return false;
   }
 
-  public void toString(CommandBuffer buffer, Writer output) throws IOException
+  public String toString(CommandBuffer buffer) throws IOException
   {
     Assert.notNull(buffer, "Precondition: buffer != null");
-    Assert.notNull(output, "Precondition: output != null");
 
-    output.append(opcode.getType().toString());
+    StringBuilder result = new StringBuilder();
+    result.append(opcode.getType().toString());
     OpcodeMode mode = opcode.getMode();
     if (mode.getSize() > 0)
     {
-      output.append(" ");
+      result.append(" ");
       ILabel label = mode.isAddress() ? buffer.getLabel(mode.getAddress(getAddress(), argument)) : null;
-      output.append(label != null ? mode.toString(label.toString()) : mode.toString(getAddress(), argument));
+      result.append(label != null ? mode.toString(label.toString()) : mode.toString(getAddress(), argument));
     }
+
+    return result.toString();
   }
 
   public List<Integer> toBytes()

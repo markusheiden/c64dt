@@ -49,7 +49,7 @@ public class DummyCommand extends AbstractCommand
   }
 
   @Override
-  public void toString(CommandBuffer buffer, Writer output) throws IOException
+  public String toString(CommandBuffer buffer) throws IOException
   {
     throw new UnsupportedOperationException();
   }

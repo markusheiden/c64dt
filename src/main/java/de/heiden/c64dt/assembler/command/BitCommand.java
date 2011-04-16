@@ -32,29 +32,33 @@ public class BitCommand extends AbstractCommand
     this.argument = argument;
   }
 
+  @Override
   public final int getSize()
   {
     return 1;
   }
 
+  @Override
   public final boolean isEnd()
   {
     return false;
   }
 
+  @Override
   public boolean combineWith(ICommand command)
   {
     return false;
   }
 
-  public void toString(CommandBuffer buffer, Writer output) throws IOException
+  @Override
+  public String toString(CommandBuffer buffer) throws IOException
   {
     Assert.notNull(buffer, "Precondition: buffer != null");
-    Assert.notNull(output, "Precondition: output != null");
 
-    output.append("!BYTE ").append(hexByte(opcode.getOpcode())).append("; ").append(opcode.toString(getAddress(), argument));
+    return "!BYTE " + hexByte(opcode.getOpcode()) + "; " + opcode.toString(getAddress(), argument);
   }
 
+  @Override
   public List<Integer> toBytes()
   {
     return Collections.singletonList(opcode.getOpcode());

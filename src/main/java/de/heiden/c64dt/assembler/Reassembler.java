@@ -427,7 +427,7 @@ public class Reassembler
 
       if (command != null)
       {
-        command.toString(commands, output);
+        output.append(command.toString(commands));
       }
       else
       {
