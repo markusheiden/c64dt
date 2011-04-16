@@ -8,6 +8,7 @@ import de.heiden.c64dt.assembler.command.DummyCommand;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 import de.heiden.c64dt.assembler.detector.BitDetector;
+import de.heiden.c64dt.assembler.detector.BrkDetector;
 import de.heiden.c64dt.assembler.detector.IDetector;
 import de.heiden.c64dt.assembler.detector.Jsr0Detector;
 import de.heiden.c64dt.assembler.detector.LabelDetector;
@@ -42,6 +43,7 @@ public class Reassembler
   public Reassembler() {
     // add default detectors
     detectors.add(new LabelDetector());
+    detectors.add(new BrkDetector());
     detectors.add(new BitDetector());
     detectors.add(new Jsr0Detector());
   }
