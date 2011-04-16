@@ -30,6 +30,10 @@ public enum CodeType
    */
   ABSOLUTE_ADDRESS;
 
+  public final boolean isUnknown() {
+    return UNKNOWN.equals(this);
+  }
+
   public final boolean isCode()
   {
     return this == OPCODE || this == CODE;
