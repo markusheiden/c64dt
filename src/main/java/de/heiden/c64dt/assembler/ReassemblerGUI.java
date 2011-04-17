@@ -44,7 +44,7 @@ public class ReassemblerGUI extends JFrame
     table.getColumnModel().getColumn(0).setMaxWidth(40);
     table.getColumnModel().getColumn(1).setMaxWidth(40);
     table.getColumnModel().getColumn(2).setPreferredWidth(100);
-    table.getColumnModel().getColumn(3).setPreferredWidth(100);
+    table.getColumnModel().getColumn(3).setMaxWidth(100);
     table.getColumnModel().getColumn(4).setPreferredWidth(200);
     table.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
     JScrollPane scroll = new JScrollPane(table,
