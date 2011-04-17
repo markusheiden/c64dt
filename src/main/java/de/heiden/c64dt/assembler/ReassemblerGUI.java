@@ -28,8 +28,6 @@ import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
  */
 public class ReassemblerGUI extends JFrame
 {
-  private String code = "";
-
   public ReassemblerGUI() throws HeadlessException
   {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
