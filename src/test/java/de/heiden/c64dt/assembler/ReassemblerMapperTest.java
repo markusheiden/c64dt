@@ -1,18 +1,15 @@
 package de.heiden.c64dt.assembler;
 
 import de.heiden.c64dt.assembler.command.CommandBuffer;
-import de.heiden.c64dt.assembler.command.CommandBufferMapper;
 import de.heiden.c64dt.assembler.detector.IDetector;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.PrintWriter;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 
 /**
  * Test for {@link ReassemblerMapper}.
