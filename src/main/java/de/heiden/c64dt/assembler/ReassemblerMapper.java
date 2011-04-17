@@ -2,6 +2,7 @@ package de.heiden.c64dt.assembler;
 
 import de.heiden.c64dt.assembler.command.CommandBufferMapper;
 import de.heiden.c64dt.assembler.detector.IDetector;
+import de.heiden.c64dt.util.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -32,18 +33,8 @@ public class ReassemblerMapper
       Document document = builder.newDocument();
       write(reassembler, document);
 
-      // Prepare the DOM document for writing
-      Source source = new DOMSource(document);
-
-      // Prepare the output file
-      Result result = new StreamResult(System.out);
-
-      // Write the DOM document to the file
-      Transformer transformer = TransformerFactory.newInstance().newTransformer();
-      transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-      transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
-      transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-      transformer.transform(source, result);
+      // debug
+      XmlUtil.toStream(document, System.out);
     }
     catch (Exception e)
     {
