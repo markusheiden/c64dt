@@ -28,7 +28,12 @@ import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
  */
 public class ReassemblerGUI extends JFrame
 {
-  public ReassemblerGUI() throws HeadlessException
+  private final CodeView code;
+
+  /**
+   * Constructor.
+   */
+  public ReassemblerGUI()
   {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -38,15 +43,23 @@ public class ReassemblerGUI extends JFrame
     // Reassembled code
     //
 
-    final CodeView code = new CodeView();
+    code = new CodeView();
     add(code.createComponent(), BorderLayout.CENTER);
 
     //
     // Menu bar
     //
 
+    add(createMenu(), BorderLayout.NORTH);
+
+    pack();
+  }
+
+  /**
+   * Create menu bar.
+   */
+  private JMenuBar createMenu() {
     JMenuBar menuBar = new JMenuBar();
-    add(menuBar, BorderLayout.NORTH);
 
     JButton start = new JButton("Reassemble");
     start.addActionListener(new ActionListener()
@@ -59,9 +72,14 @@ public class ReassemblerGUI extends JFrame
     });
     menuBar.add(start);
 
-    pack();
+    return menuBar;
   }
 
+  /**
+   * Start reassembler gui.
+   *
+   * @param args arguments (currently not evaluated)
+   */
   public static void main(String[] args)
   {
     ReassemblerGUI gui = new ReassemblerGUI();
