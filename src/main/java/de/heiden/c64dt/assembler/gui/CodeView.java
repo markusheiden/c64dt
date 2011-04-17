@@ -1,6 +1,7 @@
 package de.heiden.c64dt.assembler.gui;
 
 import de.heiden.c64dt.assembler.CodeType;
+import de.heiden.c64dt.assembler.ReassemblerMapper;
 import de.heiden.c64dt.assembler.ILabel;
 import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
@@ -13,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -53,6 +55,7 @@ public class CodeView
     table.getColumnModel().getColumn(3).setMaxWidth(100);
     table.getColumnModel().getColumn(4).setPreferredWidth(200);
     table.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
+    table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
     table.addMouseListener(new MouseAdapter()
     {
@@ -88,7 +91,8 @@ public class CodeView
 
       StringBuilder builder = new StringBuilder();
 
-      CommandBuffer commands = init();
+      Reassembler reassembler = init();
+      CommandBuffer commands = reassembler.getCommands();
       commands.restart();
       while (commands.hasNextCommand()) {
         int index = commands.getCurrentIndex();
@@ -145,6 +149,8 @@ public class CodeView
 
         model.addRow(new Object[]{flags, hexWordPlain(addr), bytes, labelString, code});
       }
+
+      new ReassemblerMapper().write(reassembler);
     }
     catch (Exception e)
     {
@@ -155,7 +161,7 @@ public class CodeView
   private static final String BASEDIR = "retro replay";
   private static final String ROM_NAME = "rr38q-cnet-%d.bin";
 
-  private CommandBuffer init() throws IOException
+  private Reassembler init() throws IOException
   {
     File file = new File(BASEDIR, String.format(ROM_NAME, 0));
     System.out.println("Reassembling " + file.getCanonicalPath() + " (" + file.length() + " Bytes)");
@@ -184,6 +190,6 @@ public class CodeView
     StringWriter writer = new StringWriter(256 * 1024);
     reassembler.reassemble(code, commands, writer);
 
-    return commands;
+    return reassembler;
   }
 }

@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
@@ -148,11 +149,26 @@ public class CommandBuffer
   }
 
   /**
+   * Length of code.
+   */
+  public int getLength() {
+    return code.length;
+  }
+
+  /**
    * Start address of code (incl.).
    */
   public int getStartAddress()
   {
     return startAddresses.get(0);
+  }
+
+  /**
+   * Get all start addresses.
+   * Just for the mapper.
+   */
+  SortedMap<Integer, Integer> getStartAddresses() {
+    return startAddresses;
   }
 
   /**

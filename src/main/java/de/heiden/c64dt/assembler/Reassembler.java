@@ -35,6 +35,7 @@ import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
  */
 public class Reassembler
 {
+  private CommandBuffer commands;
   private final List<IDetector> detectors = new ArrayList<IDetector>();
 
   /**
@@ -49,6 +50,13 @@ public class Reassembler
   }
 
   /**
+   * Command buffer.
+   */
+  public CommandBuffer getCommands() {
+    return commands;
+  }
+
+  /**
    * Add code type detector to use.
    *
    * @param detector code type detector
@@ -57,6 +65,14 @@ public class Reassembler
     Assert.notNull(detector, "Precondition: detector != null");
 
     detectors.add(detector);
+  }
+
+  /**
+   * All detectors.
+   * Just for the mapper.
+   */
+  List<IDetector> getDetectors() {
+    return detectors;
   }
 
   /**
@@ -141,27 +157,27 @@ public class Reassembler
     Assert.notNull(output, "Precondition: output != null");
 
     CodeBuffer buffer = new CodeBuffer(code);
+    this.commands = commands;
 
     boolean change = true;
     for (int count = 0; change && count < 10; count++)
     {
-      tokenize(buffer, commands);
-      reachability(commands);
-      change = detectCodeType(commands);
+      tokenize(buffer);
+      reachability();
+      change = detectCodeType();
       System.out.println(count);
     }
 
-    combine(commands);
-    write(commands, new BufferedWriter(output, code.length * 80));
+    combine();
+    write(new BufferedWriter(output, code.length * 80));
   }
 
   /**
    * Tokenize code.
    *
    * @param code code buffer
-   * @param commands command buffer
    */
-  private void tokenize(CodeBuffer code, CommandBuffer commands)
+  private void tokenize(CodeBuffer code)
   {
     Assert.notNull(code, "Precondition: code != null");
 
@@ -233,10 +249,8 @@ public class Reassembler
 
   /**
    * Compute transitive unreachability of commands.
-   *
-   * @param commands command buffer
    */
-  private void reachability(CommandBuffer commands)
+  private void reachability()
   {
     boolean change;
     do
@@ -287,6 +301,11 @@ public class Reassembler
     } while (change);
   }
 
+  /**
+   * Is command a JSR opcode?.
+   *
+   * @param command command
+   */
   private boolean isJsr(ICommand command)
   {
     return command instanceof OpcodeCommand && ((OpcodeCommand) command).getOpcode().getType() == OpcodeType.JSR;
@@ -295,10 +314,9 @@ public class Reassembler
   /**
    * Detect type of code.
    *
-   * @param commands command buffer
    * @return whether a code label has been altered
    */
-  private boolean detectCodeType(CommandBuffer commands)
+  private boolean detectCodeType()
   {
     boolean result = false;
 
@@ -317,10 +335,8 @@ public class Reassembler
 
   /**
    * Combine commands, if possible.
-   *
-   * @param commands command buffer
    */
-  private void combine(CommandBuffer commands)
+  private void combine()
   {
     Assert.notNull(commands, "Precondition: buffer != null");
 
@@ -345,10 +361,9 @@ public class Reassembler
   /**
    * Write commands to output writer.
    *
-   * @param commands command buffer
    * @param output writer to write output to
    */
-  private void write(CommandBuffer commands, Writer output) throws IOException
+  private void write(Writer output) throws IOException
   {
     Assert.notNull(commands, "Precondition: buffer != null");
     Assert.notNull(output, "Precondition: output != null");
