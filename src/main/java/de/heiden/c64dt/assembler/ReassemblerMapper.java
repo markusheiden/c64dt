@@ -69,7 +69,7 @@ public class ReassemblerMapper
     }
 
     Element commandsElement = document.createElement("commands");
-    document.appendChild(commandsElement);
+    reassemblerElement.appendChild(commandsElement);
 
     new CommandBufferMapper().write(reassembler.getCommands(), document, commandsElement);
   }
