@@ -2,6 +2,7 @@ package de.heiden.c64dt.assembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.util.ByteUtil;
+import de.heiden.c64dt.util.IXmlMapper;
 import org.springframework.jca.cci.core.InteractionCallback;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
@@ -17,7 +18,7 @@ import static de.heiden.c64dt.util.HexUtil.*;
 /**
  * XML-Mapper to read and write the reassembler model.
  */
-public class CommandBufferMapper
+public class CommandBufferMapper implements IXmlMapper<CommandBuffer>
 {
   /**
    * Add command buffer to document.

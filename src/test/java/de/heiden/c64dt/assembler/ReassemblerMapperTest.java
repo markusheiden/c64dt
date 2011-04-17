@@ -36,11 +36,13 @@ public class ReassemblerMapperTest
     ReassemblerMapper mapper = new ReassemblerMapper();
 
     Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+    Element reassemblerElement = document.createElement("reassembler");
+    document.appendChild(reassemblerElement);
 
     // write test command buffer
-    mapper.write(reassembler, document);
+    mapper.write(reassembler, document, reassemblerElement);
     // read written xml
-    Reassembler read = mapper.read(document);
+    Reassembler read = mapper.read(reassemblerElement);
 
     List<IDetector> reassemblerDetectors = reassembler.getDetectors();
     List<IDetector> readDetectors = read.getDetectors();
