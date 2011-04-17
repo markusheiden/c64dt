@@ -1,10 +1,13 @@
 package de.heiden.c64dt.assembler;
 
+import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.CommandBufferMapper;
 import de.heiden.c64dt.assembler.detector.IDetector;
 import de.heiden.c64dt.util.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,6 +18,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.PrintWriter;
 import java.util.List;
 
 import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
@@ -42,7 +46,13 @@ public class ReassemblerMapper
     }
   }
 
-  private void write(Reassembler reassembler, Document document) throws Exception
+  /**
+   * Write reassembler to document.
+   *
+   * @param reassembler Reassembler
+   * @param document Document
+   */
+  public void write(Reassembler reassembler, Document document) throws Exception
   {
     Element reassemblerElement = document.createElement("reassembler");
     document.appendChild(reassemblerElement);
@@ -58,7 +68,35 @@ public class ReassemblerMapper
       detectorsElement.appendChild(detectorElement);
     }
 
-    new CommandBufferMapper().write(reassembler.getCommands(), document, reassemblerElement);
+    Element commandsElement = document.createElement("commands");
+    document.appendChild(commandsElement);
 
+    new CommandBufferMapper().write(reassembler.getCommands(), document, commandsElement);
+  }
+
+  /**
+   * Read reassembler from document.
+   *
+   * @param document Document
+   */
+  public Reassembler read(Document document) throws Exception {
+    Reassembler reassembler = new Reassembler();
+
+    Element reassemblerElement = (Element) document.getElementsByTagName("reassembler").item(0);
+
+    Element commandsElement = (Element) reassemblerElement.getElementsByTagName("commands").item(0);
+    CommandBuffer commands = new CommandBufferMapper().read(commandsElement);
+    reassembler.reassemble(null, commands);
+
+    Element detectorsElement = (Element) reassemblerElement.getElementsByTagName("detectors").item(0);
+    NodeList detectorElements = detectorsElement.getElementsByTagName("detector");
+    for (int i = 0; i < detectorElements.getLength(); i++)
+    {
+      Element detectorElement = (Element) detectorElements.item(i);
+      String clazz = detectorElement.getAttribute("class");
+      reassembler.add((IDetector) Class.forName(clazz).newInstance());
+    }
+
+    return reassembler;
   }
 }

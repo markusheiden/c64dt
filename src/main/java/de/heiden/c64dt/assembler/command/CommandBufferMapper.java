@@ -20,21 +20,14 @@ import static de.heiden.c64dt.util.HexUtil.*;
 public class CommandBufferMapper
 {
   /**
-   * The name of the element this mapper is responsible for.
-   */
-  public static final String ELEMENT = "commands";
-
-  /**
    * Add command buffer to document.
    *
    * @param commands command buffer
    * @param document document
-   * @param parent parent element of command buffer
+   * @param commandsElement element for command buffer
    */
-  public void write(CommandBuffer commands, Document document, Element parent)
+  public void write(CommandBuffer commands, Document document, Element commandsElement)
   {
-    Element commandsElement = document.createElement(ELEMENT);
-    parent.appendChild(commandsElement);
 
     // code
     Element codeElement = document.createElement("code");

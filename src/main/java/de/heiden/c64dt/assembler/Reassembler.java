@@ -79,32 +79,28 @@ public class Reassembler
    * Reassemble program.
    *
    * @param input program with start address
-   * @param output output for reassembled code
    */
   public void reassemble(InputStream input, Writer output) throws IOException
   {
     Assert.notNull(input, "Precondition: input != null");
-    Assert.notNull(output, "Precondition: output != null");
 
-    reassemble(FileCopyUtils.copyToByteArray(input), output);
+    reassemble(FileCopyUtils.copyToByteArray(input));
   }
 
   /**
    * Reassemble program.
    *
    * @param program program with start address
-   * @param output output for reassembled code
    */
-  public void reassemble(byte[] program, Writer output) throws IOException
+  public void reassemble(byte[] program) throws IOException
   {
     Assert.notNull(program, "Precondition: program != null");
     Assert.isTrue(program.length >= 2, "Precondition: program.length >= 2");
-    Assert.notNull(output, "Precondition: output != null");
 
     int address = toWord(program, 0);
     byte[] code = new byte[program.length - 2];
     System.arraycopy(program, 2, code, 0, code.length);
-    reassemble(address, code, output);
+    reassemble(address, code);
   }
 
   /**
@@ -112,14 +108,12 @@ public class Reassembler
    *
    * @param startAddress start address of code
    * @param code program without start address
-   * @param output output for reassembled code
    */
-  public void reassemble(int startAddress, InputStream code, Writer output) throws IOException
+  public void reassemble(int startAddress, InputStream code) throws IOException
   {
     Assert.notNull(code, "Precondition: input != null");
-    Assert.notNull(output, "Precondition: output != null");
 
-    reassemble(startAddress, FileCopyUtils.copyToByteArray(code), output);
+    reassemble(startAddress, FileCopyUtils.copyToByteArray(code));
   }
 
   /**
@@ -127,21 +121,18 @@ public class Reassembler
    *
    * @param startAddress start address of code
    * @param code program without start address
-   * @param output output for reassembled code
    */
-  public void reassemble(int startAddress, byte[] code, Writer output) throws IOException
+  public void reassemble(int startAddress, byte[] code) throws IOException
   {
     Assert.isTrue(startAddress >= 0, "Precondition: startAddress >= 0");
     Assert.notNull(code, "Precondition: code != null");
-    Assert.notNull(output, "Precondition: output != null");
-
 
     if (startAddress == 0x0801)
     {
       // TODO check for basic header
     }
 
-    reassemble(code, new CommandBuffer(code, startAddress), output);
+    reassemble(code, new CommandBuffer(code, startAddress));
   }
 
   /**
@@ -149,12 +140,10 @@ public class Reassembler
    *
    * @param code program without start address
    * @param commands command buffer
-   * @param output output for reassembled code
    */
-  public void reassemble(byte[] code, CommandBuffer commands, Writer output) throws IOException
+  public void reassemble(byte[] code, CommandBuffer commands) throws IOException
   {
     Assert.notNull(code, "Precondition: code != null");
-    Assert.notNull(output, "Precondition: output != null");
 
     CodeBuffer buffer = new CodeBuffer(code);
     this.commands = commands;
@@ -169,7 +158,6 @@ public class Reassembler
     }
 
     combine();
-    write(new BufferedWriter(output, code.length * 80));
   }
 
   /**
@@ -363,7 +351,7 @@ public class Reassembler
    *
    * @param output writer to write output to
    */
-  private void write(Writer output) throws IOException
+  public void write(Writer output) throws IOException
   {
     Assert.notNull(commands, "Precondition: buffer != null");
     Assert.notNull(output, "Precondition: output != null");

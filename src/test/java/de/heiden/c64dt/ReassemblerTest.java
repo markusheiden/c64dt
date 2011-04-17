@@ -30,7 +30,7 @@ public class ReassemblerTest
   {
     byte[] data = FileCopyUtils.copyToByteArray(new File("./dummy2.prg"));
     Reassembler reassembler = new Reassembler();
-    reassembler.reassemble(data, new OutputStreamWriter(System.out));
+    reassembler.reassemble(data);
   }
 
   public static void reassemblerPerformanceTest() throws Exception
@@ -39,7 +39,7 @@ public class ReassemblerTest
     Reassembler reassembler = new Reassembler();
     for (int i = 0; i < 64; i++)
     {
-      reassembler.reassemble(data, new StringWriter(data.length * 80));
+      reassembler.reassemble(data);
     }
   }
 

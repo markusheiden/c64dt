@@ -187,8 +187,7 @@ public class CodeView
     jsr.addSubroutine(0x9F03, 2);
     commands.setType(0x1FF8, 0x2000, CodeType.ABSOLUTE_ADDRESS);
 
-    StringWriter writer = new StringWriter(256 * 1024);
-    reassembler.reassemble(code, commands, writer);
+    reassembler.reassemble(code, commands);
 
     return reassembler;
   }

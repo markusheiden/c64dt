@@ -42,13 +42,13 @@ public class CommandBufferMapperTest
     CommandBufferMapper mapper = new CommandBufferMapper();
 
     Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-    Element parent = document.createElement("test");
-    document.appendChild(parent);
+    Element commandsElement = document.createElement("commands");
+    document.appendChild(commandsElement);
 
     // write test command buffer
-    mapper.write(commands, document, parent);
+    mapper.write(commands, document, commandsElement);
     // read written xml
-    CommandBuffer read = mapper.read((Element) parent.getElementsByTagName(CommandBufferMapper.ELEMENT).item(0));
+    CommandBuffer read = mapper.read((Element) document.getElementsByTagName("commands").item(0));
 
     // code
     byte[] readCode = read.getCode();
