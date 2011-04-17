@@ -80,7 +80,7 @@ public class Reassembler
    *
    * @param input program with start address
    */
-  public void reassemble(InputStream input, Writer output) throws IOException
+  public void reassemble(InputStream input) throws IOException
   {
     Assert.notNull(input, "Precondition: input != null");
 
@@ -132,21 +132,21 @@ public class Reassembler
       // TODO check for basic header
     }
 
-    reassemble(code, new CommandBuffer(code, startAddress));
+    reassemble(new CommandBuffer(code, startAddress));
   }
 
   /**
    * Reassemble.
    *
-   * @param code program without start address
    * @param commands command buffer
    */
-  public void reassemble(byte[] code, CommandBuffer commands) throws IOException
+  public void reassemble(CommandBuffer commands) throws IOException
   {
-    Assert.notNull(code, "Precondition: code != null");
+    Assert.notNull(commands, "Precondition: commands != null");
 
-    CodeBuffer buffer = new CodeBuffer(code);
     this.commands = commands;
+
+    CodeBuffer buffer = new CodeBuffer(commands.getCode());
 
     boolean change = true;
     for (int count = 0; change && count < 10; count++)

@@ -86,7 +86,7 @@ public class ReassemblerMapper
 
     Element commandsElement = (Element) reassemblerElement.getElementsByTagName("commands").item(0);
     CommandBuffer commands = new CommandBufferMapper().read(commandsElement);
-    reassembler.reassemble(null, commands);
+    reassembler.reassemble(commands);
 
     Element detectorsElement = (Element) reassemblerElement.getElementsByTagName("detectors").item(0);
     NodeList detectorElements = detectorsElement.getElementsByTagName("detector");
