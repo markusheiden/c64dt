@@ -64,20 +64,6 @@ public class ReassemblerGUI extends JFrame
     pack();
   }
 
-  /**
-   * Fill line with spaces up to a limit.
-   *
-   * @param line line
-   * @param num limit
-   */
-  private void fillSpaces(StringBuilder line, int num)
-  {
-    while (line.length() < num)
-    {
-      line.append(' ');
-    }
-  }
-
   public static void main(String[] args)
   {
     ReassemblerGUI gui = new ReassemblerGUI();
