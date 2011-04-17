@@ -8,9 +8,12 @@ import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import java.util.SortedMap;
+
 import static junit.framework.Assert.*;
 
 /**
+ * Test for {@link CommandBufferMapper}.
  */
 public class CommandBufferMapperTest
 {
@@ -42,17 +45,16 @@ public class CommandBufferMapperTest
     Element parent = document.createElement("test");
     document.appendChild(parent);
 
+    // write test command buffer
     mapper.write(commands, document, parent);
-
-    // debug
-    XmlUtil.toStream(document, System.out);
-
+    // read written xml
     CommandBuffer read = mapper.read((Element) parent.getElementsByTagName(CommandBufferMapper.ELEMENT).item(0));
 
     // code
+    byte[] readCode = read.getCode();
     for (int i = 0; i < code.length; i++)
     {
-      assertEquals("Byte " + i + ":", code[i], read.getCode()[i]);
+      assertEquals("Byte " + i + ":", code[i], readCode[i]);
     }
 
     // code types
@@ -62,9 +64,11 @@ public class CommandBufferMapperTest
     }
 
     // addresses
-    for (Integer index : commands.getStartAddresses().keySet())
+    SortedMap<Integer,Integer> commandsStart = commands.getStartAddresses();
+    SortedMap<Integer, Integer> readStart = read.getStartAddresses();
+    for (Integer index : commandsStart.keySet())
     {
-      assertEquals("Index " + index + ":", commands.getStartAddresses().get(index), read.getStartAddresses().get(index));
+      assertEquals("Index " + index + ":", commandsStart.get(index), readStart.get(index));
     }
   }
 }
