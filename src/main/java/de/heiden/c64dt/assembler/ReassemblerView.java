@@ -10,15 +10,16 @@ import java.awt.event.ActionListener;
 /**
  * GUI for {@link Reassembler}.
  */
-public class ReassemblerGUI extends JFrame
+public class ReassemblerView extends JFrame
 {
   private final CodeView code;
 
   /**
    * Constructor.
    */
-  public ReassemblerGUI()
+  public ReassemblerView()
   {
+    setTitle("C64 Reassembler");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     setLayout(new BorderLayout());
@@ -45,8 +46,25 @@ public class ReassemblerGUI extends JFrame
   private JMenuBar createMenu() {
     JMenuBar menuBar = new JMenuBar();
 
-    JButton start = new JButton("Reassemble");
-    start.addActionListener(new ActionListener()
+    JMenu file = new JMenu("File");
+    menuBar.add(file);
+
+    JMenuItem fileOpen = new JMenuItem("Open...");
+    file.add(fileOpen);
+    fileOpen.addActionListener(new ActionListener()
+    {
+      @Override
+      public void actionPerformed(ActionEvent actionEvent)
+      {
+        JFileChooser chooser = new JFileChooser();
+        int result = chooser.showOpenDialog(ReassemblerView.this);
+      }
+    });
+
+    // for testing purposes only...
+    JMenuItem fileReassemble = new JMenuItem("Reassemble");
+    file.add(fileReassemble);
+    fileReassemble.addActionListener(new ActionListener()
     {
       @Override
       public void actionPerformed(ActionEvent actionEvent)
@@ -54,19 +72,8 @@ public class ReassemblerGUI extends JFrame
         code.reassemble();
       }
     });
-    menuBar.add(start);
+
 
     return menuBar;
-  }
-
-  /**
-   * Start reassembler gui.
-   *
-   * @param args arguments (currently not evaluated)
-   */
-  public static void main(String[] args)
-  {
-    ReassemblerGUI gui = new ReassemblerGUI();
-    gui.setVisible(true);
   }
 }

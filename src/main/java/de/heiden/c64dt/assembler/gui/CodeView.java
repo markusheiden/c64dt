@@ -63,7 +63,7 @@ public class CodeView
       public void mouseReleased(MouseEvent e)
       {
         if ((e.getButton() & MouseEvent.BUTTON2) == 0) {
-          // not right mouse button
+          // not right mouse button -> ignore
           return;
         }
 
