@@ -1,11 +1,15 @@
 package de.heiden.c64dt.assembler;
 
 import de.heiden.c64dt.assembler.gui.CodeView;
+import org.omg.CORBA.CODESET_INCOMPATIBLE;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * GUI for {@link Reassembler}.
@@ -56,8 +60,18 @@ public class ReassemblerView extends JFrame
       @Override
       public void actionPerformed(ActionEvent actionEvent)
       {
-        JFileChooser chooser = new JFileChooser();
-        int result = chooser.showOpenDialog(ReassemblerView.this);
+        try
+        {
+          JFileChooser chooser = new JFileChooser();
+          int result = chooser.showOpenDialog(ReassemblerView.this);
+          if (result == JFileChooser.APPROVE_OPTION) {
+            code.reassemble(new FileInputStream(chooser.getSelectedFile()));
+          }
+        }
+        catch (IOException e)
+        {
+          e.printStackTrace();
+        }
       }
     });
 

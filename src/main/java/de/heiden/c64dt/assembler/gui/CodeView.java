@@ -18,6 +18,7 @@ import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 
 import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
@@ -84,14 +85,21 @@ public class CodeView
     return contextMenu;
   }
 
-  public void reassemble() {
+  public void reassemble(InputStream is) throws IOException
+  {
+    Reassembler reassembler = new Reassembler();
+    reassembler.reassemble(is);
+    reassemble(reassembler);
+  }
+
+  private void reassemble(Reassembler reassembler)
+  {
     try
     {
       model.setRowCount(0);
 
       StringBuilder builder = new StringBuilder();
 
-      Reassembler reassembler = init();
       CommandBuffer commands = reassembler.getCommands();
       commands.restart();
       while (commands.hasNextCommand()) {
@@ -161,34 +169,42 @@ public class CodeView
   private static final String BASEDIR = "retro replay";
   private static final String ROM_NAME = "rr38q-cnet-%d.bin";
 
-  private Reassembler init() throws IOException
+  public void reassemble()
   {
-    File file = new File(BASEDIR, String.format(ROM_NAME, 0));
-    System.out.println("Reassembling " + file.getCanonicalPath() + " (" + file.length() + " Bytes)");
+    try
+    {
+      File file = new File(BASEDIR, String.format(ROM_NAME, 0));
+      System.out.println("Reassembling " + file.getCanonicalPath() + " (" + file.length() + " Bytes)");
 
-    byte[] code = FileCopyUtils.copyToByteArray(new FileInputStream(file));
+      byte[] code = FileCopyUtils.copyToByteArray(new FileInputStream(file));
 
-    Reassembler reassembler = new Reassembler();
-    JsrDetector jsr = new JsrDetector();
-    reassembler.add(jsr);
+      Reassembler reassembler = new Reassembler();
+      JsrDetector jsr = new JsrDetector();
+      reassembler.add(jsr);
 
-    CommandBuffer commands = new CommandBuffer(code, 0x8000);
-    commands.setType(0x0000, 0x0004, CodeType.ABSOLUTE_ADDRESS);
-    commands.setType(0x0004, 0x0009, CodeType.DATA);
-    commands.setType(0x0009, 0x0060, CodeType.OPCODE);
-    commands.setType(0x0080, 0x017F, CodeType.DATA);
-    commands.setType(0x021D, 0x022F, CodeType.DATA);
-    commands.rebase(0x0E0D, 0xE000);
-    commands.rebase(0x0FBE, 0x8000);
-    // commands.base(0x1D9F, 0x0100);
-    commands.rebase(0x1DB3, 0x8000);
-    commands.rebase(0x1E00, 0x0C000);
-    commands.setType(0x1E00, 0x1E15, CodeType.DATA);
-    jsr.addSubroutine(0x9F03, 2);
-    commands.setType(0x1FF8, 0x2000, CodeType.ABSOLUTE_ADDRESS);
+      CommandBuffer commands = new CommandBuffer(code, 0x8000);
+      commands.setType(0x0000, 0x0004, CodeType.ABSOLUTE_ADDRESS);
+      commands.setType(0x0004, 0x0009, CodeType.DATA);
+      commands.setType(0x0009, 0x0060, CodeType.OPCODE);
+      commands.setType(0x0080, 0x017F, CodeType.DATA);
+      commands.setType(0x021D, 0x022F, CodeType.DATA);
+      commands.rebase(0x0E0D, 0xE000);
+      commands.rebase(0x0FBE, 0x8000);
+      // commands.base(0x1D9F, 0x0100);
+      commands.rebase(0x1DB3, 0x8000);
+      commands.rebase(0x1E00, 0x0C000);
+      commands.setType(0x1E00, 0x1E15, CodeType.DATA);
+      jsr.addSubroutine(0x9F03, 2);
+      commands.setType(0x1FF8, 0x2000, CodeType.ABSOLUTE_ADDRESS);
 
-    reassembler.reassemble(commands);
+      reassembler.reassemble(commands);
 
-    return reassembler;
+      reassemble(reassembler);
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+    }
+
   }
 }
