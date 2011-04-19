@@ -295,16 +295,6 @@ public class Reassembler
   }
 
   /**
-   * Is command a JSR opcode?.
-   *
-   * @param command command
-   */
-  private boolean isJsr(ICommand command)
-  {
-    return command instanceof OpcodeCommand && ((OpcodeCommand) command).getOpcode().getType() == OpcodeType.JSR;
-  }
-
-  /**
    * Detect type of code.
    *
    * @return whether a code label has been altered
