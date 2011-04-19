@@ -1,7 +1,6 @@
 package de.heiden.c64dt.assembler;
 
 import de.heiden.c64dt.assembler.command.AddressCommand;
-import de.heiden.c64dt.assembler.command.BitCommand;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.DataCommand;
 import de.heiden.c64dt.assembler.command.DummyCommand;
@@ -10,13 +9,11 @@ import de.heiden.c64dt.assembler.command.OpcodeCommand;
 import de.heiden.c64dt.assembler.detector.BitDetector;
 import de.heiden.c64dt.assembler.detector.BrkDetector;
 import de.heiden.c64dt.assembler.detector.IDetector;
-import de.heiden.c64dt.assembler.detector.Jsr0Detector;
 import de.heiden.c64dt.assembler.detector.JsrDetector;
 import de.heiden.c64dt.assembler.detector.LabelDetector;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
@@ -47,7 +44,6 @@ public class Reassembler
     detectors.add(new LabelDetector());
     detectors.add(new BrkDetector());
     detectors.add(new BitDetector());
-    detectors.add(new Jsr0Detector());
     detectors.add(new JsrDetector());
   }
 

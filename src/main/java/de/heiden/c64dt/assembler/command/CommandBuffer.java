@@ -215,23 +215,15 @@ public class CommandBuffer
   }
 
   /**
-   * Is there a subroutine manually defined at the given address.
-   *
-   * @param address absolute address
-   * @return number of argument bytes or -1, if there is no subroutine at this address
-   */
-  public boolean hasSubroutine(int address) {
-    return hasAddress(address) && subroutines.get(indexForAddress(address)) != null;
-  }
-
-  /**
    * Get number of argument bytes the subroutine at the given address expects.
    *
    * @param address absolute address
    * @return number of argument bytes or -1, if there is no subroutine at this address
    */
   public int getSubroutineArguments(int address) {
-    Assert.isTrue(hasAddress(address), "Precondition: hasAddress(address)");
+    if (!hasAddress(address)) {
+      return -1;
+    }
 
     Integer result = subroutines.get(indexForAddress(address));
     return result != null? result : -1;
@@ -708,6 +700,11 @@ public class CommandBuffer
 
     Assert.notNull(result, "Postcondition: result != null");
     return result;
+  }
+
+  public ICommand peekCommand() {
+    int nextIndex = getCurrentIndex();
+    return hasIndex(nextIndex)? commands[nextIndex] : DummyCommand.DUMMY_COMMAND;
   }
 
   public boolean hasPreviousCommand()
