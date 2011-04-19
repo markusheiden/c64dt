@@ -4,6 +4,7 @@ import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.util.ByteUtil;
 import de.heiden.c64dt.util.IXmlMapper;
 import org.springframework.jca.cci.core.InteractionCallback;
+import org.springframework.util.Assert;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -64,7 +65,7 @@ public class CommandBufferMapper implements IXmlMapper<CommandBuffer>
       Element subroutineElement = document.createElement("subroutine");
       subroutineElement.setAttribute("index", hexWordPlain(entry.getKey()));
       subroutineElement.setAttribute("arguments", hexPlain(entry.getValue()));
-      addressesElement.appendChild(subroutineElement);
+      subroutinesElement.appendChild(subroutineElement);
     }
 
     // detected code types
@@ -113,14 +114,20 @@ public class CommandBufferMapper implements IXmlMapper<CommandBuffer>
       code[i / 2] = (byte) Integer.parseInt(codeData.substring(i, i + 2), 16);
     }
 
-    // start address
+    // base addresses
     Node addressesElement = commandsElement.getElementsByTagName("addresses").item(0);
     NodeList addressElements = addressesElement.getChildNodes();
+
+    // start address / first base address
     Element startAddressElement = (Element) addressElements.item(0);
+    int startIndex = Integer.parseInt(startAddressElement.getAttribute("index"), 16);
+    Assert.isTrue(startIndex == 0, "Check: startIndex == 0");
+
+    // the start address is the first base address and automatically sets the end base address
     int startAddress = Integer.parseInt(startAddressElement.getAttribute("base"), 16);
     CommandBuffer commands = new CommandBuffer(code, startAddress);
 
-    // remaining addresses
+    // remaining base addresses
     for (int i = 1; i < addressElements.getLength() - 1; i++)
     {
       Element addressElement = (Element) addressElements.item(i);
@@ -129,12 +136,19 @@ public class CommandBufferMapper implements IXmlMapper<CommandBuffer>
       commands.rebase(index, address);
     }
 
+    // end base address
+    Element endAddressElement = (Element) addressElements.item(addressElements.getLength() - 1);
+    int endIndex = Integer.parseInt(endAddressElement.getAttribute("index"), 16);
+    Assert.isTrue(endIndex == code.length, "Check: endIndex == code.length");
+    int endAddress = Integer.parseInt(endAddressElement.getAttribute("base"), 16);
+    Assert.isTrue(endAddress == startAddress, "Check: endAddress == startAddress");
+
     // subroutines
     Node subroutinesElement = commandsElement.getElementsByTagName("subroutines").item(0);
     NodeList subroutineElements = subroutinesElement.getChildNodes();
     for (int i = 0; i < subroutineElements.getLength(); i++)
     {
-      Element subroutineElement = (Element) addressElements.item(i);
+      Element subroutineElement = (Element) subroutineElements.item(i);
       int index = Integer.parseInt(subroutineElement.getAttribute("index"), 16);
       int arguments = Integer.parseInt(subroutineElement.getAttribute("arguments"), 16);
       commands.addSubroutine(index, arguments);
