@@ -190,7 +190,7 @@ public class Reassembler
         commands.addCodeReference(index, address);
 
       }
-      else if (type.isData())
+      else if (type == CodeType.DATA)
       {
         // plain data
         commands.addCommand(new DataCommand(code.readByte()));

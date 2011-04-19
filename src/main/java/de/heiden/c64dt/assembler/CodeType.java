@@ -35,17 +35,18 @@ public enum CodeType
    */
   ABSOLUTE_ADDRESS;
 
+  /**
+   * Is the code type unknown?.
+   */
   public final boolean isUnknown() {
     return UNKNOWN.equals(this);
   }
 
+  /**
+   * Is it code?.
+   */
   public final boolean isCode()
   {
     return this == OPCODE || this == CODE;
-  }
-
-  public final boolean isData()
-  {
-    return this == DATA;
   }
 }
