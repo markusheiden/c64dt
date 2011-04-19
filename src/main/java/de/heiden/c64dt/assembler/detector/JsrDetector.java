@@ -47,6 +47,8 @@ public class JsrDetector implements IDetector
         }
         else if (arguments == 0 || !commands.peekCommand().isReachable())
         {
+          // argument == 0: manual defined JSR with zero-terminated argument
+          // !commands.peekCommand().isReachable(): try automatic detection of zero-terminated argument
           int endIndex = search0(commands, arguments != 0);
           if (endIndex < 0) {
             continue;
