@@ -371,7 +371,7 @@ public class CommandBuffer
    * The current relative address.
    * This is the index where the next command will be added.
    */
-  public int getCurrentIndex()
+  public int geNextIndex()
   {
     ICommand current = commands[index];
     return index + current.getSize();
@@ -654,7 +654,7 @@ public class CommandBuffer
     Assert.notNull(command, "Precondition: command != null");
     Assert.isTrue(!command.hasAddress(), "Precondition: !command.hasAddress()");
 
-    index = getCurrentIndex();
+    index = geNextIndex();
     addCommand(index, command);
   }
 
@@ -690,12 +690,12 @@ public class CommandBuffer
 
   public boolean hasNextCommand()
   {
-    return getCurrentIndex() < code.length;
+    return geNextIndex() < code.length;
   }
 
   public ICommand nextCommand()
   {
-    index = getCurrentIndex();
+    index = geNextIndex();
     ICommand result = commands[index];
 
     Assert.notNull(result, "Postcondition: result != null");
@@ -703,7 +703,7 @@ public class CommandBuffer
   }
 
   public ICommand peekCommand() {
-    int nextIndex = getCurrentIndex();
+    int nextIndex = geNextIndex();
     return hasIndex(nextIndex)? commands[nextIndex] : DummyCommand.DUMMY_COMMAND;
   }
 
@@ -722,7 +722,7 @@ public class CommandBuffer
     ICommand result = commands[index];
 
     Assert.notNull(result, "Postcondition: result != null");
-    Assert.isTrue(getCurrentIndex() == endIndex, "Precondition: The previous commands ends at the start of the current command");
+    Assert.isTrue(geNextIndex() == endIndex, "Precondition: The previous commands ends at the start of the current command");
     return result;
   }
 
@@ -739,7 +739,7 @@ public class CommandBuffer
     // remember position of current command
     int remove = index;
     // skip current command
-    index = getCurrentIndex();
+    index = geNextIndex();
     // delete current command
     commands[remove] = null;
     // trace back to previous command
@@ -754,7 +754,7 @@ public class CommandBuffer
   public void replaceCurrentCommand(ICommand... replacements)
   {
     // get end of command for consistency check
-    int endIndex = getCurrentIndex();
+    int endIndex = geNextIndex();
 
     // delete old command
     commands[index] = null;
@@ -768,6 +768,6 @@ public class CommandBuffer
     previousCommand();
 
     // check consistency
-    Assert.isTrue(getCurrentIndex() == endIndex, "Precondition: The size of the replacements is equal to the size of the removed command");
+    Assert.isTrue(geNextIndex() == endIndex, "Precondition: The size of the replacements is equal to the size of the removed command");
   }
 }

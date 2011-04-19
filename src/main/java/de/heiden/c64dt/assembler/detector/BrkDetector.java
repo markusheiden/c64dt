@@ -1,14 +1,10 @@
 package de.heiden.c64dt.assembler.detector;
 
 import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.assembler.Opcode;
 import de.heiden.c64dt.assembler.OpcodeType;
-import de.heiden.c64dt.assembler.command.BitCommand;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
-
-import java.util.List;
 
 /**
  * Detects unreachable brk commands as data.
@@ -23,7 +19,7 @@ public class BrkDetector implements IDetector
     commands.restart();
     while (commands.hasNextCommand())
     {
-      int index = commands.getCurrentIndex();
+      int index = commands.geNextIndex();
       ICommand command = commands.nextCommand();
       if (command instanceof OpcodeCommand)
       {

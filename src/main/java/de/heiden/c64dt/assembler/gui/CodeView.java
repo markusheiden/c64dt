@@ -14,12 +14,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 
 import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
 import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
@@ -103,7 +101,7 @@ public class CodeView
       CommandBuffer commands = reassembler.getCommands();
       commands.restart();
       while (commands.hasNextCommand()) {
-        int index = commands.getCurrentIndex();
+        int index = commands.geNextIndex();
         int addr = commands.addressForIndex(index);
         ICommand command = commands.nextCommand();
 
