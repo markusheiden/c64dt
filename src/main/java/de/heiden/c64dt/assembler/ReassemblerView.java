@@ -39,7 +39,7 @@ public class ReassemblerView extends JFrame
     // Menu bar
     //
 
-    add(createMenu(), BorderLayout.NORTH);
+    setJMenuBar(createMenu());
 
     pack();
   }

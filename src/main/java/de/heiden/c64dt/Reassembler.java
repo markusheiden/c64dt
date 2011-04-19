@@ -2,6 +2,8 @@ package de.heiden.c64dt;
 
 import de.heiden.c64dt.assembler.ReassemblerView;
 
+import javax.swing.*;
+
 /**
  * Reassembler start class.
  */
@@ -12,10 +14,14 @@ public class Reassembler
    *
    * @param args arguments (currently not evaluated)
    */
-  public static void main(String[] args)
+  public static void main(String[] args) throws Exception
   {
-    // just for Mac OS...
+    // Just for Mac OS...
+    System.setProperty("apple.laf.useScreenMenuBar", "true");
     System.setProperty("com.apple.mrj.application.apple.menu.about.name", "C64 Reassembler");
+
+    // Native look and feel
+    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
     ReassemblerView gui = new ReassemblerView();
     gui.setVisible(true);
