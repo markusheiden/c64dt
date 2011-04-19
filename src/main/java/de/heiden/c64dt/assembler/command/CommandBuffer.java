@@ -25,16 +25,6 @@ import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
 public class CommandBuffer
 {
   /**
-   * Code to be reassembled.
-   */
-  private final byte[] code;
-
-  /**
-   * Index to type of code.
-   */
-  private final CodeType[] types;
-
-  /**
    * Index to referenced absolute address.
    * Target is code, e.g. if the reference is from a jmp $xxxx.
    */
@@ -71,6 +61,20 @@ public class CommandBuffer
    */
   private final Map<Integer, ExternalLabel> externalLabels;
 
+  //
+  // persistent attributes
+  //
+
+  /**
+   * Code to be reassembled.
+   */
+  private final byte[] code;
+
+  /**
+   * Index to type of code.
+   */
+  private final CodeType[] types;
+
   /**
    * Index to absolute base address.
    * First entry is always 0 -> initial start address.
@@ -79,9 +83,18 @@ public class CommandBuffer
   private final NavigableMap<Integer, Integer> startAddresses;
 
   /**
+   * Index to number of argument bytes the subroutines takes.
+   */
+  private final Map<Integer, Integer> subroutines;
+
+  /**
    * Commands as detected by the reassembler.
    */
   private final ICommand[] commands;
+
+  //
+  //
+  //
 
   /**
    * Index of the last added command.
@@ -98,26 +111,28 @@ public class CommandBuffer
   {
     Assert.isTrue(startAddress >= 0, "Precondition: startAddress >= 0");
 
-    this.code = code;
-    this.types = new CodeType[code.length];
-    Arrays.fill(this.types, CodeType.UNKNOWN);
     this.codeReferences = new int[code.length];
     Arrays.fill(this.codeReferences, -1);
     this.dataReferences = new int[code.length];
     Arrays.fill(this.dataReferences, -1);
     this.externalReferences = new int[code.length];
     Arrays.fill(this.externalReferences, -1);
-
     this.codeLabels = new HashMap<Integer, CodeLabel>();
     this.dataLabels = new HashMap<Integer, DataLabel>();
     this.externalLabels = new HashMap<Integer, ExternalLabel>();
-    this.startAddresses = new TreeMap<Integer, Integer>();
-    this.commands = new ICommand[code.length];
-    this.commands[0] = new DummyCommand();
-    this.index = 0;
 
+    this.code = code;
+    this.types = new CodeType[code.length];
+    Arrays.fill(this.types, CodeType.UNKNOWN);
+    this.startAddresses = new TreeMap<Integer, Integer>();
     this.startAddresses.put(0, startAddress);
     this.startAddresses.put(code.length, startAddress);
+    this.subroutines = new HashMap<Integer, Integer>();
+    this.commands = new ICommand[code.length];
+    this.commands[0] = new DummyCommand();
+
+    this.index = 0;
+
   }
 
   /**
@@ -126,26 +141,6 @@ public class CommandBuffer
   public byte[] getCode()
   {
     return code;
-  }
-
-  /**
-   * Is the given relative address valid?.
-   *
-   * @param index relative address
-   */
-  public boolean isValidIndex(int index)
-  {
-    return index >= 0 && index <= code.length;
-  }
-
-  /**
-   * The current relative address.
-   * This is the index where the next command will be added.
-   */
-  public int getCurrentIndex()
-  {
-    ICommand current = commands[index];
-    return index + current.getSize();
   }
 
   /**
@@ -179,7 +174,7 @@ public class CommandBuffer
    */
   public void rebase(int startIndex, int baseAddress)
   {
-    Assert.isTrue(isValidIndex(startIndex), "Precondition: isValidIndex(startIndex)");
+    Assert.isTrue(hasIndex(startIndex), "Precondition: hasIndex(startIndex)");
     assertValidAddress(baseAddress);
 
     Integer removed = startAddresses.put(startIndex, baseAddress);
@@ -194,11 +189,61 @@ public class CommandBuffer
    */
   public void base(int startIndex, int address)
   {
-    Assert.isTrue(isValidIndex(startIndex), "Precondition: isValidIndex(startIndex)");
+    Assert.isTrue(hasIndex(startIndex), "Precondition: hasIndex(startIndex)");
     assertValidAddress(address);
 
     Integer removed = startAddresses.put(startIndex, address - startIndex);
     Assert.isNull(removed, "Precondition: Not based the same index twice");
+  }
+
+  //
+  // Subroutines
+  //
+
+  /**
+   * Add a subroutine.
+   *
+   * @param index relative address of subroutine
+   * @param numBytes number of argument bytes the subroutine expects after the JSR
+   */
+  public void addSubroutine(int index, int numBytes)
+  {
+    Assert.isTrue(hasIndex(index), "Precondition: hasIndex(index)");
+    Assert.isTrue(numBytes > 0, "Precondition: numBytes > 0");
+
+    subroutines.put(index, numBytes);
+  }
+
+  /**
+   * Is there a subroutine manually defined at the given address.
+   *
+   * @param address absolute address
+   * @return number of argument bytes or -1, if there is no subroutine at this address
+   */
+  public boolean hasSubroutine(int address) {
+    return hasAddress(address) && subroutines.get(indexForAddress(address)) != null;
+  }
+
+  /**
+   * Get number of argument bytes the subroutine at the given address expects.
+   *
+   * @param address absolute address
+   * @return number of argument bytes or -1, if there is no subroutine at this address
+   */
+  public int getSubroutineArguments(int address) {
+    Assert.isTrue(hasAddress(address), "Precondition: hasAddress(address)");
+
+    Integer result = subroutines.get(indexForAddress(address));
+    return result != null? result : -1;
+  }
+
+  /**
+   * All subroutines.
+   * Just for the mapper.
+   */
+  Map<Integer, Integer> getSubroutines()
+  {
+    return subroutines;
   }
 
   //
@@ -220,7 +265,7 @@ public class CommandBuffer
    */
   public CodeType getType(int index)
   {
-    Assert.isTrue(isValidIndex(index), "Precondition: isValidIndex(index)");
+    Assert.isTrue(hasIndex(index), "Precondition: hasIndex(index)");
 
     return types[index];
   }
@@ -244,8 +289,8 @@ public class CommandBuffer
    */
   public void setType(int startIndex, int endIndex, CodeType type)
   {
-    Assert.isTrue(isValidIndex(startIndex), "Precondition: isValidIndex(startIndex)");
-    Assert.isTrue(isValidIndex(endIndex), "Precondition: isValidIndex(endIndex)");
+    Assert.isTrue(hasIndex(startIndex), "Precondition: hasIndex(startIndex)");
+    Assert.isTrue(hasIndex(endIndex), "Precondition: hasIndex(endIndex)");
     Assert.isTrue(startIndex <= endIndex, "Precondition: startIndex <= endIndex");
     Assert.notNull(type, "Precondition: type != null");
 
@@ -263,7 +308,7 @@ public class CommandBuffer
    */
   public void setType(int index, CodeType type)
   {
-    Assert.isTrue(isValidIndex(index), "Precondition: isValidIndex(index)");
+    Assert.isTrue(hasIndex(index), "Precondition: hasIndex(index)");
     Assert.notNull(type, "Precondition: type != null");
 
     types[index] = type;
@@ -331,26 +376,23 @@ public class CommandBuffer
   }
 
   /**
-   * Is the given absolute address within the code?.
-   *
-   * @param address absolute address
+   * The current relative address.
+   * This is the index where the next command will be added.
    */
-  public boolean hasAddress(int address)
+  public int getCurrentIndex()
   {
-    Iterator<Entry<Integer, Integer>> iter = startAddresses.entrySet().iterator();
-    Entry<Integer, Integer> lastAddressEntry = iter.next();
-    while (iter.hasNext())
-    {
-      Entry<Integer, Integer> addressEntry = iter.next();
-      if (address >= lastAddressEntry.getValue() + lastAddressEntry.getKey() &&
-        address < lastAddressEntry.getValue() + addressEntry.getKey())
-      {
-        return true;
-      }
-      lastAddressEntry = addressEntry;
-    }
+    ICommand current = commands[index];
+    return index + current.getSize();
+  }
 
-    return false;
+  /**
+   * Is the given relative address valid?.
+   *
+   * @param index relative address
+   */
+  public boolean hasIndex(int index)
+  {
+    return index >= 0 && index <= code.length;
   }
 
   /**
@@ -361,13 +403,60 @@ public class CommandBuffer
    */
   public int addressForIndex(int index)
   {
-    Assert.isTrue(isValidIndex(index), "Precondition: isValidIndex(index)");
+    Assert.isTrue(hasIndex(index), "Precondition: hasIndex(index)");
 
     // Compute start index for address range index belongs to
     Integer startIndex = startAddresses.floorKey(index);
     Assert.notNull(startIndex, "Check: lastStartIndex != null");
 
     return startAddresses.get(startIndex) + index;
+  }
+
+  /**
+   * Is the given absolute address within the code?.
+   *
+   * @param address absolute address
+   */
+  public boolean hasAddress(int address)
+  {
+    return indexForAddressImpl(address) >= 0;
+  }
+
+  /**
+   * Compute relative address from absolute address.
+   *
+   * @param address absolute address
+   * @return relative address
+   */
+  public int indexForAddress(int address)
+  {
+    Assert.isTrue(hasAddress(address), "Precondition: hasAddress(address)");
+
+    return indexForAddressImpl(address);
+  }
+
+  /**
+   * Is the given absolute address within the code?.
+   *
+   * @param address absolute address
+   * @return relative address or -1, if not found
+   */
+  private int indexForAddressImpl(int address)
+  {
+    Iterator<Entry<Integer, Integer>> iter = startAddresses.entrySet().iterator();
+    Entry<Integer, Integer> lastAddressEntry = iter.next();
+    while (iter.hasNext())
+    {
+      Entry<Integer, Integer> addressEntry = iter.next();
+      if (address >= lastAddressEntry.getValue() + lastAddressEntry.getKey() &&
+        address < lastAddressEntry.getValue() + addressEntry.getKey())
+      {
+        return address - lastAddressEntry.getValue();
+      }
+      lastAddressEntry = addressEntry;
+    }
+
+    return -1;
   }
 
   /**
@@ -380,7 +469,7 @@ public class CommandBuffer
    */
   public void addReference(boolean code, int fromIndex, int to)
   {
-    Assert.isTrue(isValidIndex(fromIndex), "Precondition: isValidIndex(fromIndex)");
+    Assert.isTrue(hasIndex(fromIndex), "Precondition: hasIndex(fromIndex)");
 
     if (!hasAddress(to))
     {
@@ -405,7 +494,7 @@ public class CommandBuffer
    */
   public void addCodeReference(int fromIndex, int to)
   {
-    Assert.isTrue(isValidIndex(fromIndex), "Precondition: isValidIndex(fromIndex)");
+    Assert.isTrue(hasIndex(fromIndex), "Precondition: hasIndex(fromIndex)");
     Assert.isTrue(hasAddress(to), "Precondition: hasAddress(to)");
 
     // add label for address "to"
@@ -423,7 +512,7 @@ public class CommandBuffer
    */
   public void addDataReference(int fromIndex, int to)
   {
-    Assert.isTrue(isValidIndex(fromIndex), "Precondition: isValidIndex(fromIndex)");
+    Assert.isTrue(hasIndex(fromIndex), "Precondition: hasIndex(fromIndex)");
     Assert.isTrue(hasAddress(to), "Precondition: hasAddress(to)");
 
     // add label for address "to"
@@ -441,7 +530,7 @@ public class CommandBuffer
    */
   public void addExternalReference(int fromIndex, int to)
   {
-    Assert.isTrue(isValidIndex(fromIndex), "Precondition: isValidIndex(fromIndex)");
+    Assert.isTrue(hasIndex(fromIndex), "Precondition: hasIndex(fromIndex)");
     Assert.isTrue(!hasAddress(to), "Precondition: !hasAddress(to)");
 
     // add label for address "to"

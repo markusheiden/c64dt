@@ -166,13 +166,13 @@ public class CodeView
     }
   }
 
-  private static final String BASEDIR = "retro replay";
-  private static final String ROM_NAME = "rr38q-cnet-%d.bin";
-
   public void reassemble()
   {
     try
     {
+      final String BASEDIR = "retro replay";
+      final String ROM_NAME = "rr38q-cnet-%d.bin";
+
       File file = new File(BASEDIR, String.format(ROM_NAME, 0));
       System.out.println("Reassembling " + file.getCanonicalPath() + " (" + file.length() + " Bytes)");
 
@@ -194,7 +194,7 @@ public class CodeView
       commands.rebase(0x1DB3, 0x8000);
       commands.rebase(0x1E00, 0x0C000);
       commands.setType(0x1E00, 0x1E15, CodeType.DATA);
-      jsr.addSubroutine(0x9F03, 2);
+      commands.addSubroutine(0x1F03, 2);
       commands.setType(0x1FF8, 0x2000, CodeType.ABSOLUTE_ADDRESS);
 
       reassembler.reassemble(commands);

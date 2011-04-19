@@ -55,6 +55,18 @@ public class CommandBufferMapper implements IXmlMapper<CommandBuffer>
       addressesElement.appendChild(addressElement);
     }
 
+    // subroutines
+    Element subroutinesElement = document.createElement("subroutines");
+    commandsElement.appendChild(subroutinesElement);
+
+    for (Entry<Integer, Integer> entry : commands.getSubroutines().entrySet())
+    {
+      Element subroutineElement = document.createElement("subroutine");
+      subroutineElement.setAttribute("index", hexWordPlain(entry.getKey()));
+      subroutineElement.setAttribute("arguments", hexPlain(entry.getValue()));
+      addressesElement.appendChild(subroutineElement);
+    }
+
     // detected code types
     Element typesElement = document.createElement("types");
     commandsElement.appendChild(typesElement);
@@ -115,6 +127,17 @@ public class CommandBufferMapper implements IXmlMapper<CommandBuffer>
       int index = Integer.parseInt(addressElement.getAttribute("index"), 16);
       int address = Integer.parseInt(addressElement.getAttribute("base"), 16);
       commands.rebase(index, address);
+    }
+
+    // subroutines
+    Node subroutinesElement = commandsElement.getElementsByTagName("subroutines").item(0);
+    NodeList subroutineElements = subroutinesElement.getChildNodes();
+    for (int i = 0; i < subroutineElements.getLength(); i++)
+    {
+      Element subroutineElement = (Element) addressElements.item(i);
+      int index = Integer.parseInt(subroutineElement.getAttribute("index"), 16);
+      int arguments = Integer.parseInt(subroutineElement.getAttribute("arguments"), 16);
+      commands.addSubroutine(index, arguments);
     }
 
     // detected code types

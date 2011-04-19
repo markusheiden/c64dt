@@ -34,6 +34,11 @@ public class CommandBufferMapperTest
     commands.rebase(0x0020, 0x8000);
     commands.rebase(0x0030, 0xF000);
 
+    // subroutines
+    commands.addSubroutine(0x0010, 0x10);
+    commands.addSubroutine(0x0020, 0x20);
+    commands.addSubroutine(0x0030, 0x30);
+
     // code types
     commands.setType(0x0000, 0x9000, CodeType.DATA);
     commands.setType(0x9000, CodeType.OPCODE);
@@ -69,6 +74,14 @@ public class CommandBufferMapperTest
     for (Integer index : commandsStart.keySet())
     {
       assertEquals("Index " + index + ":", commandsStart.get(index), readStart.get(index));
+    }
+
+    // subroutines
+    SortedMap<Integer,Integer> commandsSubroutines = commands.getStartAddresses();
+    SortedMap<Integer, Integer> readSubroutines = read.getStartAddresses();
+    for (Integer index : commandsSubroutines.keySet())
+    {
+      assertEquals("Index " + index + ":", commandsSubroutines.get(index), readSubroutines.get(index));
     }
   }
 }

@@ -15,24 +15,6 @@ import java.util.Map;
  */
 public class JsrDetector implements IDetector
 {
-  /**
-   * JSR address to fixed number of arguments.
-   */
-  private final Map<Integer, Integer> subroutines = new HashMap<Integer, Integer>();
-
-  /**
-   * Add a subroutine with its argument length.
-   *
-   * @param address absolute address of subroutine
-   * @param argumentLength number of byte the subroutine expects after the jsr opcode
-   */
-  public void addSubroutine(int address, int argumentLength) {
-    // TODO mh: check address
-    Assert.isTrue(argumentLength > 0, "Precondition: argumentLength > 0");
-
-    subroutines.put(address, argumentLength);
-  }
-
   @Override
   public boolean detect(CommandBuffer commands)
   {
@@ -47,10 +29,10 @@ public class JsrDetector implements IDetector
       {
         OpcodeCommand opcodeCommand = (OpcodeCommand) command;
 
-        if (opcodeCommand.getOpcode().getType().equals(OpcodeType.JSR) && subroutines.containsKey(opcodeCommand.getArgument()))
+        if (opcodeCommand.getOpcode().getType().equals(OpcodeType.JSR) && commands.hasSubroutine(opcodeCommand.getArgument()))
         {
           int startIndex = commands.getCurrentIndex();
-          int endIndex = startIndex + subroutines.get(opcodeCommand.getArgument());
+          int endIndex = startIndex + commands.getSubroutineArguments(opcodeCommand.getArgument());
             // Mark argument bytes as data
             commands.setType(startIndex, endIndex, CodeType.DATA);
             // At endIndex the code continues
