@@ -282,7 +282,7 @@ public class Reassembler
          * Exception: JSR which may be followed by argument data.
          */
         if (!lastCommand.isReachable() &&
-          command.isReachable() && !isJsr(command) && !command.isEnd() && !commands.getType().isCode())
+          command.isReachable() && !command.isEnd() && !commands.getType().isCode())
         {
           command.setReachable(false);
           // restart, if reference caused a wrong label in the already scanned code
