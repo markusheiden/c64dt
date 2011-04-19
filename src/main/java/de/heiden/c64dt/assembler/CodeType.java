@@ -26,6 +26,11 @@ public enum CodeType
   DATA,
 
   /**
+   * Bit to skip next command.
+   */
+  BIT,
+
+  /**
    * Absolute Address.
    */
   ABSOLUTE_ADDRESS;

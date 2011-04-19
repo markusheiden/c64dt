@@ -1,6 +1,7 @@
 package de.heiden.c64dt.assembler;
 
 import de.heiden.c64dt.assembler.command.AddressCommand;
+import de.heiden.c64dt.assembler.command.BitCommand;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.DataCommand;
 import de.heiden.c64dt.assembler.command.DummyCommand;
@@ -174,7 +175,14 @@ public class Reassembler
       int index = commands.getNextIndex();
       int pc = commands.addressForIndex(index);
       CodeType type = commands.getType(index);
-      if (type == CodeType.ABSOLUTE_ADDRESS)
+
+      if (type == CodeType.BIT)
+      {
+        Opcode opcode = code.readOpcode();
+        // TODO mh: read ahead argument
+        commands.addCommand(new BitCommand(opcode, 0));
+      }
+      else if (type == CodeType.ABSOLUTE_ADDRESS)
       {
         // absolute address reference as data
         int address = code.read(2);
@@ -304,11 +312,15 @@ public class Reassembler
    */
   private boolean detectCodeType()
   {
-    boolean result = false;
+    boolean change = false;
 
     for (IDetector detector : detectors)
     {
-      result |= detector.detect(commands);
+      boolean detectorHit = detector.detect(commands);
+      if (detectorHit) {
+        System.out.println(detector.getClass().getSimpleName());
+      }
+      change |= detectorHit;
     }
 
     // TODO iseahe: setType() for label locations?
@@ -316,7 +328,7 @@ public class Reassembler
     // TODO iseahe: detect self modifying code
     // TODO iseahe: detect JSR with parameters afterwards
 
-    return result;
+    return change;
   }
 
   /**
