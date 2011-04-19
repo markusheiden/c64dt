@@ -266,10 +266,11 @@ public class CommandBuffer
    * Set code type for the current opcode / command.
    *
    * @param type code type
+   * @return whether a change has taken place
    */
-  public void setType(CodeType type)
+  public boolean setType(CodeType type)
   {
-    setType(index, type);
+    return setType(index, type);
   }
 
   /**
@@ -278,18 +279,22 @@ public class CommandBuffer
    * @param startIndex first relative address (incl.)
    * @param endIndex last relative address (excl.)
    * @param type code type
+   * @return whether a change has taken place
    */
-  public void setType(int startIndex, int endIndex, CodeType type)
+  public boolean setType(int startIndex, int endIndex, CodeType type)
   {
     Assert.isTrue(hasIndex(startIndex), "Precondition: hasIndex(startIndex)");
     Assert.isTrue(hasEndIndex(endIndex), "Precondition: hasEndIndex(endIndex)");
     Assert.isTrue(startIndex <= endIndex, "Precondition: startIndex <= endIndex");
     Assert.notNull(type, "Precondition: type != null");
 
+    boolean change = false;
     for (int index = startIndex; index < endIndex; index++)
     {
-      setType(index, type);
+      change|= setType(index, type);
     }
+
+    return change;
   }
 
   /**
@@ -297,13 +302,17 @@ public class CommandBuffer
    *
    * @param index relative address
    * @param type code type
+   * @return whether a change has taken place
    */
-  public void setType(int index, CodeType type)
+  public boolean setType(int index, CodeType type)
   {
     Assert.isTrue(hasIndex(index), "Precondition: hasIndex(index)");
     Assert.notNull(type, "Precondition: type != null");
 
+    boolean change = !type.equals(types[index]);
     types[index] = type;
+
+    return change;
   }
 
   //

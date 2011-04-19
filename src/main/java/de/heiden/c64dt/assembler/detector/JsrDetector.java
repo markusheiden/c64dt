@@ -76,16 +76,17 @@ public class JsrDetector implements IDetector
       return false;
     }
 
-    int startIndex = commands.getNextIndex();
+    boolean change = false;
 
+    int startIndex = commands.getNextIndex();
     // Mark argument bytes as data
-    commands.setType(startIndex, endIndex, CodeType.DATA);
+    change |= commands.setType(startIndex, endIndex, CodeType.DATA);
     // At endIndex the code continues
-    commands.setType(endIndex, CodeType.OPCODE);
+    change |= commands.setType(endIndex, CodeType.OPCODE);
     // Add reference to make code reachable
     commands.addCodeReference(index, commands.addressForIndex(endIndex));
 
-    return true;
+    return change;
   }
 
   /**

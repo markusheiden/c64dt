@@ -27,7 +27,7 @@ public class BrkDetector implements IDetector
 
         if (opcodeCommand.getOpcode().getType().equals(OpcodeType.BRK) && !opcodeCommand.isReachable())
         {
-          commands.setType(index, CodeType.DATA);
+          change |= commands.setType(index, CodeType.DATA);
         }
       }
     }

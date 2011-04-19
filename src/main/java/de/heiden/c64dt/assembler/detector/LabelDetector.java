@@ -21,14 +21,12 @@ public class LabelDetector implements IDetector
       if (commands.hasCodeLabel())
       {
         // Mark all code label positions as a start of an opcode
-        commands.setType(CodeType.OPCODE);
-        change = true;
+        change |= commands.setType(CodeType.OPCODE);
       }
 //      else if (commands.hasDataLabel() && commands.getType().isUnknown())
 //      {
 //        // Mark all data label positions as data
-//        commands.setType(CodeType.DATA);
-//        change = true;
+//        change |= commands.setType(CodeType.DATA);
 //      }
     }
 
