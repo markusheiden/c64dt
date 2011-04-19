@@ -19,8 +19,8 @@ public class BrkDetector implements IDetector
     commands.restart();
     while (commands.hasNextCommand())
     {
-      int index = commands.getNextIndex();
       ICommand command = commands.nextCommand();
+      int index = commands.getCurrentIndex();
       if (command instanceof OpcodeCommand)
       {
         OpcodeCommand opcodeCommand = (OpcodeCommand) command;

@@ -29,21 +29,22 @@ public class JsrDetector implements IDetector
     commands.restart();
     while (commands.hasNextCommand())
     {
-      int index = commands.getNextIndex();
       ICommand command = commands.nextCommand();
+      int index = commands.getCurrentIndex();
       if (command instanceof OpcodeCommand)
       {
         OpcodeCommand opcodeCommand = (OpcodeCommand) command;
-        if (!opcodeCommand.getOpcode().getType().equals(OpcodeType.JSR) || !opcodeCommand.getOpcode().getMode().equals(OpcodeMode.ABS)) {
-          // no JSR $xxxx
+        if (!opcodeCommand.getOpcode().getType().equals(OpcodeType.JSR) ||
+            !opcodeCommand.getOpcode().getMode().equals(OpcodeMode.ABS) ||
+            !commands.hasNextCommand()) {
+          // no JSR $xxxx or no arguments
           continue;
         }
 
         int arguments = commands.getSubroutineArguments(opcodeCommand.getArgument());
         if (arguments > 0)
         {
-          markArgument(commands, index, commands.getNextIndex() + arguments);
-          change = true;
+          change |= markArgument(commands, index, commands.getNextIndex() + arguments);
         }
         else if (arguments == 0 || !commands.peekCommand().isReachable())
         {
@@ -54,8 +55,7 @@ public class JsrDetector implements IDetector
             continue;
           }
 
-          markArgument(commands, index, endIndex);
-          change = true;
+          change |= markArgument(commands, index, endIndex);
         }
       }
     }
@@ -69,8 +69,13 @@ public class JsrDetector implements IDetector
    * @param commands command buffer
    * @param index start index of JSR
    * @param endIndex end index of data (excl.), next opcode
+   * @return whether a change has taken place
    */
-  private void markArgument(CommandBuffer commands, int index, int endIndex) {
+  private boolean markArgument(CommandBuffer commands, int index, int endIndex) {
+    if (!commands.hasIndex(endIndex)) {
+      return false;
+    }
+
     int startIndex = commands.getNextIndex();
 
     // Mark argument bytes as data
@@ -80,6 +85,7 @@ public class JsrDetector implements IDetector
     // Add reference to make code reachable
     commands.addCodeReference(index, commands.addressForIndex(endIndex));
 
+    return true;
   }
 
   /**
@@ -94,7 +100,7 @@ public class JsrDetector implements IDetector
     Assert.notNull(commands, "Precondition: commands != null");
 
     byte[] code = commands.getCode();
-    for (int index = commands.getNextIndex(), count = 0; index < code.length && count < maxLength; index++)
+    for (int index = commands.getNextIndex(), count = 0; commands.hasIndex(index) && count < maxLength; index++)
     {
       if (stopAtLabels && commands.hasLabel(commands.addressForIndex(index))) {
         // stop search at any label

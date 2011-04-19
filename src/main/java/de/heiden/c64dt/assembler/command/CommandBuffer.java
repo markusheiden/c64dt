@@ -282,7 +282,7 @@ public class CommandBuffer
   public void setType(int startIndex, int endIndex, CodeType type)
   {
     Assert.isTrue(hasIndex(startIndex), "Precondition: hasIndex(startIndex)");
-    Assert.isTrue(hasIndex(endIndex), "Precondition: hasIndex(endIndex)");
+    Assert.isTrue(hasEndIndex(endIndex), "Precondition: hasEndIndex(endIndex)");
     Assert.isTrue(startIndex <= endIndex, "Precondition: startIndex <= endIndex");
     Assert.notNull(type, "Precondition: type != null");
 
@@ -392,6 +392,16 @@ public class CommandBuffer
    * @param index relative address
    */
   public boolean hasIndex(int index)
+  {
+    return index >= 0 && index < code.length;
+  }
+
+  /**
+   * Is the given relative end address valid?.
+   *
+   * @param index relative end address
+   */
+  public boolean hasEndIndex(int index)
   {
     return index >= 0 && index <= code.length;
   }
@@ -699,7 +709,7 @@ public class CommandBuffer
 
   public boolean hasNextCommand()
   {
-    return getNextIndex() < code.length;
+    return hasIndex(getNextIndex());
   }
 
   public ICommand nextCommand()
@@ -774,6 +784,7 @@ public class CommandBuffer
       addCommand(index, replacement);
       index += replacement.getSize();
     }
+    // TODO mh: trace back to the first replacement?!? comment!
     previousCommand();
 
     // check consistency
