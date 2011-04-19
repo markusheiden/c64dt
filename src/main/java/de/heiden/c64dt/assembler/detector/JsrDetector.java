@@ -29,7 +29,7 @@ public class JsrDetector implements IDetector
     commands.restart();
     while (commands.hasNextCommand())
     {
-      int index = commands.geNextIndex();
+      int index = commands.getNextIndex();
       ICommand command = commands.nextCommand();
       if (command instanceof OpcodeCommand)
       {
@@ -42,7 +42,7 @@ public class JsrDetector implements IDetector
         int arguments = commands.getSubroutineArguments(opcodeCommand.getArgument());
         if (arguments > 0)
         {
-          markArgument(commands, index, commands.geNextIndex() + arguments);
+          markArgument(commands, index, commands.getNextIndex() + arguments);
           change = true;
         }
         else if (arguments == 0 || !commands.peekCommand().isReachable())
@@ -71,7 +71,7 @@ public class JsrDetector implements IDetector
    * @param endIndex end index of data (excl.), next opcode
    */
   private void markArgument(CommandBuffer commands, int index, int endIndex) {
-    int startIndex = commands.geNextIndex();
+    int startIndex = commands.getNextIndex();
 
     // Mark argument bytes as data
     commands.setType(startIndex, endIndex, CodeType.DATA);
@@ -94,7 +94,7 @@ public class JsrDetector implements IDetector
     Assert.notNull(commands, "Precondition: commands != null");
 
     byte[] code = commands.getCode();
-    for (int index = commands.geNextIndex(), count = 0; index < code.length && count < maxLength; index++)
+    for (int index = commands.getNextIndex(), count = 0; index < code.length && count < maxLength; index++)
     {
       if (stopAtLabels && commands.hasLabel(commands.addressForIndex(index))) {
         // stop search at any label

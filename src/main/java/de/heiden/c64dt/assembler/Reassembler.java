@@ -171,7 +171,7 @@ public class Reassembler
     commands.clear();
     while (code.has(1))
     {
-      int index = commands.geNextIndex();
+      int index = commands.getNextIndex();
       int pc = commands.addressForIndex(index);
       CodeType type = commands.getType(index);
       if (type == CodeType.ABSOLUTE_ADDRESS)

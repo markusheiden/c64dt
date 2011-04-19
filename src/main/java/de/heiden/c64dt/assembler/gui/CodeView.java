@@ -101,7 +101,7 @@ public class CodeView
       CommandBuffer commands = reassembler.getCommands();
       commands.restart();
       while (commands.hasNextCommand()) {
-        int index = commands.geNextIndex();
+        int index = commands.getNextIndex();
         int addr = commands.addressForIndex(index);
         ICommand command = commands.nextCommand();
 
