@@ -1,5 +1,6 @@
 package de.heiden.c64dt.assembler.command;
 
+import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.ILabel;
 import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
@@ -25,7 +26,7 @@ public class AddressCommand extends AbstractCommand
    */
   public AddressCommand(int address)
   {
-    super(false);
+    super(CodeType.ABSOLUTE_ADDRESS, false);
 
     this.address = address;
   }

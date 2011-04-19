@@ -1,5 +1,6 @@
 package de.heiden.c64dt.assembler.command;
 
+import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.ILabel;
 import de.heiden.c64dt.assembler.Opcode;
 import de.heiden.c64dt.assembler.OpcodeMode;
@@ -40,7 +41,7 @@ public class OpcodeCommand extends AbstractCommand
    */
   public OpcodeCommand(Opcode opcode, int argument)
   {
-    super(true);
+    super(CodeType.OPCODE, true);
 
     Assert.notNull(opcode, "Precondition: opcode != null");
 

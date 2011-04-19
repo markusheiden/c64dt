@@ -1,5 +1,7 @@
 package de.heiden.c64dt.assembler.command;
 
+import de.heiden.c64dt.assembler.CodeType;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
@@ -9,6 +11,11 @@ import java.util.List;
  */
 public interface ICommand
 {
+  /**
+   * Get code type this command handles.
+   */
+  public CodeType getType();
+
   /**
    * Size in bytes of this command.
    */
@@ -30,11 +37,6 @@ public interface ICommand
    * @param address absolute address
    */
   public void setAddress(int address);
-
-  /**
-   * The first address after this command.
-   */
-  public int getNextAddress();
 
   /**
    * Is the command right after this command not reachable from this command?

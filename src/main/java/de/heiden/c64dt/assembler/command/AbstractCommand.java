@@ -1,5 +1,6 @@
 package de.heiden.c64dt.assembler.command;
 
+import de.heiden.c64dt.assembler.CodeType;
 import org.springframework.util.Assert;
 
 /**
@@ -7,18 +8,27 @@ import org.springframework.util.Assert;
  */
 public abstract class AbstractCommand implements ICommand
 {
-  private int address;
+  private CodeType type;
   private boolean reachable;
+  private int address;
 
   /**
    * Constructor.
    *
+   * @param type the code type this command handles
    * @param reachable default value for reachability
    */
-  protected AbstractCommand(boolean reachable)
+  protected AbstractCommand(CodeType type, boolean reachable)
   {
-    this.address = -1;
+    this.type = type;
     this.reachable = reachable;
+    this.address = -1;
+  }
+
+  @Override
+  public CodeType getType()
+  {
+    return type;
   }
 
   @Override
@@ -40,13 +50,6 @@ public abstract class AbstractCommand implements ICommand
     Assert.isTrue(!hasAddress(), "Precondition: !hasAddress()");
 
     this.address = address;
-  }
-
-  @Override
-  public int getNextAddress()
-  {
-    Assert.isTrue(hasAddress(), "Precondition: hasAddress()");
-    return getAddress() + getSize();
   }
 
   @Override

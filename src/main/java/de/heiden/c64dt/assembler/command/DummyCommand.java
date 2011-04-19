@@ -1,5 +1,7 @@
 package de.heiden.c64dt.assembler.command;
 
+import de.heiden.c64dt.assembler.CodeType;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
@@ -26,7 +28,7 @@ public class DummyCommand extends AbstractCommand
    */
   public DummyCommand(int address)
   {
-    super(false);
+    super(CodeType.UNKNOWN, false);
     setAddress(address);
   }
 

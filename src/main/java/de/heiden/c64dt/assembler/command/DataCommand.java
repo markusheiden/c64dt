@@ -1,5 +1,6 @@
 package de.heiden.c64dt.assembler.command;
 
+import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.charset.C64Charset;
 import org.springframework.util.Assert;
 
@@ -25,7 +26,7 @@ public class DataCommand extends AbstractCommand
    */
   public DataCommand(int data)
   {
-    super(false);
+    super(CodeType.DATA, false);
 
     this.data = new ArrayList<Integer>(8);
     this.data.add(data);
