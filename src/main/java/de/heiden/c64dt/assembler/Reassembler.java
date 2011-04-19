@@ -261,7 +261,7 @@ public class Reassembler
          * A command is not reachable, if the previous command is not reachable or is an ending command (e.g. JMP) and
          * there is no code label for the command and the command has not already been detected as an opcode.
          */
-        if (command.isReachable() && !commands.hasCodeLabel() && commands.getType() != CodeType.OPCODE &&
+        if (command.isReachable() && !commands.hasCodeLabel() && !commands.getType().isCode() &&
           (!lastCommand.isReachable() || lastCommand.isEnd()))
         {
           command.setReachable(false);
@@ -282,12 +282,11 @@ public class Reassembler
          * Exception: JSR which may be followed by argument data.
          */
         if (!lastCommand.isReachable() &&
-          command.isReachable() && !isJsr(command) && !command.isEnd() && commands.getType() != CodeType.OPCODE)
+          command.isReachable() && !isJsr(command) && !command.isEnd() && !commands.getType().isCode())
         {
           command.setReachable(false);
           // restart, if reference caused a wrong label in the already scanned code
           change |= commands.removeReference();
-          // TODO mh: Change code type to data?
         }
 
         lastCommand = command;
