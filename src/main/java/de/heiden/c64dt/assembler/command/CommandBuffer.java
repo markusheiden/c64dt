@@ -648,7 +648,9 @@ public class CommandBuffer
   }
 
   /**
-   * Remove a command.
+   * Remove the command from the given relative address.
+   *
+   * @param index relative address
    */
   void removeCommand(int index)
   {
