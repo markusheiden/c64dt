@@ -207,7 +207,7 @@ public class CommandIterator
    * Removes the current command.
    * Traces back to the previous commands afterwards.
    */
-  public void removeCurrentCommand()
+  public void removeCommand()
   {
     // remember position of current command
     int remove = index;

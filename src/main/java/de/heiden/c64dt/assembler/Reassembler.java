@@ -338,7 +338,7 @@ public class Reassembler
       if (!iter.hasLabel() && lastCommand != null && lastCommand.combineWith(command))
       {
         // TODO let command buffer handle this functionality?
-        iter.removeCurrentCommand();
+        iter.removeCommand();
       }
       else
       {
