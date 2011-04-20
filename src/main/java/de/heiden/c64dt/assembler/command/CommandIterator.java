@@ -27,6 +27,8 @@ public class CommandIterator
    */
   public CommandIterator(CommandBuffer commands)
   {
+    Assert.notNull(commands, "Precondition: commands != null");
+
     this.commands = commands;
   }
 
