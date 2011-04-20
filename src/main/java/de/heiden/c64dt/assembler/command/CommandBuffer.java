@@ -339,6 +339,22 @@ public class CommandBuffer
   }
 
   /**
+   * Is there at least one code label pointing to the argument of the current opcode / command?
+   */
+  public boolean hasConflictingCodeLabel()
+  {
+    ICommand current = commands[index];
+    for (int address = addressForIndex(index) + 1, count = 1; count < current.getSize(); address++, count++)
+    {
+      if (hasCodeLabel(address)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
    * Is a code label at the current opcode / command?
    */
   public boolean hasCodeLabel()
