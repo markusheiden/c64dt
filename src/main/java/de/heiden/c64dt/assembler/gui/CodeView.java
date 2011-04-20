@@ -103,7 +103,7 @@ public class CodeView
       CommandIterator iter = new CommandIterator(commands);
       while (iter.hasNextCommand()) {
         ICommand command = iter.nextCommand();
-        int index = iter.getCurrentIndex();
+        int index = iter.getIndex();
         int addr = commands.addressForIndex(index);
 
         builder.setLength(0);

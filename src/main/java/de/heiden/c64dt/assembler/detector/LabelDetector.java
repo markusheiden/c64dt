@@ -30,7 +30,7 @@ public class LabelDetector implements IDetector
 
         // Search for code label and mark the relative address as an opcode
         boolean notFound = true;
-        for (int index = iter.getCurrentIndex() + 1, count = 1; count < command.getSize(); index++, count++)
+        for (int index = iter.getIndex() + 1, count = 1; count < command.getSize(); index++, count++)
         {
           // TODO mh: move functionality to CommandBuffer: hasCodeLabel(int index)
           if (commands.hasCodeLabel(commands.addressForIndex(index))) {

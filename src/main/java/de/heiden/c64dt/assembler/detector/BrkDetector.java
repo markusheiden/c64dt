@@ -20,7 +20,7 @@ public class BrkDetector implements IDetector
     for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand();)
     {
       ICommand command = iter.nextCommand();
-      int index = iter.getCurrentIndex();
+      int index = iter.getIndex();
       if (command instanceof OpcodeCommand)
       {
         OpcodeCommand opcodeCommand = (OpcodeCommand) command;

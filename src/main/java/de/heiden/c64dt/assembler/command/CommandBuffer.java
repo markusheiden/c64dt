@@ -64,7 +64,7 @@ public class CommandBuffer
   /**
    * Commands as detected by the reassembler.
    */
-  final ICommand[] commands;
+  private final ICommand[] commands;
 
   /**
    * Index of the last added command.
@@ -610,10 +610,22 @@ public class CommandBuffer
   /**
    * Current relative address.
    */
-  public int getIndex() {
+  public int getIndex()
+  {
     return index;
   }
 
+  /**
+   * Get command at relative address.
+   *
+   * @param index relative address
+   */
+  public ICommand getCommand(int index)
+  {
+    Assert.isTrue(hasIndex(index), "Precondition: hasIndex(index)");
+
+    return commands[index];
+  }
 
   /**
    * Add a command at the end of the buffer.
@@ -631,5 +643,15 @@ public class CommandBuffer
     command.setAddress(address);
     commands[index] = command;
     index += command.getSize();
+  }
+
+  /**
+   * Remove a command.
+   */
+  void removeCommand(int index)
+  {
+    Assert.isTrue(hasIndex(index), "Precondition: hasIndex(index)");
+
+    commands[index] = null;
   }
 }

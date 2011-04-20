@@ -9,17 +9,21 @@ import org.springframework.util.Assert;
  */
 public class CommandIterator
 {
+  /**
+   * The command buffer to iterate.
+   */
   private CommandBuffer commands;
 
   /**
-   * Index of the last added command.
+   * Index of the current command.
+   * Iterator.
    */
   private int index;
 
   /**
    * Constructor.
    *
-   * @param commands
+   * @param commands Command buffer to iterate
    */
   public CommandIterator(CommandBuffer commands)
   {
@@ -54,45 +58,77 @@ public class CommandIterator
   //
 
   /**
-   * (Re)start iteration.
+   * The current relative address.
    */
-  public void restart()
+  public int getIndex()
   {
-    index = 0;
+    return index;
   }
 
+  /**
+   * The next relative address.
+   * This is the index from where the next command will be read.
+   */
+  public int getNextIndex()
+  {
+    return index + getCommand().getSize();
+  }
+
+  /**
+   * Is there one more command?
+   */
   public boolean hasNextCommand()
   {
     return commands.hasIndex(getNextIndex());
   }
 
+  /**
+   * Iterate to next command and return it.
+   */
   public ICommand nextCommand()
   {
     index = getNextIndex();
-    ICommand result = commands.commands[index];
+    ICommand result = getCommand();
 
     Assert.notNull(result, "Postcondition: result != null");
     return result;
   }
 
-  public ICommand peekCommand() {
-    int nextIndex = getNextIndex();
-    return commands.hasIndex(nextIndex)? commands.commands[nextIndex] : DummyCommand.DUMMY_COMMAND;
+  /**
+   * Get the current command.
+   */
+  private ICommand getCommand()
+  {
+    return commands.getCommand(index);
   }
 
+  /**
+   * Get the next command without iterating to it.
+   */
+  public ICommand peekCommand() {
+    int nextIndex = getNextIndex();
+    return commands.hasIndex(nextIndex)? commands.getCommand(nextIndex) : DummyCommand.DUMMY_COMMAND;
+  }
+
+  /**
+   * Is there at least one command before the current command.
+   */
   public boolean hasPreviousCommand()
   {
     return index > 0;
   }
 
+  /**
+   * Iterate to the previous command and return it.
+   */
   @SuppressWarnings({"StatementWithEmptyBody"})
   public ICommand previousCommand()
   {
     // get start of current command for consistency check
     int endIndex = index;
     // trace back for previous command
-    while (index > 0 && commands.commands[--index] == null);
-    ICommand result = commands.commands[index];
+    while (index > 0 && commands.getCommand(--index) == null);
+    ICommand result = getCommand();
 
     Assert.notNull(result, "Postcondition: result != null");
     Assert.isTrue(getNextIndex() == endIndex, "Precondition: The previous commands ends at the start of the current command");
@@ -108,8 +144,7 @@ public class CommandIterator
    */
   public boolean hasLabel()
   {
-    ICommand current = commands.commands[index];
-    return commands.hasLabel(current.getAddress());
+    return commands.hasLabel(getCommand().getAddress());
   }
 
   /**
@@ -119,8 +154,7 @@ public class CommandIterator
    */
   public ILabel getLabel()
   {
-    ICommand current = commands.commands[index];
-    return commands.getLabel(current.getAddress());
+    return commands.getLabel(getCommand().getAddress());
   }
 
   /**
@@ -128,8 +162,7 @@ public class CommandIterator
    */
   public boolean hasConflictingCodeLabel()
   {
-    ICommand current = commands.commands[index];
-    for (int address = commands.addressForIndex(index) + 1, count = 1; count < current.getSize(); address++, count++)
+    for (int address = commands.addressForIndex(index) + 1, count = 1; count < getCommand().getSize(); address++, count++)
     {
       if (commands.hasCodeLabel(address)) {
         return true;
@@ -144,8 +177,7 @@ public class CommandIterator
    */
   public boolean hasCodeLabel()
   {
-    ICommand current = commands.commands[index];
-    return commands.hasCodeLabel(current.getAddress());
+    return commands.hasCodeLabel(getCommand().getAddress());
   }
 
   /**
@@ -153,8 +185,7 @@ public class CommandIterator
    */
   public boolean hasDataLabel()
   {
-    ICommand current = commands.commands[index];
-    return commands.hasDataLabel(current.getAddress());
+    return commands.hasDataLabel(getCommand().getAddress());
   }
 
   /**
@@ -167,28 +198,6 @@ public class CommandIterator
     return commands.removeReference(index);
   }
 
-  //
-  //
-  //
-
-  /**
-   * The current relative address.
-   * Only valid, if at least one command has been added.
-   */
-  public int getCurrentIndex()
-  {
-    return index;
-  }
-
-  /**
-   * The next relative address.
-   * This is the index where the next command will be added.
-   */
-  public int getNextIndex()
-  {
-    ICommand current = commands.commands[index];
-    return index + current.getSize();
-  }
 
   //
   // modifying operations during iteration
@@ -205,7 +214,7 @@ public class CommandIterator
     // skip current command
     index = getNextIndex();
     // delete current command
-    commands.commands[remove] = null;
+    commands.removeCommand(remove);
     // trace back to previous command
     previousCommand();
   }

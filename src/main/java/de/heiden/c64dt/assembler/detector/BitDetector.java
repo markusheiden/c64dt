@@ -3,7 +3,6 @@ package de.heiden.c64dt.assembler.detector;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Opcode;
 import de.heiden.c64dt.assembler.OpcodeType;
-import de.heiden.c64dt.assembler.command.BitCommand;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.ICommand;
@@ -37,7 +36,7 @@ public class BitDetector implements IDetector
 
           if (skippedOpcode.isLegal() && skippedOpcode.getSize() == size - 1)
           {
-            int index = iter.getCurrentIndex();
+            int index = iter.getIndex();
             change |= commands.setType(index++, CodeType.BIT);
             change |= commands.setType(index++, CodeType.OPCODE);
             if (bytes.size() == 3) {
