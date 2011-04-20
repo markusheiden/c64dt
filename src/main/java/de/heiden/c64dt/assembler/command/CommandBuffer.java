@@ -129,7 +129,6 @@ public class CommandBuffer
     this.startAddresses.put(code.length, startAddress);
     this.subroutines = new HashMap<Integer, Integer>();
     this.commands = new ICommand[code.length];
-    this.commands[0] = new DummyCommand();
 
     this.index = 0;
 
@@ -146,7 +145,6 @@ public class CommandBuffer
   {
     return code;
   }
-
 
   /**
    * Is the given relative address valid?.
@@ -171,7 +169,8 @@ public class CommandBuffer
   /**
    * Length of code.
    */
-  public int getLength() {
+  public int getLength()
+  {
     return code.length;
   }
 
