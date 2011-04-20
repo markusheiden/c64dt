@@ -791,30 +791,4 @@ public class CommandBuffer
     // trace back to previous command
     previousCommand();
   }
-
-  /**
-   * Replace the current command.
-   *
-   * @param replacements Replacement commands
-   */
-  public void replaceCurrentCommand(ICommand... replacements)
-  {
-    // get end of command for consistency check
-    int endIndex = getNextIndex();
-
-    // delete old command
-    commands[index] = null;
-
-    // add new commands
-    for (ICommand replacement : replacements)
-    {
-      addCommand(index, replacement);
-      index += replacement.getSize();
-    }
-    // TODO mh: trace back to the first replacement?!? comment!
-    previousCommand();
-
-    // check consistency
-    Assert.isTrue(getNextIndex() == endIndex, "Precondition: The size of the replacements is equal to the size of the removed command");
-  }
 }
