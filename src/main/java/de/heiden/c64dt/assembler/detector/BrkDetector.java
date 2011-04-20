@@ -17,9 +17,7 @@ public class BrkDetector implements IDetector
   {
     boolean change = false;
 
-    CommandIterator iter = new CommandIterator(commands);
-
-    while (iter.hasNextCommand())
+    for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand();)
     {
       ICommand command = iter.nextCommand();
       int index = iter.getCurrentIndex();

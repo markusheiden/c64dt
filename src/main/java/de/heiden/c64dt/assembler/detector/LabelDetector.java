@@ -15,9 +15,7 @@ public class LabelDetector implements IDetector
   {
     boolean change = false;
 
-    CommandIterator iter = new CommandIterator(commands);
-
-    while (iter.hasNextCommand())
+    for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand();)
     {
       ICommand command = iter.nextCommand();
       if (iter.hasCodeLabel())
