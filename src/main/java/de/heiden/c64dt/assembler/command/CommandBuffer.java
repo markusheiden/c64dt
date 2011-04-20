@@ -330,6 +330,8 @@ public class CommandBuffer
 
   /**
    * Is a label at the given absolute address?
+   *
+   * @param address absolute address
    */
   public boolean hasLabel(int address)
   {
