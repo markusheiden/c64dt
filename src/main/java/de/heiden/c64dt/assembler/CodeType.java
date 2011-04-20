@@ -38,7 +38,8 @@ public enum CodeType
   /**
    * Is the code type unknown?.
    */
-  public final boolean isUnknown() {
+  public final boolean isUnknown()
+  {
     return UNKNOWN.equals(this);
   }
 

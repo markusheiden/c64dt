@@ -107,9 +107,10 @@ public class CommandIterator
   /**
    * Get the next command without iterating to it.
    */
-  public ICommand peekCommand() {
+  public ICommand peekCommand()
+  {
     int nextIndex = getNextIndex();
-    return commands.hasIndex(nextIndex)? commands.getCommand(nextIndex) : DummyCommand.DUMMY_COMMAND;
+    return commands.hasIndex(nextIndex) ? commands.getCommand(nextIndex) : DummyCommand.DUMMY_COMMAND;
   }
 
   /**
@@ -129,7 +130,10 @@ public class CommandIterator
     // get start of current command for consistency check
     int endIndex = index;
     // trace back for previous command
-    while (index > 0 && commands.getCommand(--index) == null);
+    while (index > 0 && commands.getCommand(--index) == null)
+    {
+      ;
+    }
     ICommand result = getCommand();
 
     Assert.notNull(result, "Postcondition: result != null");
@@ -166,7 +170,8 @@ public class CommandIterator
   {
     for (int address = commands.addressForIndex(index) + 1, count = 1; count < getCommand().getSize(); address++, count++)
     {
-      if (commands.hasCodeLabel(address)) {
+      if (commands.hasCodeLabel(address))
+      {
         return true;
       }
     }

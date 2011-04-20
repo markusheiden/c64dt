@@ -1,16 +1,14 @@
 package de.heiden.c64dt.assembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.util.XmlUtil;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-
 import java.util.SortedMap;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
 
 /**
  * Test for {@link CommandBufferMapper}.
@@ -69,7 +67,7 @@ public class CommandBufferMapperTest
     }
 
     // addresses
-    SortedMap<Integer,Integer> commandsStart = commands.getStartAddresses();
+    SortedMap<Integer, Integer> commandsStart = commands.getStartAddresses();
     SortedMap<Integer, Integer> readStart = read.getStartAddresses();
     for (Integer index : commandsStart.keySet())
     {
@@ -77,7 +75,7 @@ public class CommandBufferMapperTest
     }
 
     // subroutines
-    SortedMap<Integer,Integer> commandsSubroutines = commands.getStartAddresses();
+    SortedMap<Integer, Integer> commandsSubroutines = commands.getStartAddresses();
     SortedMap<Integer, Integer> readSubroutines = read.getStartAddresses();
     for (Integer index : commandsSubroutines.keySet())
     {

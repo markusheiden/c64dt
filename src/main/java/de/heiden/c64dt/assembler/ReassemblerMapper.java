@@ -7,30 +7,20 @@ import de.heiden.c64dt.util.IXmlMapper;
 import de.heiden.c64dt.util.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
-
-import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
 
 /**
  * XML-Mapper to read and write the reassembler model.
  */
 public class ReassemblerMapper implements IXmlMapper<Reassembler>
 {
-  public void write(Reassembler reassembler) {
+  public void write(Reassembler reassembler)
+  {
     try
     {
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -82,7 +72,8 @@ public class ReassemblerMapper implements IXmlMapper<Reassembler>
    * @param reassemblerElement XML element to read
    * @return Reassembler
    */
-  public Reassembler read(Element reassemblerElement) throws IOException {
+  public Reassembler read(Element reassemblerElement) throws IOException
+  {
     try
     {
       Reassembler reassembler = new Reassembler();

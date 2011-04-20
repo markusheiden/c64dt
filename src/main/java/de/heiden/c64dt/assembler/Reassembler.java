@@ -41,7 +41,8 @@ public class Reassembler
   /**
    * Constructor.
    */
-  public Reassembler() {
+  public Reassembler()
+  {
     // add default detectors
     detectors.add(new LabelDetector());
     detectors.add(new BrkDetector());
@@ -52,7 +53,8 @@ public class Reassembler
   /**
    * Command buffer.
    */
-  public CommandBuffer getCommands() {
+  public CommandBuffer getCommands()
+  {
     return commands;
   }
 
@@ -61,7 +63,8 @@ public class Reassembler
    *
    * @param detector code type detector
    */
-  public void add(IDetector detector) {
+  public void add(IDetector detector)
+  {
     Assert.notNull(detector, "Precondition: detector != null");
 
     detectors.add(detector);
@@ -71,7 +74,8 @@ public class Reassembler
    * All detectors.
    * Just for the mapper.
    */
-  List<IDetector> getDetectors() {
+  List<IDetector> getDetectors()
+  {
     return detectors;
   }
 
@@ -308,7 +312,8 @@ public class Reassembler
     for (IDetector detector : detectors)
     {
       boolean detectorHit = detector.detect(commands);
-      if (detectorHit) {
+      if (detectorHit)
+      {
         System.out.println(detector.getClass().getSimpleName());
       }
       change |= detectorHit;

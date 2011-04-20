@@ -1,16 +1,9 @@
 package de.heiden.c64dt.util;
 
-import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.assembler.command.CommandBuffer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
-import java.util.Map.Entry;
-import java.util.SortedMap;
-
-import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
-import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
 
 /**
  * Interface for xml mappers.

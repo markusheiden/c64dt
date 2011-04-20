@@ -2,8 +2,6 @@ package de.heiden.c64dt.assembler;
 
 import org.springframework.util.Assert;
 
-import java.util.Arrays;
-
 /**
  * Abstract implementation of input stream for code.
  */

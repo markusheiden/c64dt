@@ -190,7 +190,8 @@ public class CommandBuffer
    * Get all start addresses.
    * Just for the mapper.
    */
-  SortedMap<Integer, Integer> getStartAddresses() {
+  SortedMap<Integer, Integer> getStartAddresses()
+  {
     return startAddresses;
   }
 
@@ -312,13 +313,15 @@ public class CommandBuffer
    * @param address absolute address
    * @return number of argument bytes or -1, if there is no subroutine at this address
    */
-  public int getSubroutineArguments(int address) {
-    if (!hasAddress(address)) {
+  public int getSubroutineArguments(int address)
+  {
+    if (!hasAddress(address))
+    {
       return -1;
     }
 
     Integer result = subroutines.get(indexForAddress(address));
-    return result != null? result : -1;
+    return result != null ? result : -1;
   }
 
   /**
@@ -364,7 +367,7 @@ public class CommandBuffer
     boolean change = false;
     for (int index = startIndex; index < endIndex; index++)
     {
-      change|= setType(index, type);
+      change |= setType(index, type);
     }
 
     return change;

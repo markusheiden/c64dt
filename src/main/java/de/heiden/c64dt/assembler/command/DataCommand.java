@@ -62,7 +62,8 @@ public class DataCommand extends AbstractCommand
     Assert.notNull(buffer, "Precondition: buffer != null");
 
     StringBuilder output = new StringBuilder(16 + data.size() * 8);
-    if (data.size() > 8 && isSameByte()) {
+    if (data.size() > 8 && isSameByte())
+    {
       // special case: the data consists of the same byte over and over again
 
       output.append("!FILL ");
@@ -70,7 +71,9 @@ public class DataCommand extends AbstractCommand
       output.append(", ");
       output.append(hexByte(data.get(0)));
 
-    } else {
+    }
+    else
+    {
       // default case: different data bytes
 
       output.append("!BYTE ");
@@ -96,10 +99,13 @@ public class DataCommand extends AbstractCommand
   /**
    * Detect if the data consists of the same byte repeated multiple times.
    */
-  private boolean isSameByte() {
+  private boolean isSameByte()
+  {
     Integer content = data.get(0);
-    for (Integer dataByte : data) {
-      if  (!content.equals(dataByte)) {
+    for (Integer dataByte : data)
+    {
+      if (!content.equals(dataByte))
+      {
         return false;
       }
     }

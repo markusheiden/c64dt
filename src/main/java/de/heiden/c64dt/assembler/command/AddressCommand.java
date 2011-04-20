@@ -6,7 +6,6 @@ import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.util.Arrays;
 import java.util.List;
 

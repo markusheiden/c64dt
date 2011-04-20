@@ -7,7 +7,6 @@ import org.springframework.util.FileCopyUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.StringWriter;
 
 /**
  * Reassembler test startup.

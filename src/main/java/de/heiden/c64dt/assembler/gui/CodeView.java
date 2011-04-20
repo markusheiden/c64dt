@@ -1,9 +1,9 @@
 package de.heiden.c64dt.assembler.gui;
 
 import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.assembler.ReassemblerMapper;
 import de.heiden.c64dt.assembler.ILabel;
 import de.heiden.c64dt.assembler.Reassembler;
+import de.heiden.c64dt.assembler.ReassemblerMapper;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.ICommand;
@@ -62,7 +62,8 @@ public class CodeView
       @Override
       public void mouseReleased(MouseEvent e)
       {
-        if ((e.getButton() & MouseEvent.BUTTON2) == 0) {
+        if ((e.getButton() & MouseEvent.BUTTON2) == 0)
+        {
           // not right mouse button -> ignore
           return;
         }
@@ -77,7 +78,8 @@ public class CodeView
   /**
    * Create context menu.
    */
-  private JPopupMenu createContextMenu() {
+  private JPopupMenu createContextMenu()
+  {
     JPopupMenu contextMenu = new JPopupMenu();
     contextMenu.add(new JMenuItem("Test"));
 
@@ -101,7 +103,8 @@ public class CodeView
 
       CommandBuffer commands = reassembler.getCommands();
       CommandIterator iter = new CommandIterator(commands);
-      while (iter.hasNextCommand()) {
+      while (iter.hasNextCommand())
+      {
         ICommand command = iter.nextCommand();
         int index = iter.getIndex();
         int addr = commands.addressForIndex(index);

@@ -33,10 +33,13 @@ public class LabelDetector implements IDetector
         for (int index = iter.getIndex() + 1, count = 1; count < command.getSize(); index++, count++)
         {
           // TODO mh: move functionality to CommandBuffer: hasCodeLabel(int index)
-          if (commands.hasCodeLabel(commands.addressForIndex(index))) {
+          if (commands.hasCodeLabel(commands.addressForIndex(index)))
+          {
             change |= commands.setType(index, CodeType.OPCODE);
             notFound = false;
-          } else if (notFound) {
+          }
+          else if (notFound)
+          {
             // mark as data until first code label
             change |= commands.setType(index, CodeType.DATA);
           }

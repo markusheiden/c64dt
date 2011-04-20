@@ -3,9 +3,7 @@ package de.heiden.c64dt.assembler.command;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.util.ByteUtil;
 import de.heiden.c64dt.util.IXmlMapper;
-import org.springframework.jca.cci.core.InteractionCallback;
 import org.springframework.util.Assert;
-import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -14,7 +12,9 @@ import org.w3c.dom.NodeList;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 
-import static de.heiden.c64dt.util.HexUtil.*;
+import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
+import static de.heiden.c64dt.util.HexUtil.hexPlain;
+import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
 
 /**
  * XML-Mapper to read and write the reassembler model.
@@ -42,12 +42,12 @@ public class CommandBufferMapper implements IXmlMapper<CommandBuffer>
       codeHex.append(hexBytePlain(ByteUtil.toByte(code, i)));
     }
     codeElement.setTextContent(codeHex.toString());
-    
+
     // start addresses
     Element addressesElement = document.createElement("addresses");
     commandsElement.appendChild(addressesElement);
 
-    SortedMap<Integer,Integer> startAddresses = commands.getStartAddresses();
+    SortedMap<Integer, Integer> startAddresses = commands.getStartAddresses();
     for (Entry<Integer, Integer> entry : startAddresses.entrySet())
     {
       Element addressElement = document.createElement("address");
@@ -76,19 +76,22 @@ public class CommandBufferMapper implements IXmlMapper<CommandBuffer>
     {
       int startIndex = index;
       CodeType type = commands.getType(index++);
-      if (!type.isUnknown()) {
+      if (!type.isUnknown())
+      {
         // count indexes with the same type
         int count = 1;
         for (; index < commands.getLength(); index++, count++)
         {
-          if (!commands.getType(index).equals(type)) {
+          if (!commands.getType(index).equals(type))
+          {
             break;
           }
         }
 
         Element typeElement = document.createElement("type");
         typeElement.setAttribute("index", hexWordPlain(startIndex));
-        if (count > 1) {
+        if (count > 1)
+        {
           typeElement.setAttribute("end", hexWordPlain(index));
 
         }
@@ -104,7 +107,8 @@ public class CommandBufferMapper implements IXmlMapper<CommandBuffer>
    *
    * @param commandsElement element to read
    */
-  public CommandBuffer read(Element commandsElement) {
+  public CommandBuffer read(Element commandsElement)
+  {
     // code
     Node codeElement = commandsElement.getElementsByTagName("code").item(0);
     String codeData = codeElement.getTextContent().trim();
@@ -162,10 +166,13 @@ public class CommandBufferMapper implements IXmlMapper<CommandBuffer>
       Element typeElement = (Element) typeElements.item(i);
       int index = Integer.parseInt(typeElement.getAttribute("index"), 16);
       CodeType type = CodeType.valueOf(typeElement.getAttribute("type"));
-      if (typeElement.hasAttribute("end")) {
+      if (typeElement.hasAttribute("end"))
+      {
         int end = Integer.parseInt(typeElement.getAttribute("end"), 16);
         commands.setType(index, end, type);
-      } else {
+      }
+      else
+      {
         commands.setType(index, type);
       }
     }

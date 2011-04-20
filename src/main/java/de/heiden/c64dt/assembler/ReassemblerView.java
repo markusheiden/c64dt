@@ -1,14 +1,12 @@
 package de.heiden.c64dt.assembler;
 
 import de.heiden.c64dt.assembler.gui.CodeView;
-import org.omg.CORBA.CODESET_INCOMPATIBLE;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -47,7 +45,8 @@ public class ReassemblerView extends JFrame
   /**
    * Create menu bar.
    */
-  private JMenuBar createMenu() {
+  private JMenuBar createMenu()
+  {
     JMenuBar menuBar = new JMenuBar();
 
     JMenu file = new JMenu("File");
@@ -64,7 +63,8 @@ public class ReassemblerView extends JFrame
         {
           JFileChooser chooser = new JFileChooser();
           int result = chooser.showOpenDialog(ReassemblerView.this);
-          if (result == JFileChooser.APPROVE_OPTION) {
+          if (result == JFileChooser.APPROVE_OPTION)
+          {
             code.reassemble(new FileInputStream(chooser.getSelectedFile()));
           }
         }

@@ -17,7 +17,7 @@ public class JsrDetector implements IDetector
 {
   /**
    * Maximum length of zero-terminated argument after JSR opcode.
-   *
+   * <p/>
    * TODO mh: make configurable?
    */
   private final int maxLength = 256;
@@ -35,8 +35,9 @@ public class JsrDetector implements IDetector
       {
         OpcodeCommand opcodeCommand = (OpcodeCommand) command;
         if (!opcodeCommand.getOpcode().getType().equals(OpcodeType.JSR) ||
-            !opcodeCommand.getOpcode().getMode().equals(OpcodeMode.ABS) ||
-            !iter.hasNextCommand()) {
+          !opcodeCommand.getOpcode().getMode().equals(OpcodeMode.ABS) ||
+          !iter.hasNextCommand())
+        {
           // no JSR $xxxx or no arguments
           continue;
         }
@@ -52,7 +53,8 @@ public class JsrDetector implements IDetector
           // argument == 0: manual defined JSR with zero-terminated argument
           // !commands.peekCommand().isReachable(): try automatic detection of zero-terminated argument
           int endIndex = search0(commands, argumentsIndex, arguments != 0);
-          if (endIndex < 0) {
+          if (endIndex < 0)
+          {
             continue;
           }
 
@@ -73,8 +75,10 @@ public class JsrDetector implements IDetector
    * @param endIndex end index of data (excl.), next opcode
    * @return whether a change has taken place
    */
-  private boolean markArgument(CommandBuffer commands, int index, int startIndex, int endIndex) {
-    if (!commands.hasIndex(endIndex)) {
+  private boolean markArgument(CommandBuffer commands, int index, int startIndex, int endIndex)
+  {
+    if (!commands.hasIndex(endIndex))
+    {
       return false;
     }
 
@@ -84,8 +88,8 @@ public class JsrDetector implements IDetector
     return
       // Mark argument bytes as data
       commands.setType(startIndex, endIndex, CodeType.DATA) |
-      // At endIndex the code continues
-      commands.setType(endIndex, CodeType.OPCODE);
+        // At endIndex the code continues
+        commands.setType(endIndex, CodeType.OPCODE);
   }
 
   /**
@@ -97,18 +101,21 @@ public class JsrDetector implements IDetector
    * @param stopAtLabels search at labels?
    * @return end index or -1, if no arguments have been found
    */
-  private int search0(CommandBuffer commands, int startIndex, boolean stopAtLabels) {
+  private int search0(CommandBuffer commands, int startIndex, boolean stopAtLabels)
+  {
     Assert.notNull(commands, "Precondition: commands != null");
 
     byte[] code = commands.getCode();
     for (int index = startIndex, count = 0; commands.hasIndex(index) && count < maxLength; index++)
     {
-      if (stopAtLabels && commands.hasLabel(commands.addressForIndex(index))) {
+      if (stopAtLabels && commands.hasLabel(commands.addressForIndex(index)))
+      {
         // stop search at any label
         return -1;
       }
 
-      if (code[index] == 0) {
+      if (code[index] == 0)
+      {
         // terminating zero found, return index of following code
         return index + 1;
       }

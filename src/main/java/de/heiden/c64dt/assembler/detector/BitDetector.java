@@ -39,7 +39,8 @@ public class BitDetector implements IDetector
             int index = iter.getIndex();
             change |= commands.setType(index++, CodeType.BIT);
             change |= commands.setType(index++, CodeType.OPCODE);
-            if (bytes.size() == 3) {
+            if (bytes.size() == 3)
+            {
               change |= commands.setType(index++, CodeType.CODE);
             }
           }
