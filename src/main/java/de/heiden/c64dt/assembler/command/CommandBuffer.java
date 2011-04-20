@@ -61,6 +61,16 @@ public class CommandBuffer
    */
   private final Map<Integer, ExternalLabel> externalLabels;
 
+  /**
+   * Commands as detected by the reassembler.
+   */
+  final ICommand[] commands;
+
+  /**
+   * Index of the last added command.
+   */
+  private int index;
+
   //
   // persistent attributes
   //
@@ -87,19 +97,9 @@ public class CommandBuffer
    */
   private final Map<Integer, Integer> subroutines;
 
-  /**
-   * Commands as detected by the reassembler.
-   */
-  final ICommand[] commands;
-
   //
   //
   //
-
-  /**
-   * Index of the last added command.
-   */
-  private int index;
 
   /**
    * Constructor.
@@ -537,6 +537,7 @@ public class CommandBuffer
   /**
    * Remove a reference from the given relative address.
    *
+   * @param index relative address
    * @return whether a label has been removed
    */
   public boolean removeReference(int index)
@@ -618,7 +619,6 @@ public class CommandBuffer
    * Add a command at the end of the buffer.
    *
    * @param command command
-   * @return next relative address
    */
   public void addCommand(ICommand command)
   {
