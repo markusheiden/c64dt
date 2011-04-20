@@ -147,6 +147,27 @@ public class CommandBuffer
     return code;
   }
 
+
+  /**
+   * Is the given relative address valid?.
+   *
+   * @param index relative address
+   */
+  public boolean hasIndex(int index)
+  {
+    return index >= 0 && index < code.length;
+  }
+
+  /**
+   * Is the given relative end address valid?.
+   *
+   * @param index relative end address
+   */
+  public boolean hasEndIndex(int index)
+  {
+    return index >= 0 && index <= code.length;
+  }
+
   /**
    * Length of code.
    */
@@ -172,6 +193,70 @@ public class CommandBuffer
    */
   SortedMap<Integer, Integer> getStartAddresses() {
     return startAddresses;
+  }
+
+  /**
+   * Compute absolute address from relative address.
+   *
+   * @param index relative address
+   * @return absolute address
+   */
+  public int addressForIndex(int index)
+  {
+    Assert.isTrue(hasIndex(index), "Precondition: hasIndex(index)");
+
+    // Compute start index for address range index belongs to
+    Integer startIndex = startAddresses.floorKey(index);
+    Assert.notNull(startIndex, "Check: lastStartIndex != null");
+
+    return startAddresses.get(startIndex) + index;
+  }
+
+  /**
+   * Is the given absolute address within the code?.
+   *
+   * @param address absolute address
+   */
+  public boolean hasAddress(int address)
+  {
+    return indexForAddressImpl(address) >= 0;
+  }
+
+  /**
+   * Compute relative address from absolute address.
+   *
+   * @param address absolute address
+   * @return relative address
+   */
+  public int indexForAddress(int address)
+  {
+    Assert.isTrue(hasAddress(address), "Precondition: hasAddress(address)");
+
+    return indexForAddressImpl(address);
+  }
+
+  /**
+   * Is the given absolute address within the code?.
+   *
+   * @param address absolute address
+   * @return relative address or -1, if not found
+   */
+  private int indexForAddressImpl(int address)
+  {
+    Iterator<Entry<Integer, Integer>> iter = startAddresses.entrySet().iterator();
+    Entry<Integer, Integer> lastAddressEntry = iter.next();
+    while (iter.hasNext())
+    {
+      Entry<Integer, Integer> addressEntry = iter.next();
+      if (address >= lastAddressEntry.getValue() + lastAddressEntry.getKey() &&
+        address < lastAddressEntry.getValue() + addressEntry.getKey())
+      {
+        return address - lastAddressEntry.getValue();
+      }
+      lastAddressEntry = addressEntry;
+    }
+
+    return -1;
   }
 
   /**
@@ -362,87 +447,11 @@ public class CommandBuffer
   }
 
   /**
-   * Is the given relative address valid?.
-   *
-   * @param index relative address
+   * All referenced addresses which do not point to this code.
    */
-  public boolean hasIndex(int index)
+  public Collection<ExternalLabel> getExternalLabels()
   {
-    return index >= 0 && index < code.length;
-  }
-
-  /**
-   * Is the given relative end address valid?.
-   *
-   * @param index relative end address
-   */
-  public boolean hasEndIndex(int index)
-  {
-    return index >= 0 && index <= code.length;
-  }
-
-  /**
-   * Compute absolute address from relative address.
-   *
-   * @param index relative address
-   * @return absolute address
-   */
-  public int addressForIndex(int index)
-  {
-    Assert.isTrue(hasIndex(index), "Precondition: hasIndex(index)");
-
-    // Compute start index for address range index belongs to
-    Integer startIndex = startAddresses.floorKey(index);
-    Assert.notNull(startIndex, "Check: lastStartIndex != null");
-
-    return startAddresses.get(startIndex) + index;
-  }
-
-  /**
-   * Is the given absolute address within the code?.
-   *
-   * @param address absolute address
-   */
-  public boolean hasAddress(int address)
-  {
-    return indexForAddressImpl(address) >= 0;
-  }
-
-  /**
-   * Compute relative address from absolute address.
-   *
-   * @param address absolute address
-   * @return relative address
-   */
-  public int indexForAddress(int address)
-  {
-    Assert.isTrue(hasAddress(address), "Precondition: hasAddress(address)");
-
-    return indexForAddressImpl(address);
-  }
-
-  /**
-   * Is the given absolute address within the code?.
-   *
-   * @param address absolute address
-   * @return relative address or -1, if not found
-   */
-  private int indexForAddressImpl(int address)
-  {
-    Iterator<Entry<Integer, Integer>> iter = startAddresses.entrySet().iterator();
-    Entry<Integer, Integer> lastAddressEntry = iter.next();
-    while (iter.hasNext())
-    {
-      Entry<Integer, Integer> addressEntry = iter.next();
-      if (address >= lastAddressEntry.getValue() + lastAddressEntry.getKey() &&
-        address < lastAddressEntry.getValue() + addressEntry.getKey())
-      {
-        return address - lastAddressEntry.getValue();
-      }
-      lastAddressEntry = addressEntry;
-    }
-
-    return -1;
+    return externalLabels.values();
   }
 
   /**
@@ -533,9 +542,9 @@ public class CommandBuffer
   public boolean removeReference(int index)
   {
     return
-      remove(index, codeReferences, codeLabels) |
-        remove(index, dataReferences, dataLabels) |
-        remove(index, externalReferences, externalLabels);
+      removeReference(index, codeReferences, codeLabels) |
+        removeReference(index, dataReferences, dataLabels) |
+        removeReference(index, externalReferences, externalLabels);
   }
 
   /**
@@ -546,7 +555,7 @@ public class CommandBuffer
    * @param labels all labels
    * @return whether a label has been removed
    */
-  private boolean remove(int index, int[] references, Map<Integer, ?> labels)
+  private boolean removeReference(int index, int[] references, Map<Integer, ?> labels)
   {
     // get referenced absolute address
     int referenced = references[index];
@@ -577,14 +586,6 @@ public class CommandBuffer
     return true;
   }
 
-  /**
-   * All referenced addresses which do not point to this code.
-   */
-  public Collection<ExternalLabel> getExternalLabels()
-  {
-    return externalLabels.values();
-  }
-
   //
   // command specific interface
   //
@@ -601,13 +602,12 @@ public class CommandBuffer
     dataLabels.clear();
     externalLabels.clear();
     Arrays.fill(commands, null);
-    commands[0] = new DummyCommand();
 
     index = 0;
   }
 
   /**
-   * Current relative index.
+   * Current relative address.
    */
   public int getIndex() {
     return index;
