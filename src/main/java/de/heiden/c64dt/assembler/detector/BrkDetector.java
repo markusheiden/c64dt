@@ -3,6 +3,7 @@ package de.heiden.c64dt.assembler.detector;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.OpcodeType;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
+import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 
@@ -16,11 +17,12 @@ public class BrkDetector implements IDetector
   {
     boolean change = false;
 
-    commands.restart();
-    while (commands.hasNextCommand())
+    CommandIterator iter = new CommandIterator(commands);
+
+    while (iter.hasNextCommand())
     {
-      ICommand command = commands.nextCommand();
-      int index = commands.getCurrentIndex();
+      ICommand command = iter.nextCommand();
+      int index = iter.getCurrentIndex();
       if (command instanceof OpcodeCommand)
       {
         OpcodeCommand opcodeCommand = (OpcodeCommand) command;

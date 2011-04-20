@@ -3,6 +3,7 @@ package de.heiden.c64dt.assembler;
 import de.heiden.c64dt.assembler.command.AddressCommand;
 import de.heiden.c64dt.assembler.command.BitCommand;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
+import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.DataCommand;
 import de.heiden.c64dt.assembler.command.DummyCommand;
 import de.heiden.c64dt.assembler.command.ICommand;
@@ -172,7 +173,7 @@ public class Reassembler
     commands.clear();
     while (code.has(1))
     {
-      int index = commands.getNextIndex();
+      int index = commands.getIndex();
       int pc = commands.addressForIndex(index);
       CodeType type = commands.getType(index);
 
@@ -249,24 +250,25 @@ public class Reassembler
     boolean change;
     do
     {
-      commands.restart();
       change = false;
+
+      CommandIterator iter = new CommandIterator(commands);
 
       // tracing forward from one unreachable command to the next
       ICommand lastCommand = new DummyCommand();
-      while (commands.hasNextCommand())
+      while (iter.hasNextCommand())
       {
-        ICommand command = commands.nextCommand();
+        ICommand command = iter.nextCommand();
         /*
          * A command is not reachable, if the previous command is not reachable or is an ending command (e.g. JMP) and
          * there is no code label for the command and the command has not already been detected as an opcode.
          */
-        if (command.isReachable() && !commands.hasCodeLabel() && !commands.getType().isCode() &&
+        if (command.isReachable() && !iter.hasCodeLabel() && !iter.getType().isCode() &&
           (!lastCommand.isReachable() || lastCommand.isEnd()))
         {
           command.setReachable(false);
           // restart, if reference caused a wrong label in the already scanned code
-          change |= commands.removeReference();
+          change |= iter.removeReference();
         }
 
         lastCommand = command;
@@ -274,19 +276,19 @@ public class Reassembler
 
       // trace backward from unreachable command to the previous
       lastCommand = new DummyCommand();
-      while (commands.hasPreviousCommand())
+      while (iter.hasPreviousCommand())
       {
-        ICommand command = commands.previousCommand();
+        ICommand command = iter.previousCommand();
         /*
          * A code command is not reachable, if it leads to unreachable code.
          * Exception: JSR which may be followed by argument data.
          */
         if (!lastCommand.isReachable() &&
-          command.isReachable() && !command.isEnd() && !commands.getType().isCode())
+          command.isReachable() && !command.isEnd() && !iter.getType().isCode())
         {
           command.setReachable(false);
           // restart, if reference caused a wrong label in the already scanned code
-          change |= commands.removeReference();
+          change |= iter.removeReference();
         }
 
         lastCommand = command;
@@ -327,16 +329,16 @@ public class Reassembler
   {
     Assert.notNull(commands, "Precondition: buffer != null");
 
-    commands.restart();
+    CommandIterator iter = new CommandIterator(commands);
 
     ICommand lastCommand = null;
-    while (commands.hasNextCommand())
+    while (iter.hasNextCommand())
     {
-      ICommand command = commands.nextCommand();
-      if (!commands.hasLabel() && lastCommand != null && lastCommand.combineWith(command))
+      ICommand command = iter.nextCommand();
+      if (!iter.hasLabel() && lastCommand != null && lastCommand.combineWith(command))
       {
         // TODO let command buffer handle this functionality?
-        commands.removeCurrentCommand();
+        iter.removeCurrentCommand();
       }
       else
       {
@@ -355,7 +357,7 @@ public class Reassembler
     Assert.notNull(commands, "Precondition: buffer != null");
     Assert.notNull(output, "Precondition: output != null");
 
-    commands.restart();
+    CommandIterator iter = new CommandIterator(commands);
 
     // start address
     output.append("*=").append(hexWord(commands.getStartAddress())).append("\n");
@@ -371,9 +373,9 @@ public class Reassembler
 
     // code
     StringBuilder line = new StringBuilder(80);
-    while (commands.hasNextCommand())
+    while (iter.hasNextCommand())
     {
-      ICommand command = commands.nextCommand();
+      ICommand command = iter.nextCommand();
       int pc = command.getAddress();
 
       line.setLength(0);
@@ -417,7 +419,7 @@ public class Reassembler
       line.append(" | ");
 
       // reassembler output
-      ILabel label = commands.getLabel();
+      ILabel label = iter.getLabel();
       if (label != null)
       {
         // TODO mh: check length of label?

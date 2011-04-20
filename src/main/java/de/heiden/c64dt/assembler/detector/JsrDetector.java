@@ -4,6 +4,7 @@ import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.OpcodeMode;
 import de.heiden.c64dt.assembler.OpcodeType;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
+import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 import org.springframework.util.Assert;
@@ -26,17 +27,18 @@ public class JsrDetector implements IDetector
   {
     boolean change = false;
 
-    commands.restart();
-    while (commands.hasNextCommand())
+    CommandIterator iter = new CommandIterator(commands);
+
+    while (iter.hasNextCommand())
     {
-      ICommand command = commands.nextCommand();
-      int index = commands.getCurrentIndex();
+      ICommand command = iter.nextCommand();
+      int index = iter.getCurrentIndex();
       if (command instanceof OpcodeCommand)
       {
         OpcodeCommand opcodeCommand = (OpcodeCommand) command;
         if (!opcodeCommand.getOpcode().getType().equals(OpcodeType.JSR) ||
             !opcodeCommand.getOpcode().getMode().equals(OpcodeMode.ABS) ||
-            !commands.hasNextCommand()) {
+            !iter.hasNextCommand()) {
           // no JSR $xxxx or no arguments
           continue;
         }
@@ -44,18 +46,18 @@ public class JsrDetector implements IDetector
         int arguments = commands.getSubroutineArguments(opcodeCommand.getArgument());
         if (arguments > 0)
         {
-          change |= markArgument(commands, index, commands.getNextIndex() + arguments);
+          change |= markArgument(commands, iter, index, iter.getNextIndex() + arguments);
         }
-        else if (arguments == 0 || !commands.peekCommand().isReachable())
+        else if (arguments == 0 || !iter.peekCommand().isReachable())
         {
           // argument == 0: manual defined JSR with zero-terminated argument
           // !commands.peekCommand().isReachable(): try automatic detection of zero-terminated argument
-          int endIndex = search0(commands, arguments != 0);
+          int endIndex = search0(commands, iter, arguments != 0);
           if (endIndex < 0) {
             continue;
           }
 
-          change |= markArgument(commands, index, endIndex);
+          change |= markArgument(commands, iter, index, endIndex);
         }
       }
     }
@@ -71,14 +73,14 @@ public class JsrDetector implements IDetector
    * @param endIndex end index of data (excl.), next opcode
    * @return whether a change has taken place
    */
-  private boolean markArgument(CommandBuffer commands, int index, int endIndex) {
+  private boolean markArgument(CommandBuffer commands, CommandIterator iter, int index, int endIndex) {
     if (!commands.hasIndex(endIndex)) {
       return false;
     }
 
     boolean change = false;
 
-    int startIndex = commands.getNextIndex();
+    int startIndex = iter.getNextIndex();
     // Mark argument bytes as data
     change |= commands.setType(startIndex, endIndex, CodeType.DATA);
     // At endIndex the code continues
@@ -97,11 +99,11 @@ public class JsrDetector implements IDetector
    * @param stopAtLabels search at labels?
    * @return end index or -1, if no arguments have been found
    */
-  private int search0(CommandBuffer commands, boolean stopAtLabels) {
+  private int search0(CommandBuffer commands, CommandIterator iter, boolean stopAtLabels) {
     Assert.notNull(commands, "Precondition: commands != null");
 
     byte[] code = commands.getCode();
-    for (int index = commands.getNextIndex(), count = 0; commands.hasIndex(index) && count < maxLength; index++)
+    for (int index = iter.getNextIndex(), count = 0; commands.hasIndex(index) && count < maxLength; index++)
     {
       if (stopAtLabels && commands.hasLabel(commands.addressForIndex(index))) {
         // stop search at any label

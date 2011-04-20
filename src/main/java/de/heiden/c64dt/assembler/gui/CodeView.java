@@ -5,6 +5,7 @@ import de.heiden.c64dt.assembler.ReassemblerMapper;
 import de.heiden.c64dt.assembler.ILabel;
 import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
+import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.detector.JsrDetector;
 import org.springframework.util.FileCopyUtils;
@@ -99,10 +100,10 @@ public class CodeView
       StringBuilder builder = new StringBuilder();
 
       CommandBuffer commands = reassembler.getCommands();
-      commands.restart();
-      while (commands.hasNextCommand()) {
-        ICommand command = commands.nextCommand();
-        int index = commands.getCurrentIndex();
+      CommandIterator iter = new CommandIterator(commands);
+      while (iter.hasNextCommand()) {
+        ICommand command = iter.nextCommand();
+        int index = iter.getCurrentIndex();
         int addr = commands.addressForIndex(index);
 
         builder.setLength(0);
@@ -133,7 +134,7 @@ public class CodeView
         String bytes = builder.toString().trim();
 
         builder.setLength(0);
-        ILabel label = commands.getLabel();
+        ILabel label = iter.getLabel();
         if (label != null)
         {
           // TODO mh: check length of label?

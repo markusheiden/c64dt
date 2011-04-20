@@ -5,6 +5,7 @@ import de.heiden.c64dt.assembler.Opcode;
 import de.heiden.c64dt.assembler.OpcodeType;
 import de.heiden.c64dt.assembler.command.BitCommand;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
+import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 
@@ -20,10 +21,11 @@ public class BitDetector implements IDetector
   {
     boolean change = false;
 
-    commands.restart();
-    while (commands.hasNextCommand())
+    CommandIterator iter = new CommandIterator(commands);
+
+    while (iter.hasNextCommand())
     {
-      ICommand command = commands.nextCommand();
+      ICommand command = iter.nextCommand();
       if (command instanceof OpcodeCommand)
       {
         OpcodeCommand opcodeCommand = (OpcodeCommand) command;
@@ -37,7 +39,7 @@ public class BitDetector implements IDetector
 
           if (skippedOpcode.isLegal() && skippedOpcode.getSize() == size - 1)
           {
-            int index = commands.getCurrentIndex();
+            int index = iter.getCurrentIndex();
             change |= commands.setType(index++, CodeType.BIT);
             change |= commands.setType(index++, CodeType.OPCODE);
             if (bytes.size() == 3) {

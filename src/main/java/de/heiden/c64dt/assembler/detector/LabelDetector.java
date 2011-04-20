@@ -2,6 +2,7 @@ package de.heiden.c64dt.assembler.detector;
 
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
+import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.ICommand;
 
 /**
@@ -14,23 +15,24 @@ public class LabelDetector implements IDetector
   {
     boolean change = false;
 
-    commands.restart();
-    while (commands.hasNextCommand())
+    CommandIterator iter = new CommandIterator(commands);
+
+    while (iter.hasNextCommand())
     {
-      ICommand command = commands.nextCommand();
-      if (commands.hasCodeLabel())
+      ICommand command = iter.nextCommand();
+      if (iter.hasCodeLabel())
       {
         // Mark all code label positions as a start of an opcode
-        change |= commands.setType(CodeType.OPCODE);
+        change |= iter.setType(CodeType.OPCODE);
       }
-      else if (commands.hasConflictingCodeLabel())
+      else if (iter.hasConflictingCodeLabel())
       {
         // Mark current command as data, because it may not be an opcode
-        change |= commands.setType(CodeType.DATA);
+        change |= iter.setType(CodeType.DATA);
 
         // Search for code label and mark the relative address as an opcode
         boolean notFound = true;
-        for (int index = commands.getCurrentIndex() + 1, count = 1; count < command.getSize(); index++, count++)
+        for (int index = iter.getCurrentIndex() + 1, count = 1; count < command.getSize(); index++, count++)
         {
           // TODO mh: move functionality to CommandBuffer: hasCodeLabel(int index)
           if (commands.hasCodeLabel(commands.addressForIndex(index))) {

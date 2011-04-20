@@ -90,7 +90,7 @@ public class CommandBuffer
   /**
    * Commands as detected by the reassembler.
    */
-  private final ICommand[] commands;
+  final ICommand[] commands;
 
   //
   //
@@ -135,6 +135,10 @@ public class CommandBuffer
 
   }
 
+  //
+  // code
+  //
+
   /**
    * Code to be reassembled.
    */
@@ -149,6 +153,10 @@ public class CommandBuffer
   public int getLength() {
     return code.length;
   }
+
+  //
+  // base addresses
+  //
 
   /**
    * Start address of code (incl.).
@@ -243,14 +251,6 @@ public class CommandBuffer
   //
 
   /**
-   * Get code type of the current opcode / command.
-   */
-  public CodeType getType()
-  {
-    return getType(index);
-  }
-
-  /**
    * Get code type of the command at the given relative address.
    *
    * @param index relative address
@@ -260,17 +260,6 @@ public class CommandBuffer
     Assert.isTrue(hasIndex(index), "Precondition: hasIndex(index)");
 
     return types[index];
-  }
-
-  /**
-   * Set code type for the current opcode / command.
-   *
-   * @param type code type
-   * @return whether a change has taken place
-   */
-  public boolean setType(CodeType type)
-  {
-    return setType(index, type);
   }
 
   /**
@@ -320,15 +309,6 @@ public class CommandBuffer
   //
 
   /**
-   * Is a label at the current opcode / command?
-   */
-  public boolean hasLabel()
-  {
-    ICommand current = commands[index];
-    return hasLabel(current.getAddress());
-  }
-
-  /**
    * Is a label at the given absolute address?
    *
    * @param address absolute address
@@ -341,28 +321,24 @@ public class CommandBuffer
   }
 
   /**
-   * Is there at least one code label pointing to the argument of the current opcode / command?
+   * Label representation for an absolute address.
+   *
+   * @param address absolute address
+   * @return label or null if no label exists for this address
    */
-  public boolean hasConflictingCodeLabel()
+  public ILabel getLabel(int address)
   {
-    ICommand current = commands[index];
-    for (int address = addressForIndex(index) + 1, count = 1; count < current.getSize(); address++, count++)
+    ILabel result = codeLabels.get(address);
+    if (result == null)
     {
-      if (hasCodeLabel(address)) {
-        return true;
-      }
+      result = dataLabels.get(address);
+    }
+    if (result == null)
+    {
+      result = externalLabels.get(address);
     }
 
-    return false;
-  }
-
-  /**
-   * Is a code label at the current opcode / command?
-   */
-  public boolean hasCodeLabel()
-  {
-    ICommand current = commands[index];
-    return hasCodeLabel(current.getAddress());
+    return result;
   }
 
   /**
@@ -376,15 +352,6 @@ public class CommandBuffer
   }
 
   /**
-   * Is a data label at the current opcode / command?
-   */
-  public boolean hasDataLabel()
-  {
-    ICommand current = commands[index];
-    return hasDataLabel(current.getAddress());
-  }
-
-  /**
    * Is a data label at the given absolute address?
    *
    * @param address absolute address
@@ -392,25 +359,6 @@ public class CommandBuffer
   public boolean hasDataLabel(int address)
   {
     return dataLabels.containsKey(address);
-  }
-
-  /**
-   * The current relative address.
-   * Only valid, if at least one command has been added.
-   */
-  public int getCurrentIndex()
-  {
-    return index;
-  }
-
-  /**
-   * The next relative address.
-   * This is the index where the next command will be added.
-   */
-  public int getNextIndex()
-  {
-    ICommand current = commands[index];
-    return index + current.getSize();
   }
 
   /**
@@ -578,11 +526,11 @@ public class CommandBuffer
   }
 
   /**
-   * Remove a reference from the current address.
+   * Remove a reference from the given relative address.
    *
    * @return whether a label has been removed
    */
-  public boolean removeReference()
+  public boolean removeReference(int index)
   {
     return
       remove(index, codeReferences, codeLabels) |
@@ -630,38 +578,6 @@ public class CommandBuffer
   }
 
   /**
-   * Label representation for the current address.
-   *
-   * @return label representation or null if no label exists for the current address
-   */
-  public ILabel getLabel()
-  {
-    ICommand current = commands[index];
-    return getLabel(current.getAddress());
-  }
-
-  /**
-   * Label representation for an absolute address.
-   *
-   * @param address absolute address
-   * @return label or null if no label exists for this address
-   */
-  public ILabel getLabel(int address)
-  {
-    ILabel result = codeLabels.get(address);
-    if (result == null)
-    {
-      result = dataLabels.get(address);
-    }
-    if (result == null)
-    {
-      result = externalLabels.get(address);
-    }
-
-    return result;
-  }
-
-  /**
    * All referenced addresses which do not point to this code.
    */
   public Collection<ExternalLabel> getExternalLabels()
@@ -686,31 +602,25 @@ public class CommandBuffer
     externalLabels.clear();
     Arrays.fill(commands, null);
     commands[0] = new DummyCommand();
-    index = 0;
 
+    index = 0;
   }
+
+  /**
+   * Current relative index.
+   */
+  public int getIndex() {
+    return index;
+  }
+
 
   /**
    * Add a command at the end of the buffer.
    *
    * @param command command
+   * @return next relative address
    */
   public void addCommand(ICommand command)
-  {
-    Assert.notNull(command, "Precondition: command != null");
-    Assert.isTrue(!command.hasAddress(), "Precondition: !command.hasAddress()");
-
-    index = getNextIndex();
-    addCommand(index, command);
-  }
-
-  /**
-   * Add a command at a given relative address.
-   *
-   * @param index relative address
-   * @param command command
-   */
-  private void addCommand(int index, ICommand command)
   {
     Assert.notNull(command, "Precondition: command != null");
     Assert.isTrue(!command.hasAddress(), "Precondition: !command.hasAddress()");
@@ -720,75 +630,6 @@ public class CommandBuffer
 
     command.setAddress(address);
     commands[index] = command;
-  }
-
-  //
-  // Iterator
-  //
-
-  /**
-   * (Re)start iteration.
-   */
-  public void restart()
-  {
-    index = 0;
-  }
-
-  public boolean hasNextCommand()
-  {
-    return hasIndex(getNextIndex());
-  }
-
-  public ICommand nextCommand()
-  {
-    index = getNextIndex();
-    ICommand result = commands[index];
-
-    Assert.notNull(result, "Postcondition: result != null");
-    return result;
-  }
-
-  public ICommand peekCommand() {
-    int nextIndex = getNextIndex();
-    return hasIndex(nextIndex)? commands[nextIndex] : DummyCommand.DUMMY_COMMAND;
-  }
-
-  public boolean hasPreviousCommand()
-  {
-    return index > 0;
-  }
-
-  @SuppressWarnings({"StatementWithEmptyBody"})
-  public ICommand previousCommand()
-  {
-    // get start of current command for consistency check
-    int endIndex = index;
-    // trace back for previous command
-    while (index > 0 && commands[--index] == null);
-    ICommand result = commands[index];
-
-    Assert.notNull(result, "Postcondition: result != null");
-    Assert.isTrue(getNextIndex() == endIndex, "Precondition: The previous commands ends at the start of the current command");
-    return result;
-  }
-
-  //
-  // modifying operations during iteration
-  //
-
-  /**
-   * Removes the current command.
-   * Traces back to the previous commands afterwards.
-   */
-  public void removeCurrentCommand()
-  {
-    // remember position of current command
-    int remove = index;
-    // skip current command
-    index = getNextIndex();
-    // delete current command
-    commands[remove] = null;
-    // trace back to previous command
-    previousCommand();
+    index += command.getSize();
   }
 }
