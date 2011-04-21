@@ -17,6 +17,14 @@ import static de.heiden.c64dt.util.HexUtil.hexByte;
  */
 public class DataCommand extends AbstractCommand
 {
+  /**
+   * How many bytes a data line (!BYTE) should hold at max.
+   */
+  private static final int MAX_BYTES = 8;
+
+  /**
+   * Data bytes.
+   */
   private List<Integer> data;
 
   /**
@@ -28,7 +36,7 @@ public class DataCommand extends AbstractCommand
   {
     super(CodeType.DATA, false);
 
-    this.data = new ArrayList<Integer>(8);
+    this.data = new ArrayList<Integer>(MAX_BYTES);
     this.data.add(data);
   }
 
@@ -47,7 +55,7 @@ public class DataCommand extends AbstractCommand
   @Override
   public boolean combineWith(ICommand command)
   {
-    if (!(command instanceof DataCommand))
+    if (!(command instanceof DataCommand) || data.size() >= MAX_BYTES && !isSameByte())
     {
       return false;
     }
