@@ -33,6 +33,9 @@ public class ReassemblerView extends JFrame
     code = new CodeView();
     add(code.createComponent(), BorderLayout.CENTER);
 
+    // for testing purposes only...
+    code.reassemble();
+
     //
     // Menu bar
     //
@@ -74,19 +77,6 @@ public class ReassemblerView extends JFrame
         }
       }
     });
-
-    // for testing purposes only...
-    JMenuItem fileReassemble = new JMenuItem("Reassemble");
-    file.add(fileReassemble);
-    fileReassemble.addActionListener(new ActionListener()
-    {
-      @Override
-      public void actionPerformed(ActionEvent actionEvent)
-      {
-        code.reassemble();
-      }
-    });
-
 
     return menuBar;
   }

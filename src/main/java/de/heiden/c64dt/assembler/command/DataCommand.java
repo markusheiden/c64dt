@@ -55,12 +55,21 @@ public class DataCommand extends AbstractCommand
   @Override
   public boolean combineWith(ICommand command)
   {
-    if (!(command instanceof DataCommand) || data.size() >= MAX_BYTES && !isSameByte())
+    // Only other data commands may be merged
+    if (!(command instanceof DataCommand))
     {
       return false;
     }
 
-    data.addAll(((DataCommand) command).data);
+    DataCommand dataCommand = (DataCommand) command;
+
+    // Only merge more than MAX_BYTES if result is a !FILL
+    if (data.size() >= MAX_BYTES && (!isSameByte() || !dataCommand.isSameByte() || !data.get(0).equals(dataCommand.data.get(0))))
+    {
+      return false;
+    }
+
+    data.addAll(dataCommand.data);
     return true;
   }
 
