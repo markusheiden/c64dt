@@ -1,7 +1,7 @@
 package de.heiden.c64dt.assembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.assembler.ILabel;
+import de.heiden.c64dt.assembler.label.ILabel;
 import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 
@@ -12,10 +12,13 @@ import java.util.List;
 import static de.heiden.c64dt.util.HexUtil.hexWord;
 
 /**
- * Command for data.
+ * Command for an absolute address referencing code.
  */
 public class AddressCommand extends AbstractCommand
 {
+  /**
+   * Referenced absolute code address.
+   */
   private int address;
 
   /**
@@ -54,6 +57,7 @@ public class AddressCommand extends AbstractCommand
     Assert.notNull(buffer, "Precondition: buffer != null");
 
     ILabel label = buffer.getLabel(address);
+    Assert.isTrue(label.getAddress() == address, "Check: label.getAddress() == address");
     return "!WORD " + (label != null ? label.toString() : hexWord(address));
   }
 

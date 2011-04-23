@@ -1,7 +1,7 @@
 package de.heiden.c64dt.assembler.gui;
 
 import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.assembler.ILabel;
+import de.heiden.c64dt.assembler.label.ILabel;
 import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.assembler.ReassemblerMapper;
 import de.heiden.c64dt.assembler.command.CommandBuffer;

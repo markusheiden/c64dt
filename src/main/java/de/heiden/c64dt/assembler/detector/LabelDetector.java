@@ -23,26 +23,34 @@ public class LabelDetector implements IDetector
         // Mark all code label positions as a start of an opcode
         change |= iter.setType(CodeType.OPCODE);
       }
-      else if (iter.hasConflictingCodeLabel())
+      else
       {
-        // Mark current command as data, because it may not be an opcode
-        change |= iter.setType(CodeType.DATA);
-
-        // Search for code label and mark the relative address as an opcode
-        boolean notFound = true;
-        for (int index = iter.getIndex() + 1, count = 1; count < command.getSize(); index++, count++)
+        if (hasConflictingCodeLabel(commands, iter))
         {
-          // TODO mh: move functionality to CommandBuffer: hasCodeLabel(int index)
-          if (commands.hasCodeLabel(commands.addressForIndex(index)))
+          // Mark current command as data, because it may not be an opcode
+          change |= iter.setType(CodeType.DATA);
+
+          // Search for code label and mark the relative address as an opcode
+          boolean notFound = true;
+          for (int index = iter.getIndex() + 1, count = 1; count < command.getSize(); index++, count++)
           {
-            change |= commands.setType(index, CodeType.OPCODE);
-            notFound = false;
+            // TODO mh: move functionality to CommandBuffer: hasCodeLabel(int index)
+            if (commands.hasCodeLabel(commands.addressForIndex(index)))
+            {
+              change |= commands.setType(index, CodeType.OPCODE);
+              notFound = false;
+            }
+            else if (notFound)
+            {
+              // mark as data until first code label
+              change |= commands.setType(index, CodeType.DATA);
+            }
           }
-          else if (notFound)
-          {
-            // mark as data until first code label
-            change |= commands.setType(index, CodeType.DATA);
-          }
+        }
+        if (hasConflictingDataLabel(commands, iter))
+        {
+          // TODO mh: what may be the source for this reference? Move all reference of conflicting labels?
+//          commands.addCodeReference(0, iter.getIndex());
         }
 
       }
@@ -54,5 +62,43 @@ public class LabelDetector implements IDetector
     }
 
     return change;
+  }
+
+  /**
+   * Is there at least one code label pointing to the argument of the current opcode / command?
+   *
+   * @param commands command buffer
+   * @param iter command iterator
+   */
+  public boolean hasConflictingCodeLabel(CommandBuffer commands, CommandIterator iter)
+  {
+    for (int address = iter.getAddress() + 1, count = 1; count < iter.getCommand().getSize(); address++, count++)
+    {
+      if (commands.hasCodeLabel(address))
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Is there at least one code label pointing to the argument of the current opcode / command?
+   *
+   * @param commands command buffer
+   * @param iter command iterator
+   */
+  public boolean hasConflictingDataLabel(CommandBuffer commands, CommandIterator iter)
+  {
+    for (int address = iter.getAddress() + 1, count = 1; count < iter.getCommand().getSize(); address++, count++)
+    {
+      if (commands.hasDataLabel(address))
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

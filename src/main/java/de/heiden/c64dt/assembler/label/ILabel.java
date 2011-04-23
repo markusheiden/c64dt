@@ -1,4 +1,4 @@
-package de.heiden.c64dt.assembler;
+package de.heiden.c64dt.assembler.label;
 
 /**
  * Label.
@@ -12,6 +12,9 @@ public interface ILabel extends Comparable<ILabel>
 
   /**
    * String representation of this label.
+   * +/- X is add, if needed.
+   *
+   * @param address absolute address this label is used for
    */
-  public String toString();
+  public String toString(int address);
 }

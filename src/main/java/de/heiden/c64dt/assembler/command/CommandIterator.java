@@ -1,7 +1,7 @@
 package de.heiden.c64dt.assembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.assembler.ILabel;
+import de.heiden.c64dt.assembler.label.ILabel;
 import org.springframework.util.Assert;
 
 /**
@@ -68,6 +68,14 @@ public class CommandIterator
   }
 
   /**
+   * The current absolute address.
+   */
+  public int getAddress()
+  {
+    return commands.addressForIndex(index);
+  }
+
+  /**
    * The next relative address.
    * This is the index from where the next command will be read.
    */
@@ -99,7 +107,7 @@ public class CommandIterator
   /**
    * Get the current command.
    */
-  private ICommand getCommand()
+  public ICommand getCommand()
   {
     return commands.getCommand(index);
   }
@@ -161,22 +169,6 @@ public class CommandIterator
   public ILabel getLabel()
   {
     return commands.getLabel(getCommand().getAddress());
-  }
-
-  /**
-   * Is there at least one code label pointing to the argument of the current opcode / command?
-   */
-  public boolean hasConflictingCodeLabel()
-  {
-    for (int address = commands.addressForIndex(index) + 1, count = 1; count < getCommand().getSize(); address++, count++)
-    {
-      if (commands.hasCodeLabel(address))
-      {
-        return true;
-      }
-    }
-
-    return false;
   }
 
   /**

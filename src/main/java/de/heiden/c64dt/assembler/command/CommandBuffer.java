@@ -1,10 +1,10 @@
 package de.heiden.c64dt.assembler.command;
 
-import de.heiden.c64dt.assembler.CodeLabel;
+import de.heiden.c64dt.assembler.label.CodeLabel;
 import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.assembler.DataLabel;
-import de.heiden.c64dt.assembler.ExternalLabel;
-import de.heiden.c64dt.assembler.ILabel;
+import de.heiden.c64dt.assembler.label.DataLabel;
+import de.heiden.c64dt.assembler.label.ExternalLabel;
+import de.heiden.c64dt.assembler.label.ILabel;
 import org.springframework.util.Assert;
 
 import java.util.Arrays;

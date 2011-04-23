@@ -1,22 +1,22 @@
-package de.heiden.c64dt.assembler;
+package de.heiden.c64dt.assembler.label;
 
 /**
- * Label to data.
+ * Label to code.
  */
-public class DataLabel extends AbstractLabel
+public class CodeLabel extends AbstractLabel
 {
   /**
    * Constructor.
    *
    * @param address address the label points to.
    */
-  public DataLabel(int address)
+  public CodeLabel(int address)
   {
     super(address);
   }
 
   protected String getLabelPrefix()
   {
-    return "l";
+    return "L";
   }
 }

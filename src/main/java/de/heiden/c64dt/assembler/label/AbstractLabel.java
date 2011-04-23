@@ -1,4 +1,6 @@
-package de.heiden.c64dt.assembler;
+package de.heiden.c64dt.assembler.label;
+
+import de.heiden.c64dt.assembler.label.ILabel;
 
 import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
 import static de.heiden.c64dt.util.HexUtil.hexPlain;
@@ -8,6 +10,9 @@ import static de.heiden.c64dt.util.HexUtil.hexPlain;
  */
 public abstract class AbstractLabel implements ILabel
 {
+  /**
+   * Absolute address this label stands for.
+   */
   private int address;
 
   /**
@@ -22,6 +27,7 @@ public abstract class AbstractLabel implements ILabel
     this.address = address;
   }
 
+  @Override
   public int getAddress()
   {
     return address;
@@ -33,9 +39,20 @@ public abstract class AbstractLabel implements ILabel
     return getAddress() - label.getAddress();
   }
 
-  public String toString()
+  @Override
+  public String toString(int address)
   {
-    return getLabelPrefix() + "_" + hexPlain(address);
+    String result = getLabelPrefix() + "_" + hexPlain(this.address);
+    if (this.address < address)
+    {
+      result += " + " + (address - this.address);
+    }
+    else if (this.address > address)
+    {
+      result += " - " + (this.address - address);
+    }
+
+    return result;
   }
 
   /**

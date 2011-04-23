@@ -13,6 +13,8 @@ import de.heiden.c64dt.assembler.detector.BrkDetector;
 import de.heiden.c64dt.assembler.detector.IDetector;
 import de.heiden.c64dt.assembler.detector.JsrDetector;
 import de.heiden.c64dt.assembler.detector.LabelDetector;
+import de.heiden.c64dt.assembler.label.ExternalLabel;
+import de.heiden.c64dt.assembler.label.ILabel;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 

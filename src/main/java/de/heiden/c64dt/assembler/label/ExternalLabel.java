@@ -1,4 +1,4 @@
-package de.heiden.c64dt.assembler;
+package de.heiden.c64dt.assembler.label;
 
 /**
  * Label for external references.
