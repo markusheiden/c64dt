@@ -430,7 +430,7 @@ public class Reassembler
       if (label != null)
       {
         // TODO mh: check length of label?
-        line.append(label.toString()).append(":");
+        line.append(label.toString(pc)).append(":");
       }
 
       fillSpaces(line, 40);

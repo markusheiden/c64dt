@@ -141,7 +141,7 @@ public class CodeView
         if (label != null)
         {
           // TODO mh: check length of label?
-          builder.append(label.toString()).append(":");
+          builder.append(label.toString(addr)).append(":");
         }
         String labelString = builder.toString();
 
