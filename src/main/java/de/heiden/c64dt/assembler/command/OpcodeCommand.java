@@ -89,8 +89,22 @@ public class OpcodeCommand extends AbstractCommand
     if (mode.getSize() > 0)
     {
       result.append(" ");
-      ILabel label = mode.isAddress() ? buffer.getLabel(mode.getAddress(getAddress(), argument)) : null;
-      result.append(label != null ? mode.toString(label.toString(argument)) : mode.toString(getAddress(), argument));
+      if (mode.isAddress())
+      {
+        ILabel label = buffer.getLabel(mode.getAddress(getAddress(), argument));
+        if (label != null)
+        {
+          result.append(mode.toString(label.toString(mode.getAddress(getAddress(), argument))));
+        }
+        else
+        {
+          result.append(mode.toString(getAddress(), argument));
+        }
+      }
+      else
+      {
+        result.append(mode.toString(getAddress(), argument));
+      }
     }
 
     return result.toString();
