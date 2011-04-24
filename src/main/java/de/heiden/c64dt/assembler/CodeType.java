@@ -50,4 +50,12 @@ public enum CodeType
   {
     return this == OPCODE || this == CODE;
   }
+
+  /**
+   * Is it data?.
+   */
+  public final boolean isData()
+  {
+    return this == DATA || this == ABSOLUTE_ADDRESS;
+  }
 }

@@ -46,11 +46,12 @@ public class JsrDetector implements IDetector
         int arguments = commands.getSubroutineArguments(opcodeCommand.getArgument());
         if (arguments > 0)
         {
+          // fixed length argument
           change |= markArgument(commands, index, argumentsIndex, argumentsIndex + arguments);
         }
         else if (arguments == 0 || !iter.peekCommand().isReachable())
         {
-          // argument == 0: manual defined JSR with zero-terminated argument
+          // argument == 0: search zero terminating the argument
           // !commands.peekCommand().isReachable(): try automatic detection of zero-terminated argument
           int endIndex = search0(commands, argumentsIndex, arguments != 0);
           if (endIndex < 0)
@@ -98,20 +99,30 @@ public class JsrDetector implements IDetector
    *
    * @param commands command buffer
    * @param startIndex index to start at
-   * @param stopAtLabels search at labels?
+   * @param check stop at labels?
    * @return end index or -1, if no arguments have been found
    */
-  private int search0(CommandBuffer commands, int startIndex, boolean stopAtLabels)
+  private int search0(CommandBuffer commands, int startIndex, boolean check)
   {
     Assert.notNull(commands, "Precondition: commands != null");
 
     byte[] code = commands.getCode();
     for (int index = startIndex, count = 0; commands.hasIndex(index) && count < maxLength; index++)
     {
-      if (stopAtLabels && commands.hasLabel(commands.addressForIndex(index)))
+      // check for aborting conditions only, if request
+      if (check)
       {
-        // stop search at any label
-        return -1;
+        if (commands.hasLabel(commands.addressForIndex(index)))
+        {
+          // stop search at any label
+          return -1;
+        }
+        CodeType type = commands.getType(index);
+        if (!type.isUnknown() && !type.isData())
+        {
+          // stop if code type has already been determined
+          return -1;
+        }
       }
 
       if (code[index] == 0)
