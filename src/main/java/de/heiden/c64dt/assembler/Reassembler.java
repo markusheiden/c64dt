@@ -265,17 +265,17 @@ public class Reassembler
       while (iter.hasNextCommand())
       {
         ICommand command = iter.nextCommand();
-        /*
-         * A command is not reachable, if the previous command is not reachable or is an ending command (e.g. JMP) and
-         * there is no code label for the command and the command has not already been detected as an opcode.
-         */
-        if (command.isReachable() && !iter.hasCodeLabel() && !iter.getType().isCode() &&
-          (!lastCommand.isReachable() || lastCommand.isEnd()))
-        {
-          command.setReachable(false);
-          // restart, if reference caused a wrong label in the already scanned code
-          change |= iter.removeReference();
-        }
+//        /*
+//         * A command is not reachable, if the previous command is not reachable or is an ending command (e.g. JMP) and
+//         * there is no code label for the command and the command has not already been detected as an opcode.
+//         */
+//        if (command.isReachable() && !iter.hasCodeLabel() && !iter.getType().isCode() &&
+//          (!lastCommand.isReachable() || lastCommand.isEnd()))
+//        {
+//          command.setReachable(false);
+//          // restart, if reference caused a wrong label in the already scanned code
+//          change |= iter.removeReference();
+//        }
 
         lastCommand = command;
       }

@@ -1,6 +1,4 @@
-package de.heiden.c64dt.assembler;
-
-import de.heiden.c64dt.assembler.gui.CodeView;
+package de.heiden.c64dt.assembler.gui;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
- * GUI for {@link Reassembler}.
+ * GUI for {@link de.heiden.c64dt.assembler.Reassembler}.
  */
 public class ReassemblerView extends JFrame
 {

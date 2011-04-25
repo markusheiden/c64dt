@@ -1,6 +1,6 @@
 package de.heiden.c64dt;
 
-import de.heiden.c64dt.assembler.ReassemblerView;
+import de.heiden.c64dt.assembler.gui.ReassemblerView;
 
 import javax.swing.*;
 
