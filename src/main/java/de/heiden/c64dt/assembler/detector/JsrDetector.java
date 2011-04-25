@@ -109,7 +109,7 @@ public class JsrDetector implements IDetector
     byte[] code = commands.getCode();
     for (int index = startIndex, count = 0; commands.hasIndex(index) && count < maxLength; index++)
     {
-      // check for aborting conditions only, if request
+      // check for aborting conditions, only if requested
       if (check)
       {
         if (commands.hasLabel(commands.addressForIndex(index)))
