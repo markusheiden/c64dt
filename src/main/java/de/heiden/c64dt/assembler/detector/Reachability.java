@@ -9,7 +9,7 @@ import de.heiden.c64dt.assembler.command.ICommand;
  * Detects reachability of code.
  * Computes transitive unreachability of commands.
  */
-public class ReachabilityDetector implements IDetector
+public class Reachability implements IDetector
 {
   @Override
   public boolean detect(CommandBuffer commands)

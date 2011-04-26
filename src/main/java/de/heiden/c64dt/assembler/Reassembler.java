@@ -12,7 +12,8 @@ import de.heiden.c64dt.assembler.detector.BrkDetector;
 import de.heiden.c64dt.assembler.detector.IDetector;
 import de.heiden.c64dt.assembler.detector.JsrDetector;
 import de.heiden.c64dt.assembler.detector.LabelDetector;
-import de.heiden.c64dt.assembler.detector.ReachabilityDetector;
+import de.heiden.c64dt.assembler.detector.Reachability;
+import de.heiden.c64dt.assembler.detector.Tokenizer;
 import de.heiden.c64dt.assembler.label.ExternalLabel;
 import de.heiden.c64dt.assembler.label.ILabel;
 import org.springframework.util.Assert;
@@ -46,7 +47,8 @@ public class Reassembler
   public Reassembler()
   {
     // add default detectors
-    detectors.add(new ReachabilityDetector());
+    detectors.add(new Tokenizer());
+    detectors.add(new Reachability());
     detectors.add(new LabelDetector());
     detectors.add(new BrkDetector());
     detectors.add(new BitDetector());
@@ -153,99 +155,14 @@ public class Reassembler
 
     this.commands = commands;
 
-    CodeBuffer buffer = new CodeBuffer(commands.getCode());
-
     boolean change = true;
     for (int count = 0; change && count < 10; count++)
     {
-      tokenize(buffer);
       change = detectCodeType();
       System.out.println(count);
     }
 
     combine();
-  }
-
-  /**
-   * Tokenize code.
-   *
-   * @param code code buffer
-   */
-  private void tokenize(CodeBuffer code)
-  {
-    Assert.notNull(code, "Precondition: code != null");
-
-    code.restart();
-    commands.clear();
-    while (code.has(1))
-    {
-      int index = commands.getIndex();
-      int pc = commands.addressForIndex(index);
-      CodeType type = commands.getType(index);
-
-      if (type == CodeType.BIT)
-      {
-        Opcode opcode = code.readOpcode();
-        // TODO mh: read ahead argument
-        commands.addCommand(new BitCommand(opcode, 0));
-      }
-      else if (type == CodeType.ABSOLUTE_ADDRESS)
-      {
-        // absolute address reference as data
-        int address = code.read(2);
-        commands.addCommand(new AddressCommand(address));
-        commands.addCodeReference(index, address);
-
-      }
-      else if (type == CodeType.DATA)
-      {
-        // plain data
-        commands.addCommand(new DataCommand(code.readByte()));
-      }
-      else
-      {
-        // unknown or code -> try to disassemble an opcode
-        Opcode opcode = code.readOpcode();
-        OpcodeMode mode = opcode.getMode();
-        int size = mode.getSize();
-
-        if (code.has(1 + size))
-        {
-          if (opcode.isLegal() || type == CodeType.OPCODE)
-          {
-            // TODO log error if illegal opcode and type is OPCODE?
-            if (size == 0)
-            {
-              // opcode without argument
-              commands.addCommand(new OpcodeCommand(opcode));
-            }
-            else
-            {
-              // opcode with an argument
-              int argument = code.read(mode.getSize());
-              commands.addCommand(new OpcodeCommand(opcode, argument));
-              if (mode.isAddress())
-              {
-                int address = mode.getAddress(pc, argument);
-                // track references of opcodes
-                commands.addReference(opcode.getType().isJump(), index, address);
-              }
-            }
-          }
-          else
-          {
-            // no valid opcode -> assume data
-            commands.addCommand(new DataCommand(opcode.getOpcode()));
-          }
-        }
-        else
-        {
-          // not enough argument bytes for opcode -> assume data
-          // TODO log error, when type != UNKNOWN?
-          commands.addCommand(new DataCommand(opcode.getOpcode()));
-        }
-      }
-    }
   }
 
   /**
