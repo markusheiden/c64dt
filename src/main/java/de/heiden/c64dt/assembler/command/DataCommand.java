@@ -34,7 +34,7 @@ public class DataCommand extends AbstractCommand
    */
   public DataCommand(int data)
   {
-    super(CodeType.DATA, false);
+    super(CodeType.DATA);
 
     this.data = new ArrayList<Integer>(MAX_BYTES);
     this.data.add(data);

@@ -27,7 +27,7 @@ public class DummyCommand extends AbstractCommand
    */
   public DummyCommand(int address)
   {
-    super(CodeType.UNKNOWN, false);
+    super(CodeType.UNKNOWN);
     setAddress(address);
   }
 

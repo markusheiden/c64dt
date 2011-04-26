@@ -32,6 +32,21 @@ public class CommandIterator
     this.commands = commands;
   }
 
+  /**
+   * Start iteration at the last command.
+   */
+  public CommandIterator reverse()
+  {
+    index = commands.getLength();
+    for (index = commands.getLength(); commands.getCommand(--index) == null;)
+    {
+      ;
+    }
+    index = getNextIndex();
+
+    return this;
+  }
+
   //
   // code types
   //

@@ -8,21 +8,19 @@ import org.springframework.util.Assert;
  */
 public abstract class AbstractCommand implements ICommand
 {
-  private CodeType type;
-  private boolean reachable;
-  private int address;
+  private final CodeType type;
+  private boolean reachable = false;
+  private int address = -1;
 
   /**
    * Constructor.
    *
    * @param type the code type this command handles
-   * @param reachable default value for reachability
+   *
    */
-  protected AbstractCommand(CodeType type, boolean reachable)
+  protected AbstractCommand(CodeType type)
   {
     this.type = type;
-    this.reachable = reachable;
-    this.address = -1;
   }
 
   @Override

@@ -40,7 +40,7 @@ public class OpcodeCommand extends AbstractCommand
    */
   public OpcodeCommand(Opcode opcode, int argument)
   {
-    super(CodeType.OPCODE, true);
+    super(CodeType.OPCODE);
 
     Assert.notNull(opcode, "Precondition: opcode != null");
 
