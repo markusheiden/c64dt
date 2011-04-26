@@ -5,7 +5,6 @@ import de.heiden.c64dt.assembler.command.BitCommand;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.DataCommand;
-import de.heiden.c64dt.assembler.command.DummyCommand;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 import de.heiden.c64dt.assembler.detector.BitDetector;
@@ -13,6 +12,7 @@ import de.heiden.c64dt.assembler.detector.BrkDetector;
 import de.heiden.c64dt.assembler.detector.IDetector;
 import de.heiden.c64dt.assembler.detector.JsrDetector;
 import de.heiden.c64dt.assembler.detector.LabelDetector;
+import de.heiden.c64dt.assembler.detector.ReachabilityDetector;
 import de.heiden.c64dt.assembler.label.ExternalLabel;
 import de.heiden.c64dt.assembler.label.ILabel;
 import org.springframework.util.Assert;
@@ -46,6 +46,7 @@ public class Reassembler
   public Reassembler()
   {
     // add default detectors
+    detectors.add(new ReachabilityDetector());
     detectors.add(new LabelDetector());
     detectors.add(new BrkDetector());
     detectors.add(new BitDetector());
@@ -158,7 +159,6 @@ public class Reassembler
     for (int count = 0; change && count < 10; count++)
     {
       tokenize(buffer);
-      reachability();
       change = detectCodeType();
       System.out.println(count);
     }
@@ -246,60 +246,6 @@ public class Reassembler
         }
       }
     }
-  }
-
-  /**
-   * Compute transitive unreachability of commands.
-   */
-  private void reachability()
-  {
-    boolean change;
-    do
-    {
-      change = false;
-
-      CommandIterator iter = new CommandIterator(commands);
-
-      // tracing forward from one unreachable command to the next
-      ICommand lastCommand = new DummyCommand();
-      while (iter.hasNextCommand())
-      {
-        ICommand command = iter.nextCommand();
-//        /*
-//         * A command is not reachable, if the previous command is not reachable or is an ending command (e.g. JMP) and
-//         * there is no code label for the command and the command has not already been detected as an opcode.
-//         */
-//        if (command.isReachable() && !iter.hasCodeLabel() && !iter.getType().isCode() &&
-//          (!lastCommand.isReachable() || lastCommand.isEnd()))
-//        {
-//          command.setReachable(false);
-//          // restart, if reference caused a wrong label in the already scanned code
-//          change |= iter.removeReference();
-//        }
-
-        lastCommand = command;
-      }
-
-      // trace backward from unreachable command to the previous
-      lastCommand = new DummyCommand();
-      while (iter.hasPreviousCommand())
-      {
-        ICommand command = iter.previousCommand();
-        /*
-         * A code command is not reachable, if it leads to unreachable code.
-         * Exception: JSR which may be followed by argument data.
-         */
-        if (!lastCommand.isReachable() &&
-          command.isReachable() && !command.isEnd() && !iter.getType().isCode())
-        {
-          command.setReachable(false);
-          // restart, if reference caused a wrong label in the already scanned code
-          change |= iter.removeReference();
-        }
-
-        lastCommand = command;
-      }
-    } while (change);
   }
 
   /**
