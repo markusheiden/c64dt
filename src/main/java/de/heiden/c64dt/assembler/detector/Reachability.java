@@ -8,6 +8,7 @@ import de.heiden.c64dt.assembler.command.ICommand;
 /**
  * Detects reachability of code.
  * Computes transitive unreachability of commands.
+ * Should be the second detector.
  */
 public class Reachability implements IDetector
 {

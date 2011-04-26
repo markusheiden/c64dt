@@ -11,7 +11,8 @@ import de.heiden.c64dt.assembler.command.DataCommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 
 /**
- * Tokenizes the code
+ * Tokenizes the code.
+ * Should be the first detector.
  */
 public class Tokenizer implements IDetector
 {
