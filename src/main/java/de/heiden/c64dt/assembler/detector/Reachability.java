@@ -36,8 +36,8 @@ public class Reachability implements IDetector
         ICommand command = iter.previousCommand();
         /*
          * A code command is not reachable, if it leads to unreachable code.
-         * Exception: JSR which may be followed by argument data.
          *
+         * TODO mh: Exception: JSR which may be followed by argument data.
          * TODO mh: check JMP/JSR/Bxx targets for reachability
          */
         if (!lastCommand.isReachable() &&
