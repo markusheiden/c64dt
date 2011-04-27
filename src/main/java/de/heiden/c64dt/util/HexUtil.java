@@ -73,7 +73,7 @@ public class HexUtil
     assert value >= 0 : "Precondition: value >= 0";
     assert value < 0x10000 : "value < 0x10000";
 
-    return value < 0x100 ? hexBytePlain(value) : hexWordPlain(value);
+    return value < 0x100? hexBytePlain(value) : hexWordPlain(value);
   }
 
   /**
@@ -86,6 +86,6 @@ public class HexUtil
     assert value >= 0 : "Precondition: value >= 0";
     assert value < 0x10000 : "value < 0x10000";
 
-    return value < 0x100 ? hexByte(value) : hexWord(value);
+    return value < 0x100? hexByte(value) : hexWord(value);
   }
 }

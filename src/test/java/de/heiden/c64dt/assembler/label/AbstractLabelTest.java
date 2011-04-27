@@ -1,8 +1,9 @@
 package de.heiden.c64dt.assembler.label;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test for {@link AbstractLabel}.

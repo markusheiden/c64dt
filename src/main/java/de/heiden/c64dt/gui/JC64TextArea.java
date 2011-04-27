@@ -295,7 +295,7 @@ public class JC64TextArea extends JC64CommonComponent
     int foreground = _foregrounds[row][column].getRGB();
     int background = _backgrounds[row][column].getRGB();
 
-    int charOffset = _upper ? 0x0000 : 0x0800;
+    int charOffset = _upper? 0x0000 : 0x0800;
     int charPtr = charOffset + (_chars[row][column] & 0xFF) * 8;
     for (int y = row * 8, lastY = y + 8; y < lastY; y++)
     {
@@ -303,7 +303,7 @@ public class JC64TextArea extends JC64CommonComponent
       int data = _charsetROM[charPtr++];
       for (int dx = 0, bit = 0x80; bit > 0; dx++, bit = bit >> 1)
       {
-        imageData[offset + dx] = (data & bit) != 0 ? foreground : background;
+        imageData[offset + dx] = (data & bit) != 0? foreground : background;
       }
     }
   }

@@ -101,8 +101,8 @@ public class Disassembler
       {
         int argument = buffer.read(mode.getSize());
 
-        output.append(size >= 1 ? " " + hexBytePlain(lo(argument)) : "   ");
-        output.append(size >= 2 ? " " + hexBytePlain(hi(argument)) : "   ");
+        output.append(size >= 1? " " + hexBytePlain(lo(argument)) : "   ");
+        output.append(size >= 2? " " + hexBytePlain(hi(argument)) : "   ");
         output.append(" ");
         output.append(opcode.getType().toString());
         output.append(" ");

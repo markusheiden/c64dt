@@ -83,7 +83,7 @@ public class C64Connection extends AbstractConnection
 
     for (int ptr = 0, remain = data.length; remain > 0; ptr += 128, remain -= 128)
     {
-      int length = remain > 128 ? 128 : remain;
+      int length = remain > 128? 128 : remain;
       Packet packet = createPacket(4, hi(address), lo(address), hi(length), lo(length));
       packet.addData(data, ptr, length);
       sendPacketGetReply(packet);

@@ -1,7 +1,7 @@
 package de.heiden.c64dt.assembler.command;
 
-import de.heiden.c64dt.assembler.label.CodeLabel;
 import de.heiden.c64dt.assembler.CodeType;
+import de.heiden.c64dt.assembler.label.CodeLabel;
 import de.heiden.c64dt.assembler.label.DataLabel;
 import de.heiden.c64dt.assembler.label.ExternalLabel;
 import de.heiden.c64dt.assembler.label.ILabel;
@@ -321,7 +321,7 @@ public class CommandBuffer
     }
 
     Integer result = subroutines.get(indexForAddress(address));
-    return result != null ? result : -1;
+    return result != null? result : -1;
   }
 
   /**

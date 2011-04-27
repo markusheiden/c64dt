@@ -60,8 +60,8 @@ public abstract class AbstractConnection
    */
   public String getDestination()
   {
-    SocketAddress result = destination != null ? destination : lastDestination;
-    return result != null ? result.toString() : "unknown";
+    SocketAddress result = destination != null? destination : lastDestination;
+    return result != null? result.toString() : "unknown";
   }
 
   /**
@@ -100,7 +100,7 @@ public abstract class AbstractConnection
   {
     packet.pad();
     byte[] data = packet.getData();
-    lastOutput = new DatagramPacket(data, data.length, destination != null ? destination : lastDestination);
+    lastOutput = new DatagramPacket(data, data.length, destination != null? destination : lastDestination);
     socket.send(lastOutput);
   }
 

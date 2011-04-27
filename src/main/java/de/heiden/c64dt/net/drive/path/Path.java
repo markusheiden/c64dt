@@ -48,10 +48,10 @@ public class Path extends AbstractPath
     {
       File file = files[i];
       int extensionPos = file.getName().lastIndexOf('.');
-      String extension = extensionPos >= 0 ? file.getName().substring(extensionPos + 1) : "";
-      FileMode mode = new FileMode(file.isDirectory() ? FileType.DIR : FileType.fileType(extension));
+      String extension = extensionPos >= 0? file.getName().substring(extensionPos + 1) : "";
+      FileMode mode = new FileMode(file.isDirectory()? FileType.DIR : FileType.fileType(extension));
       byte[] filename = encode(trimTo16(file.getName()));
-      int size = file.isDirectory() ? 0 : (int) ((file.length() + 253) / 254);
+      int size = file.isDirectory()? 0 : (int) ((file.length() + 253) / 254);
       entries.add(new de.heiden.c64dt.disk.File(mode, 1, 0, filename, size));
     }
     byte[] trimmedName = new byte[16];

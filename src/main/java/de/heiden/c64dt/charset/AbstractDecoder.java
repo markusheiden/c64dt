@@ -32,7 +32,7 @@ public abstract class AbstractDecoder extends CharsetDecoder
         // characters above 0x7F just have inverted colors
         out.put(toChar((byte) (in.get() & 0x7F)));
       }
-      return in.hasRemaining() ? CoderResult.OVERFLOW : CoderResult.UNDERFLOW;
+      return in.hasRemaining()? CoderResult.OVERFLOW : CoderResult.UNDERFLOW;
     }
     catch (UnmappableCharacterException e)
     {

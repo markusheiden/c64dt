@@ -1,9 +1,9 @@
 package de.heiden.c64dt.assembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.assembler.label.ILabel;
 import de.heiden.c64dt.assembler.Opcode;
 import de.heiden.c64dt.assembler.OpcodeMode;
+import de.heiden.c64dt.assembler.label.ILabel;
 import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 

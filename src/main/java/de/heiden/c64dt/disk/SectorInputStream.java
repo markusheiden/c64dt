@@ -66,7 +66,7 @@ public class SectorInputStream extends InputStream
       track = ByteUtil.toByte(currentSector[0]);
       sector = ByteUtil.toByte(currentSector[1]);
       pos = 0x02;
-      remaining = track == 0x00 ? sector : 0xFE;
+      remaining = track == 0x00? sector : 0xFE;
     }
 
     --remaining;

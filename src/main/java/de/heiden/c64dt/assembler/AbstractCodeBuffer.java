@@ -65,6 +65,6 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer
   {
     Assert.isTrue(number == 1 || number == 2, "Precondition: number == 1 || number == 2");
 
-    return number == 1 ? readByte() : readByte() + (readByte() << 8);
+    return number == 1? readByte() : readByte() + (readByte() << 8);
   }
 }

@@ -252,7 +252,7 @@ public class GCR
       out.append(": ");
       for (int j = 0; j < 16; i++, j++)
       {
-        out.append(table[i] >= 0 ? HexUtil.hexByte(table[i]) : "---");
+        out.append(table[i] >= 0? HexUtil.hexByte(table[i]) : "---");
         out.append(", ");
       }
       out.append("\n");

@@ -184,7 +184,7 @@ public enum OpcodeMode
   public String toString(int pc, int argument)
   {
     // Default implementation, will be overridden by some modes
-    return toString(getSize() == 1 ? hexByte(argument) : hexWord(argument));
+    return toString(getSize() == 1? hexByte(argument) : hexWord(argument));
   }
 
   /**

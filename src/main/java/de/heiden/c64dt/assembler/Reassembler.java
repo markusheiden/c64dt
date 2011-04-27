@@ -1,12 +1,8 @@
 package de.heiden.c64dt.assembler;
 
-import de.heiden.c64dt.assembler.command.AddressCommand;
-import de.heiden.c64dt.assembler.command.BitCommand;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.CommandIterator;
-import de.heiden.c64dt.assembler.command.DataCommand;
 import de.heiden.c64dt.assembler.command.ICommand;
-import de.heiden.c64dt.assembler.command.OpcodeCommand;
 import de.heiden.c64dt.assembler.detector.BitDetector;
 import de.heiden.c64dt.assembler.detector.BrkDetector;
 import de.heiden.c64dt.assembler.detector.IDetector;
@@ -285,7 +281,7 @@ public class Reassembler
         line.append(hexBytePlain(data.get(i)));
       }
       fillSpaces(line, 21);
-      line.append(data.size() > 3 ? "..." : "   ");
+      line.append(data.size() > 3? "..." : "   ");
       line.append(" | ");
 
       // reassembler output

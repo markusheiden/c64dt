@@ -17,6 +17,6 @@ public class ExternalLabel extends AbstractLabel
 
   protected String getLabelPrefix()
   {
-    return getAddress() < 0x100 ? "Z" : "X";
+    return getAddress() < 0x100? "Z" : "X";
   }
 }

@@ -136,7 +136,7 @@ public class CommandIterator
   public ICommand peekCommand()
   {
     int nextIndex = getNextIndex();
-    return commands.hasIndex(nextIndex) ? commands.getCommand(nextIndex) : DummyCommand.DUMMY_COMMAND;
+    return commands.hasIndex(nextIndex)? commands.getCommand(nextIndex) : DummyCommand.DUMMY_COMMAND;
   }
 
   /**

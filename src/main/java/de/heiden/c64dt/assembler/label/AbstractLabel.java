@@ -1,7 +1,5 @@
 package de.heiden.c64dt.assembler.label;
 
-import de.heiden.c64dt.assembler.label.ILabel;
-
 import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
 import static de.heiden.c64dt.util.HexUtil.hexPlain;
 

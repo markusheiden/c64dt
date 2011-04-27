@@ -30,7 +30,7 @@ public abstract class AbstractPath implements IPath
   protected AbstractPath(IPath parent)
   {
     // set this as parent, when no parent is specified to not leave root dir
-    this.parent = parent == null ? this : parent;
+    this.parent = parent == null? this : parent;
   }
 
   public IPath getParent()

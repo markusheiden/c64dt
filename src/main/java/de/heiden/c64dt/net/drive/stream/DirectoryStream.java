@@ -78,7 +78,7 @@ public class DirectoryStream extends AbstractStream
     }
     writeByte(SPACE);
     writeBytes(encode(file.getMode().getType().getExtension()));
-    writeByte(file.getMode().isLocked() ? LOWER : SPACE);
+    writeByte(file.getMode().isLocked()? LOWER : SPACE);
     writeByte(SPACE);
     writeByte(0x00);
   }

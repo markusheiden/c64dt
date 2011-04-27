@@ -27,14 +27,14 @@ public class C64Charset extends Charset
    */
   protected C64Charset(boolean upper)
   {
-    super("C64_" + (upper ? "UPPER" : "LOWER"), null);
+    super("C64_" + (upper? "UPPER" : "LOWER"), null);
 
     this.upper = upper;
   }
 
   public static C64Charset charset(boolean upper)
   {
-    return upper ? UPPER : LOWER;
+    return upper? UPPER : LOWER;
   }
 
   public boolean contains(Charset cs)
@@ -45,12 +45,12 @@ public class C64Charset extends Charset
 
   public AbstractDecoder newDecoder()
   {
-    return upper ? new C64DecoderUpper(this) : new C64DecoderLower(this);
+    return upper? new C64DecoderUpper(this) : new C64DecoderLower(this);
   }
 
   public AbstractEncoder newEncoder()
   {
-    return upper ? new C64EncoderUpper(this) : new C64EncoderLower(this);
+    return upper? new C64EncoderUpper(this) : new C64EncoderLower(this);
   }
 
   //

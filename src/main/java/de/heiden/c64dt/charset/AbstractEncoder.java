@@ -31,7 +31,7 @@ public abstract class AbstractEncoder extends CharsetEncoder
       {
         out.put(toByte(in.get()));
       }
-      return in.hasRemaining() ? CoderResult.OVERFLOW : CoderResult.UNDERFLOW;
+      return in.hasRemaining()? CoderResult.OVERFLOW : CoderResult.UNDERFLOW;
     }
     catch (UnmappableCharacterException e)
     {
