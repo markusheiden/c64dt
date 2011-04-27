@@ -15,10 +15,10 @@ public class CommandIterator
   private CommandBuffer commands;
 
   /**
-   * Index of the current command.
-   * Iterator.
+   * Index of the current command / the iterator.
+   * Start before the first command.
    */
-  private int index;
+  private int index = -1;
 
   /**
    * Constructor.
@@ -34,14 +34,17 @@ public class CommandIterator
 
   /**
    * Start iteration at the last command.
+   *
+   * @return this, for method chaining
    */
   public CommandIterator reverse()
   {
-    index = commands.getLength();
+    // trace backward for last command
     for (index = commands.getLength(); commands.getCommand(--index) == null;)
     {
-      ;
+      // search further
     }
+    // set index after last command
     index = getNextIndex();
 
     return this;
@@ -96,7 +99,7 @@ public class CommandIterator
    */
   public int getNextIndex()
   {
-    return index + getCommand().getSize();
+    return index < 0? 0 : index + getCommand().getSize();
   }
 
   /**
@@ -152,10 +155,10 @@ public class CommandIterator
   {
     // get start of current command for consistency check
     int endIndex = index;
-    // trace back for previous command
+    // trace backwards for previous command
     while (index > 0 && commands.getCommand(--index) == null)
     {
-      ;
+      // search further
     }
     ICommand result = getCommand();
 
