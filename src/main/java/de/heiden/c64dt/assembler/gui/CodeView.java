@@ -2,16 +2,12 @@ package de.heiden.c64dt.assembler.gui;
 
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Reassembler;
-import de.heiden.c64dt.assembler.ReassemblerMapper;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
-import de.heiden.c64dt.assembler.command.CommandIterator;
-import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.detector.JsrDetector;
-import de.heiden.c64dt.assembler.label.ILabel;
+import de.heiden.c64dt.assembler.gui.action.CodeTypeActions;
 import org.springframework.util.FileCopyUtils;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -20,26 +16,25 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
-import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
-
 /**
  * View for reassembled code.
  */
 public class CodeView
 {
+  private Reassembler reassembler;
+
   /**
    * Model.
    */
-  private final DefaultTableModel model;
+  private final CodeTableModel model;
 
   /**
    * Constructor.
    */
   public CodeView()
   {
-    model = new DefaultTableModel(
-      new String[]{"Flags", "Addr", "Bytes", "Label", "Code"}, 0);
+    reassembler = new Reassembler();
+    model = new CodeTableModel(reassembler);
   }
 
   /**
@@ -68,7 +63,8 @@ public class CodeView
           return;
         }
 
-        createContextMenu().show(table, e.getX(), e.getY());
+        // TODO mh: select row
+        createContextMenu(table).show(table, e.getX(), e.getY());
       }
     });
 
@@ -78,95 +74,21 @@ public class CodeView
   /**
    * Create context menu.
    */
-  private JPopupMenu createContextMenu()
+  private JPopupMenu createContextMenu(JTable table)
   {
     JPopupMenu contextMenu = new JPopupMenu();
-    contextMenu.add(new JMenuItem("Test"));
+
+    CodeTypeActions.addToMenu(contextMenu, table);
 
     return contextMenu;
   }
 
   public void reassemble(InputStream is) throws IOException
   {
-    Reassembler reassembler = new Reassembler();
     reassembler.reassemble(is);
-    reassemble(reassembler);
+    model.update();
   }
 
-  private void reassemble(Reassembler reassembler)
-  {
-    try
-    {
-      model.setRowCount(0);
-
-      StringBuilder builder = new StringBuilder();
-
-      CommandBuffer commands = reassembler.getCommands();
-      CommandIterator iter = new CommandIterator(commands);
-      while (iter.hasNextCommand())
-      {
-        ICommand command = iter.nextCommand();
-        int index = iter.getIndex();
-        int addr = commands.addressForIndex(index);
-
-        builder.setLength(0);
-        if (!command.isReachable())
-        {
-          builder.append("U");
-        }
-        for (int i = 1; i < command.getSize(); i++)
-        {
-          if (commands.hasCodeLabel(addr + i))
-          {
-            builder.append("C");
-          }
-          if (commands.hasDataLabel(addr + i))
-          {
-            builder.append("D");
-          }
-        }
-        String flags = builder.toString();
-
-        builder.setLength(0);
-        java.util.List<Integer> data = command.toBytes();
-        for (int dataByte : data)
-        {
-          builder.append(" ");
-          builder.append(hexBytePlain(dataByte));
-        }
-        String bytes = builder.toString().trim();
-
-        builder.setLength(0);
-        ILabel label = iter.getLabel();
-        if (label != null)
-        {
-          // TODO mh: check length of label?
-          builder.append(label.toString(addr)).append(":");
-        }
-        String labelString = builder.toString();
-
-        builder.setLength(0);
-        if (command != null)
-        {
-          builder.append(command.toString(commands));
-        }
-        else
-        {
-          // TODO mh: log error?
-          builder.append("???");
-        }
-        String code = builder.toString();
-
-        model.addRow(new Object[]{flags, hexWordPlain(addr), bytes, labelString, code});
-      }
-
-      new ReassemblerMapper().write(reassembler);
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-  }
 
   public void reassemble()
   {
@@ -180,7 +102,6 @@ public class CodeView
 
       byte[] code = FileCopyUtils.copyToByteArray(new FileInputStream(file));
 
-      Reassembler reassembler = new Reassembler();
       JsrDetector jsr = new JsrDetector();
       reassembler.add(jsr);
 
@@ -201,7 +122,7 @@ public class CodeView
 
       reassembler.reassemble(commands);
 
-      reassemble(reassembler);
+      model.update();
     }
     catch (IOException e)
     {

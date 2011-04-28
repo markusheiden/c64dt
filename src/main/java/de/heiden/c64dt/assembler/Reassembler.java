@@ -141,11 +141,19 @@ public class Reassembler
   }
 
   /**
+   * Reassemble again.
+   */
+  public void reassemble()
+  {
+    reassemble(commands);
+  }
+
+  /**
    * Reassemble.
    *
    * @param commands command buffer
    */
-  public void reassemble(CommandBuffer commands) throws IOException
+  public void reassemble(CommandBuffer commands)
   {
     Assert.notNull(commands, "Precondition: commands != null");
 
