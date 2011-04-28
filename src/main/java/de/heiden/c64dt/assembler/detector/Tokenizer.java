@@ -4,6 +4,7 @@ import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Opcode;
 import de.heiden.c64dt.assembler.OpcodeMode;
+import de.heiden.c64dt.assembler.OpcodeType;
 import de.heiden.c64dt.assembler.command.AddressCommand;
 import de.heiden.c64dt.assembler.command.BitCommand;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
@@ -37,15 +38,25 @@ public class Tokenizer implements IDetector
 
       if (type == CodeType.BIT)
       {
+        // BIT opcode used just to skip the next opcode
         Opcode opcode = code.readOpcode();
-        // TODO mh: read ahead argument
-        commands.addCommand(new BitCommand(opcode, 0));
+        if (opcode.getType().equals(OpcodeType.BIT) && code.has(opcode.getMode().getSize()))
+        {
+          // TODO mh: read argument too
+          commands.addCommand(new BitCommand(opcode, 0));
+        }
+        else
+        {
+          // no BIT opcode -> assume data
+          code.setCurrentIndex(codeIndex);
+          commands.addCommand(new DataCommand(code.readByte()));
+        }
       }
       else if (type == CodeType.ABSOLUTE_ADDRESS)
       {
-        // absolute address reference as data
-        int address = code.read(2);
-        if (commands.hasAddress(address))
+        // absolute address as data
+        int address;
+        if (code.has(2) && commands.hasAddress(address = code.read(2)))
         {
           commands.addCommand(new AddressCommand(address));
           commands.addCodeReference(index, address);
@@ -55,7 +66,6 @@ public class Tokenizer implements IDetector
           code.setCurrentIndex(codeIndex);
           commands.addCommand(new DataCommand(code.readByte(), code.readByte()));
         }
-
       }
       else if (type == CodeType.DATA)
       {
@@ -69,40 +79,32 @@ public class Tokenizer implements IDetector
         OpcodeMode mode = opcode.getMode();
         int size = mode.getSize();
 
-        if (code.has(1 + size))
+        if (code.has(1 + size) && (opcode.isLegal() || type == CodeType.OPCODE))
         {
-          if (opcode.isLegal() || type == CodeType.OPCODE)
+          // TODO log error if illegal opcode and type is OPCODE?
+          if (size == 0)
           {
-            // TODO log error if illegal opcode and type is OPCODE?
-            if (size == 0)
-            {
-              // opcode without argument
-              commands.addCommand(new OpcodeCommand(opcode));
-            }
-            else
-            {
-              // opcode with an argument
-              int argument = code.read(mode.getSize());
-              commands.addCommand(new OpcodeCommand(opcode, argument));
-              if (mode.isAddress())
-              {
-                int address = mode.getAddress(pc, argument);
-                // track references of opcodes
-                commands.addReference(opcode.getType().isJump(), index, address);
-              }
-            }
+            // opcode without argument
+            commands.addCommand(new OpcodeCommand(opcode));
           }
           else
           {
-            // no valid opcode -> assume data
-            commands.addCommand(new DataCommand(opcode.getOpcode()));
+            // opcode with an argument
+            int argument = code.read(size);
+            commands.addCommand(new OpcodeCommand(opcode, argument));
+            if (mode.isAddress())
+            {
+              int address = mode.getAddress(pc, argument);
+              // track references of opcodes
+              commands.addReference(opcode.getType().isJump(), index, address);
+            }
           }
         }
         else
         {
-          // not enough argument bytes for opcode -> assume data
-          // TODO log error, when type != UNKNOWN?
-          commands.addCommand(new DataCommand(opcode.getOpcode()));
+          // not enough argument bytes for opcode or illegal opcode -> assume data
+          code.setCurrentIndex(codeIndex);
+          commands.addCommand(new DataCommand(code.readByte()));
         }
       }
     }
