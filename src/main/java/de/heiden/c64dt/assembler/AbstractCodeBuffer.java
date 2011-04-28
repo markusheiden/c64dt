@@ -1,5 +1,6 @@
 package de.heiden.c64dt.assembler;
 
+import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 
 /**
@@ -8,7 +9,7 @@ import org.springframework.util.Assert;
 public abstract class AbstractCodeBuffer implements ICodeBuffer
 {
   private int length;
-  protected int position;
+  private int position;
   private int opcode;
 
   /**
@@ -26,13 +27,6 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer
   }
 
   @Override
-  public void restart()
-  {
-    position = 0;
-    opcode = -1;
-  }
-
-  @Override
   public final int getCommandIndex()
   {
     return opcode;
@@ -42,6 +36,12 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer
   public final int getCurrentIndex()
   {
     return position;
+  }
+
+  @Override
+  public final void setCurrentIndex(int index)
+  {
+    position = index;
   }
 
   @Override
@@ -67,4 +67,19 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer
 
     return number == 1? readByte() : readByte() + (readByte() << 8);
   }
+
+  /**
+   * Read a byte from the code at the current position and advance.
+   */
+  public final int readByte()
+  {
+    return readByteAt(position++);
+  }
+
+  /**
+   * Read a byte from the source.
+   *
+   * @param index index of byte to read
+   */
+  protected abstract int readByteAt(int index);
 }

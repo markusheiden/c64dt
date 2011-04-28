@@ -6,12 +6,6 @@ package de.heiden.c64dt.assembler;
 public interface ICodeBuffer
 {
   /**
-   * Restart.
-   * Sets the current position to the start of the code / commands.
-   */
-  public void restart();
-
-  /**
    * The index of the current command.
    */
   public int getCommandIndex();
@@ -20,6 +14,13 @@ public interface ICodeBuffer
    * The current index.
    */
   public int getCurrentIndex();
+
+  /**
+   * Set the current index.
+   *
+   * @param index index
+   */
+  public void setCurrentIndex(int index);
 
   //
   // code specific interface
@@ -33,11 +34,6 @@ public interface ICodeBuffer
   public boolean has(int number);
 
   /**
-   * Read a byte from the code at the current position and advance.
-   */
-  public int readByte();
-
-  /**
    * Read an opcode.
    */
   public Opcode readOpcode();
@@ -48,4 +44,9 @@ public interface ICodeBuffer
    * @param number number of bytes to read
    */
   public int read(int number);
+
+  /**
+   * Read a byte from the code at the current position and advance.
+   */
+  public int readByte();
 }

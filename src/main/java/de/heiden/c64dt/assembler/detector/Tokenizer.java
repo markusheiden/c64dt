@@ -9,6 +9,7 @@ import de.heiden.c64dt.assembler.command.BitCommand;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.DataCommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
+import org.springframework.util.Assert;
 
 import static de.heiden.c64dt.util.ByteUtil.hi;
 import static de.heiden.c64dt.util.ByteUtil.lo;
@@ -27,7 +28,10 @@ public class Tokenizer implements IDetector
     commands.clear();
     while (code.has(1))
     {
+      int codeIndex = code.getCurrentIndex();
+
       int index = commands.getIndex();
+      Assert.isTrue(codeIndex == index, "Check: codeIndex == index");
       int pc = commands.addressForIndex(index);
       CodeType type = commands.getType(index);
 
@@ -48,7 +52,8 @@ public class Tokenizer implements IDetector
         }
         else
         {
-          commands.addCommand(new DataCommand(lo(address), hi(address)));
+          code.setCurrentIndex(codeIndex);
+          commands.addCommand(new DataCommand(code.readByte(), code.readByte()));
         }
 
       }

@@ -21,15 +21,9 @@ public class CodeBuffer extends AbstractCodeBuffer
     this.code = code;
   }
 
-  //
-  // code specific interface
-  //
-
-  /**
-   * Read a byte from the code at the current position and advance.
-   */
-  public final int readByte()
+  @Override
+  protected int readByteAt(int index)
   {
-    return ByteUtil.toByte(code[position++]);
+    return ByteUtil.toByte(code[index]);
   }
 }
