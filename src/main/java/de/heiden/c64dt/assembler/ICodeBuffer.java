@@ -42,6 +42,7 @@ public interface ICodeBuffer
    * Read 'number' bytes as one word.
    *
    * @param number number of bytes to read
+   * @return read byte if number == 1, read word if number == 2, -1 if number == 0
    */
   public int read(int number);
 

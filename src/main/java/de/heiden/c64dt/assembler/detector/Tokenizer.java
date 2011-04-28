@@ -86,22 +86,13 @@ public class Tokenizer implements IDetector
         if (code.has(modeSize) && (opcode.isLegal() || type == CodeType.OPCODE))
         {
           // TODO mh: log error if illegal opcode and type is OPCODE?
-          if (modeSize == 0)
+          int argument = code.read(modeSize);
+          commands.addCommand(new OpcodeCommand(opcode, argument));
+          if (mode.isAddress())
           {
-            // opcode without argument
-            commands.addCommand(new OpcodeCommand(opcode));
-          }
-          else
-          {
-            // opcode with an argument
-            int argument = code.read(modeSize);
-            commands.addCommand(new OpcodeCommand(opcode, argument));
-            if (mode.isAddress())
-            {
-              int address = mode.getAddress(pc, argument);
-              // track references of opcodes
-              commands.addReference(opcode.getType().isJump(), index, address);
-            }
+            int address = mode.getAddress(pc, argument);
+            // track references of opcodes
+            commands.addReference(opcode.getType().isJump(), index, address);
           }
         }
         else
