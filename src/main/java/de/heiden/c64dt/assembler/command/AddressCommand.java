@@ -52,7 +52,7 @@ public class AddressCommand extends AbstractCommand
   }
 
   @Override
-  public String toString(CommandBuffer buffer) throws IOException
+  public String toString(CommandBuffer buffer)
   {
     Assert.notNull(buffer, "Precondition: buffer != null");
 

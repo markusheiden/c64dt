@@ -67,7 +67,7 @@ public interface ICommand
    *
    * @param buffer command buffer
    */
-  public String toString(CommandBuffer buffer) throws IOException;
+  public String toString(CommandBuffer buffer);
 
   /**
    * Byte representation of this command.

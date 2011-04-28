@@ -79,7 +79,7 @@ public class OpcodeCommand extends AbstractCommand
     return false;
   }
 
-  public String toString(CommandBuffer buffer) throws IOException
+  public String toString(CommandBuffer buffer)
   {
     Assert.notNull(buffer, "Precondition: buffer != null");
 
