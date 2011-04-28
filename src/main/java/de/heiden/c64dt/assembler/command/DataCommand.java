@@ -6,6 +6,7 @@ import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,14 +31,30 @@ public class DataCommand extends AbstractCommand
   /**
    * Constructor.
    *
-   * @param data byte this command represents
+   * @param dataByte byte this command represents
    */
-  public DataCommand(int data)
+  public DataCommand(int dataByte)
   {
     super(CodeType.DATA);
 
     this.data = new ArrayList<Integer>(MAX_BYTES);
-    this.data.add(data);
+    this.data.add(dataByte);
+  }
+
+  /**
+   * Constructor.
+   *
+   * @param dataBytes bytes this command represents
+   */
+  public DataCommand(int... dataBytes)
+  {
+    super(CodeType.DATA);
+
+    this.data = new ArrayList<Integer>(MAX_BYTES);
+    for (int dataByte : dataBytes)
+    {
+      this.data.add(dataByte);
+    }
   }
 
   @Override

@@ -10,6 +10,9 @@ import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.DataCommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 
+import static de.heiden.c64dt.util.ByteUtil.hi;
+import static de.heiden.c64dt.util.ByteUtil.lo;
+
 /**
  * Tokenizes the code.
  * Should be the first detector.
@@ -38,8 +41,15 @@ public class Tokenizer implements IDetector
       {
         // absolute address reference as data
         int address = code.read(2);
-        commands.addCommand(new AddressCommand(address));
-        commands.addCodeReference(index, address);
+        if (commands.hasAddress(address))
+        {
+          commands.addCommand(new AddressCommand(address));
+          commands.addCodeReference(index, address);
+        }
+        else
+        {
+          commands.addCommand(new DataCommand(lo(address), hi(address)));
+        }
 
       }
       else if (type == CodeType.DATA)
