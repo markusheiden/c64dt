@@ -40,10 +40,14 @@ public class Tokenizer implements IDetector
       {
         // BIT opcode used just to skip the next opcode
         Opcode opcode = code.readOpcode();
-        if (opcode.getType().equals(OpcodeType.BIT) && code.has(opcode.getMode().getSize()))
+        int modeSize = opcode.getMode().getSize();
+
+        if (opcode.getType().equals(OpcodeType.BIT) && modeSize > 0 && code.has(modeSize))
         {
-          // TODO mh: read argument too
-          commands.addCommand(new BitCommand(opcode, 0));
+          int argumentIndex = code.getCurrentIndex();
+          commands.addCommand(new BitCommand(opcode, code.read(modeSize)));
+          // Reset code buffer to the argument, because this should be the skipped opcode
+          code.setCurrentIndex(argumentIndex);
         }
         else
         {
@@ -77,12 +81,12 @@ public class Tokenizer implements IDetector
         // unknown or code -> try to disassemble an opcode
         Opcode opcode = code.readOpcode();
         OpcodeMode mode = opcode.getMode();
-        int size = mode.getSize();
+        int modeSize = mode.getSize();
 
-        if (code.has(1 + size) && (opcode.isLegal() || type == CodeType.OPCODE))
+        if (code.has(modeSize) && (opcode.isLegal() || type == CodeType.OPCODE))
         {
-          // TODO log error if illegal opcode and type is OPCODE?
-          if (size == 0)
+          // TODO mh: log error if illegal opcode and type is OPCODE?
+          if (modeSize == 0)
           {
             // opcode without argument
             commands.addCommand(new OpcodeCommand(opcode));
@@ -90,7 +94,7 @@ public class Tokenizer implements IDetector
           else
           {
             // opcode with an argument
-            int argument = code.read(size);
+            int argument = code.read(modeSize);
             commands.addCommand(new OpcodeCommand(opcode, argument));
             if (mode.isAddress())
             {
