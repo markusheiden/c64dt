@@ -21,6 +21,9 @@ import java.io.InputStream;
  */
 public class CodeView
 {
+  /**
+   * The reassembler.
+   */
   private Reassembler reassembler;
 
   /**
@@ -50,7 +53,7 @@ public class CodeView
     table.getColumnModel().getColumn(3).setMaxWidth(100);
     table.getColumnModel().getColumn(4).setPreferredWidth(200);
     table.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
-    table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+    table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
     table.addMouseListener(new MouseAdapter()
     {
@@ -63,7 +66,14 @@ public class CodeView
           return;
         }
 
-        // TODO mh: select row
+        // select row on click of the right mouse button too
+        int row = table.rowAtPoint(e.getPoint());
+        if (row >= 0)
+        {
+          table.getSelectionModel().addSelectionInterval(row, row);
+        }
+
+        // show (dynamic) context menu
         createContextMenu(table).show(table, e.getX(), e.getY());
       }
     });
@@ -73,6 +83,8 @@ public class CodeView
 
   /**
    * Create context menu.
+   *
+   * @param table The table the action work on
    */
   private JPopupMenu createContextMenu(JTable table)
   {
@@ -83,13 +95,21 @@ public class CodeView
     return contextMenu;
   }
 
+  /**
+   * Reassemble the given code
+   *
+   * @param is Input stream with code
+   * @throws IOException In case of IO errors
+   */
   public void reassemble(InputStream is) throws IOException
   {
     reassembler.reassemble(is);
     model.update();
   }
 
-
+  /**
+   * Just for testing purposes: Reassemble fixed code at startup.
+   */
   public void reassemble()
   {
     try
@@ -126,7 +146,8 @@ public class CodeView
     }
     catch (IOException e)
     {
-      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      // this method is just for test, so just output the exception
+      e.printStackTrace();
     }
 
   }
