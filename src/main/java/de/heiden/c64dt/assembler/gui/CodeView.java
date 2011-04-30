@@ -5,6 +5,7 @@ import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.detector.JsrDetector;
 import de.heiden.c64dt.assembler.gui.action.CodeTypeActions;
+import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
 import javax.swing.*;
@@ -36,8 +37,22 @@ public class CodeView
    */
   public CodeView()
   {
-    reassembler = new Reassembler();
+    this.reassembler = new Reassembler();
     model = new CodeTableModel(reassembler);
+  }
+
+  /**
+   * Use another reassembler.
+   *
+   * @param reassembler
+   */
+  public void use(Reassembler reassembler)
+  {
+    Assert.notNull(reassembler, "Precondition: reassembler != null");
+
+    this.reassembler = reassembler;
+    model.setReassembler(reassembler);
+    model.update();
   }
 
   /**

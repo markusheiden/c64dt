@@ -10,12 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Mark as code action.
+ * "Mark as" actions.
  */
 public class CodeTypeActions
 {
   /**
-   * Add the action to a menu.
+   * Add the actions to a menu.
    *
    * @param menu Menu
    * @param table The table this action works on
@@ -27,6 +27,17 @@ public class CodeTypeActions
       // No selection -> no actions possible
       return;
     }
+
+    JMenuItem unknown = new JMenuItem("Mark as unknown");
+    menu.add(unknown);
+    unknown.addActionListener(new ActionListener()
+    {
+      @Override
+      public void actionPerformed(ActionEvent actionEvent)
+      {
+        mark(table, CodeType.UNKNOWN);
+      }
+    });
 
     JMenuItem code = new JMenuItem("Mark as code");
     menu.add(code);

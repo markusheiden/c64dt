@@ -150,4 +150,9 @@ public class CodeTableModel extends DefaultTableModel
     rowToIndex.put(getRowCount(), index);
     addRow(new Object[]{flags, hexWordPlain(address), bytes, label, code});
   }
+
+  public void setReassembler(Reassembler reassembler)
+  {
+    this.reassembler = reassembler;
+  }
 }
