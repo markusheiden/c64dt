@@ -119,8 +119,8 @@ public class CommandBufferMapper implements IXmlMapper<CommandBuffer>
     }
 
     // base addresses
-    Node addressesElement = commandsElement.getElementsByTagName("addresses").item(0);
-    NodeList addressElements = addressesElement.getChildNodes();
+    Element addressesElement = (Element) commandsElement.getElementsByTagName("addresses").item(0);
+    NodeList addressElements = addressesElement.getElementsByTagName("address");
 
     // start address / first base address
     Element startAddressElement = (Element) addressElements.item(0);

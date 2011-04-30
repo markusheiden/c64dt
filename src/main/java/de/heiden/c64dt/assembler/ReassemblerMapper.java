@@ -12,6 +12,8 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -19,10 +21,8 @@ import java.util.List;
  */
 public class ReassemblerMapper implements IXmlMapper<Reassembler>
 {
-  public void write(Reassembler reassembler)
+  public void write(Reassembler reassembler, OutputStream stream) throws Exception
   {
-    try
-    {
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
       DocumentBuilder builder = factory.newDocumentBuilder();
 
@@ -32,12 +32,7 @@ public class ReassemblerMapper implements IXmlMapper<Reassembler>
       write(reassembler, document, reassemblerElement);
 
       // debug
-      XmlUtil.toStream(document, System.out);
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
+      XmlUtil.toStream(document, stream);
   }
 
   /**
@@ -64,6 +59,22 @@ public class ReassemblerMapper implements IXmlMapper<Reassembler>
     reassemblerElement.appendChild(commandsElement);
 
     new CommandBufferMapper().write(reassembler.getCommands(), document, commandsElement);
+  }
+
+  /**
+   * Read reassembler from document.
+   *
+   * @param stream with xml file to read
+   * @return Reassembler
+   */
+  public Reassembler read(InputStream stream) throws Exception
+  {
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    DocumentBuilder builder = factory.newDocumentBuilder();
+
+    Document document = builder.parse(stream);
+    Element reassemblerElement = document.getDocumentElement();
+    return read(reassemblerElement);
   }
 
   /**
