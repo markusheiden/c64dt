@@ -7,7 +7,6 @@ import de.heiden.c64dt.assembler.gui.CodeTableModel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * "Mark as" actions.
@@ -28,49 +27,78 @@ public class CodeTypeActions
       return;
     }
 
-    JMenuItem unknown = new JMenuItem("Mark as unknown");
-    menu.add(unknown);
-    unknown.addActionListener(new ActionListener()
+    menu.add(markAsUnknown(table));
+    menu.add(markAsCode(table));
+    menu.add(markAsData(table));
+    menu.add(markAsAbsoluteAddress(table));
+  }
+
+  /**
+   * Create action "Mark as unknown".
+   *
+   * @param table The table this action works on
+   */
+  public static Action markAsUnknown(final JTable table)
+  {
+    return new AbstractAction("Mark as unknown")
     {
       @Override
       public void actionPerformed(ActionEvent actionEvent)
       {
         mark(table, CodeType.UNKNOWN);
       }
-    });
+    };
+  }
 
-    JMenuItem code = new JMenuItem("Mark as code");
-    menu.add(code);
-    code.addActionListener(new ActionListener()
+  /**
+   * Create action "Mark as code".
+   *
+   * @param table The table this action works on
+   */
+  public static Action markAsCode(final JTable table)
+  {
+    return new AbstractAction("Mark as code")
     {
       @Override
       public void actionPerformed(ActionEvent actionEvent)
       {
         mark(table, CodeType.CODE);
       }
-    });
+    };
+  }
 
-    JMenuItem data = new JMenuItem("Mark as data");
-    menu.add(data);
-    data.addActionListener(new ActionListener()
+  /**
+   * Create action "Mark as data".
+   *
+   * @param table The table this action works on
+   */
+  public static Action markAsData(final JTable table)
+  {
+    return new AbstractAction("Mark as data")
     {
       @Override
       public void actionPerformed(ActionEvent actionEvent)
       {
         mark(table, CodeType.DATA);
       }
-    });
+    };
+  }
 
-    JMenuItem address = new JMenuItem("Mark as absolute address");
-    menu.add(address);
-    address.addActionListener(new ActionListener()
+  /**
+   * Create action "Mark as absolute address".
+   *
+   * @param table The table this action works on
+   */
+  public static Action markAsAbsoluteAddress(final JTable table)
+  {
+    return new AbstractAction("Mark as absolute address")
     {
       @Override
       public void actionPerformed(ActionEvent actionEvent)
       {
         mark(table, CodeType.ABSOLUTE_ADDRESS);
       }
-    });
+    };
   }
 
   /**
