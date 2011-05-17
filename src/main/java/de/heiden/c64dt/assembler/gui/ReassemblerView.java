@@ -6,7 +6,6 @@ import de.heiden.c64dt.assembler.ReassemblerMapper;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.detector.JsrDetector;
 import org.apache.log4j.Logger;
-import org.exolab.castor.xml.Marshaller;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
@@ -236,8 +235,6 @@ public class ReassemblerView extends JFrame
           int result = chooser.showSaveDialog(ReassemblerView.this);
           if (result == JFileChooser.APPROVE_OPTION)
           {
-            Writer writer = new FileWriter("test.xml");
-            Marshaller.marshal(reassembler, writer);
             new ReassemblerMapper().write(reassembler, new FileOutputStream(chooser.getSelectedFile()));
           }
         }
