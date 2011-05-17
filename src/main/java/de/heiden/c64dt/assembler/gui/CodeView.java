@@ -44,7 +44,7 @@ public class CodeView
   {
     Assert.notNull(reassembler, "Precondition: reassembler != null");
 
-    model.setReassembler(reassembler);
+    model.use(reassembler);
   }
 
   /**

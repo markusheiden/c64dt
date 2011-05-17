@@ -110,7 +110,7 @@ public class CodeTypeActions
   private static void mark(JTable table, CodeType type)
   {
     CodeTableModel model = (CodeTableModel) table.getModel();
-    CommandBuffer commands = model.getCommands();
+    CommandBuffer commands = model.getReassembler().getCommands();
     for (int row : table.getSelectedRows())
     {
       int index = model.getIndex(row);

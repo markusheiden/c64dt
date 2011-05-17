@@ -38,11 +38,19 @@ public class CodeTableModel extends DefaultTableModel
   }
 
   /**
+   * Get underlying reassembler.
+   */
+  public Reassembler getReassembler()
+  {
+    return reassembler;
+  }
+
+  /**
    * Use another reassembler.
    *
    * @param reassembler Underlying representation
    */
-  public void setReassembler(Reassembler reassembler)
+  public void use(Reassembler reassembler)
   {
     this.reassembler = reassembler;
     update();
@@ -55,6 +63,7 @@ public class CodeTableModel extends DefaultTableModel
   {
     // Clear old model
     setRowCount(0);
+    rowToIndex.clear();
 
     // no model -> no representation
     if (reassembler == null) {
@@ -126,24 +135,6 @@ public class CodeTableModel extends DefaultTableModel
   }
 
   /**
-   * Get underlying commands.
-   */
-  public CommandBuffer getCommands()
-  {
-    return reassembler.getCommands();
-  }
-
-  /**
-   * The relative address of the code shown in a given row.
-   *
-   * @param row Row
-   */
-  public Integer getIndex(int row)
-  {
-    return rowToIndex.get(row);
-  }
-
-  /**
    * Add a row to the model.
    *
    * @param index Relative address
@@ -157,5 +148,15 @@ public class CodeTableModel extends DefaultTableModel
   {
     rowToIndex.put(getRowCount(), index);
     addRow(new Object[]{flags, hexWordPlain(address), bytes, label, code});
+  }
+
+  /**
+   * The relative address of the code shown in a given row.
+   *
+   * @param row Row
+   */
+  public Integer getIndex(int row)
+  {
+    return rowToIndex.get(row);
   }
 }
