@@ -1,12 +1,10 @@
 package de.heiden.c64dt.assembler.gui;
 
 import de.heiden.c64dt.assembler.Reassembler;
-import de.heiden.c64dt.assembler.ReassemblerMapper;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.label.ILabel;
-import org.springframework.util.Assert;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.HashMap;
@@ -33,16 +31,21 @@ public class CodeTableModel extends DefaultTableModel
 
   /**
    * Constructor.
+   */
+  public CodeTableModel()
+  {
+    super(new String[]{"Flags", "Addr", "Bytes", "Label", "Code"}, 0);
+  }
+
+  /**
+   * Use another reassembler.
    *
    * @param reassembler Underlying representation
    */
-  public CodeTableModel(Reassembler reassembler)
+  public void setReassembler(Reassembler reassembler)
   {
-    super(new String[]{"Flags", "Addr", "Bytes", "Label", "Code"}, 0);
-
-    Assert.notNull(reassembler, "Precondition: reassembler != null");
-
     this.reassembler = reassembler;
+    update();
   }
 
   /**
@@ -50,11 +53,16 @@ public class CodeTableModel extends DefaultTableModel
    */
   public void update()
   {
-    reassembler.reassemble();
-    CommandBuffer commands = reassembler.getCommands();
-
     // Clear old model
     setRowCount(0);
+
+    // no model -> no representation
+    if (reassembler == null) {
+      return;
+    }
+
+    reassembler.reassemble();
+    CommandBuffer commands = reassembler.getCommands();
 
     StringBuilder builder = new StringBuilder();
 
@@ -149,10 +157,5 @@ public class CodeTableModel extends DefaultTableModel
   {
     rowToIndex.put(getRowCount(), index);
     addRow(new Object[]{flags, hexWordPlain(address), bytes, label, code});
-  }
-
-  public void setReassembler(Reassembler reassembler)
-  {
-    this.reassembler = reassembler;
   }
 }

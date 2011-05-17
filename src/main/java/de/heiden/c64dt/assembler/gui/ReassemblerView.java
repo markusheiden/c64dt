@@ -1,10 +1,14 @@
 package de.heiden.c64dt.assembler.gui;
 
+import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.assembler.ReassemblerMapper;
+import de.heiden.c64dt.assembler.command.CommandBuffer;
+import de.heiden.c64dt.assembler.detector.JsrDetector;
 import org.apache.log4j.Logger;
 import org.exolab.castor.xml.Marshaller;
 import org.springframework.util.Assert;
+import org.springframework.util.FileCopyUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Writer;
 
 /**
@@ -51,7 +56,7 @@ public class ReassemblerView extends JFrame
     add(code.createComponent(), BorderLayout.CENTER);
 
     // for testing purposes only...
-    code.reassemble();
+    reassemble();
 
     //
     // Menu bar
@@ -60,6 +65,64 @@ public class ReassemblerView extends JFrame
     setJMenuBar(createMenu());
 
     pack();
+  }
+
+  /**
+   * Just for testing purposes: Reassemble fixed code at startup.
+   */
+  private void reassemble()
+  {
+    reassembler = new Reassembler();
+
+    try
+    {
+      final String BASEDIR = "retro replay";
+      final String ROM_NAME = "rr38q-cnet-%d.bin";
+
+      File file = new File(BASEDIR, String.format(ROM_NAME, 0));
+      System.out.println("Reassembling " + file.getCanonicalPath() + " (" + file.length() + " Bytes)");
+
+      byte[] bytes = FileCopyUtils.copyToByteArray(new FileInputStream(file));
+
+      JsrDetector jsr = new JsrDetector();
+      reassembler.add(jsr);
+
+      CommandBuffer commands = new CommandBuffer(bytes, 0x8000);
+      commands.setType(0x0000, 0x0004, CodeType.ABSOLUTE_ADDRESS);
+      commands.setType(0x0004, 0x0009, CodeType.DATA);
+      commands.setType(0x0009, 0x0060, CodeType.OPCODE);
+      commands.setType(0x0080, 0x017F, CodeType.DATA);
+      commands.setType(0x021D, 0x022F, CodeType.DATA);
+      commands.rebase(0x0E0D, 0xE000);
+      commands.rebase(0x0FBE, 0x8000);
+      // commands.base(0x1D9F, 0x0100);
+      commands.rebase(0x1DB3, 0x8000);
+      commands.rebase(0x1E00, 0x0C000);
+      commands.setType(0x1E00, 0x1E15, CodeType.DATA);
+      commands.addSubroutine(0x1F03, 2);
+      commands.setType(0x1FF8, 0x2000, CodeType.ABSOLUTE_ADDRESS);
+
+      reassembler.reassemble(commands);
+
+      code.use(reassembler);
+    }
+    catch (IOException e)
+    {
+      // this method is just for test, so just output the exception
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Reassemble the given code
+   *
+   * @param is Input stream with code
+   * @throws IOException In case of IO errors
+   */
+  public void reassemble(InputStream is) throws IOException
+  {
+    reassembler.reassemble(is);
+    code.use(reassembler);
   }
 
   /**
@@ -98,7 +161,7 @@ public class ReassemblerView extends JFrame
           int result = chooser.showOpenDialog(ReassemblerView.this);
           if (result == JFileChooser.APPROVE_OPTION)
           {
-            code.reassemble(new FileInputStream(chooser.getSelectedFile()));
+            reassemble(new FileInputStream(chooser.getSelectedFile()));
           }
         }
         catch (IOException e)
@@ -171,8 +234,8 @@ public class ReassemblerView extends JFrame
           int result = chooser.showSaveDialog(ReassemblerView.this);
           if (result == JFileChooser.APPROVE_OPTION)
           {
-//            Writer writer = new FileWriter("test.xml");
-//            Marshaller.marshal(reassembler, writer);
+            Writer writer = new FileWriter("test.xml");
+            Marshaller.marshal(reassembler, writer);
             new ReassemblerMapper().write(reassembler, new FileOutputStream(chooser.getSelectedFile()));
           }
         }
