@@ -2,6 +2,8 @@ package de.heiden.c64dt.assembler.gui;
 
 import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.assembler.ReassemblerMapper;
+import org.apache.log4j.Logger;
+import org.exolab.castor.xml.Marshaller;
 import org.springframework.util.Assert;
 
 import javax.swing.*;
@@ -11,13 +13,17 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 
 /**
  * GUI for {@link de.heiden.c64dt.assembler.Reassembler}.
  */
 public class ReassemblerView extends JFrame
 {
+  private final Logger logger = Logger.getLogger(getClass());
+
   private Reassembler reassembler;
 
   private File currentFile;
@@ -97,6 +103,7 @@ public class ReassemblerView extends JFrame
         }
         catch (IOException e)
         {
+          logger.error("Failed to open file", e);
           JOptionPane.showMessageDialog(ReassemblerView.this,
             "Failed to open file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
         }
@@ -123,6 +130,7 @@ public class ReassemblerView extends JFrame
         }
         catch (Exception e)
         {
+          logger.error("Failed to open file", e);
           currentFile = null;
           JOptionPane.showMessageDialog(ReassemblerView.this,
             "Failed to open file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
@@ -143,6 +151,7 @@ public class ReassemblerView extends JFrame
         }
         catch (Exception e)
         {
+          logger.error("Failed to save file", e);
           JOptionPane.showMessageDialog(ReassemblerView.this,
             "Failed to save file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
         }
@@ -162,11 +171,14 @@ public class ReassemblerView extends JFrame
           int result = chooser.showSaveDialog(ReassemblerView.this);
           if (result == JFileChooser.APPROVE_OPTION)
           {
+//            Writer writer = new FileWriter("test.xml");
+//            Marshaller.marshal(reassembler, writer);
             new ReassemblerMapper().write(reassembler, new FileOutputStream(chooser.getSelectedFile()));
           }
         }
         catch (Exception e)
         {
+          logger.error("Failed to save file", e);
           JOptionPane.showMessageDialog(ReassemblerView.this,
             "Failed to save file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
         }
