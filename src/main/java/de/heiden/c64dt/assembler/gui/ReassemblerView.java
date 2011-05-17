@@ -55,8 +55,10 @@ public class ReassemblerView extends JFrame
     code = new CodeView();
     add(code.createComponent(), BorderLayout.CENTER);
 
+    reassembler = new Reassembler();
+
     // for testing purposes only...
-    reassemble();
+//    reassemble();
 
     //
     // Menu bar
@@ -122,13 +124,13 @@ public class ReassemblerView extends JFrame
   public void reassemble(InputStream is) throws IOException
   {
     reassembler.reassemble(is);
-    code.use(reassembler);
+    use(reassembler);
   }
 
   /**
    * Use another reassembler.
    *
-   * @param reassembler
+   * @param reassembler Reassembler
    */
   public void use(Reassembler reassembler)
   {
