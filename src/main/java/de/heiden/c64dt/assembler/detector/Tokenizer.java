@@ -1,5 +1,6 @@
 package de.heiden.c64dt.assembler.detector;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Opcode;
@@ -19,6 +20,7 @@ import static de.heiden.c64dt.util.ByteUtil.lo;
  * Tokenizes the code.
  * Should be the first detector.
  */
+@XStreamAlias("tokenizer")
 public class Tokenizer implements IDetector
 {
   @Override

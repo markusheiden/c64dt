@@ -1,5 +1,6 @@
 package de.heiden.c64dt.assembler.detector;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import de.heiden.c64dt.assembler.Opcode;
 import de.heiden.c64dt.assembler.OpcodeType;
 import de.heiden.c64dt.assembler.command.BitCommand;
@@ -14,6 +15,7 @@ import de.heiden.c64dt.assembler.command.OpcodeCommand;
  * Computes transitive unreachability of commands.
  * Should be the second detector.
  */
+@XStreamAlias("reachability")
 public class Reachability implements IDetector
 {
   @Override

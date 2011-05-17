@@ -1,5 +1,6 @@
 package de.heiden.c64dt.assembler;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.ICommand;
@@ -32,6 +33,7 @@ import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
 /**
  * Reassembler.
  */
+@XStreamAlias("reassembler")
 public class Reassembler
 {
   private CommandBuffer commands;

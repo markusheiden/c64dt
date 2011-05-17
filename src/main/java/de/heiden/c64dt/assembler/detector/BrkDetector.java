@@ -1,5 +1,6 @@
 package de.heiden.c64dt.assembler.detector;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.OpcodeType;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
@@ -10,6 +11,7 @@ import de.heiden.c64dt.assembler.command.OpcodeCommand;
 /**
  * Detects unreachable brk commands as data.
  */
+@XStreamAlias("brk-detector")
 public class BrkDetector implements IDetector
 {
   @Override
