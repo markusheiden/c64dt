@@ -39,11 +39,28 @@ import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
 /**
  * Reassembler.
  */
+@XmlRootElement(name = "reassembler")
 public class Reassembler
 {
-  private CommandBuffer commands;
-
+  /**
+   * Code type detectors to use.
+   */
+  @XmlElementWrapper(name = "detectors")
+  @XmlElements({
+    @XmlElement(name = "bit", type = BitDetector.class),
+    @XmlElement(name = "brk", type = BrkDetector.class),
+    @XmlElement(name = "jsr", type = JsrDetector.class),
+    @XmlElement(name = "label", type = LabelDetector.class),
+    @XmlElement(name = "reachability", type = Reachability.class),
+    @XmlElement(name = "tokenizer", type = Tokenizer.class)
+  })
   private final List<IDetector> detectors = new ArrayList<IDetector>();
+
+  /**
+   * Reassembled code.
+   */
+  @XmlElement(name = "commands")
+  private CommandBuffer commands;
 
   /**
    * Constructor.

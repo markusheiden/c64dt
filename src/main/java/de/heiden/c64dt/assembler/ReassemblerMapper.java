@@ -21,45 +21,21 @@ public class ReassemblerMapper extends AbstractXmlMapper<Reassembler>
    */
   public ReassemblerMapper() throws Exception
   {
-    super("reassembler");
+    super("reassembler", Reassembler.class);
   }
 
   @Override
   public void write(Reassembler reassembler, Document document, Element reassemblerElement) throws Exception
   {
-    Element detectorsElement = document.createElement("detectors");
-    reassemblerElement.appendChild(detectorsElement);
-
-    List<IDetector> detectors = reassembler.getDetectors();
-    for (IDetector detector : detectors)
-    {
-      detectorsElement.appendChild(marshal(detector, document));
-    }
-
-    Element commandsElement = document.createElement("commands");
-    reassemblerElement.appendChild(commandsElement);
-
+    Element commandsElement = (Element) reassemblerElement.getElementsByTagName("commands").item(0);
     new CommandBufferMapper().write(reassembler.getCommands(), document, commandsElement);
   }
 
   @Override
-  public Reassembler read(Element reassemblerElement) throws Exception
+  public Reassembler read(Element reassemblerElement, Reassembler reassembler) throws Exception
   {
-    Reassembler reassembler = new Reassembler();
-
-    Element detectorsElement = (Element) reassemblerElement.getElementsByTagName("detectors").item(0);
-    NodeList detectorElements = detectorsElement.getChildNodes();
-    for (int i = 0; i < detectorElements.getLength(); i++)
-    {
-      Node node = detectorElements.item(i);
-      if (node instanceof Element)
-      {
-        reassembler.add(unmarshal((Element) node, IDetector.class));
-      }
-    }
-
     Element commandsElement = (Element) reassemblerElement.getElementsByTagName("commands").item(0);
-    CommandBuffer commands = new CommandBufferMapper().read(commandsElement);
+    CommandBuffer commands = new CommandBufferMapper().read(commandsElement, reassembler.getCommands());
     reassembler.reassemble(commands);
 
     return reassembler;

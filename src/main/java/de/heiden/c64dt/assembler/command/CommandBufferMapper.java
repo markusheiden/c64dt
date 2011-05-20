@@ -26,7 +26,7 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
    */
   public CommandBufferMapper() throws Exception
   {
-    super("commands");
+    super("commands", CommandBuffer.class);
   }
 
   @Override
@@ -103,7 +103,7 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
   }
 
   @Override
-  public CommandBuffer read(Element commandsElement)
+  public CommandBuffer read(Element commandsElement, CommandBuffer dummy)
   {
     // code
     Node codeElement = commandsElement.getElementsByTagName("code").item(0);

@@ -26,14 +26,16 @@ import java.io.Writer;
 public abstract class AbstractXmlMapper<O extends Object>
 {
   private final String elementName;
+  private final Class<O> clazz;
   protected final DocumentBuilder builder;
 
   /**
    * Constructor.
    */
-  public AbstractXmlMapper(String elementName) throws Exception
+  public AbstractXmlMapper(String elementName, Class<O> clazz) throws Exception
   {
     this.elementName = elementName;
+    this.clazz = clazz;
 
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     builder = factory.newDocumentBuilder();
@@ -47,26 +49,13 @@ public abstract class AbstractXmlMapper<O extends Object>
    */
   public void write(O object, OutputStream stream) throws Exception
   {
-      Document document = builder.newDocument();
-      Element reassemblerElement = document.createElement(elementName);
-      document.appendChild(reassemblerElement);
-      write(object, document, reassemblerElement);
+    Document document = builder.newDocument();
+    document.appendChild(marshal(object, document));
 
-      // debug
-      XmlUtil.toStream(document, stream);
-  }
+    write(object, document, document.getDocumentElement());
 
-  /**
-   * Read object from stream.
-   *
-   * @param stream with xml file to read
-   * @return Reassembler
-   */
-  public O read(InputStream stream) throws Exception
-  {
-    Document document = builder.parse(stream);
-    Element element = document.getDocumentElement();
-    return read(element);
+    // debug
+    XmlUtil.toStream(document, stream);
   }
 
   /**
@@ -78,14 +67,26 @@ public abstract class AbstractXmlMapper<O extends Object>
    */
   public abstract void write(O o, Document document, Element element) throws Exception;
 
+  /**
+   * Read object from stream.
+   *
+   * @param stream with xml file to read
+   * @return Reassembler
+   */
+  public O read(InputStream stream) throws Exception
+  {
+    Document document = builder.parse(stream);
+    O result = unmarshal(document, clazz);
+    return read(document.getDocumentElement(), result);
+  }
 
   /**
    * Read an object from the element.
    *
    * @param element Element to read
-   * @return Deserialized object
+   * @param object Unmarshalled, incomplete object
    */
-  public abstract O read(Element element) throws Exception;
+  public abstract O read(Element element, O object) throws Exception;
 
   /**
    * Marshal an arbitrary object with JAXB.
@@ -105,11 +106,11 @@ public abstract class AbstractXmlMapper<O extends Object>
   /**
    * Unmarshal an arbitrary object with JAXB.
    *
-   * @param element Xml representation of object
+   * @param node Xml representation of object
    * @param clazz Class of object
    */
-  protected <O> O unmarshal(Element element, Class<O> clazz) throws Exception
+  protected <O> O unmarshal(Node node, Class<O> clazz) throws Exception
   {
-    return JAXB.unmarshal(new DOMSource(element), clazz);
+    return JAXB.unmarshal(new DOMSource(node), clazz);
   }
 }

@@ -7,9 +7,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.*;
 
 /**
  * Test for {@link ReassemblerMapper}.
@@ -32,20 +34,30 @@ public class ReassemblerMapperTest
 
     ReassemblerMapper mapper = new ReassemblerMapper();
 
-    Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-    Element reassemblerElement = document.createElement("reassembler");
-    document.appendChild(reassemblerElement);
+    // write to xml
+    ByteArrayOutputStream os = new ByteArrayOutputStream();
+    mapper.write(reassembler, os);
+    byte[] xml = os.toByteArray();
 
-    // write test command buffer
-    mapper.write(reassembler, document, reassemblerElement);
     // read written xml
-    Reassembler read = mapper.read(reassemblerElement);
+    Reassembler read = mapper.read(new ByteArrayInputStream(xml));
 
-    List<IDetector> reassemblerDetectors = reassembler.getDetectors();
+    List<IDetector> detectors = reassembler.getDetectors();
     List<IDetector> readDetectors = read.getDetectors();
-    for (int i = 0; i < reassemblerDetectors.size(); i++)
+    for (int i = 0; i < detectors.size(); i++)
     {
-      assertEquals(reassemblerDetectors.get(i).getClass(), readDetectors.get(i).getClass());
+      assertEquals(detectors.get(i).getClass(), readDetectors.get(i).getClass());
+    }
+
+    // write read xml again
+    os.reset();
+    mapper.write(read, os);
+    byte[] readXml = os.toByteArray();
+
+    assertEquals(xml.length, readXml.length);
+    for (int i = 0; i < xml.length; i++)
+    {
+      assertEquals("Byte " + i,  xml[i], readXml[i]);
     }
   }
 }

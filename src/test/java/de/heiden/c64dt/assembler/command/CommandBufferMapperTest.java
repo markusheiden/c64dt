@@ -1,11 +1,16 @@
 package de.heiden.c64dt.assembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
+import de.heiden.c64dt.assembler.Reassembler;
+import de.heiden.c64dt.assembler.detector.IDetector;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.List;
 import java.util.SortedMap;
 
 import static junit.framework.Assert.assertEquals;
@@ -44,14 +49,13 @@ public class CommandBufferMapperTest
 
     CommandBufferMapper mapper = new CommandBufferMapper();
 
-    Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-    Element commandsElement = document.createElement("commands");
-    document.appendChild(commandsElement);
+    // write to xml
+    ByteArrayOutputStream os = new ByteArrayOutputStream();
+    mapper.write(commands, os);
+    byte[] xml = os.toByteArray();
 
-    // write test command buffer
-    mapper.write(commands, document, commandsElement);
     // read written xml
-    CommandBuffer read = mapper.read((Element) document.getElementsByTagName("commands").item(0));
+    CommandBuffer read = mapper.read(new ByteArrayInputStream(xml));
 
     // code
     byte[] readCode = read.getCode();
@@ -80,6 +84,17 @@ public class CommandBufferMapperTest
     for (Integer index : commandsSubroutines.keySet())
     {
       assertEquals("Index " + index + ":", commandsSubroutines.get(index), readSubroutines.get(index));
+    }
+
+    // write read xml again
+    os.reset();
+    mapper.write(read, os);
+    byte[] readXml = os.toByteArray();
+
+    assertEquals(xml.length, readXml.length);
+    for (int i = 0; i < xml.length; i++)
+    {
+      assertEquals("Byte " + i,  xml[i], readXml[i]);
     }
   }
 }
