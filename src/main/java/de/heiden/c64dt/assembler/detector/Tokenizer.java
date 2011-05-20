@@ -1,6 +1,5 @@
 package de.heiden.c64dt.assembler.detector;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Opcode;
@@ -13,14 +12,13 @@ import de.heiden.c64dt.assembler.command.DataCommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 import org.springframework.util.Assert;
 
-import static de.heiden.c64dt.util.ByteUtil.hi;
-import static de.heiden.c64dt.util.ByteUtil.lo;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Tokenizes the code.
  * Should be the first detector.
  */
-@XStreamAlias("tokenizer")
+@XmlRootElement(name = "tokenizer")
 public class Tokenizer implements IDetector
 {
   @Override

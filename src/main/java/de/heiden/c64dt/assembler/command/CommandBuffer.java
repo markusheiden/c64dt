@@ -1,7 +1,5 @@
 package de.heiden.c64dt.assembler.command;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.label.CodeLabel;
 import de.heiden.c64dt.assembler.label.DataLabel;
@@ -24,61 +22,52 @@ import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
 /**
  * Input stream for code.
  */
-@XStreamAlias("commands")
 public class CommandBuffer
 {
   /**
    * Index to referenced absolute address.
    * Target is code, e.g. if the reference is from a jmp $xxxx.
    */
-  @XStreamOmitField
   private final int[] codeReferences;
 
   /**
    * Index to referenced absolute address.
    * Target is data, e.g. if the reference is from a sta $xxxx.
    */
-  @XStreamOmitField
   private final int[] dataReferences;
 
   /**
    * Index to referenced absolute address.
    * This references point to outside of the code.
    */
-  @XStreamOmitField
   private final int[] externalReferences;
 
   /**
    * Absolute address to code label.
    * If there is at least one reference to an address a label for it exists.
    */
-  @XStreamOmitField
   private final Map<Integer, CodeLabel> codeLabels;
 
   /**
    * Absolute address to data label.
    * If there is at least one reference to an address a label for it exists.
    */
-  @XStreamOmitField
   private final Map<Integer, DataLabel> dataLabels;
 
   /**
    * Absolute address to external label.
    * If there is at least one reference to an address a label for it exists.
    */
-  @XStreamOmitField
   private final Map<Integer, ExternalLabel> externalLabels;
 
   /**
    * Commands as detected by the reassembler.
    */
-  @XStreamOmitField
   private final ICommand[] commands;
 
   /**
    * Index of the last added command.
    */
-  @XStreamOmitField
   private int index;
 
   //
@@ -141,7 +130,15 @@ public class CommandBuffer
     this.commands = new ICommand[code.length];
 
     this.index = 0;
+  }
 
+  /**
+   * Hidden constructor for JAXB.
+   */
+  private CommandBuffer()
+  {
+    // TODO mh: init final fields with null instead
+    this(new byte[0], 0);
   }
 
   //

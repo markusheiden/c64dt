@@ -5,7 +5,6 @@ import de.heiden.c64dt.assembler.label.ILabel;
 import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 

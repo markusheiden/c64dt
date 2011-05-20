@@ -1,8 +1,8 @@
 package de.heiden.c64dt.assembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
+import de.heiden.c64dt.util.AbstractXmlMapper;
 import de.heiden.c64dt.util.ByteUtil;
-import de.heiden.c64dt.util.IXmlMapper;
 import org.springframework.util.Assert;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -19,18 +19,19 @@ import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
 /**
  * XML-Mapper to read and write the reassembler model.
  */
-public class CommandBufferMapper implements IXmlMapper<CommandBuffer>
+public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
 {
   /**
-   * Add command buffer to document.
-   *
-   * @param commands command buffer
-   * @param document document
-   * @param commandsElement element for command buffer
+   * Constructor.
    */
+  public CommandBufferMapper() throws Exception
+  {
+    super("commands");
+  }
+
+  @Override
   public void write(CommandBuffer commands, Document document, Element commandsElement)
   {
-
     // code
     Element codeElement = document.createElement("code");
     commandsElement.appendChild(codeElement);
@@ -101,12 +102,7 @@ public class CommandBufferMapper implements IXmlMapper<CommandBuffer>
     }
   }
 
-
-  /**
-   * Read command buffer from document.
-   *
-   * @param commandsElement element to read
-   */
+  @Override
   public CommandBuffer read(Element commandsElement)
   {
     // code
@@ -152,10 +148,14 @@ public class CommandBufferMapper implements IXmlMapper<CommandBuffer>
     NodeList subroutineElements = subroutinesElement.getChildNodes();
     for (int i = 0; i < subroutineElements.getLength(); i++)
     {
-      Element subroutineElement = (Element) subroutineElements.item(i);
-      int index = Integer.parseInt(subroutineElement.getAttribute("index"), 16);
-      int arguments = Integer.parseInt(subroutineElement.getAttribute("arguments"), 16);
-      commands.addSubroutine(index, arguments);
+      Node node = subroutineElements.item(i);
+      if (node instanceof Element)
+      {
+        Element subroutineElement = (Element) node;
+        int index = Integer.parseInt(subroutineElement.getAttribute("index"), 16);
+        int arguments = Integer.parseInt(subroutineElement.getAttribute("arguments"), 16);
+        commands.addSubroutine(index, arguments);
+      }
     }
 
     // detected code types

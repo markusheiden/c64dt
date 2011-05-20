@@ -1,7 +1,5 @@
 package de.heiden.c64dt.assembler.detector;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.OpcodeMode;
 import de.heiden.c64dt.assembler.OpcodeType;
@@ -11,11 +9,14 @@ import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 import org.springframework.util.Assert;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Detects JSR commands to predefined address which are followed by fixed length or zero-terminated arguments.
  * Additionally it automatically detects JSR commands which are followed by their zero-terminated arguments.
  */
-@XStreamAlias("jsr-detector")
+@XmlRootElement(name = "jsr")
 public class JsrDetector implements IDetector
 {
   /**
@@ -23,8 +24,7 @@ public class JsrDetector implements IDetector
    * <p/>
    * TODO mh: make configurable?
    */
-  @XStreamAlias("max")
-  @XStreamAsAttribute
+  @XmlAttribute(name = "max")
   private final int maxLength = 256;
 
   @Override

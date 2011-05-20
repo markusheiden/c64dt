@@ -4,9 +4,7 @@ import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.charset.C64Charset;
 import org.springframework.util.Assert;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

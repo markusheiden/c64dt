@@ -1,7 +1,5 @@
 package de.heiden.c64dt.assembler.detector;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import de.heiden.c64dt.assembler.Opcode;
 import de.heiden.c64dt.assembler.OpcodeType;
 import de.heiden.c64dt.assembler.command.BitCommand;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
@@ -10,12 +8,14 @@ import de.heiden.c64dt.assembler.command.DummyCommand;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Detects reachability of code.
  * Computes transitive unreachability of commands.
  * Should be the second detector.
  */
-@XStreamAlias("reachability")
+@XmlRootElement(name = "reachability")
 public class Reachability implements IDetector
 {
   @Override

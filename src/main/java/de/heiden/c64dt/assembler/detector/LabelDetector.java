@@ -1,15 +1,16 @@
 package de.heiden.c64dt.assembler.detector;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.ICommand;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Detects code label as code and data label as data.
  */
-@XStreamAlias("label-detector")
+@XmlRootElement(name = "label")
 public class LabelDetector implements IDetector
 {
   @Override

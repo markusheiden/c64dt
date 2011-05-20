@@ -1,6 +1,5 @@
 package de.heiden.c64dt.assembler;
 
-import de.heiden.c64dt.util.ByteUtil;
 import org.springframework.util.Assert;
 
 /**

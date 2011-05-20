@@ -1,6 +1,5 @@
 package de.heiden.c64dt.assembler.detector;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Opcode;
 import de.heiden.c64dt.assembler.OpcodeType;
@@ -9,12 +8,14 @@ import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.util.List;
 
 /**
  * Detects bit commands which are intended to just skip the next opcode.
  */
-@XStreamAlias("bit-detector")
+@XmlRootElement(name = "bit")
 public class BitDetector implements IDetector
 {
   @Override

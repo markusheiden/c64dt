@@ -4,7 +4,6 @@ import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Opcode;
 import org.springframework.util.Assert;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
