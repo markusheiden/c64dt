@@ -11,13 +11,8 @@ import java.io.OutputStream;
 /**
  * Interface for xml mappers.
  */
-public abstract class AbstractXmlMapper<O extends Object>
+public abstract class AbstractXmlMapper<O>
 {
-  /**
-   * Element name for mapped objects.
-   */
-  private final String elementName;
-
   /**
    * Mapped clazz.
    */
@@ -26,12 +21,10 @@ public abstract class AbstractXmlMapper<O extends Object>
   /**
    * Constructor.
    *
-   * @param elementName Element name for mapped objects
    * @param clazz Mapped class
    */
-  public AbstractXmlMapper(String elementName, Class<O> clazz) throws Exception
+  public AbstractXmlMapper(Class<O> clazz) throws Exception
   {
-    this.elementName = elementName;
     this.clazz = clazz;
   }
 

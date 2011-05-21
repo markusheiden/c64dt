@@ -26,7 +26,7 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
    */
   public CommandBufferMapper() throws Exception
   {
-    super("commands", CommandBuffer.class);
+    super(CommandBuffer.class);
   }
 
   @Override

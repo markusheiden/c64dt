@@ -18,7 +18,7 @@ public class ReassemblerMapper extends AbstractXmlMapper<Reassembler>
    */
   public ReassemblerMapper() throws Exception
   {
-    super("reassembler", Reassembler.class);
+    super(Reassembler.class);
   }
 
   @Override
