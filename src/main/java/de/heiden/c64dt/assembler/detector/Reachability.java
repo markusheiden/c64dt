@@ -15,7 +15,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Computes transitive unreachability of commands.
  * Should be the second detector.
  */
-@XmlRootElement(name = "reachability")
 public class Reachability implements IDetector
 {
   @Override

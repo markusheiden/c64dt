@@ -15,7 +15,6 @@ import java.util.List;
 /**
  * Detects bit commands which are intended to just skip the next opcode.
  */
-@XmlRootElement(name = "bit")
 public class BitDetector implements IDetector
 {
   @Override

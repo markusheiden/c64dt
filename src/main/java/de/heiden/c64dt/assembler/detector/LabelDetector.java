@@ -10,7 +10,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Detects code label as code and data label as data.
  */
-@XmlRootElement(name = "label")
 public class LabelDetector implements IDetector
 {
   @Override

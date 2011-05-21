@@ -16,7 +16,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Detects JSR commands to predefined address which are followed by fixed length or zero-terminated arguments.
  * Additionally it automatically detects JSR commands which are followed by their zero-terminated arguments.
  */
-@XmlRootElement(name = "jsr")
 public class JsrDetector implements IDetector
 {
   /**

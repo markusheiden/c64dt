@@ -18,7 +18,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Tokenizes the code.
  * Should be the first detector.
  */
-@XmlRootElement(name = "tokenizer")
 public class Tokenizer implements IDetector
 {
   @Override

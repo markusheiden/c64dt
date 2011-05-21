@@ -12,7 +12,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Detects unreachable brk commands as data.
  */
-@XmlRootElement(name = "brk")
 public class BrkDetector implements IDetector
 {
   @Override

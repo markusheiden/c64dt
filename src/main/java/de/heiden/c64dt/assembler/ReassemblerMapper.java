@@ -16,26 +16,30 @@ import java.util.List;
  */
 public class ReassemblerMapper extends AbstractXmlMapper<Reassembler>
 {
+  private final CommandBufferMapper commandBufferMapper;
+
   /**
    * Constructor.
    */
   public ReassemblerMapper() throws Exception
   {
     super("reassembler", Reassembler.class);
+
+    commandBufferMapper = new CommandBufferMapper();
   }
 
   @Override
   public void write(Reassembler reassembler, Document document, Element reassemblerElement) throws Exception
   {
     Element commandsElement = (Element) reassemblerElement.getElementsByTagName("commands").item(0);
-    new CommandBufferMapper().write(reassembler.getCommands(), document, commandsElement);
+    commandBufferMapper.write(reassembler.getCommands(), document, commandsElement);
   }
 
   @Override
   public Reassembler read(Element reassemblerElement, Reassembler reassembler) throws Exception
   {
     Element commandsElement = (Element) reassemblerElement.getElementsByTagName("commands").item(0);
-    CommandBuffer commands = new CommandBufferMapper().read(commandsElement, reassembler.getCommands());
+    CommandBuffer commands = commandBufferMapper.read(commandsElement, reassembler.getCommands());
     reassembler.reassemble(commands);
 
     return reassembler;
