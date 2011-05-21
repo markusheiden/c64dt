@@ -43,14 +43,12 @@ public abstract class AbstractXmlMapper<O extends Object>
    */
   public void write(O object, OutputStream stream) throws Exception
   {
-    Node node = XmlUtil.marshal(object);
-
     Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+    Node node = XmlUtil.marshal(object);
     document.appendChild(document.importNode(node, true));
 
     write(object, document, document.getDocumentElement());
 
-    // debug
     XmlUtil.toStream(document, stream);
   }
 
