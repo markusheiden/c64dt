@@ -139,7 +139,7 @@ public class JDirectory extends JList
     Assert.notNull(directory, "Precondition: directory != null");
 
     final List<IFile> files = directory.getFiles();
-    for (Iterator<IFile> iter = files.iterator(); iter.hasNext();)
+    for (Iterator<IFile> iter = files.iterator(); iter.hasNext(); )
     {
       IFile file = iter.next();
       if (!file.getMode().isVisible())

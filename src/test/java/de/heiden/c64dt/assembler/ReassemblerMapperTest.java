@@ -3,15 +3,12 @@ package de.heiden.c64dt.assembler;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.detector.IDetector;
 import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
 
 /**
  * Test for {@link ReassemblerMapper}.
@@ -57,7 +54,7 @@ public class ReassemblerMapperTest
     assertEquals(xml.length, readXml.length);
     for (int i = 0; i < xml.length; i++)
     {
-      assertEquals("Byte " + i,  xml[i], readXml[i]);
+      assertEquals("Byte " + i, xml[i], readXml[i]);
     }
   }
 }

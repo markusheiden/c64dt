@@ -2,14 +2,9 @@ package de.heiden.c64dt.assembler;
 
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.CommandBufferMapper;
-import de.heiden.c64dt.assembler.detector.IDetector;
 import de.heiden.c64dt.util.AbstractXmlMapper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import java.util.List;
 
 /**
  * XML-Mapper to read and write the reassembler model.

@@ -1,24 +1,16 @@
 package de.heiden.c64dt.util;
 
-import de.heiden.c64dt.assembler.Reassembler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xml.sax.InputSource;
 
 import javax.xml.bind.JAXB;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
 
 /**
  * Interface for xml mappers.
@@ -63,7 +55,7 @@ public abstract class AbstractXmlMapper<O extends Object>
    *
    * @param o object to serialize
    * @param document document
-   * @param element  Element
+   * @param element Element
    */
   public abstract void write(O o, Document document, Element element) throws Exception;
 

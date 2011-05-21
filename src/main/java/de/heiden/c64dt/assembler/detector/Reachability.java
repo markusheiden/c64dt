@@ -8,8 +8,6 @@ import de.heiden.c64dt.assembler.command.DummyCommand;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * Detects reachability of code.
  * Computes transitive unreachability of commands.
@@ -21,7 +19,7 @@ public class Reachability implements IDetector
   public boolean detect(CommandBuffer commands)
   {
     // initially mark all opcodes as reachable
-    for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand();)
+    for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand(); )
     {
       ICommand command = iter.nextCommand();
       command.setReachable(command instanceof OpcodeCommand || command instanceof BitCommand);
@@ -41,7 +39,7 @@ public class Reachability implements IDetector
        * TODO mh: check JMP/JSR/Bxx targets for reachability?
        */
       if (!lastCommand.isReachable() &&
-          command.isReachable() && !command.isEnd() && !isJsr(command) && !iter.getType().isCode())
+        command.isReachable() && !command.isEnd() && !isJsr(command) && !iter.getType().isCode())
       {
         command.setReachable(false);
         iter.removeReference();

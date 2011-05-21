@@ -1,16 +1,10 @@
 package de.heiden.c64dt.assembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.assembler.Reassembler;
-import de.heiden.c64dt.assembler.detector.IDetector;
 import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.List;
 import java.util.SortedMap;
 
 import static junit.framework.Assert.assertEquals;
@@ -94,7 +88,7 @@ public class CommandBufferMapperTest
     assertEquals(xml.length, readXml.length);
     for (int i = 0; i < xml.length; i++)
     {
-      assertEquals("Byte " + i,  xml[i], readXml[i]);
+      assertEquals("Byte " + i, xml[i], readXml[i]);
     }
   }
 }

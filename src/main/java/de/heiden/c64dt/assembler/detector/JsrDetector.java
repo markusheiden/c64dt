@@ -10,7 +10,6 @@ import de.heiden.c64dt.assembler.command.OpcodeCommand;
 import org.springframework.util.Assert;
 
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Detects JSR commands to predefined address which are followed by fixed length or zero-terminated arguments.
@@ -31,7 +30,7 @@ public class JsrDetector implements IDetector
   {
     boolean change = false;
 
-    for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand();)
+    for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand(); )
     {
       ICommand command = iter.nextCommand();
       int index = iter.getIndex();

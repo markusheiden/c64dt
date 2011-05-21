@@ -116,7 +116,7 @@ public class ReassemblerView extends JFrame
    * Reassemble the given code
    *
    * @param is Input stream with code
-   * @throws IOException In case of IO errors
+   * @exception IOException In case of IO errors
    */
   public void reassemble(InputStream is) throws IOException
   {

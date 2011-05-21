@@ -185,7 +185,7 @@ public abstract class AbstractDiskImage implements IDiskImage
     System.arraycopy(getSector(18, 0), 0xA2, idAndType, 0, 5);
 
     List<IFile> files = new ArrayList<IFile>(18 * 8);
-    for (SectorIterator iter = new SectorIterator(this, 18, 1); iter.hasNext();)
+    for (SectorIterator iter = new SectorIterator(this, 18, 1); iter.hasNext(); )
     {
       byte[] content = iter.next();
       for (int pos = 0; pos < 256; pos += 0x20)

@@ -15,9 +15,6 @@ import de.heiden.c64dt.assembler.label.ILabel;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;

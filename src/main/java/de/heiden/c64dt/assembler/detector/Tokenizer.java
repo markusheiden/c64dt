@@ -12,8 +12,6 @@ import de.heiden.c64dt.assembler.command.DataCommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 import org.springframework.util.Assert;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * Tokenizes the code.
  * Should be the first detector.

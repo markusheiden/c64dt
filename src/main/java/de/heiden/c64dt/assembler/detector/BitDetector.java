@@ -8,8 +8,6 @@ import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 import java.util.List;
 
 /**
@@ -22,7 +20,7 @@ public class BitDetector implements IDetector
   {
     boolean change = false;
 
-    for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand();)
+    for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand(); )
     {
       ICommand command = iter.nextCommand();
       if (command instanceof OpcodeCommand)

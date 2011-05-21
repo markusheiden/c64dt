@@ -246,7 +246,7 @@ public class GCR
   private static String toString(int[] table)
   {
     StringBuilder out = new StringBuilder(256 * 5);
-    for (int i = 0; i < table.length;)
+    for (int i = 0; i < table.length; )
     {
       out.append(HexUtil.hexWord(i));
       out.append(": ");

@@ -73,7 +73,7 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
     Element typesElement = document.createElement("types");
     commandsElement.appendChild(typesElement);
 
-    for (int index = 0; index < commands.getLength();)
+    for (int index = 0; index < commands.getLength(); )
     {
       int startIndex = index;
       CodeType type = commands.getType(index++);

@@ -66,7 +66,8 @@ public class CodeTableModel extends DefaultTableModel
     rowToIndex.clear();
 
     // no model -> no representation
-    if (reassembler == null) {
+    if (reassembler == null)
+    {
       return;
     }
 
