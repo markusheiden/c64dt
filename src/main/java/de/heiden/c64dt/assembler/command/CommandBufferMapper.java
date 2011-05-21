@@ -99,7 +99,7 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
       {
         typeElement.setAttribute("end", hexWordPlain(index));
       }
-      typeElement.setAttribute("type", type.name());
+      typeElement.setTextContent(type.name());
       typesElement.appendChild(typeElement);
     }
   }
@@ -163,7 +163,7 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
     {
       Element typeElement = (Element) typeElements.item(i);
       int index = parseHexWordPlain(typeElement.getAttribute("index"));
-      CodeType type = CodeType.valueOf(typeElement.getAttribute("type"));
+      CodeType type = CodeType.valueOf(typeElement.getTextContent().trim());
       if (typeElement.hasAttribute("end"))
       {
         int end = parseHexWordPlain(typeElement.getAttribute("end"));
