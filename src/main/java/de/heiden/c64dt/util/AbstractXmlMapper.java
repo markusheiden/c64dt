@@ -39,9 +39,8 @@ public abstract class AbstractXmlMapper<O>
     Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
     Node node = XmlUtil.marshal(object);
     document.appendChild(document.importNode(node, true));
-
     write(object, document, document.getDocumentElement());
-
+    document.normalizeDocument();
     XmlUtil.toStream(document, stream);
   }
 
@@ -62,6 +61,7 @@ public abstract class AbstractXmlMapper<O>
   public O read(InputStream stream) throws Exception
   {
     Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
+    document.normalize();
     O result = XmlUtil.unmarshal(document, clazz);
     return read(document.getDocumentElement(), result);
   }

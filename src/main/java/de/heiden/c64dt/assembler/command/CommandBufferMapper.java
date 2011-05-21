@@ -41,7 +41,7 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
     StringBuilder codeHex = new StringBuilder(code.length * 2);
     for (int i = 0; i < code.length; i++)
     {
-      codeHex.append(hexBytePlain(ByteUtil.toByte(code, i)));
+      codeHex.append(hexBytePlain(ByteUtil.toByte(code[i])));
     }
     codeElement.setTextContent(codeHex.toString());
 
@@ -78,27 +78,29 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
     {
       int startIndex = index;
       CodeType type = commands.getType(index++);
-      if (!type.isUnknown())
+      if (type.isUnknown())
       {
-        // count indexes with the same type
-        int count = 1;
-        for (; index < commands.getLength(); index++, count++)
-        {
-          if (!commands.getType(index).equals(type))
-          {
-            break;
-          }
-        }
-
-        Element typeElement = document.createElement("type");
-        typeElement.setAttribute("index", hexWordPlain(startIndex));
-        if (count > 1)
-        {
-          typeElement.setAttribute("end", hexWordPlain(index));
-        }
-        typeElement.setAttribute("type", type.name());
-        typesElement.appendChild(typeElement);
+        continue;
       }
+
+      // count indexes with the same type
+      int count = 1;
+      for (; index < commands.getLength(); index++, count++)
+      {
+        if (!commands.getType(index).equals(type))
+        {
+          break;
+        }
+      }
+
+      Element typeElement = document.createElement("type");
+      typeElement.setAttribute("index", hexWordPlain(startIndex));
+      if (count > 1)
+      {
+        typeElement.setAttribute("end", hexWordPlain(index));
+      }
+      typeElement.setAttribute("type", type.name());
+      typesElement.appendChild(typeElement);
     }
   }
 
