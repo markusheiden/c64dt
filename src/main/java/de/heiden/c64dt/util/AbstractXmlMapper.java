@@ -4,11 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import javax.xml.bind.JAXB;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.dom.DOMSource;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -17,32 +13,40 @@ import java.io.OutputStream;
  */
 public abstract class AbstractXmlMapper<O extends Object>
 {
+  /**
+   * Element name for mapped objects.
+   */
   private final String elementName;
+
+  /**
+   * Mapped clazz.
+   */
   private final Class<O> clazz;
-  protected final DocumentBuilder builder;
 
   /**
    * Constructor.
+   *
+   * @param elementName Element name for mapped objects
+   * @param clazz Mapped class
    */
   public AbstractXmlMapper(String elementName, Class<O> clazz) throws Exception
   {
     this.elementName = elementName;
     this.clazz = clazz;
-
-    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-    builder = factory.newDocumentBuilder();
   }
 
   /**
-   * Write object to an stream.
+   * Write the object to the stream.
    *
    * @param object Object
    * @param stream Stream
    */
   public void write(O object, OutputStream stream) throws Exception
   {
-    Document document = builder.newDocument();
-    document.appendChild(marshal(object, document));
+    Node node = XmlUtil.marshal(object);
+
+    Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+    document.appendChild(document.importNode(node, true));
 
     write(object, document, document.getDocumentElement());
 
@@ -51,7 +55,7 @@ public abstract class AbstractXmlMapper<O extends Object>
   }
 
   /**
-   * Add an object as the given element to the document.
+   * Add the object as the given element to the document.
    *
    * @param o object to serialize
    * @param document document
@@ -60,15 +64,14 @@ public abstract class AbstractXmlMapper<O extends Object>
   public abstract void write(O o, Document document, Element element) throws Exception;
 
   /**
-   * Read object from stream.
+   * Read an object from the stream.
    *
-   * @param stream with xml file to read
-   * @return Reassembler
+   * @param stream Stream with xml file to read
    */
   public O read(InputStream stream) throws Exception
   {
-    Document document = builder.parse(stream);
-    O result = unmarshal(document, clazz);
+    Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
+    O result = XmlUtil.unmarshal(document, clazz);
     return read(document.getDocumentElement(), result);
   }
 
@@ -79,30 +82,4 @@ public abstract class AbstractXmlMapper<O extends Object>
    * @param object Unmarshalled, incomplete object
    */
   public abstract O read(Element element, O object) throws Exception;
-
-  /**
-   * Marshal an arbitrary object with JAXB.
-   *
-   * @param object Object
-   * @param document Document to create the node for
-   * @return Xml representation
-   */
-  protected Node marshal(Object object, Document document) throws Exception
-  {
-    DOMResult result = new DOMResult();
-    JAXB.marshal(object, result);
-    Document elementDocument = (Document) result.getNode();
-    return document.importNode(elementDocument.getDocumentElement(), true);
-  }
-
-  /**
-   * Unmarshal an arbitrary object with JAXB.
-   *
-   * @param node Xml representation of object
-   * @param clazz Class of object
-   */
-  protected <O> O unmarshal(Node node, Class<O> clazz) throws Exception
-  {
-    return JAXB.unmarshal(new DOMSource(node), clazz);
-  }
 }

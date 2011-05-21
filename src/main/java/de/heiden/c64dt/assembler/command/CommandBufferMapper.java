@@ -94,7 +94,6 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
         if (count > 1)
         {
           typeElement.setAttribute("end", hexWordPlain(index));
-
         }
         typeElement.setAttribute("type", type.name());
         typesElement.appendChild(typeElement);
