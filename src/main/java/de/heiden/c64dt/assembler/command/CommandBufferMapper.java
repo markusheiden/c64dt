@@ -113,7 +113,7 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
     byte[] code = new byte[codeData.length() / 2];
     for (int i = 0; i < codeData.length(); i += 2)
     {
-      code[i / 2] = (byte) Integer.parseInt(codeData.substring(i, i + 2), 16);
+      code[i / 2] = (byte) parseHexWordPlain(codeData.substring(i, i + 2));
     }
 
     // base addresses
@@ -122,11 +122,11 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
 
     // start address / first base address
     Element startAddressElement = (Element) addressElements.item(0);
-    int startIndex = Integer.parseInt(startAddressElement.getAttribute("index"), 16);
+    int startIndex = parseHexWordPlain(startAddressElement.getAttribute("index"));
     Assert.isTrue(startIndex == 0, "Check: startIndex == 0");
 
     // the start address is the first base address and automatically sets the end base address
-    int startAddress = Integer.parseInt(startAddressElement.getAttribute("base"), 16);
+    int startAddress = parseHexWordPlain(startAddressElement.getAttribute("base"));
     CommandBuffer commands = new CommandBuffer(code, startAddress);
 
     // remaining base addresses
@@ -146,18 +146,14 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
     Assert.isTrue(endAddress == startAddress, "Check: endAddress == startAddress");
 
     // subroutines
-    Node subroutinesElement = commandsElement.getElementsByTagName("subroutines").item(0);
-    NodeList subroutineElements = subroutinesElement.getChildNodes();
+    Element subroutinesElement = (Element) commandsElement.getElementsByTagName("subroutines").item(0);
+    NodeList subroutineElements = subroutinesElement.getElementsByTagName("subroutine");
     for (int i = 0; i < subroutineElements.getLength(); i++)
     {
-      Node node = subroutineElements.item(i);
-      if (node instanceof Element)
-      {
-        Element subroutineElement = (Element) node;
-        int index = parseHexWordPlain(subroutineElement.getAttribute("index"));
-        int arguments = parseHexWordPlain(subroutineElement.getAttribute("arguments"));
-        commands.addSubroutine(index, arguments);
-      }
+      Element subroutineElement = (Element) subroutineElements.item(i);
+      int index = parseHexWordPlain(subroutineElement.getAttribute("index"));
+      int arguments = parseHexWordPlain(subroutineElement.getAttribute("arguments"));
+      commands.addSubroutine(index, arguments);
     }
 
     // detected code types
