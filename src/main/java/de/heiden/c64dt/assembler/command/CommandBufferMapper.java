@@ -15,6 +15,7 @@ import java.util.SortedMap;
 import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
 import static de.heiden.c64dt.util.HexUtil.hexPlain;
 import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
+import static de.heiden.c64dt.util.HexUtil.parseHexWordPlain;
 
 /**
  * XML-Mapper to read and write the reassembler model.
@@ -130,16 +131,16 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
     for (int i = 1; i < addressElements.getLength() - 1; i++)
     {
       Element addressElement = (Element) addressElements.item(i);
-      int index = Integer.parseInt(addressElement.getAttribute("index"), 16);
-      int address = Integer.parseInt(addressElement.getAttribute("base"), 16);
+      int index = parseHexWordPlain(addressElement.getAttribute("index"));
+      int address = parseHexWordPlain(addressElement.getAttribute("base"));
       commands.rebase(index, address);
     }
 
     // end base address
     Element endAddressElement = (Element) addressElements.item(addressElements.getLength() - 1);
-    int endIndex = Integer.parseInt(endAddressElement.getAttribute("index"), 16);
+    int endIndex = parseHexWordPlain(endAddressElement.getAttribute("index"));
     Assert.isTrue(endIndex == code.length, "Check: endIndex == code.length");
-    int endAddress = Integer.parseInt(endAddressElement.getAttribute("base"), 16);
+    int endAddress = parseHexWordPlain(endAddressElement.getAttribute("base"));
     Assert.isTrue(endAddress == startAddress, "Check: endAddress == startAddress");
 
     // subroutines
@@ -151,8 +152,8 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
       if (node instanceof Element)
       {
         Element subroutineElement = (Element) node;
-        int index = Integer.parseInt(subroutineElement.getAttribute("index"), 16);
-        int arguments = Integer.parseInt(subroutineElement.getAttribute("arguments"), 16);
+        int index = parseHexWordPlain(subroutineElement.getAttribute("index"));
+        int arguments = parseHexWordPlain(subroutineElement.getAttribute("arguments"));
         commands.addSubroutine(index, arguments);
       }
     }
@@ -163,11 +164,11 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
     for (int i = 0; i < typeElements.getLength(); i++)
     {
       Element typeElement = (Element) typeElements.item(i);
-      int index = Integer.parseInt(typeElement.getAttribute("index"), 16);
+      int index = parseHexWordPlain(typeElement.getAttribute("index"));
       CodeType type = CodeType.valueOf(typeElement.getAttribute("type"));
       if (typeElement.hasAttribute("end"))
       {
-        int end = Integer.parseInt(typeElement.getAttribute("end"), 16);
+        int end = parseHexWordPlain(typeElement.getAttribute("end"));
         commands.setType(index, end, type);
       }
       else

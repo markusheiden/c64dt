@@ -88,4 +88,17 @@ public class HexUtil
 
     return value < 0x100? hexByte(value) : hexWord(value);
   }
+
+  /**
+   * Parse string representation of a hex number.
+   *
+   * @param value String representation
+   */
+  public static int parseHexWordPlain(String value)
+  {
+    int result = Integer.parseInt(value, 16);
+
+    assert result >= 0 && result < 0x1000 : "Precondition: result >= 0 && result < 0x1000";
+    return result;
+  }
 }
