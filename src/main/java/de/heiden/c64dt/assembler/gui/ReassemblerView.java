@@ -4,7 +4,6 @@ import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.assembler.ReassemblerMapper;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
-import de.heiden.c64dt.assembler.detector.JsrDetector;
 import org.apache.log4j.Logger;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
@@ -55,7 +54,7 @@ public class ReassemblerView extends JFrame
     reassembler = new Reassembler();
 
     // for testing purposes only...
-//    reassemble();
+    reassemble();
 
     //
     // Menu bar
@@ -82,9 +81,6 @@ public class ReassemblerView extends JFrame
       System.out.println("Reassembling " + file.getCanonicalPath() + " (" + file.length() + " Bytes)");
 
       byte[] bytes = FileCopyUtils.copyToByteArray(new FileInputStream(file));
-
-      JsrDetector jsr = new JsrDetector();
-      reassembler.add(jsr);
 
       CommandBuffer commands = new CommandBuffer(bytes, 0x8000);
       commands.setType(0x0000, 0x0004, CodeType.ABSOLUTE_ADDRESS);
