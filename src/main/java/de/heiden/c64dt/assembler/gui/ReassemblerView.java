@@ -1,12 +1,9 @@
 package de.heiden.c64dt.assembler.gui;
 
-import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.assembler.ReassemblerMapper;
-import de.heiden.c64dt.assembler.command.CommandBuffer;
 import org.apache.log4j.Logger;
 import org.springframework.util.Assert;
-import org.springframework.util.FileCopyUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,13 +45,15 @@ public class ReassemblerView extends JFrame
     // Reassembled code
     //
 
+    reassembler = new Reassembler();
+
     code = new CodeView();
     add(code.createComponent(), BorderLayout.CENTER);
 
-    reassembler = new Reassembler();
-
     // for testing purposes only...
     reassemble();
+
+    code.use(reassembler);
 
     //
     // Menu bar
@@ -74,34 +73,9 @@ public class ReassemblerView extends JFrame
 
     try
     {
-      final String BASEDIR = "retro replay";
-      final String ROM_NAME = "rr38q-cnet-%d.bin";
-
-      File file = new File(BASEDIR, String.format(ROM_NAME, 0));
-      System.out.println("Reassembling " + file.getCanonicalPath() + " (" + file.length() + " Bytes)");
-
-      byte[] bytes = FileCopyUtils.copyToByteArray(new FileInputStream(file));
-
-      CommandBuffer commands = new CommandBuffer(bytes, 0x8000);
-      commands.setType(0x0000, 0x0004, CodeType.ABSOLUTE_ADDRESS);
-      commands.setType(0x0004, 0x0009, CodeType.DATA);
-      commands.setType(0x0009, 0x0060, CodeType.OPCODE);
-      commands.setType(0x0080, 0x017F, CodeType.DATA);
-      commands.setType(0x021D, 0x022F, CodeType.DATA);
-      commands.rebase(0x0E0D, 0xE000);
-      commands.rebase(0x0FBE, 0x8000);
-      // commands.base(0x1D9F, 0x0100);
-      commands.rebase(0x1DB3, 0x8000);
-      commands.rebase(0x1E00, 0x0C000);
-      commands.setType(0x1E00, 0x1E15, CodeType.DATA);
-      commands.addSubroutine(0x1F03, 2);
-      commands.setType(0x1FF8, 0x2000, CodeType.ABSOLUTE_ADDRESS);
-
-      reassembler.reassemble(commands);
-
-      code.use(reassembler);
+      reassembler = new ReassemblerMapper().read(new FileInputStream(new File("retro replay", "rr38q-cnet-0.xml")));
     }
-    catch (IOException e)
+    catch (Exception e)
     {
       // this method is just for test, so just output the exception
       e.printStackTrace();
