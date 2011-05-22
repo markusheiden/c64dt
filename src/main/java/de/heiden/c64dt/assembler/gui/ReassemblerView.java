@@ -102,12 +102,12 @@ public class ReassemblerView extends JFrame
   /**
    * Update GUI state.
    */
-  private final void updateGUI()
+  protected final void updateGUI()
   {
     String title = "C64 Reassembler";
     if (currentFile != null)
     {
-      title = currentFile.getName() + " - " + title;
+      title = currentFile.getAbsolutePath() + " - " + title;
     }
     setTitle(title);
 
@@ -167,6 +167,10 @@ public class ReassemblerView extends JFrame
         try
         {
           JFileChooser chooser = new JFileChooser();
+          if (currentFile != null)
+          {
+            chooser.setCurrentDirectory(currentFile.getParentFile());
+          }
           int result = chooser.showOpenDialog(ReassemblerView.this);
           if (result == JFileChooser.APPROVE_OPTION)
           {
@@ -216,6 +220,11 @@ public class ReassemblerView extends JFrame
         try
         {
           JFileChooser chooser = new JFileChooser();
+          if (currentFile != null)
+          {
+            chooser.setCurrentDirectory(currentFile.getParentFile());
+            chooser.setSelectedFile(currentFile);
+          }
           int result = chooser.showSaveDialog(ReassemblerView.this);
           if (result == JFileChooser.APPROVE_OPTION)
           {
