@@ -67,9 +67,9 @@ public class CodeView
 
         // select row on click of the right mouse button too
         int row = table.rowAtPoint(e.getPoint());
-        if (row >= 0)
+        if (row >= 0 && !table.getSelectionModel().isSelectedIndex(row))
         {
-          table.getSelectionModel().addSelectionInterval(row, row);
+          table.getSelectionModel().setSelectionInterval(row, row);
         }
 
         // show (dynamic) context menu
