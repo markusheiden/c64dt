@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * GUI for {@link de.heiden.c64dt.assembler.Reassembler}.
@@ -25,6 +24,11 @@ public class ReassemblerView extends JFrame
   private Reassembler reassembler;
 
   private File currentFile;
+
+  private JMenuItem fileOpen;
+  private JMenuItem fileLoad;
+  private JMenuItem fileSave;
+  private JMenuItem fileSaveAs;
 
   /**
    * The code view.
@@ -45,15 +49,8 @@ public class ReassemblerView extends JFrame
     // Reassembled code
     //
 
-    reassembler = new Reassembler();
-
     code = new CodeView();
     add(code.createComponent(), BorderLayout.CENTER);
-
-    // for testing purposes only...
-    reassemble();
-
-    code.use(reassembler);
 
     //
     // Menu bar
@@ -62,6 +59,12 @@ public class ReassemblerView extends JFrame
     setJMenuBar(createMenu());
 
     pack();
+
+    use(new Reassembler());
+    // for testing purposes only...
+    reassemble();
+
+    updateGUI();
   }
 
   /**
@@ -69,29 +72,17 @@ public class ReassemblerView extends JFrame
    */
   private void reassemble()
   {
-    reassembler = new Reassembler();
-
     try
     {
-      reassembler = new ReassemblerMapper().read(new FileInputStream(new File("retro replay", "rr38q-cnet-0.xml")));
+      File file = new File("retro replay", "rr38q-cnet-0.xml");
+      use(new ReassemblerMapper().read(new FileInputStream(file)));
+      currentFile = file;
     }
     catch (Exception e)
     {
       // this method is just for test, so just output the exception
       e.printStackTrace();
     }
-  }
-
-  /**
-   * Reassemble the given code
-   *
-   * @param is Input stream with code
-   * @exception IOException In case of IO errors
-   */
-  public void reassemble(InputStream is) throws IOException
-  {
-    reassembler.reassemble(is);
-    use(reassembler);
   }
 
   /**
@@ -103,9 +94,29 @@ public class ReassemblerView extends JFrame
   {
     Assert.notNull(reassembler, "Precondition: reassembler != null");
 
+    this.currentFile = null;
     this.reassembler = reassembler;
     code.use(reassembler);
   }
+
+  /**
+   * Update GUI state.
+   */
+  private final void updateGUI()
+  {
+    String title = "C64 Reassembler";
+    if (currentFile != null)
+    {
+      title = currentFile.getName() + " - " + title;
+    }
+    setTitle(title);
+
+    fileSave.setEnabled(currentFile != null);
+  }
+
+  //
+  // Menu
+  //
 
   /**
    * Create menu bar.
@@ -117,7 +128,7 @@ public class ReassemblerView extends JFrame
     JMenu file = new JMenu("File");
     menuBar.add(file);
 
-    JMenuItem fileOpen = new JMenuItem("Reassemble...");
+    fileOpen = new JMenuItem("Reassemble...");
     file.add(fileOpen);
     fileOpen.addActionListener(new ActionListener()
     {
@@ -130,19 +141,23 @@ public class ReassemblerView extends JFrame
           int result = chooser.showOpenDialog(ReassemblerView.this);
           if (result == JFileChooser.APPROVE_OPTION)
           {
-            reassemble(new FileInputStream(chooser.getSelectedFile()));
+            // TODO mh: ask for start address
+            currentFile = null;
+            reassembler.reassemble(new FileInputStream(chooser.getSelectedFile()));
           }
         }
         catch (IOException e)
         {
           logger.error("Failed to open file", e);
+          use(new Reassembler());
           JOptionPane.showMessageDialog(ReassemblerView.this,
             "Failed to open file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
         }
+        updateGUI();
       }
     });
 
-    JMenuItem fileLoad = new JMenuItem("Load...");
+    fileLoad = new JMenuItem("Load...");
     file.add(fileLoad);
     fileLoad.addActionListener(new ActionListener()
     {
@@ -155,22 +170,22 @@ public class ReassemblerView extends JFrame
           int result = chooser.showOpenDialog(ReassemblerView.this);
           if (result == JFileChooser.APPROVE_OPTION)
           {
+            use(new ReassemblerMapper().read(new FileInputStream(chooser.getSelectedFile())));
             currentFile = chooser.getSelectedFile();
-            code.use(new ReassemblerMapper().read(new FileInputStream(currentFile)));
-//            fileSave.setEnabled(true);
           }
         }
         catch (Exception e)
         {
           logger.error("Failed to open file", e);
-          currentFile = null;
+          use(new Reassembler());
           JOptionPane.showMessageDialog(ReassemblerView.this,
             "Failed to open file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
         }
+        updateGUI();
       }
     });
 
-    JMenuItem fileSave = new JMenuItem("Save");
+    fileSave = new JMenuItem("Save");
     file.add(fileSave);
     fileSave.addActionListener(new ActionListener()
     {
@@ -187,10 +202,11 @@ public class ReassemblerView extends JFrame
           JOptionPane.showMessageDialog(ReassemblerView.this,
             "Failed to save file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
         }
+        updateGUI();
       }
     });
 
-    JMenuItem fileSaveAs = new JMenuItem("Save as...");
+    fileSaveAs = new JMenuItem("Save as...");
     file.add(fileSaveAs);
     fileSaveAs.addActionListener(new ActionListener()
     {
@@ -204,6 +220,7 @@ public class ReassemblerView extends JFrame
           if (result == JFileChooser.APPROVE_OPTION)
           {
             new ReassemblerMapper().write(reassembler, new FileOutputStream(chooser.getSelectedFile()));
+            currentFile = chooser.getSelectedFile();
           }
         }
         catch (Exception e)
@@ -212,6 +229,7 @@ public class ReassemblerView extends JFrame
           JOptionPane.showMessageDialog(ReassemblerView.this,
             "Failed to save file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
         }
+        updateGUI();
       }
     });
 

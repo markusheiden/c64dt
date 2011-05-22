@@ -71,6 +71,8 @@ public class Reassembler
     detectors.add(new BrkDetector());
     detectors.add(new BitDetector());
     detectors.add(new JsrDetector());
+
+    commands = new CommandBuffer(new byte[]{0}, 0);
   }
 
   /**
