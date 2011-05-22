@@ -37,6 +37,12 @@ public class CodeTableModel extends DefaultTableModel
     super(new String[]{"Flags", "Addr", "Bytes", "Label", "Code"}, 0);
   }
 
+  @Override
+  public boolean isCellEditable(int row, int column)
+  {
+    return false;
+  }
+
   /**
    * Get underlying reassembler.
    */
