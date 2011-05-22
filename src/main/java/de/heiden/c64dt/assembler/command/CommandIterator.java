@@ -40,7 +40,7 @@ public class CommandIterator
   public CommandIterator reverse()
   {
     // trace backward for last command
-    for (index = commands.getLength(); commands.getCommand(--index) == null; )
+    for (index = commands.getLength() - 1; index >= 0 && commands.getCommand(index) == null; index--)
     {
       // search further
     }
