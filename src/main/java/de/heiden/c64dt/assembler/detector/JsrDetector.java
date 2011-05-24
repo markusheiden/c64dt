@@ -33,37 +33,39 @@ public class JsrDetector implements IDetector
     for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand(); )
     {
       ICommand command = iter.nextCommand();
-      int index = iter.getIndex();
-      if (command instanceof OpcodeCommand)
+      if (!(command instanceof OpcodeCommand))
       {
-        OpcodeCommand opcodeCommand = (OpcodeCommand) command;
-        if (!opcodeCommand.getOpcode().getType().equals(OpcodeType.JSR) ||
-          !opcodeCommand.getOpcode().getMode().equals(OpcodeMode.ABS) ||
-          !iter.hasNextCommand())
+        continue;
+      }
+      OpcodeCommand opcodeCommand = (OpcodeCommand) command;
+
+      if (!opcodeCommand.getOpcode().getType().equals(OpcodeType.JSR) ||
+        !opcodeCommand.getOpcode().getMode().equals(OpcodeMode.ABS) ||
+        !iter.hasNextCommand())
+      {
+        // no JSR $xxxx or no arguments
+        continue;
+      }
+
+      int index = iter.getIndex();
+      int argumentsIndex = iter.getNextIndex();
+      int arguments = commands.getSubroutineArguments(opcodeCommand.getArgument());
+      if (arguments > 0)
+      {
+        // fixed length argument
+        change |= markArgument(commands, index, argumentsIndex, argumentsIndex + arguments);
+      }
+      else if (arguments == 0 || !iter.peekCommand().isReachable())
+      {
+        // argument == 0: search zero terminating the argument
+        // !commands.peekCommand().isReachable(): try automatic detection of zero-terminated argument
+        int endIndex = search0(commands, argumentsIndex, arguments != 0);
+        if (endIndex < 0)
         {
-          // no JSR $xxxx or no arguments
           continue;
         }
 
-        int argumentsIndex = iter.getNextIndex();
-        int arguments = commands.getSubroutineArguments(opcodeCommand.getArgument());
-        if (arguments > 0)
-        {
-          // fixed length argument
-          change |= markArgument(commands, index, argumentsIndex, argumentsIndex + arguments);
-        }
-        else if (arguments == 0 || !iter.peekCommand().isReachable())
-        {
-          // argument == 0: search zero terminating the argument
-          // !commands.peekCommand().isReachable(): try automatic detection of zero-terminated argument
-          int endIndex = search0(commands, argumentsIndex, arguments != 0);
-          if (endIndex < 0)
-          {
-            continue;
-          }
-
-          change |= markArgument(commands, index, argumentsIndex, endIndex);
-        }
+        change |= markArgument(commands, index, argumentsIndex, endIndex);
       }
     }
 
