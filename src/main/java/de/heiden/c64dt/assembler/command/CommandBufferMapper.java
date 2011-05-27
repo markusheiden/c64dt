@@ -62,11 +62,12 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
     Element subroutinesElement = document.createElement("subroutines");
     commandsElement.appendChild(subroutinesElement);
 
-    for (Entry<Integer, Integer> entry : commands.getSubroutines().entrySet())
+    for (Entry<Integer, Subroutine> entry : commands.getSubroutines().entrySet())
     {
       Element subroutineElement = document.createElement("subroutine");
       subroutineElement.setAttribute("index", hexWordPlain(entry.getKey()));
-      subroutineElement.setAttribute("arguments", hexPlain(entry.getValue()));
+      subroutineElement.setAttribute("arguments", hexPlain(entry.getValue().getArguments()));
+      subroutineElement.setTextContent(entry.getValue().getType().toString());
       subroutinesElement.appendChild(subroutineElement);
     }
 
@@ -153,7 +154,8 @@ public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
       Element subroutineElement = (Element) subroutineElements.item(i);
       int index = parseHexWordPlain(subroutineElement.getAttribute("index"));
       int arguments = parseHexWordPlain(subroutineElement.getAttribute("arguments"));
-      commands.addSubroutine(index, arguments);
+      CodeType type = CodeType.valueOf(subroutineElement.getTextContent().trim());
+      commands.addSubroutine(new Subroutine(index, arguments, type));
     }
 
     // detected code types

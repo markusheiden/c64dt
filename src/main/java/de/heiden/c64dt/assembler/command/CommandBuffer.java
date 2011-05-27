@@ -94,7 +94,7 @@ public class CommandBuffer
   /**
    * Index to number of argument bytes the subroutines takes.
    */
-  private final Map<Integer, Integer> subroutines;
+  private final Map<Integer, Subroutine> subroutines;
 
   //
   //
@@ -126,7 +126,7 @@ public class CommandBuffer
     this.startAddresses = new TreeMap<Integer, Integer>();
     this.startAddresses.put(0, startAddress);
     this.startAddresses.put(code.length, startAddress);
-    this.subroutines = new HashMap<Integer, Integer>();
+    this.subroutines = new HashMap<Integer, Subroutine>();
     this.commands = new ICommand[code.length];
 
     this.index = 0;
@@ -303,39 +303,38 @@ public class CommandBuffer
   /**
    * Add a subroutine.
    *
-   * @param index relative address of subroutine
-   * @param numBytes number of argument bytes the subroutine expects after the JSR
+   * @param subroutine Subroutine
    */
-  public void addSubroutine(int index, int numBytes)
+  public void addSubroutine(Subroutine subroutine)
   {
-    Assert.isTrue(hasIndex(index), "Precondition: hasIndex(index)");
-    Assert.isTrue(numBytes > 0, "Precondition: numBytes > 0");
+    Assert.notNull(subroutine, "Precondition: subroutine != null");
+    Assert.isTrue(hasIndex(subroutine.getIndex()), "Precondition: hasIndex(subroutine.getIndex())");
 
-    subroutines.put(index, numBytes);
+    Subroutine removed = subroutines.put(subroutine.getIndex(), subroutine);
+    Assert.isNull(removed, "Precondition: no doubled subroutines");
   }
 
   /**
-   * Get number of argument bytes the subroutine at the given address expects.
+   * Get subroutine at a given absolute address.
    *
    * @param address absolute address
-   * @return number of argument bytes or -1, if there is no subroutine at this address
+   * @return subroutine or null, if there is no subroutine at this address
    */
-  public int getSubroutineArguments(int address)
+  public Subroutine getSubroutine(int address)
   {
     if (!hasAddress(address))
     {
-      return -1;
+      return null;
     }
 
-    Integer result = subroutines.get(indexForAddress(address));
-    return result != null? result : -1;
+    return subroutines.get(indexForAddress(address));
   }
 
   /**
    * All subroutines.
    * Just for the mapper.
    */
-  Map<Integer, Integer> getSubroutines()
+  Map<Integer, Subroutine> getSubroutines()
   {
     return subroutines;
   }

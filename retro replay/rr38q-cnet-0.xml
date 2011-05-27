@@ -21,7 +21,9 @@
       <address base="8000" index="2000"/>
     </addresses>
     <subroutines>
-      <subroutine arguments="02" index="1F03"/>
+      <subroutine arguments="00" index="0763">DATA</subroutine>
+      <subroutine arguments="02" index="1F01">ABSOLUTE_ADDRESS</subroutine>
+      <subroutine arguments="02" index="1F03">DATA</subroutine>
     </subroutines>
     <types>
       <type end="0004" index="0000">ABSOLUTE_ADDRESS</type>

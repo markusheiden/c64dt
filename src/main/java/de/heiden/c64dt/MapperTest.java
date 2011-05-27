@@ -3,6 +3,7 @@ package de.heiden.c64dt;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.assembler.ReassemblerMapper;
+import de.heiden.c64dt.assembler.command.Subroutine;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -15,7 +16,7 @@ public class MapperTest
     Reassembler reassembler = new Reassembler();
     reassembler.reassemble(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
     reassembler.getCommands().setType(1, 3, CodeType.CODE);
-    reassembler.getCommands().addSubroutine(4, 2);
+    reassembler.getCommands().addSubroutine(new Subroutine(4, 2));
 
     mapper.write(reassembler, System.out);
 

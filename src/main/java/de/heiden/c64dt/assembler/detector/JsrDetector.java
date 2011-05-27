@@ -7,6 +7,7 @@ import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
+import de.heiden.c64dt.assembler.command.Subroutine;
 import org.springframework.util.Assert;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -49,11 +50,16 @@ public class JsrDetector implements IDetector
 
       int index = iter.getIndex();
       int argumentsIndex = iter.getNextIndex();
-      int arguments = commands.getSubroutineArguments(opcodeCommand.getArgument());
+
+      Subroutine subroutine = commands.getSubroutine(opcodeCommand.getArgument());
+      // TODO mh: rework
+      int arguments = subroutine != null? subroutine.getArguments() : -1;
+      CodeType type = subroutine != null? subroutine.getType() : CodeType.DATA;
+
       if (arguments > 0)
       {
         // fixed length argument
-        change |= markArgument(commands, index, argumentsIndex, argumentsIndex + arguments);
+        change |= markArgument(commands, index, argumentsIndex, argumentsIndex + arguments, type);
       }
       else if (arguments == 0 || !iter.peekCommand().isReachable())
       {
@@ -65,7 +71,7 @@ public class JsrDetector implements IDetector
           continue;
         }
 
-        change |= markArgument(commands, index, argumentsIndex, endIndex);
+        change |= markArgument(commands, index, argumentsIndex, endIndex, type);
       }
     }
 
@@ -79,9 +85,10 @@ public class JsrDetector implements IDetector
    * @param index index of JSR
    * @param startIndex index of data, argument
    * @param endIndex end index of data (excl.), next opcode
+   * @param type Code type of argument
    * @return whether a change has taken place
    */
-  private boolean markArgument(CommandBuffer commands, int index, int startIndex, int endIndex)
+  private boolean markArgument(CommandBuffer commands, int index, int startIndex, int endIndex, CodeType type)
   {
     if (!commands.hasIndex(endIndex))
     {
@@ -89,11 +96,12 @@ public class JsrDetector implements IDetector
     }
 
     // Add reference to make code after the argument reachable
+    // TODO mh: read absolute address from jsr?
     commands.addCodeReference(index, commands.addressForIndex(endIndex));
 
     return
       // Mark argument bytes as data
-      commands.setType(startIndex, endIndex, CodeType.DATA) |
+      commands.setType(startIndex, endIndex, type) |
         // At endIndex the code continues
         commands.setType(endIndex, CodeType.OPCODE);
   }

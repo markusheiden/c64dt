@@ -32,9 +32,9 @@ public class CommandBufferMapperTest
     commands.rebase(0x0030, 0xF000);
 
     // subroutines
-    commands.addSubroutine(0x0010, 0x10);
-    commands.addSubroutine(0x0020, 0x20);
-    commands.addSubroutine(0x0030, 0x30);
+    commands.addSubroutine(new Subroutine(0x0010, 0x10));
+    commands.addSubroutine(new Subroutine(0x0020, 0x20));
+    commands.addSubroutine(new Subroutine(0x0030, 0x30));
 
     // code types
     commands.setType(0x0000, 0x9000, CodeType.DATA);
