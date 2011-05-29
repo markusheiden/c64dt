@@ -52,26 +52,38 @@ public class JsrDetector implements IDetector
       int argumentsIndex = iter.getNextIndex();
 
       Subroutine subroutine = commands.getSubroutine(opcodeCommand.getArgument());
-      // TODO mh: rework
-      int arguments = subroutine != null? subroutine.getArguments() : -1;
-      CodeType type = subroutine != null? subroutine.getType() : CodeType.DATA;
-
-      if (arguments > 0)
+      if (subroutine == null)
       {
-        // fixed length argument
-        change |= markArgument(commands, index, argumentsIndex, argumentsIndex + arguments, type);
-      }
-      else if (arguments == 0 || !iter.peekCommand().isReachable())
-      {
-        // argument == 0: search zero terminating the argument
-        // !commands.peekCommand().isReachable(): try automatic detection of zero-terminated argument
-        int endIndex = search0(commands, argumentsIndex, arguments != 0);
+        // try automatic detection of zero-terminated argument
+        int endIndex = search0(commands, argumentsIndex, true);
         if (endIndex < 0)
         {
           continue;
         }
 
-        change |= markArgument(commands, index, argumentsIndex, endIndex, type);
+        change |= markArgument(commands, index, argumentsIndex, endIndex, CodeType.DATA);
+      }
+      else
+      {
+        int arguments = subroutine.getArguments();
+        CodeType type = subroutine.getType();
+
+        if (arguments == 0)
+        {
+          // search zero terminating the argument
+          int endIndex = search0(commands, argumentsIndex, false);
+          if (endIndex < 0)
+          {
+            continue;
+          }
+
+          change |= markArgument(commands, index, argumentsIndex, endIndex, type);
+        }
+        else if (arguments > 0)
+        {
+          // fixed length argument
+          change |= markArgument(commands, index, argumentsIndex, argumentsIndex + arguments, type);
+        }
       }
     }
 

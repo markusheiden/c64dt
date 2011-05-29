@@ -32,9 +32,9 @@ public class CommandBufferMapperTest
     commands.rebase(0x0030, 0xF000);
 
     // subroutines
-    commands.addSubroutine(new Subroutine(0x0010, 0x10));
-    commands.addSubroutine(new Subroutine(0x0020, 0x20));
-    commands.addSubroutine(new Subroutine(0x0030, 0x30));
+    commands.addSubroutine(new Subroutine(0x1000, 0x10));
+    commands.addSubroutine(new Subroutine(0x2000, 0x20));
+    commands.addSubroutine(new Subroutine(0x3000, 0x30));
 
     // code types
     commands.setType(0x0000, 0x9000, CodeType.DATA);
@@ -75,9 +75,9 @@ public class CommandBufferMapperTest
     // subroutines
     SortedMap<Integer, Integer> commandsSubroutines = commands.getStartAddresses();
     SortedMap<Integer, Integer> readSubroutines = read.getStartAddresses();
-    for (Integer index : commandsSubroutines.keySet())
+    for (Integer address : commandsSubroutines.keySet())
     {
-      assertEquals("Index " + index + ":", commandsSubroutines.get(index), readSubroutines.get(index));
+      assertEquals("Address " + address + ":", commandsSubroutines.get(address), readSubroutines.get(address));
     }
 
     // write read xml again

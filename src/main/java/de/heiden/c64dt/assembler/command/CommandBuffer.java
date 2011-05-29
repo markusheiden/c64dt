@@ -92,7 +92,7 @@ public class CommandBuffer
   private final NavigableMap<Integer, Integer> startAddresses;
 
   /**
-   * Index to number of argument bytes the subroutines takes.
+   * Absolute address to subroutines.
    */
   private final Map<Integer, Subroutine> subroutines;
 
@@ -308,9 +308,8 @@ public class CommandBuffer
   public void addSubroutine(Subroutine subroutine)
   {
     Assert.notNull(subroutine, "Precondition: subroutine != null");
-    Assert.isTrue(hasIndex(subroutine.getIndex()), "Precondition: hasIndex(subroutine.getIndex())");
 
-    Subroutine removed = subroutines.put(subroutine.getIndex(), subroutine);
+    Subroutine removed = subroutines.put(subroutine.getAddress(), subroutine);
     Assert.isNull(removed, "Precondition: no doubled subroutines");
   }
 
@@ -322,12 +321,7 @@ public class CommandBuffer
    */
   public Subroutine getSubroutine(int address)
   {
-    if (!hasAddress(address))
-    {
-      return null;
-    }
-
-    return subroutines.get(indexForAddress(address));
+    return subroutines.get(address);
   }
 
   /**
