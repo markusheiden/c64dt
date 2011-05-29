@@ -12,6 +12,10 @@ import org.apache.log4j.Logger;
 import org.springframework.util.Assert;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Detects JSR commands to predefined address which are followed by fixed length or zero-terminated arguments.
@@ -92,6 +96,43 @@ public class JsrDetector implements IDetector
     }
 
     return change;
+  }
+
+  /**
+   * Build JSR cross reference.
+   *
+   * @param commands command buffer
+   * @return Absolute address to list of relative addresses of JSR to the absolute address
+   */
+  protected Map<Integer, List<Integer>> crossReference(CommandBuffer commands)
+  {
+    Map<Integer, List<Integer>> result = new HashMap<Integer, List<Integer>>();
+
+    for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand(); )
+    {
+      ICommand command = iter.nextCommand();
+      if (!(command instanceof OpcodeCommand))
+      {
+        continue;
+      }
+      OpcodeCommand opcodeCommand = (OpcodeCommand) command;
+
+      if (opcodeCommand.getOpcode().getType().equals(OpcodeType.JSR) &&
+        opcodeCommand.getOpcode().getMode().equals(OpcodeMode.ABS) &&
+        iter.hasNextCommand())
+      {
+        int address = opcodeCommand.getArgument();
+        List<Integer> references = result.get(address);
+        if (references == null)
+        {
+          references = new ArrayList<Integer>();
+          result.put(address, references);
+        }
+        references.add(iter.getIndex());
+      }
+    }
+
+    return result;
   }
 
   /**

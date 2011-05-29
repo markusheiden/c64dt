@@ -86,6 +86,18 @@ public class CommandIterator
   }
 
   /**
+   * Sets the current relative address.
+   *
+   * @param index relative address
+   */
+  public void setIndex(int index)
+  {
+    Assert.notNull(commands.getCommand(index), "Precondition: There is a command at the given index");
+
+    this.index = index;
+  }
+
+  /**
    * The current absolute address.
    */
   public int getAddress()
@@ -168,6 +180,26 @@ public class CommandIterator
   }
 
   //
+  // modifying operations during iteration
+  //
+
+  /**
+   * Removes the current command.
+   * Traces back to the previous commands afterwards.
+   */
+  public void removeCommand()
+  {
+    // remember position of current command
+    int remove = index;
+    // skip current command
+    index = getNextIndex();
+    // delete current command
+    commands.removeCommand(remove);
+    // trace back to previous command
+    previousCommand();
+  }
+
+  //
   // label/reference specific interface
   //
 
@@ -213,26 +245,5 @@ public class CommandIterator
   public boolean removeReference()
   {
     return commands.removeReference(index);
-  }
-
-
-  //
-  // modifying operations during iteration
-  //
-
-  /**
-   * Removes the current command.
-   * Traces back to the previous commands afterwards.
-   */
-  public void removeCommand()
-  {
-    // remember position of current command
-    int remove = index;
-    // skip current command
-    index = getNextIndex();
-    // delete current command
-    commands.removeCommand(remove);
-    // trace back to previous command
-    previousCommand();
   }
 }
