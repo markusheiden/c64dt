@@ -8,6 +8,7 @@ import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 import de.heiden.c64dt.assembler.command.Subroutine;
+import org.apache.log4j.Logger;
 import org.springframework.util.Assert;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -18,6 +19,8 @@ import javax.xml.bind.annotation.XmlAttribute;
  */
 public class JsrDetector implements IDetector
 {
+  private final Logger logger = Logger.getLogger(getClass());
+
   /**
    * Maximum length of zero-terminated argument after JSR opcode.
    * <p/>
@@ -84,6 +87,7 @@ public class JsrDetector implements IDetector
           // fixed length argument
           change |= markArgument(commands, index, argumentsIndex, argumentsIndex + arguments, type);
         }
+        // else: "normal" subroutine
       }
     }
 
