@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+
+import static de.heiden.c64dt.util.HexUtil.hexWord;
 
 /**
  * Detects JSR commands to predefined address which are followed by fixed length or zero-terminated arguments.
@@ -38,58 +41,47 @@ public class JsrDetector implements IDetector
   {
     boolean change = false;
 
-    for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand(); )
+    Map<Integer, List<Integer>> crossReferences = crossReference(commands);
+    for (Entry<Integer, List<Integer>> crossReference : crossReferences.entrySet())
     {
-      ICommand command = iter.nextCommand();
-      if (!(command instanceof OpcodeCommand))
-      {
-        continue;
-      }
-      OpcodeCommand opcodeCommand = (OpcodeCommand) command;
+      int address = crossReference.getKey();
+      List<Integer> references = crossReference.getValue();
 
-      if (!opcodeCommand.getOpcode().getType().equals(OpcodeType.JSR) ||
-        !opcodeCommand.getOpcode().getMode().equals(OpcodeMode.ABS) ||
-        !iter.hasNextCommand())
-      {
-        // no JSR $xxxx or no arguments
-        continue;
-      }
+      Subroutine subroutine = commands.getSubroutine(address);
 
-      int index = iter.getIndex();
-      int argumentsIndex = iter.getNextIndex();
-
-      Subroutine subroutine = commands.getSubroutine(opcodeCommand.getArgument());
-      if (subroutine == null)
+      for (int reference : references)
       {
-        // try automatic detection of zero-terminated argument
-        int endIndex = search0(commands, argumentsIndex, true);
-        if (endIndex < 0)
+        if (subroutine == null)
         {
-          continue;
-        }
-
-        change |= markArgument(commands, index, argumentsIndex, endIndex, CodeType.DATA);
-      }
-      else
-      {
-        int arguments = subroutine.getArguments();
-        CodeType type = subroutine.getType();
-
-        if (arguments == 0)
-        {
-          // search zero terminating the argument
-          int endIndex = search0(commands, argumentsIndex, false);
+          // try automatic detection of zero-terminated argument
+          int endIndex = search0(commands, reference + 1, true);
           if (endIndex < 0)
           {
             continue;
           }
 
-          change |= markArgument(commands, index, argumentsIndex, endIndex, type);
+          logger.debug("Detected subroutine with zero terminated argument at address " + hexWord(address) + ", referenced at index " + hexWord(reference));
+          change |= markArgument(commands, reference, reference + 1, endIndex, CodeType.DATA);
         }
-        else if (arguments > 0)
+        else if (subroutine.getArguments() == 0)
         {
+          logger.debug("Known subroutine with zero terminated argument at address " + hexWord(address) + ", referenced at index " + hexWord(reference));
+
+          // search the zero which is terminating the argument
+          int endIndex = search0(commands, reference + 1, false);
+          if (endIndex < 0)
+          {
+            continue;
+          }
+
+          change |= markArgument(commands, reference, reference + 1, endIndex, subroutine.getType());
+        }
+        else if (subroutine.getArguments() > 0)
+        {
+          logger.debug("Known subroutine with " + subroutine.getArguments() + " byte argument at address " + hexWord(address) + ", referenced at index " + hexWord(reference));
+
           // fixed length argument
-          change |= markArgument(commands, index, argumentsIndex, argumentsIndex + arguments, type);
+          change |= markArgument(commands, reference, reference + 1, reference + 1 + subroutine.getArguments(), subroutine.getType());
         }
         // else: "normal" subroutine
       }
