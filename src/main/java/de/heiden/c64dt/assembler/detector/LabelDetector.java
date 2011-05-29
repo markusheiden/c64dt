@@ -23,42 +23,38 @@ public class LabelDetector implements IDetector
         // Mark all code label positions as a start of an opcode
         change |= iter.setType(CodeType.OPCODE);
       }
-      else
+      else if (hasConflictingCodeLabel(commands, iter))
       {
-        if (hasConflictingCodeLabel(commands, iter))
-        {
-          // Mark current command as data, because it may not be an opcode
-          change |= iter.setType(CodeType.DATA);
+        // Mark current command as data, because it may not be an opcode
+        change |= iter.setType(CodeType.DATA);
 
-          // Search for code label and mark the relative address as an opcode
-          boolean notFound = true;
-          for (int index = iter.getIndex() + 1, count = 1; count < command.getSize(); index++, count++)
+        // Search for code label and mark the relative address as an opcode
+        boolean notFound = true;
+        for (int index = iter.getIndex() + 1, count = 1; count < command.getSize(); index++, count++)
+        {
+          // TODO mh: move functionality to CommandBuffer: hasCodeLabel(int index)
+          if (commands.hasCodeLabel(commands.addressForIndex(index)))
           {
-            // TODO mh: move functionality to CommandBuffer: hasCodeLabel(int index)
-            if (commands.hasCodeLabel(commands.addressForIndex(index)))
-            {
-              change |= commands.setType(index, CodeType.OPCODE);
-              notFound = false;
-            }
-            else if (notFound)
-            {
-              // mark as data until first code label
-              change |= commands.setType(index, CodeType.DATA);
-            }
+            change |= commands.setType(index, CodeType.OPCODE);
+            notFound = false;
+          }
+          else if (notFound)
+          {
+            // mark as data until first code label
+            change |= commands.setType(index, CodeType.DATA);
           }
         }
-        if (hasConflictingDataLabel(commands, iter))
-        {
-          // TODO mh: what may be the source for this reference? Move all reference of conflicting labels?
-//          commands.addCodeReference(0, iter.getIndex());
-        }
-
       }
-//      else if (commands.hasDataLabel() && commands.getType().isUnknown())
-//      {
-//        // Mark all data label positions as data
-//        change |= commands.setType(CodeType.DATA);
-//      }
+      else if (hasConflictingDataLabel(commands, iter))
+      {
+        // TODO mh: what may be the source for this reference? Move all references of conflicting labels?
+//          commands.addCodeReference(0, iter.getIndex());
+      }
+//    else if (commands.hasDataLabel() && commands.getType().isUnknown())
+//    {
+//      // Mark all data label positions as data
+//      change |= commands.setType(CodeType.DATA);
+//    }
     }
 
     return change;
