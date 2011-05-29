@@ -102,7 +102,7 @@ public class JsrDetector implements IDetector
    * Build JSR cross reference.
    *
    * @param commands command buffer
-   * @return Absolute address to list of relative addresses of JSR to the absolute address
+   * @return Absolute address to list of relative addresses of JSR to that absolute address
    */
   protected Map<Integer, List<Integer>> crossReference(CommandBuffer commands)
   {
