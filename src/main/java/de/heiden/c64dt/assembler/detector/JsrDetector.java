@@ -86,9 +86,11 @@ public class JsrDetector implements IDetector
       for (int index : references)
       {
         int arguments = subroutine.getArguments();
+        CodeType type = subroutine.getType();
+
         if (arguments == 0)
         {
-          logger.debug("Known subroutine with zero terminated argument at address " + hexWord(address) + ", referenced at index " + hexWord(index));
+          logger.debug("Known subroutine with zero terminated argument (" + type + ") at address " + hexWord(address) + ", referenced at index " + hexWord(index));
 
           // search the zero which is terminating the argument
           int endIndex = search0(commands, index + 1, false);
@@ -97,14 +99,14 @@ public class JsrDetector implements IDetector
             continue;
           }
 
-          change |= markJSR(commands, index, endIndex, subroutine.getType());
+          change |= markJSR(commands, index, endIndex, type);
         }
         else if (arguments > 0)
         {
-          logger.debug("Known subroutine with " + arguments + " byte argument at address " + hexWord(address) + ", referenced at index " + hexWord(index));
+          logger.debug("Known subroutine with " + arguments + " byte argument (" + type + ") at address " + hexWord(address) + ", referenced at index " + hexWord(index));
 
           // fixed length argument
-          change |= markJSR(commands, index, index + 3 + arguments, subroutine.getType());
+          change |= markJSR(commands, index, index + 3 + arguments, type);
         }
         // else: "normal" subroutine
       }
@@ -177,7 +179,7 @@ public class JsrDetector implements IDetector
       count++;
     }
 
-    return createSubroutine(commands, "zero terminated argument", address, 0, CodeType.DATA, matches, unreachable, count);
+    return createSubroutine(commands, "zero terminated argument", address, 0, CodeType.DATA, matches, unreachable, count, true);
   }
 
   /**
@@ -213,24 +215,25 @@ public class JsrDetector implements IDetector
       count++;
     }
 
-    // set unreachable to number of matches, to disable unreachableRation
-    return createSubroutine(commands, "absolute address argument", address, 2, CodeType.ABSOLUTE_ADDRESS, matches, matches, count);
+    // disabled unreachableRatio for this case
+    return createSubroutine(commands, "absolute address argument", address, 2, CodeType.ABSOLUTE_ADDRESS, matches, unreachable, count, false);
   }
 
   /**
    * Create new subroutine, if condition matches.
    *
    * @param commands Command buffer
-   * @param kind Texttual description of argument type
+   * @param kind Textual description of argument type
    * @param address Absolute address of subroutine
    * @param arguments Number of argument bytes of subroutine
    * @param type Code Type of argument bytes
    * @param matches Number of matches
    * @param unreachable Number of unreachable code after JSR
    * @param count Total number of JSRs
+   * @param checkUnreachable Should unreachableRation be checked?
    * @return Subroutine or null, if condition does not match
    */
-  private Subroutine createSubroutine(CommandBuffer commands, String kind, int address, int arguments, CodeType type, int matches, int unreachable, int count)
+  private Subroutine createSubroutine(CommandBuffer commands, String kind, int address, int arguments, CodeType type, int matches, int unreachable, int count, boolean checkUnreachable)
   {
     if (matches == 0)
     {
@@ -241,7 +244,7 @@ public class JsrDetector implements IDetector
     // Check conditions
     double detectedUnreachableRatio = ((double) unreachable) / ((double) count);
     double detectedMatchRatio = ((double) matches) / ((double) count);
-    if (matches < minMatches || detectedUnreachableRatio < unreachableRatio || detectedMatchRatio < matchRatio)
+    if (matches < minMatches || checkUnreachable && detectedUnreachableRatio < unreachableRatio || detectedMatchRatio < matchRatio)
     {
       logger.debug("Potential subroutine with " + kind + " at address " + hexWord(address) + ": Probability " + matches + " (" + unreachable + ") / " + count);
       return null;
