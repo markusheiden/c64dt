@@ -85,7 +85,8 @@ public class JsrDetector implements IDetector
       // mark subroutine calls
       for (int index : references)
       {
-        if (subroutine.getArguments() == 0)
+        int arguments = subroutine.getArguments();
+        if (arguments == 0)
         {
           logger.debug("Known subroutine with zero terminated argument at address " + hexWord(address) + ", referenced at index " + hexWord(index));
 
@@ -98,12 +99,12 @@ public class JsrDetector implements IDetector
 
           change |= markJSR(commands, index, endIndex, subroutine.getType());
         }
-        else if (subroutine.getArguments() > 0)
+        else if (arguments > 0)
         {
-          logger.debug("Known subroutine with " + subroutine.getArguments() + " byte argument at address " + hexWord(address) + ", referenced at index " + hexWord(index));
+          logger.debug("Known subroutine with " + arguments + " byte argument at address " + hexWord(address) + ", referenced at index " + hexWord(index));
 
           // fixed length argument
-          change |= markJSR(commands, index, index + 3 + subroutine.getArguments(), subroutine.getType());
+          change |= markJSR(commands, index, index + 3 + arguments, subroutine.getType());
         }
         // else: "normal" subroutine
       }
