@@ -1,6 +1,8 @@
 package de.heiden.c64dt.assembler.detector;
 
+import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.assembler.CodeType;
+import de.heiden.c64dt.assembler.Opcode;
 import de.heiden.c64dt.assembler.OpcodeMode;
 import de.heiden.c64dt.assembler.OpcodeType;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
@@ -29,12 +31,28 @@ public class JsrDetector implements IDetector
   private final Logger logger = Logger.getLogger(getClass());
 
   /**
-   * Maximum length of zero-terminated argument after JSR opcode.
-   * <p/>
-   * TODO mh: make configurable?
+   * Minimum number of matches (check for expected argument type) to detect a new subroutine.
    */
-  @XmlAttribute(name = "max")
-  private final int maxLength = 256;
+  @XmlAttribute(name = "min-matches")
+  private int minMatches = 2;
+
+  /**
+   * Minimum ratio of unreachable code after JSR to detect a new subroutine.
+   */
+  @XmlAttribute(name = "unreachable-ration")
+  private double unreachableRatio = 0.2;
+
+  /**
+   * Minimum ratio of matches (check for expected argument type) to detect a new subroutine.
+   */
+  @XmlAttribute(name = "match-ration")
+  private double matchRatio = 0.8;
+
+  /**
+   * Maximum length of zero-terminated argument after JSR opcode.
+   */
+  @XmlAttribute(name = "max-length")
+  private int maxLength = 256;
 
   @Override
   public boolean detect(CommandBuffer commands)
@@ -48,40 +66,41 @@ public class JsrDetector implements IDetector
       List<Integer> references = crossReference.getValue();
 
       Subroutine subroutine = commands.getSubroutine(address);
-
-      for (int reference : references)
+      if (subroutine == null)
       {
-        if (subroutine == null)
-        {
-          // try automatic detection of zero-terminated argument
-          int endIndex = search0(commands, reference + 1, true);
-          if (endIndex < 0)
-          {
-            continue;
-          }
+        subroutine = detectZero(commands, address, references);
+      }
+      if (subroutine == null)
+      {
+        subroutine = detectAddress(commands, address, references);
+      }
+      if (subroutine == null)
+      {
+        continue;
+      }
 
-          logger.debug("Detected subroutine with zero terminated argument at address " + hexWord(address) + ", referenced at index " + hexWord(reference));
-          change |= markArgument(commands, reference, reference + 1, endIndex, CodeType.DATA);
-        }
-        else if (subroutine.getArguments() == 0)
+      // mark subroutine calls
+      for (int index : references)
+      {
+        if (subroutine.getArguments() == 0)
         {
-          logger.debug("Known subroutine with zero terminated argument at address " + hexWord(address) + ", referenced at index " + hexWord(reference));
+          logger.debug("Known subroutine with zero terminated argument at address " + hexWord(address) + ", referenced at index " + hexWord(index));
 
           // search the zero which is terminating the argument
-          int endIndex = search0(commands, reference + 1, false);
+          int endIndex = search0(commands, index + 1, false);
           if (endIndex < 0)
           {
             continue;
           }
 
-          change |= markArgument(commands, reference, reference + 1, endIndex, subroutine.getType());
+          change |= markJSR(commands, index, endIndex, subroutine.getType());
         }
         else if (subroutine.getArguments() > 0)
         {
-          logger.debug("Known subroutine with " + subroutine.getArguments() + " byte argument at address " + hexWord(address) + ", referenced at index " + hexWord(reference));
+          logger.debug("Known subroutine with " + subroutine.getArguments() + " byte argument at address " + hexWord(address) + ", referenced at index " + hexWord(index));
 
           // fixed length argument
-          change |= markArgument(commands, reference, reference + 1, reference + 1 + subroutine.getArguments(), subroutine.getType());
+          change |= markJSR(commands, index, index + 3 + subroutine.getArguments(), subroutine.getType());
         }
         // else: "normal" subroutine
       }
@@ -109,9 +128,8 @@ public class JsrDetector implements IDetector
       }
       OpcodeCommand opcodeCommand = (OpcodeCommand) command;
 
-      if (opcodeCommand.getOpcode().getType().equals(OpcodeType.JSR) &&
-        opcodeCommand.getOpcode().getMode().equals(OpcodeMode.ABS) &&
-        iter.hasNextCommand())
+      Opcode opcode = opcodeCommand.getOpcode();
+      if (command.isReachable() && opcode.getType().equals(OpcodeType.JSR) && opcode.getMode().equals(OpcodeMode.ABS) && iter.hasNextCommand())
       {
         int address = opcodeCommand.getArgument();
         List<Integer> references = result.get(address);
@@ -128,31 +146,94 @@ public class JsrDetector implements IDetector
   }
 
   /**
-   * Markus argument as data and following opcode as code.
+   * Detect yet unknown subroutines with zero terminated argument.
    *
    * @param commands command buffer
-   * @param index index of JSR
-   * @param startIndex index of data, argument
-   * @param endIndex end index of data (excl.), next opcode
-   * @param type Code type of argument
-   * @return whether a change has taken place
+   * @param address address of the subroutine
+   * @param references all references to that subroutine
+   * @return Subroutine or null, if no consistent type of subroutine could be detected
    */
-  private boolean markArgument(CommandBuffer commands, int index, int startIndex, int endIndex, CodeType type)
+  protected Subroutine detectZero(CommandBuffer commands, int address, List<Integer> references)
   {
-    if (!commands.hasIndex(endIndex))
+    int matches = 0;
+    int unreachable = 0;
+    int count = 0;
+    for (int index : references)
     {
-      return false;
+      // try automatic detection of zero-terminated argument
+      int endIndex = search0(commands, index + 1, true);
+      if (endIndex >= 0)
+      {
+        matches++;
+        if (!commands.getCommand(index + 3).isReachable())
+        {
+          unreachable++;
+        }
+      }
+      count++;
     }
 
-    // Add reference to make code after the argument reachable
-    // TODO mh: read absolute address from jsr?
-    commands.addCodeReference(index, commands.addressForIndex(endIndex));
+    return createSubroutine(commands, "zero terminated argument", address, 0, CodeType.DATA, matches, unreachable, count);
+  }
 
-    return
-      // Mark argument bytes as data
-      commands.setType(startIndex, endIndex, type) |
-        // At endIndex the code continues
-        commands.setType(endIndex, CodeType.OPCODE);
+  /**
+   * Detect yet unknown subroutines with absolute address argument.
+   *
+   * @param commands command buffer
+   * @param address address of the subroutine
+   * @param references all references to that subroutine
+   * @return Subroutine or null, if no consistent type of subroutine could be detected
+   */
+  protected Subroutine detectAddress(CommandBuffer commands, int address, List<Integer> references)
+  {
+    CodeBuffer buffer = new CodeBuffer(commands.getCode());
+
+    int matches = 0;
+    int unreachable = 0;
+    int count = 0;
+    for (int index : references)
+    {
+      buffer.setCurrentIndex(index);
+      if (buffer.has(3 + 2))
+      {
+        buffer.setCurrentIndex(index + 3);
+        if (commands.hasAddress(buffer.read(2)))
+        {
+          matches++;
+          if (!commands.getCommand(index + 3).isReachable())
+          {
+            unreachable++;
+          }
+        }
+      }
+      count++;
+    }
+
+    // set unreachable to number of matches, to disable unreachableRation
+    return createSubroutine(commands, "absolute address argument", address, 2, CodeType.ABSOLUTE_ADDRESS, matches, matches, count);
+  }
+
+  private Subroutine createSubroutine(CommandBuffer commands, String kind, int address, int arguments, CodeType type, int matches, int unreachable, int count)
+  {
+    if (matches == 0)
+    {
+      // nothing detected
+      return null;
+    }
+
+    double detectedUnreachableRatio = ((double) unreachable) / ((double) count);
+    double detectedMatchRatio = ((double) matches) / ((double) count);
+    if (matches < minMatches || detectedUnreachableRatio < unreachableRatio || detectedMatchRatio < matchRatio)
+    {
+      logger.debug("Potential subroutine with " + kind + " at address " + hexWord(address) + ": Probability " + matches + " (" + unreachable + ") / " + count);
+      return null;
+    }
+
+    logger.debug("Detected subroutine with " + kind + " at address " + hexWord(address) + ": Probability " + matches + " (" + unreachable + ") / " + count);
+    Subroutine result = new Subroutine(address, arguments, type);
+    commands.addSubroutine(result);
+
+    return result;
   }
 
   /**
@@ -196,5 +277,33 @@ public class JsrDetector implements IDetector
 
     // no valid zero-terminated argument found
     return -1;
+  }
+
+  /**
+   * Markus argument as data and following opcode as code.
+   *
+   * @param commands command buffer
+   * @param index index of JSR
+   * @param endIndex end index of data (excl.), next opcode
+   * @param type Code type of argument
+   * @return whether a change has taken place
+   */
+  private boolean markJSR(CommandBuffer commands, int index, int endIndex, CodeType type)
+  {
+    if (!commands.hasIndex(endIndex))
+    {
+      return false;
+    }
+
+    // Add reference to make code after the argument reachable
+    commands.addCodeReference(index, commands.addressForIndex(endIndex));
+
+    return
+      // Mark JSR as opcode
+      commands.setType(index, CodeType.OPCODE) |
+        // Mark argument bytes as data
+        commands.setType(index + 1, endIndex, type) |
+        // At endIndex the code continues
+        commands.setType(endIndex, CodeType.OPCODE);
   }
 }

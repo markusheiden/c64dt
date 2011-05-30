@@ -6,7 +6,7 @@
     <label/>
     <brk/>
     <bit/>
-    <jsr max="256"/>
+    <jsr match-ration="0.8" max-length="256" min-matches="2" unreachable-ration="0.2"/>
   </detectors>
   <commands>
     <code>
@@ -21,9 +21,6 @@
       <address base="8000" index="2000"/>
     </addresses>
     <subroutines>
-      <subroutine arguments="00" address="8763">DATA</subroutine>
-      <subroutine arguments="02" address="9F01">ABSOLUTE_ADDRESS</subroutine>
-      <subroutine arguments="02" address="9F03">DATA</subroutine>
     </subroutines>
     <types>
       <type end="0004" index="0000">ABSOLUTE_ADDRESS</type>
@@ -45,13 +42,21 @@
       <type index="01EC">OPCODE</type>
       <type index="0214">OPCODE</type>
       <type index="021A">OPCODE</type>
-      <type end="022F" index="021D">DATA</type>
+      <type end="022F" index="021B">DATA</type>
       <type index="022F">OPCODE</type>
-      <type end="023A" index="0238">DATA</type>
+      <type end="0238" index="0236">ABSOLUTE_ADDRESS</type>
+      <type index="0238">OPCODE</type>
+      <type index="0239">DATA</type>
       <type index="023A">OPCODE</type>
+      <type end="0247" index="0245">ABSOLUTE_ADDRESS</type>
+      <type index="0247">OPCODE</type>
       <type index="0250">OPCODE</type>
       <type index="0289">OPCODE</type>
+      <type end="0291" index="028F">ABSOLUTE_ADDRESS</type>
+      <type index="0291">OPCODE</type>
       <type index="0293">OPCODE</type>
+      <type end="0296" index="0294">ABSOLUTE_ADDRESS</type>
+      <type index="0296">OPCODE</type>
       <type index="0298">OPCODE</type>
       <type index="029B">OPCODE</type>
       <type index="02C1">OPCODE</type>
@@ -66,6 +71,8 @@
       <type index="030F">OPCODE</type>
       <type index="0318">OPCODE</type>
       <type index="0338">OPCODE</type>
+      <type end="0345" index="0343">ABSOLUTE_ADDRESS</type>
+      <type index="0345">OPCODE</type>
       <type index="0362">OPCODE</type>
       <type index="0364">OPCODE</type>
       <type index="037A">OPCODE</type>
@@ -134,22 +141,28 @@
       <type index="079B">OPCODE</type>
       <type index="07AD">OPCODE</type>
       <type index="07B2">OPCODE</type>
-      <type end="07E5" index="07B8">DATA</type>
+      <type end="07E5" index="07B6">DATA</type>
       <type end="07E7" index="07E5">OPCODE</type>
       <type index="07EA">OPCODE</type>
       <type index="07F5">OPCODE</type>
       <type index="07F9">OPCODE</type>
-      <type end="080B" index="0803">DATA</type>
+      <type end="0803" index="0801">ABSOLUTE_ADDRESS</type>
+      <type index="0803">OPCODE</type>
+      <type end="080B" index="0804">DATA</type>
       <type index="080B">OPCODE</type>
       <type index="0811">OPCODE</type>
       <type index="0816">OPCODE</type>
       <type index="0820">OPCODE</type>
-      <type end="08A1" index="086C">DATA</type>
+      <type end="086C" index="086A">ABSOLUTE_ADDRESS</type>
+      <type index="086C">OPCODE</type>
+      <type end="08A1" index="086D">DATA</type>
       <type index="08A1">OPCODE</type>
-      <type end="08B3" index="08A9">DATA</type>
+      <type end="08A9" index="08A7">ABSOLUTE_ADDRESS</type>
+      <type index="08A9">OPCODE</type>
+      <type end="08B3" index="08AA">DATA</type>
       <type index="08B3">OPCODE</type>
       <type index="08C1">OPCODE</type>
-      <type end="08DB" index="08C4">DATA</type>
+      <type end="08DB" index="08C2">DATA</type>
       <type index="08DB">OPCODE</type>
       <type end="08F1" index="08EF">OPCODE</type>
       <type index="08FC">OPCODE</type>
@@ -160,13 +173,15 @@
       <type index="094E">OPCODE</type>
       <type index="0957">OPCODE</type>
       <type index="095A">OPCODE</type>
-      <type end="0966" index="095D">DATA</type>
+      <type end="0966" index="095B">DATA</type>
       <type index="0966">OPCODE</type>
       <type index="096A">OPCODE</type>
-      <type end="0996" index="096D">DATA</type>
+      <type end="0996" index="096B">DATA</type>
       <type index="0996">OPCODE</type>
       <type index="0998">OPCODE</type>
-      <type end="09A4" index="099E">DATA</type>
+      <type end="099E" index="099C">ABSOLUTE_ADDRESS</type>
+      <type index="099E">OPCODE</type>
+      <type end="09A4" index="099F">DATA</type>
       <type end="09A6" index="09A4">OPCODE</type>
       <type index="09AE">OPCODE</type>
       <type index="09B0">OPCODE</type>
@@ -176,10 +191,10 @@
       <type index="0A00">OPCODE</type>
       <type index="0A02">OPCODE</type>
       <type index="0A19">OPCODE</type>
-      <type end="0A27" index="0A1C">DATA</type>
+      <type end="0A27" index="0A1A">DATA</type>
       <type index="0A27">OPCODE</type>
       <type index="0A2A">OPCODE</type>
-      <type end="0A34" index="0A2D">DATA</type>
+      <type end="0A34" index="0A2B">DATA</type>
       <type index="0A34">OPCODE</type>
       <type index="0A69">OPCODE</type>
       <type index="0A6D">OPCODE</type>
@@ -187,7 +202,11 @@
       <type index="0A7F">OPCODE</type>
       <type index="0A81">OPCODE</type>
       <type index="0A99">OPCODE</type>
+      <type end="0A9C" index="0A9A">ABSOLUTE_ADDRESS</type>
+      <type index="0A9C">OPCODE</type>
       <type index="0A9E">OPCODE</type>
+      <type end="0AA1" index="0A9F">ABSOLUTE_ADDRESS</type>
+      <type index="0AA1">OPCODE</type>
       <type index="0AA5">OPCODE</type>
       <type index="0AAA">OPCODE</type>
       <type index="0AAF">OPCODE</type>
@@ -218,6 +237,8 @@
       <type index="0B86">OPCODE</type>
       <type index="0B8E">OPCODE</type>
       <type index="0B9D">OPCODE</type>
+      <type end="0BA0" index="0B9E">ABSOLUTE_ADDRESS</type>
+      <type index="0BA0">OPCODE</type>
       <type index="0BBC">OPCODE</type>
       <type index="0BE6">OPCODE</type>
       <type index="0C0C">OPCODE</type>
@@ -225,6 +246,8 @@
       <type index="0C2E">OPCODE</type>
       <type index="0C33">OPCODE</type>
       <type index="0C4C">OPCODE</type>
+      <type end="0C71" index="0C6F">ABSOLUTE_ADDRESS</type>
+      <type index="0C71">OPCODE</type>
       <type index="0C7D">OPCODE</type>
       <type index="0C87">OPCODE</type>
       <type index="0CAA">OPCODE</type>
@@ -302,19 +325,23 @@
       <type index="1155">OPCODE</type>
       <type index="1159">OPCODE</type>
       <type index="1171">OPCODE</type>
-      <type end="11B5" index="11A7">DATA</type>
+      <type end="1194" index="1192">ABSOLUTE_ADDRESS</type>
+      <type index="1194">OPCODE</type>
+      <type end="11B5" index="119F">DATA</type>
       <type index="11B5">OPCODE</type>
       <type index="11B8">OPCODE</type>
       <type index="11BB">OPCODE</type>
       <type index="11C4">OPCODE</type>
       <type index="11CA">OPCODE</type>
-      <type end="11DD" index="11CE">DATA</type>
+      <type end="11CE" index="11CC">ABSOLUTE_ADDRESS</type>
+      <type index="11CE">OPCODE</type>
+      <type end="11DD" index="11CF">DATA</type>
       <type index="11DD">OPCODE</type>
       <type index="11E7">OPCODE</type>
       <type index="11E9">OPCODE</type>
       <type index="11EB">OPCODE</type>
       <type index="11ED">OPCODE</type>
-      <type end="1220" index="1210">DATA</type>
+      <type end="1220" index="120E">DATA</type>
       <type index="1220">OPCODE</type>
       <type index="1234">OPCODE</type>
       <type index="1236">OPCODE</type>
@@ -328,28 +355,34 @@
       <type index="128B">OPCODE</type>
       <type index="1295">OPCODE</type>
       <type index="1298">OPCODE</type>
-      <type end="12B8" index="12A4">DATA</type>
+      <type end="12A4" index="12A2">ABSOLUTE_ADDRESS</type>
+      <type index="12A4">OPCODE</type>
+      <type end="12B8" index="12A5">DATA</type>
       <type index="12B8">OPCODE</type>
       <type end="12DA" index="12B9">DATA</type>
       <type index="12DA">OPCODE</type>
+      <type end="12E2" index="12E0">ABSOLUTE_ADDRESS</type>
+      <type index="12E2">OPCODE</type>
       <type index="12E8">OPCODE</type>
       <type index="12F6">OPCODE</type>
       <type index="12F9">OPCODE</type>
       <type index="12FC">OPCODE</type>
-      <type end="1313" index="1302">DATA</type>
+      <type end="1313" index="1300">DATA</type>
       <type index="1313">OPCODE</type>
-      <type end="1333" index="1324">DATA</type>
+      <type end="1333" index="1322">DATA</type>
       <type index="1333">OPCODE</type>
       <type index="1337">OPCODE</type>
-      <type end="1344" index="1342">DATA</type>
+      <type end="1344" index="1338">DATA</type>
       <type index="1344">OPCODE</type>
       <type index="1348">OPCODE</type>
-      <type end="1364" index="1352">DATA</type>
+      <type end="1364" index="1350">DATA</type>
       <type index="1364">OPCODE</type>
       <type index="1368">OPCODE</type>
-      <type end="1379" index="1374">DATA</type>
+      <type end="1379" index="1369">DATA</type>
       <type index="1379">OPCODE</type>
       <type index="137B">OPCODE</type>
+      <type end="1380" index="137E">ABSOLUTE_ADDRESS</type>
+      <type index="1380">OPCODE</type>
       <type index="1382">OPCODE</type>
       <type index="13A1">OPCODE</type>
       <type index="140D">OPCODE</type>
@@ -357,6 +390,8 @@
       <type index="1420">OPCODE</type>
       <type index="1446">OPCODE</type>
       <type index="1449">OPCODE</type>
+      <type end="1452" index="1450">ABSOLUTE_ADDRESS</type>
+      <type index="1452">OPCODE</type>
       <type index="1459">DATA</type>
       <type index="145A">OPCODE</type>
       <type index="145E">OPCODE</type>
@@ -375,10 +410,10 @@
       <type index="14F9">OPCODE</type>
       <type index="14FC">DATA</type>
       <type index="14FD">OPCODE</type>
-      <type end="1541" index="1525">DATA</type>
+      <type end="1541" index="1523">DATA</type>
       <type index="1541">OPCODE</type>
       <type index="1552">OPCODE</type>
-      <type end="1564" index="1558">DATA</type>
+      <type end="1564" index="1553">DATA</type>
       <type index="1564">OPCODE</type>
       <type end="156A" index="1568">DATA</type>
       <type index="156A">OPCODE</type>
@@ -424,7 +459,7 @@
       <type index="1766">OPCODE</type>
       <type index="1772">OPCODE</type>
       <type index="1778">OPCODE</type>
-      <type end="1781" index="177B">DATA</type>
+      <type end="1781" index="1779">DATA</type>
       <type index="1781">OPCODE</type>
       <type index="1791">OPCODE</type>
       <type index="179C">OPCODE</type>
@@ -442,28 +477,32 @@
       <type index="1839">OPCODE</type>
       <type index="183C">OPCODE</type>
       <type index="184D">OPCODE</type>
-      <type end="1858" index="1850">DATA</type>
+      <type end="1858" index="184E">DATA</type>
       <type end="185A" index="1858">OPCODE</type>
       <type index="1860">OPCODE</type>
       <type index="1867">OPCODE</type>
       <type index="186A">OPCODE</type>
       <type index="1889">OPCODE</type>
       <type index="188F">OPCODE</type>
+      <type end="1895" index="1893">ABSOLUTE_ADDRESS</type>
+      <type index="1895">OPCODE</type>
       <type index="1898">OPCODE</type>
       <type index="189F">OPCODE</type>
       <type index="18AC">OPCODE</type>
       <type index="18B4">OPCODE</type>
       <type index="18B9">OPCODE</type>
       <type index="18BC">OPCODE</type>
-      <type end="18CF" index="18C2">DATA</type>
+      <type end="18CF" index="18BD">DATA</type>
       <type index="18CF">OPCODE</type>
       <type index="18DB">BIT</type>
       <type index="18DC">OPCODE</type>
       <type index="18DD">CODE</type>
-      <type end="18FB" index="18E9">DATA</type>
+      <type end="18FB" index="18E4">DATA</type>
       <type index="18FB">OPCODE</type>
       <type index="190D">OPCODE</type>
       <type index="1917">OPCODE</type>
+      <type end="191C" index="191A">ABSOLUTE_ADDRESS</type>
+      <type index="191C">OPCODE</type>
       <type index="1929">OPCODE</type>
       <type index="192C">OPCODE</type>
       <type index="1933">OPCODE</type>
@@ -572,6 +611,8 @@
       <type index="1F09">DATA</type>
       <type index="1F0A">OPCODE</type>
       <type index="1F26">OPCODE</type>
+      <type end="1F62" index="1F53">DATA</type>
+      <type index="1F62">OPCODE</type>
       <type index="1F77">OPCODE</type>
       <type index="1F81">OPCODE</type>
       <type index="1F86">OPCODE</type>
