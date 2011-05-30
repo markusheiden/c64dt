@@ -20,9 +20,15 @@ public class JsrDetectorTest
   public void testCrossReference()
   {
     CommandBuffer commands = new CommandBuffer(new byte[10], 0x1000);
-    commands.addCommand(new OpcodeCommand(Opcode.OPCODE_20, 0x1000));
-    commands.addCommand(new OpcodeCommand(Opcode.OPCODE_20, 0x1003));
-    commands.addCommand(new OpcodeCommand(Opcode.OPCODE_20, 0x1000));
+    OpcodeCommand jsr0 = new OpcodeCommand(Opcode.OPCODE_20, 0x1000);
+    jsr0.setReachable(true);
+    commands.addCommand(jsr0);
+    OpcodeCommand jsr3 = new OpcodeCommand(Opcode.OPCODE_20, 0x1003);
+    jsr3.setReachable(true);
+    commands.addCommand(jsr3);
+    OpcodeCommand jsr6 = new OpcodeCommand(Opcode.OPCODE_20, 0x1000);
+    jsr6.setReachable(true);
+    commands.addCommand(jsr6);
     commands.addCommand(new OpcodeCommand(Opcode.OPCODE_EA));
 
     JsrDetector detector = new JsrDetector();
