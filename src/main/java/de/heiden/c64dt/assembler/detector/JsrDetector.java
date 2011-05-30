@@ -28,6 +28,9 @@ import static de.heiden.c64dt.util.HexUtil.hexWord;
  */
 public class JsrDetector implements IDetector
 {
+  /**
+   * Logger.
+   */
   private final Logger logger = Logger.getLogger(getClass());
 
   /**
@@ -213,6 +216,19 @@ public class JsrDetector implements IDetector
     return createSubroutine(commands, "absolute address argument", address, 2, CodeType.ABSOLUTE_ADDRESS, matches, matches, count);
   }
 
+  /**
+   * Create new subroutine, if condition matches.
+   *
+   * @param commands Command buffer
+   * @param kind Texttual description of argument type
+   * @param address Absolute address of subroutine
+   * @param arguments Number of argument bytes of subroutine
+   * @param type Code Type of argument bytes
+   * @param matches Number of matches
+   * @param unreachable Number of unreachable code after JSR
+   * @param count Total number of JSRs
+   * @return Subroutine or null, if condition does not match
+   */
   private Subroutine createSubroutine(CommandBuffer commands, String kind, int address, int arguments, CodeType type, int matches, int unreachable, int count)
   {
     if (matches == 0)
@@ -221,6 +237,7 @@ public class JsrDetector implements IDetector
       return null;
     }
 
+    // Check conditions
     double detectedUnreachableRatio = ((double) unreachable) / ((double) count);
     double detectedMatchRatio = ((double) matches) / ((double) count);
     if (matches < minMatches || detectedUnreachableRatio < unreachableRatio || detectedMatchRatio < matchRatio)
@@ -229,6 +246,7 @@ public class JsrDetector implements IDetector
       return null;
     }
 
+    // Met all conditions -> create subroutine
     logger.debug("Detected subroutine with " + kind + " at address " + hexWord(address) + ": Probability " + matches + " (" + unreachable + ") / " + count);
     Subroutine result = new Subroutine(address, arguments, type);
     commands.addSubroutine(result);
@@ -280,11 +298,12 @@ public class JsrDetector implements IDetector
   }
 
   /**
-   * Markus argument as data and following opcode as code.
+   * Mark argument bytes of JSR.
+   * Adds a code reference from JSR to the opcode after the argument of the JSR for reachability.
    *
-   * @param commands command buffer
-   * @param index index of JSR
-   * @param endIndex end index of data (excl.), next opcode
+   * @param commands Command buffer
+   * @param index Relative address of JSR
+   * @param endIndex End index of data (excl.), next opcode
    * @param type Code type of argument
    * @return whether a change has taken place
    */
@@ -301,7 +320,7 @@ public class JsrDetector implements IDetector
     return
       // Mark JSR as opcode
       commands.setType(index, CodeType.OPCODE) |
-        // Mark argument bytes as data
+        // Mark argument bytes as the given code type
         commands.setType(index + 1, endIndex, type) |
         // At endIndex the code continues
         commands.setType(endIndex, CodeType.OPCODE);
