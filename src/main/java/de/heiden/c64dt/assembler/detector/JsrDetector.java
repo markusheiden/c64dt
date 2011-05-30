@@ -93,7 +93,7 @@ public class JsrDetector implements IDetector
           logger.debug("Known subroutine with zero terminated argument (" + type + ") at address " + hexWord(address) + ", referenced at index " + hexWord(index));
 
           // search the zero which is terminating the argument
-          int endIndex = search0(commands, index + 1, false);
+          int endIndex = search0(commands, index + 3, false);
           if (endIndex < 0)
           {
             continue;
@@ -167,7 +167,7 @@ public class JsrDetector implements IDetector
     for (int index : references)
     {
       // try automatic detection of zero-terminated argument
-      int endIndex = search0(commands, index + 1, true);
+      int endIndex = search0(commands, index + 3, true);
       if (endIndex >= 0)
       {
         matches++;
