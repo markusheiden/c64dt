@@ -129,7 +129,7 @@ public class GotoActions
     int jumpIndex = commands.indexForAddress(address);
     int jumpRow = model.getRow(jumpIndex);
     table.scrollRectToVisible(getRowBounds(table, jumpRow));
-    table.setEditingRow(jumpRow);
+    table.getSelectionModel().setSelectionInterval(jumpRow, jumpRow);
   }
 
   /**
