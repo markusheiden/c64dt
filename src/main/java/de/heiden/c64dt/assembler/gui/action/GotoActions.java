@@ -23,25 +23,20 @@ public class GotoActions
   private final JTable table;
 
   /**
+   * Action "Go to".
+   */
+  private final Action gotoAction;
+
+  /**
    * Constructor.
    *
    * @param table The table this action works on
    */
-  public GotoActions(JTable table)
+  public GotoActions(final JTable table)
   {
     this.table = table;
-  }
 
-  /**
-   * Add the actions to a menu.
-   *
-   * @param menu Menu
-   */
-  public void addToMenu(JPopupMenu menu)
-  {
-    final Action gotoAction = gotoAction();
-
-    menu.add(gotoAction);
+    gotoAction = createGotoAction();
 
     table.getSelectionModel().addListSelectionListener(new ListSelectionListener()
     {
@@ -66,9 +61,20 @@ public class GotoActions
   }
 
   /**
+   * Add the actions to a menu.
+   *
+   * @param menu Menu
+   */
+  public void addToMenu(JPopupMenu menu)
+  {
+    menu.add(gotoAction);
+
+  }
+
+  /**
    * Create action "Go to".
    */
-  public Action gotoAction()
+  private Action createGotoAction()
   {
     return new AbstractAction("Go to")
     {

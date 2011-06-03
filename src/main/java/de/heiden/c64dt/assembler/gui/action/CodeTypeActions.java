@@ -21,31 +21,38 @@ public class CodeTypeActions
   private final JTable table;
 
   /**
+   * Action "Mark as unknown".
+   */
+  private final Action markAsUnknownAction;
+
+  /**
+   * Action "Mark as code".
+   */
+  private final Action markAsCodeAction;
+
+  /**
+   * Action "Mark as data".
+   */
+  private final Action markAsDataAction;
+
+  /**
+   * Action "Mark as absolute address".
+   */
+  private final Action markAsAbsoluteAddressAction;
+
+  /**
    * Constructor.
    *
    * @param table The table this action works on
    */
-  public CodeTypeActions(JTable table)
+  public CodeTypeActions(final JTable table)
   {
     this.table = table;
-  }
 
-  /**
-   * Add the actions to a menu.
-   *
-   * @param menu Menu
-   */
-  public void addToMenu(JPopupMenu menu)
-  {
-    final Action markAsUnknownAction = markAsUnknown();
-    final Action markAsCodeAction = markAsCode();
-    final Action markAsDataAction = markAsData();
-    final Action markAsAbsoluteAddressAction = markAsAbsoluteAddress();
-
-    menu.add(markAsUnknownAction);
-    menu.add(markAsCodeAction);
-    menu.add(markAsDataAction);
-    menu.add(markAsAbsoluteAddressAction);
+    markAsUnknownAction = createMarkAsUnknownAction();
+    markAsCodeAction = createMarkAsCodeAction();
+    markAsDataAction = createMarkAsDataAction();
+    markAsAbsoluteAddressAction = createMarkAsAbsoluteAddressAction();
 
     table.getSelectionModel().addListSelectionListener(new ListSelectionListener()
     {
@@ -62,9 +69,22 @@ public class CodeTypeActions
   }
 
   /**
+   * Add the actions to a menu.
+   *
+   * @param menu Menu
+   */
+  public void addToMenu(JPopupMenu menu)
+  {
+    menu.add(markAsUnknownAction);
+    menu.add(markAsCodeAction);
+    menu.add(markAsDataAction);
+    menu.add(markAsAbsoluteAddressAction);
+  }
+
+  /**
    * Create action "Mark as unknown".
    */
-  public Action markAsUnknown()
+  private Action createMarkAsUnknownAction()
   {
     return new AbstractAction("Mark as unknown")
     {
@@ -79,7 +99,7 @@ public class CodeTypeActions
   /**
    * Create action "Mark as code".
    */
-  public Action markAsCode()
+  private Action createMarkAsCodeAction()
   {
     return new AbstractAction("Mark as code")
     {
@@ -94,7 +114,7 @@ public class CodeTypeActions
   /**
    * Create action "Mark as data".
    */
-  public Action markAsData()
+  private Action createMarkAsDataAction()
   {
     return new AbstractAction("Mark as data")
     {
@@ -109,7 +129,7 @@ public class CodeTypeActions
   /**
    * Create action "Mark as absolute address".
    */
-  public Action markAsAbsoluteAddress()
+  private Action createMarkAsAbsoluteAddressAction()
   {
     return new AbstractAction("Mark as absolute address")
     {

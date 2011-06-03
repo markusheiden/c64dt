@@ -20,6 +20,9 @@ public class CodeView
    */
   private CodeTableModel model;
 
+  /**
+   * Context menu.
+   */
   private JPopupMenu contextMenu;
 
   /**
@@ -59,6 +62,7 @@ public class CodeView
 
     contextMenu = new JPopupMenu();
     new GotoActions(table).addToMenu(contextMenu);
+    contextMenu.add(new JSeparator());
     new CodeTypeActions(table).addToMenu(contextMenu);
 
     table.addMouseListener(new MouseAdapter()
