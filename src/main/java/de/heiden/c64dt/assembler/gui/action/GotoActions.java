@@ -68,7 +68,6 @@ public class GotoActions
   public void addToMenu(JPopupMenu menu)
   {
     menu.add(gotoAction);
-
   }
 
   /**
@@ -89,12 +88,13 @@ public class GotoActions
   /**
    * Goto destination (address) of an opcode.
    *
-   * @param row Row in which the event has been triggered
+   * @param row Row in which the event has been triggered or -1
    */
   private void gotoDestination(int row)
   {
     if (row < 0)
     {
+      // now row -> no jump
       return;
     }
 
@@ -102,21 +102,31 @@ public class GotoActions
     CommandBuffer commands = model.getReassembler().getCommands();
 
     int index = model.getIndex(row);
-    ICommand command = commands.getCommand(index);
-    if (command instanceof OpcodeCommand)
-    {
-      OpcodeCommand opcodeCommand = (OpcodeCommand) command;
-      if (opcodeCommand.getOpcode().getMode().isAddress())
-      {
-        int address = opcodeCommand.getArgument();
-        if (commands.hasAddress(address))
-        {
-          int jumpIndex = commands.indexForAddress(address);
-          int jumpRow = model.getRow(jumpIndex);
-          table.scrollRectToVisible(table.getCellRect(jumpRow, 1, true));
-        }
-      }
-    }
-  }
 
+    // just works for opcodes
+    ICommand command = commands.getCommand(index);
+    if (!(command instanceof OpcodeCommand))
+    {
+      return;
+    }
+
+    // just works for opcodes with an address
+    OpcodeCommand opcodeCommand = (OpcodeCommand) command;
+    if (!opcodeCommand.getOpcode().getMode().isAddress())
+    {
+      return;
+    }
+
+    // check if address is known
+    int address = opcodeCommand.getArgument();
+    if (!commands.hasAddress(address))
+    {
+      return;
+    }
+
+    // do the jump
+    int jumpIndex = commands.indexForAddress(address);
+    int jumpRow = model.getRow(jumpIndex);
+    table.scrollRectToVisible(table.getCellRect(jumpRow, 1, true));
+  }
 }
