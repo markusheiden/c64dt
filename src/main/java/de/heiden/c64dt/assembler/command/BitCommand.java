@@ -44,12 +44,6 @@ public class BitCommand extends AbstractCommand
   }
 
   @Override
-  public boolean combineWith(ICommand command)
-  {
-    return false;
-  }
-
-  @Override
   public String toString(CommandBuffer buffer)
   {
     Assert.notNull(buffer, "Precondition: buffer != null");

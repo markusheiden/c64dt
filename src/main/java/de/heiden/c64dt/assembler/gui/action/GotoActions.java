@@ -113,13 +113,13 @@ public class GotoActions
 
     // just works for opcodes with an address
     OpcodeCommand opcodeCommand = (OpcodeCommand) command;
-    if (!opcodeCommand.getOpcode().getMode().isAddress())
+    if (!opcodeCommand.isArgumentAddress())
     {
       return;
     }
 
     // check if address is known
-    int address = opcodeCommand.getOpcode().getMode().getAddress(opcodeCommand.getAddress(), opcodeCommand.getArgument());
+    int address = opcodeCommand.getArgumentAddress();
     if (!commands.hasAddress(address))
     {
       return;

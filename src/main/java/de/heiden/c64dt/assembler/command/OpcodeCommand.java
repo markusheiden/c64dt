@@ -50,11 +50,17 @@ public class OpcodeCommand extends AbstractCommand
 
   }
 
+  /**
+   * Opcode.
+   */
   public Opcode getOpcode()
   {
     return opcode;
   }
 
+  /**
+   * Argument for opcode, if any.
+   */
   public int getArgument()
   {
     Assert.isTrue(getSize() > 1, "Precondition: getSize() > 1");
@@ -62,20 +68,38 @@ public class OpcodeCommand extends AbstractCommand
     return argument;
   }
 
+  /**
+   * Is the argument an (absolute) address?
+   */
+  public boolean isArgumentAddress()
+  {
+    return opcode.getMode().isAddress();
+  }
+
+  /**
+   * Get the opcode argument as absolute address.
+   */
+  public int getArgumentAddress()
+  {
+    Assert.isTrue(isArgumentAddress(), "Precondition: isArgumentAddress()");
+
+    return opcode.getMode().getAddress(getAddress(), getArgument());
+  }
+
+  /**
+   * Size of opcode including the argument.
+   */
   public final int getSize()
   {
     return size;
   }
 
+  /**
+   * Does the control flow may not reach the opcode directly after this opcode?
+   */
   public final boolean isEnd()
   {
     return end;
-  }
-
-  public boolean combineWith(ICommand command)
-  {
-    // no combine support needed yet
-    return false;
   }
 
   public String toString(CommandBuffer buffer)

@@ -60,4 +60,11 @@ public abstract class AbstractCommand implements ICommand
   {
     this.reachable = reachable;
   }
+
+  @Override
+  public boolean combineWith(ICommand command)
+  {
+    // Default implementation: No combine support.
+    return false;
+  }
 }

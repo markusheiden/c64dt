@@ -43,12 +43,6 @@ public class DummyCommand extends AbstractCommand
   }
 
   @Override
-  public boolean combineWith(ICommand command)
-  {
-    return false;
-  }
-
-  @Override
   public String toString(CommandBuffer buffer)
   {
     throw new UnsupportedOperationException();
