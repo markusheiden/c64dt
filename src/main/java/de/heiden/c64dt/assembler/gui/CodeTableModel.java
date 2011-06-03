@@ -28,6 +28,7 @@ public class CodeTableModel extends DefaultTableModel
    * Mapping from row to relative address of the code shown in that row.
    */
   private final Map<Integer, Integer> rowToIndex = new HashMap<Integer, Integer>();
+  private final Map<Integer, Integer> indexToRow = new HashMap<Integer, Integer>();
 
   /**
    * Constructor.
@@ -70,6 +71,7 @@ public class CodeTableModel extends DefaultTableModel
     // Clear old model
     setRowCount(0);
     rowToIndex.clear();
+    indexToRow.clear();
 
     // no model -> no representation
     if (reassembler == null)
@@ -154,6 +156,7 @@ public class CodeTableModel extends DefaultTableModel
   private void addRow(int index, String flags, int address, String bytes, String label, String code)
   {
     rowToIndex.put(getRowCount(), index);
+    indexToRow.put(index, getRowCount());
     addRow(new Object[]{flags, hexWordPlain(address), bytes, label, code});
   }
 
@@ -165,5 +168,15 @@ public class CodeTableModel extends DefaultTableModel
   public Integer getIndex(int row)
   {
     return rowToIndex.get(row);
+  }
+
+  /**
+   * The row in which the relative address is shown.
+   *
+   * @param index Index
+   */
+  public Integer getRow(int index)
+  {
+    return indexToRow.get(index);
   }
 }

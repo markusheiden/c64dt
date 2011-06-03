@@ -6,6 +6,8 @@ import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.gui.CodeTableModel;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 
 /**
@@ -14,89 +16,107 @@ import java.awt.event.ActionEvent;
 public class CodeTypeActions
 {
   /**
+   * The table.
+   */
+  private final JTable table;
+
+  /**
+   * Constructor.
+   *
+   * @param table The table this action works on
+   */
+  public CodeTypeActions(JTable table)
+  {
+    this.table = table;
+  }
+
+  /**
    * Add the actions to a menu.
    *
    * @param menu Menu
-   * @param table The table this action works on
    */
-  public static void addToMenu(JPopupMenu menu, final JTable table)
+  public void addToMenu(JPopupMenu menu)
   {
-    if (table.getSelectedRowCount() == 0)
-    {
-      // No selection -> no actions possible
-      return;
-    }
+    final Action markAsUnknownAction = markAsUnknown();
+    final Action markAsCodeAction = markAsCode();
+    final Action markAsDataAction = markAsData();
+    final Action markAsAbsoluteAddressAction = markAsAbsoluteAddress();
 
-    menu.add(markAsUnknown(table));
-    menu.add(markAsCode(table));
-    menu.add(markAsData(table));
-    menu.add(markAsAbsoluteAddress(table));
+    menu.add(markAsUnknownAction);
+    menu.add(markAsCodeAction);
+    menu.add(markAsDataAction);
+    menu.add(markAsAbsoluteAddressAction);
+
+    table.getSelectionModel().addListSelectionListener(new ListSelectionListener()
+    {
+      @Override
+      public void valueChanged(ListSelectionEvent listSelectionEvent)
+      {
+        boolean isSelection = table.getSelectedRowCount() > 0;
+        markAsUnknownAction.setEnabled(isSelection);
+        markAsCodeAction.setEnabled(isSelection);
+        markAsDataAction.setEnabled(isSelection);
+        markAsAbsoluteAddressAction.setEnabled(isSelection);
+      }
+    });
   }
 
   /**
    * Create action "Mark as unknown".
-   *
-   * @param table The table this action works on
    */
-  public static Action markAsUnknown(final JTable table)
+  public Action markAsUnknown()
   {
     return new AbstractAction("Mark as unknown")
     {
       @Override
       public void actionPerformed(ActionEvent actionEvent)
       {
-        mark(table, CodeType.UNKNOWN);
+        mark(CodeType.UNKNOWN);
       }
     };
   }
 
   /**
    * Create action "Mark as code".
-   *
-   * @param table The table this action works on
    */
-  public static Action markAsCode(final JTable table)
+  public Action markAsCode()
   {
     return new AbstractAction("Mark as code")
     {
       @Override
       public void actionPerformed(ActionEvent actionEvent)
       {
-        mark(table, CodeType.CODE);
+        mark(CodeType.CODE);
       }
     };
   }
 
   /**
    * Create action "Mark as data".
-   *
-   * @param table The table this action works on
    */
-  public static Action markAsData(final JTable table)
+  public Action markAsData()
   {
     return new AbstractAction("Mark as data")
     {
       @Override
       public void actionPerformed(ActionEvent actionEvent)
       {
-        mark(table, CodeType.DATA);
+        mark(CodeType.DATA);
       }
     };
   }
 
   /**
    * Create action "Mark as absolute address".
-   *
-   * @param table The table this action works on
    */
-  public static Action markAsAbsoluteAddress(final JTable table)
+  public Action markAsAbsoluteAddress()
   {
     return new AbstractAction("Mark as absolute address")
     {
       @Override
       public void actionPerformed(ActionEvent actionEvent)
       {
-        mark(table, CodeType.ABSOLUTE_ADDRESS);
+        mark(CodeType.ABSOLUTE_ADDRESS);
       }
     };
   }
@@ -104,10 +124,9 @@ public class CodeTypeActions
   /**
    * Marks the code with the given code type.
    *
-   * @param table The table
    * @param type Code type
    */
-  private static void mark(JTable table, CodeType type)
+  private void mark(CodeType type)
   {
     CodeTableModel model = (CodeTableModel) table.getModel();
     CommandBuffer commands = model.getReassembler().getCommands();

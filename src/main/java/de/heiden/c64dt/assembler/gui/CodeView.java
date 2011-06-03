@@ -2,6 +2,7 @@ package de.heiden.c64dt.assembler.gui;
 
 import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.assembler.gui.action.CodeTypeActions;
+import de.heiden.c64dt.assembler.gui.action.GotoActions;
 import org.springframework.util.Assert;
 
 import javax.swing.*;
@@ -18,6 +19,8 @@ public class CodeView
    * Model.
    */
   private CodeTableModel model;
+
+  private JPopupMenu contextMenu;
 
   /**
    * Constructor.
@@ -54,6 +57,10 @@ public class CodeView
     table.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
     table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
+    contextMenu = new JPopupMenu();
+    new GotoActions(table).addToMenu(contextMenu);
+    new CodeTypeActions(table).addToMenu(contextMenu);
+
     table.addMouseListener(new MouseAdapter()
     {
       @Override
@@ -73,24 +80,10 @@ public class CodeView
         }
 
         // show (dynamic) context menu
-        createContextMenu(table).show(table, e.getX(), e.getY());
+        contextMenu.show(table, e.getX(), e.getY());
       }
     });
 
     return new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-  }
-
-  /**
-   * Create context menu.
-   *
-   * @param table The table the action work on
-   */
-  private JPopupMenu createContextMenu(JTable table)
-  {
-    JPopupMenu contextMenu = new JPopupMenu();
-
-    CodeTypeActions.addToMenu(contextMenu, table);
-
-    return contextMenu;
   }
 }
