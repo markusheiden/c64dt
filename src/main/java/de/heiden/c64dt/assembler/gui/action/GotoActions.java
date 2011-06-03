@@ -127,6 +127,11 @@ public class GotoActions
 
     // do the jump
     int jumpIndex = commands.indexForAddress(address);
+    if (jumpIndex < 0)
+    {
+      return;
+    }
+
     int jumpRow = model.getRow(jumpIndex);
     table.scrollRectToVisible(getRowBounds(table, jumpRow));
     table.getSelectionModel().setSelectionInterval(jumpRow, jumpRow);
