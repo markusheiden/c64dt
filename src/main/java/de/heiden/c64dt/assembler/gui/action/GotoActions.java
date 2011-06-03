@@ -119,7 +119,7 @@ public class GotoActions
     }
 
     // check if address is known
-    int address = opcodeCommand.getArgument();
+    int address = opcodeCommand.getOpcode().getMode().getAddress(opcodeCommand.getAddress(), opcodeCommand.getArgument());
     if (!commands.hasAddress(address))
     {
       return;
