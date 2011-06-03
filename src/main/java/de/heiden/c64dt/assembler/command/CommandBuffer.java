@@ -233,7 +233,7 @@ public class CommandBuffer
    * Compute relative address from absolute address.
    *
    * @param address absolute address
-   * @return relative address
+   * @return relative address or -1, if not found
    */
   public int indexForAddress(int address)
   {
