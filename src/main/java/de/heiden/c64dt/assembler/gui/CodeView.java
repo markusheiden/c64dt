@@ -6,6 +6,7 @@ import de.heiden.c64dt.assembler.gui.action.GotoActions;
 import org.springframework.util.Assert;
 
 import javax.swing.*;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -52,11 +53,12 @@ public class CodeView
   {
     final JTable table = new JTable(model);
     table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-    table.getColumnModel().getColumn(0).setMaxWidth(40);
-    table.getColumnModel().getColumn(1).setMaxWidth(40);
-    table.getColumnModel().getColumn(2).setPreferredWidth(100);
-    table.getColumnModel().getColumn(3).setMaxWidth(100);
-    table.getColumnModel().getColumn(4).setPreferredWidth(200);
+    TableColumnModel columnModel = table.getColumnModel();
+    columnModel.getColumn(0).setMaxWidth(40);
+    columnModel.getColumn(1).setMaxWidth(40);
+    columnModel.getColumn(2).setPreferredWidth(100);
+    columnModel.getColumn(3).setMaxWidth(100);
+    columnModel.getColumn(4).setPreferredWidth(200);
     table.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
     table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
