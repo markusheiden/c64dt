@@ -1,16 +1,11 @@
 package de.heiden.c64dt.assembler.gui;
 
 import de.heiden.c64dt.assembler.Reassembler;
-import de.heiden.c64dt.assembler.command.CommandBuffer;
 import org.springframework.util.Assert;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.util.SortedSet;
-
-import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
 
 /**
  * View for cross reference of current opcode.
@@ -20,21 +15,14 @@ public class CrossReferenceView
   /**
    * Model.
    */
-  private DefaultTableModel model;
-
-  /**
-   * Underlying representation: the reassembler.
-   */
-  private Reassembler reassembler;
+  private CrossReferenceTableModel model;
 
   /**
    * Constructor.
    */
   public CrossReferenceView()
   {
-    this.model = new DefaultTableModel();
-    model.addColumn("Index");
-    model.addColumn("Addr");
+    this.model = new CrossReferenceTableModel();
   }
 
   /**
@@ -46,7 +34,7 @@ public class CrossReferenceView
   {
     Assert.notNull(reassembler, "Precondition: reassembler != null");
 
-    this.reassembler = reassembler;
+    model.use(reassembler);
   }
 
   /**
@@ -56,19 +44,7 @@ public class CrossReferenceView
    */
   public void select(int index)
   {
-    model.setRowCount(0);
-    if (index < 0)
-    {
-      // no row selected -> display nothing
-      return;
-    }
-
-    CommandBuffer commands = reassembler.getCommands();
-    SortedSet<Integer> references = commands.getReferences(commands.addressForIndex(index));
-    for (Integer reference : references)
-    {
-      model.addRow(new Object[]{hexWordPlain(reference), hexWordPlain(commands.addressForIndex(reference))});
-    }
+    model.select(index);
   }
 
   /**

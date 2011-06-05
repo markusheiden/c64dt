@@ -79,7 +79,6 @@ public class CodeTableModel extends DefaultTableModel
       return;
     }
 
-    reassembler.reassemble();
     CommandBuffer commands = reassembler.getCommands();
 
     StringBuilder builder = new StringBuilder();
