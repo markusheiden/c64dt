@@ -325,7 +325,7 @@ public class JsrDetector implements IDetector
       // Mark JSR as opcode
       commands.setType(index, CodeType.OPCODE) |
         // Mark argument bytes as the given code type
-        commands.setType(index + 1, endIndex, type) |
+        commands.setType(index + 3, endIndex, type) |
         // At endIndex the code continues
         commands.setType(endIndex, CodeType.OPCODE);
   }
