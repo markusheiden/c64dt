@@ -3,13 +3,19 @@ package de.heiden.c64dt.assembler.gui;
 import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.assembler.gui.action.CodeTypeActions;
 import de.heiden.c64dt.assembler.gui.action.GotoActions;
+import de.heiden.c64dt.assembler.gui.event.AddressChangedEvent;
+import de.heiden.c64dt.assembler.gui.event.AddressChangedListener;
 import org.springframework.util.Assert;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * View for reassembled code.
@@ -27,11 +33,39 @@ public class CodeView
   private JPopupMenu contextMenu;
 
   /**
+   * Listeners for {@link de.heiden.c64dt.assembler.gui.event.AddressChangedEvent}s.
+   */
+  private final List<AddressChangedListener> addressChangedListeners = new ArrayList<AddressChangedListener>();
+
+  /**
    * Constructor.
    */
   public CodeView()
   {
     model = new CodeTableModel();
+  }
+
+  /**
+   * Add a listener for {@AddressChangedEvent}s.
+   *
+   * @param listener listener
+   */
+  public void add(AddressChangedListener listener)
+  {
+    addressChangedListeners.add(listener);
+  }
+
+  /**
+   * Notify all listener of an address change.
+   *
+   * @param event Address changed event
+   */
+  private void notifyAddressChangedListeners(AddressChangedEvent event)
+  {
+    for (AddressChangedListener listener : addressChangedListeners)
+    {
+      listener.addressChanged(event);
+    }
   }
 
   /**
@@ -49,11 +83,8 @@ public class CodeView
   /**
    * Create GUI representation.
    */
-  public JInternalFrame createComponent()
+  public JComponent createComponent()
   {
-    JInternalFrame frame = new JInternalFrame("Code");
-    frame.setVisible(true);
-
     final JTable table = new JTable(model);
     table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
     TableColumnModel columnModel = table.getColumnModel();
@@ -93,8 +124,16 @@ public class CodeView
       }
     });
 
-    frame.add(new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS));
+    table.getSelectionModel().addListSelectionListener(new ListSelectionListener()
+    {
+      @Override
+      public void valueChanged(ListSelectionEvent listSelectionEvent)
+      {
+        notifyAddressChangedListeners(new AddressChangedEvent(this,
+          table.getSelectedRow() >= 0? model.getIndex(table.getSelectedRow()) : -1));
+      }
+    });
 
-    return frame;
+    return new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
   }
 }

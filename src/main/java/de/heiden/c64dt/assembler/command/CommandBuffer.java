@@ -15,7 +15,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
 
@@ -534,6 +536,30 @@ public class CommandBuffer
     externalLabels.put(to, new ExternalLabel(to));
     // add reference
     externalReferences[fromIndex] = to;
+  }
+
+  /**
+   * Get all references to an address.
+   *
+   * @param address Absolute address
+   */
+  public SortedSet<Integer> getReferences(int address)
+  {
+    SortedSet<Integer> result = new TreeSet<Integer>();
+    for (int i = 0; i < code.length; i++)
+    {
+      if (codeReferences[i] == address)
+      {
+        result.add(i);
+      }
+      else if (dataReferences[i] == address)
+      {
+        result.add(i);
+      }
+      // external references are not needed, because they do never point into the reassembled code
+    }
+
+    return result;
   }
 
   /**

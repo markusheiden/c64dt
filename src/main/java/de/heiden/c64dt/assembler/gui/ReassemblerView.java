@@ -2,6 +2,8 @@ package de.heiden.c64dt.assembler.gui;
 
 import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.assembler.ReassemblerMapper;
+import de.heiden.c64dt.assembler.gui.event.AddressChangedEvent;
+import de.heiden.c64dt.assembler.gui.event.AddressChangedListener;
 import org.apache.log4j.Logger;
 import org.springframework.util.Assert;
 
@@ -36,6 +38,11 @@ public class ReassemblerView extends JFrame
   private final CodeView code;
 
   /**
+   * Cross reference.
+   */
+  private final CrossReferenceView crossReference;
+
+  /**
    * Constructor.
    */
   public ReassemblerView()
@@ -43,14 +50,36 @@ public class ReassemblerView extends JFrame
     setTitle("C64 Reassembler");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    setLayout(new BorderLayout());
+    JSplitPane main = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+    add(main);
 
     //
     // Reassembled code
     //
 
     code = new CodeView();
-    add(code.createComponent(), BorderLayout.CENTER);
+    main.setRightComponent(code.createComponent());
+
+    //
+    // Helper views
+    //
+
+    JPanel helperPane = new JPanel();
+    helperPane.setLayout(new GridLayout(2, 1));
+    main.setLeftComponent(helperPane);
+
+    helperPane.add(new JPanel());
+
+    crossReference = new CrossReferenceView();
+    code.add(new AddressChangedListener()
+    {
+      @Override
+      public void addressChanged(AddressChangedEvent event)
+      {
+        crossReference.select(event.getIndex());
+      }
+    });
+    helperPane.add(crossReference.createComponent());
 
     //
     // Menu bar
@@ -96,7 +125,9 @@ public class ReassemblerView extends JFrame
 
     this.currentFile = null;
     this.reassembler = reassembler;
+
     code.use(reassembler);
+    crossReference.use(reassembler);
   }
 
   /**
