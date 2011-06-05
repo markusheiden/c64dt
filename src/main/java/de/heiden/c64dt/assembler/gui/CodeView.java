@@ -49,8 +49,11 @@ public class CodeView
   /**
    * Create GUI representation.
    */
-  public JComponent createComponent()
+  public JInternalFrame createComponent()
   {
+    JInternalFrame frame = new JInternalFrame("Code");
+    frame.setVisible(true);
+
     final JTable table = new JTable(model);
     table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
     TableColumnModel columnModel = table.getColumnModel();
@@ -90,6 +93,8 @@ public class CodeView
       }
     });
 
-    return new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    frame.add(new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS));
+
+    return frame;
   }
 }
