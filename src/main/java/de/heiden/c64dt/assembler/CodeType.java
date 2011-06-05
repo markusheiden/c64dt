@@ -8,32 +8,55 @@ public enum CodeType
   /**
    * Type of code is not known yet.
    */
-  UNKNOWN,
+  UNKNOWN("U"),
 
   /**
    * Declares that at this position should start an opcode.
    */
-  OPCODE,
+  OPCODE("O"),
 
   /**
    * Declares that at this position is code (opcode or argument).
    */
-  CODE,
+  CODE("C"),
 
   /**
    * Data.
    */
-  DATA,
+  DATA("D"),
 
   /**
    * Bit to skip next command.
    */
-  BIT,
+  BIT("B"),
 
   /**
    * Absolute Address.
    */
-  ABSOLUTE_ADDRESS;
+  ADDRESS("A");
+
+  /**
+   * ID.
+   */
+  private final String id;
+
+  /**
+   * Constructor.
+   *
+   * @param id ID
+   */
+  private CodeType(String id)
+  {
+    this.id = id;
+  }
+
+  /**
+   * ID.
+   */
+  public String getId()
+  {
+    return id;
+  }
 
   /**
    * Is the code type unknown?.
@@ -56,6 +79,6 @@ public enum CodeType
    */
   public final boolean isData()
   {
-    return this == DATA || this == ABSOLUTE_ADDRESS;
+    return this == DATA || this == ADDRESS;
   }
 }

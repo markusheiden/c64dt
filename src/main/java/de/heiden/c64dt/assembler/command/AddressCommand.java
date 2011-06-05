@@ -27,7 +27,7 @@ public class AddressCommand extends AbstractCommand
    */
   public AddressCommand(int address)
   {
-    super(CodeType.ABSOLUTE_ADDRESS);
+    super(CodeType.ADDRESS);
 
     this.address = address;
   }

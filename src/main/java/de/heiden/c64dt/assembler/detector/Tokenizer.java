@@ -53,7 +53,7 @@ public class Tokenizer implements IDetector
           commands.addCommand(new DataCommand(code.readByte()));
         }
       }
-      else if (type == CodeType.ABSOLUTE_ADDRESS)
+      else if (type == CodeType.ADDRESS)
       {
         // absolute address as data
         int address;

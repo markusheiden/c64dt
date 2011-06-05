@@ -111,9 +111,11 @@ public class CodeTableModel extends DefaultTableModel
 
       builder.setLength(0);
       List<Integer> data = command.toBytes();
+      int i = index;
       for (int dataByte : data)
       {
         builder.append(" ");
+        builder.append(commands.getType(i++).getId().toLowerCase());
         builder.append(hexBytePlain(dataByte));
       }
       String bytes = builder.toString().trim();

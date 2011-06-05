@@ -216,7 +216,7 @@ public class JsrDetector implements IDetector
     }
 
     // disabled unreachableRatio for this case
-    return createSubroutine(commands, "absolute address argument", address, 2, CodeType.ABSOLUTE_ADDRESS, matches, unreachable, count, false);
+    return createSubroutine(commands, "absolute address argument", address, 2, CodeType.ADDRESS, matches, unreachable, count, false);
   }
 
   /**

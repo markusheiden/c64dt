@@ -136,7 +136,7 @@ public class CodeTypeActions
       @Override
       public void actionPerformed(ActionEvent actionEvent)
       {
-        mark(CodeType.ABSOLUTE_ADDRESS);
+        mark(CodeType.ADDRESS);
       }
     };
   }
