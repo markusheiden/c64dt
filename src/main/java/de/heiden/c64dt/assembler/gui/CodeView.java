@@ -4,7 +4,11 @@ import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.assembler.gui.action.CodeTypeActions;
 import de.heiden.c64dt.assembler.gui.action.GotoActions;
 import de.heiden.c64dt.assembler.gui.event.AddressChangedEvent;
-import de.heiden.c64dt.assembler.gui.event.AddressChangedListener;
+import de.heiden.c64dt.assembler.gui.event.GotoAddressEvent;
+import de.heiden.c64dt.assembler.gui.event.ReassemblerEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -15,15 +19,18 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * View for reassembled code.
  */
 @Component
-public class CodeView
+public class CodeView implements ApplicationListener<ReassemblerEvent>
 {
+  /**
+   * The table.
+   */
+  private JTable table;
+
   /**
    * Model.
    */
@@ -35,9 +42,10 @@ public class CodeView
   private JPopupMenu contextMenu;
 
   /**
-   * Listeners for {@link de.heiden.c64dt.assembler.gui.event.AddressChangedEvent}s.
+   * Spring event publisher.
    */
-  private final List<AddressChangedListener> addressChangedListeners = new ArrayList<AddressChangedListener>();
+  @Autowired
+  private ApplicationEventPublisher publisher;
 
   /**
    * Constructor.
@@ -45,29 +53,6 @@ public class CodeView
   public CodeView()
   {
     model = new CodeTableModel();
-  }
-
-  /**
-   * Add a listener for {@AddressChangedEvent}s.
-   *
-   * @param listener listener
-   */
-  public void add(AddressChangedListener listener)
-  {
-    addressChangedListeners.add(listener);
-  }
-
-  /**
-   * Notify all listener of an address change.
-   *
-   * @param event Address changed event
-   */
-  private void notifyAddressChangedListeners(AddressChangedEvent event)
-  {
-    for (AddressChangedListener listener : addressChangedListeners)
-    {
-      listener.addressChanged(event);
-    }
   }
 
   /**
@@ -87,7 +72,7 @@ public class CodeView
    */
   public JComponent createComponent()
   {
-    final JTable table = new JTable(model);
+    table = new JTable(model);
     table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
     TableColumnModel columnModel = table.getColumnModel();
     columnModel.getColumn(0).setMaxWidth(40);
@@ -132,11 +117,58 @@ public class CodeView
       @Override
       public void valueChanged(ListSelectionEvent listSelectionEvent)
       {
-        notifyAddressChangedListeners(new AddressChangedEvent(this,
+        publisher.publishEvent(new AddressChangedEvent(this,
           table.getSelectedRow() >= 0? model.getIndex(table.getSelectedRow()) : -1));
       }
     });
 
     return new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+  }
+
+  @Override
+  public void onApplicationEvent(ReassemblerEvent event)
+  {
+    if (event instanceof GotoAddressEvent)
+    {
+      gotoIndex(((GotoAddressEvent) event).getIndex());
+    }
+  }
+
+  /**
+   * Jump to the given relative address.
+   *
+   * @param index Relative address
+   */
+  private void gotoIndex(int index)
+  {
+    if (!model.getReassembler().getCommands().hasIndex(index))
+    {
+      return;
+    }
+
+    int jumpRow = model.getRow(index);
+    table.scrollRectToVisible(getRowBounds(table, jumpRow));
+    table.getSelectionModel().setSelectionInterval(jumpRow, jumpRow);
+  }
+
+  /**
+   * Get bounds for row +/- 3 rows.
+   *
+   * @param table Table
+   * @param row row
+   */
+  private Rectangle getRowBounds(JTable table, int row)
+  {
+    int first = Math.max(0, row - 3);
+    int last = Math.min(table.getRowCount() - 1, row + 3);
+
+    Rectangle result = table.getCellRect(first, -1, true);
+    result = result.union(table.getCellRect(last, -1, true));
+    Insets i = table.getInsets();
+
+    result.x = i.left;
+    result.width = table.getWidth() - i.left - i.right;
+
+    return result;
   }
 }

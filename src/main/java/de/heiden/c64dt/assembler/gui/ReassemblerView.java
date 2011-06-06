@@ -2,8 +2,6 @@ package de.heiden.c64dt.assembler.gui;
 
 import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.assembler.ReassemblerMapper;
-import de.heiden.c64dt.assembler.gui.event.AddressChangedEvent;
-import de.heiden.c64dt.assembler.gui.event.AddressChangedListener;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -79,14 +77,6 @@ public class ReassemblerView extends JFrame
 
     helperPane.add(new JPanel());
 
-    code.add(new AddressChangedListener()
-    {
-      @Override
-      public void addressChanged(AddressChangedEvent event)
-      {
-        crossReference.select(event.getIndex());
-      }
-    });
     helperPane.add(crossReference.createComponent());
 
     //
