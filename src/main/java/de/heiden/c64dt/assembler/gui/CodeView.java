@@ -122,7 +122,10 @@ public class CodeView implements ApplicationListener<ReassemblerEvent>
       }
     });
 
-    return new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    JScrollPane scroll = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    scroll.setBorder(BorderFactory.createTitledBorder("Code"));
+
+    return scroll;
   }
 
   @Override
