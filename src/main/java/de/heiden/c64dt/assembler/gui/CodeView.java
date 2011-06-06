@@ -5,6 +5,7 @@ import de.heiden.c64dt.assembler.gui.action.CodeTypeActions;
 import de.heiden.c64dt.assembler.gui.action.GotoActions;
 import de.heiden.c64dt.assembler.gui.event.AddressChangedEvent;
 import de.heiden.c64dt.assembler.gui.event.AddressChangedListener;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import javax.swing.*;
@@ -20,6 +21,7 @@ import java.util.List;
 /**
  * View for reassembled code.
  */
+@Component
 public class CodeView
 {
   /**

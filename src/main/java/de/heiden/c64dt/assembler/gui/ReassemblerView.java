@@ -5,8 +5,11 @@ import de.heiden.c64dt.assembler.ReassemblerMapper;
 import de.heiden.c64dt.assembler.gui.event.AddressChangedEvent;
 import de.heiden.c64dt.assembler.gui.event.AddressChangedListener;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import javax.annotation.PostConstruct;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,6 +22,7 @@ import java.io.IOException;
 /**
  * GUI for {@link de.heiden.c64dt.assembler.Reassembler}.
  */
+@Component
 public class ReassemblerView extends JFrame
 {
   private final Logger logger = Logger.getLogger(getClass());
@@ -35,12 +39,14 @@ public class ReassemblerView extends JFrame
   /**
    * The code view.
    */
-  private final CodeView code;
+  @Autowired
+  private CodeView code;
 
   /**
    * Cross reference.
    */
-  private final CrossReferenceView crossReference;
+  @Autowired
+  private CrossReferenceView crossReference;
 
   /**
    * Constructor.
@@ -49,7 +55,11 @@ public class ReassemblerView extends JFrame
   {
     setTitle("C64 Reassembler");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+  }
 
+  @PostConstruct
+  private void init()
+  {
     JSplitPane main = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
     add(main);
 
@@ -57,7 +67,6 @@ public class ReassemblerView extends JFrame
     // Reassembled code
     //
 
-    code = new CodeView();
     main.setRightComponent(code.createComponent());
 
     //
@@ -70,7 +79,6 @@ public class ReassemblerView extends JFrame
 
     helperPane.add(new JPanel());
 
-    crossReference = new CrossReferenceView();
     code.add(new AddressChangedListener()
     {
       @Override

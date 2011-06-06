@@ -1,6 +1,7 @@
 package de.heiden.c64dt;
 
 import de.heiden.c64dt.assembler.gui.ReassemblerView;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.swing.*;
 
@@ -23,7 +24,8 @@ public class Reassembler
     // Native look and feel
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-    ReassemblerView gui = new ReassemblerView();
+    AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("de.heiden.c64dt");
+    ReassemblerView gui = context.getBean(ReassemblerView.class);
     gui.setVisible(true);
   }
 

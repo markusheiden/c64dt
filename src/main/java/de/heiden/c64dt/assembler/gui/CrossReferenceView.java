@@ -1,6 +1,7 @@
 package de.heiden.c64dt.assembler.gui;
 
 import de.heiden.c64dt.assembler.Reassembler;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import javax.swing.*;
@@ -10,6 +11,7 @@ import java.awt.*;
 /**
  * View for cross reference of current opcode.
  */
+@Component
 public class CrossReferenceView
 {
   /**
