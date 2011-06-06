@@ -139,16 +139,16 @@ public class CodeView implements ApplicationListener<ReassemblerEvent>
    *
    * @param index Relative address
    */
-  private void gotoIndex(int index)
+  public void gotoIndex(int index)
   {
     if (!model.getReassembler().getCommands().hasIndex(index))
     {
       return;
     }
 
-    int jumpRow = model.getRow(index);
-    table.scrollRectToVisible(getRowBounds(table, jumpRow));
-    table.getSelectionModel().setSelectionInterval(jumpRow, jumpRow);
+    int row = model.getRow(index);
+    table.scrollRectToVisible(getRowBounds(table, row));
+    table.getSelectionModel().setSelectionInterval(row, row);
   }
 
   /**
