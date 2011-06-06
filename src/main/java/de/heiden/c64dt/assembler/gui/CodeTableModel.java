@@ -35,7 +35,7 @@ public class CodeTableModel extends DefaultTableModel
    */
   public CodeTableModel()
   {
-    super(new String[]{"Flags", "Addr", "Bytes", "Label", "Code"}, 0);
+    super(new String[]{"Flags", "Index", "Addr", "Bytes", "Label", "Code"}, 0);
   }
 
   @Override
@@ -158,7 +158,7 @@ public class CodeTableModel extends DefaultTableModel
   {
     rowToIndex.put(getRowCount(), index);
     indexToRow.put(index, getRowCount());
-    addRow(new Object[]{flags, hexWordPlain(address), bytes, label, code});
+    addRow(new Object[]{flags, hexWordPlain(index), hexWordPlain(address), bytes, label, code});
   }
 
   /**

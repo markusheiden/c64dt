@@ -90,9 +90,10 @@ public class CodeView
     TableColumnModel columnModel = table.getColumnModel();
     columnModel.getColumn(0).setMaxWidth(40);
     columnModel.getColumn(1).setMaxWidth(40);
-    columnModel.getColumn(2).setPreferredWidth(100);
-    columnModel.getColumn(3).setMaxWidth(100);
-    columnModel.getColumn(4).setPreferredWidth(200);
+    columnModel.getColumn(2).setMaxWidth(40);
+    columnModel.getColumn(3).setPreferredWidth(100);
+    columnModel.getColumn(4).setMaxWidth(100);
+    columnModel.getColumn(5).setPreferredWidth(200);
     table.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
     table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
