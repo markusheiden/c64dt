@@ -132,8 +132,25 @@ public class GotoActions
       return;
     }
 
-    int jumpRow = model.getRow(jumpIndex);
-    table.scrollRectToVisible(TableUtil.getRowBounds(table, jumpRow, 3));
-    table.getSelectionModel().setSelectionInterval(jumpRow, jumpRow);
+    gotoIndex(jumpIndex);
+  }
+
+  /**
+   * Jump to the given relative address.
+   *
+   * @param index Relative address
+   */
+  public void gotoIndex(int index)
+  {
+    CodeTableModel model = (CodeTableModel) table.getModel();
+
+    if (!model.getReassembler().getCommands().hasIndex(index))
+    {
+      return;
+    }
+
+    int row = model.getRow(index);
+    table.scrollRectToVisible(TableUtil.getRowBounds(table, row, 3));
+    table.getSelectionModel().setSelectionInterval(row, row);
   }
 }
