@@ -6,6 +6,7 @@ import de.heiden.c64dt.assembler.gui.action.GotoActions;
 import de.heiden.c64dt.assembler.gui.event.AddressChangedEvent;
 import de.heiden.c64dt.assembler.gui.event.GotoAddressEvent;
 import de.heiden.c64dt.assembler.gui.event.ReassemblerEvent;
+import de.heiden.c64dt.assembler.gui.util.TableUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
@@ -150,28 +151,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent>
     }
 
     int row = model.getRow(index);
-    table.scrollRectToVisible(getRowBounds(table, row));
+    table.scrollRectToVisible(TableUtil.getRowBounds(table, row, 3));
     table.getSelectionModel().setSelectionInterval(row, row);
-  }
-
-  /**
-   * Get bounds for row +/- 3 rows.
-   *
-   * @param table Table
-   * @param row row
-   */
-  private Rectangle getRowBounds(JTable table, int row)
-  {
-    int first = Math.max(0, row - 3);
-    int last = Math.min(table.getRowCount() - 1, row + 3);
-
-    Rectangle result = table.getCellRect(first, -1, true);
-    result = result.union(table.getCellRect(last, -1, true));
-    Insets i = table.getInsets();
-
-    result.x = i.left;
-    result.width = table.getWidth() - i.left - i.right;
-
-    return result;
   }
 }
