@@ -4,11 +4,11 @@ import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.command.OpcodeCommand;
 import de.heiden.c64dt.assembler.gui.CodeTableModel;
+import de.heiden.c64dt.assembler.gui.util.TableUtil;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -133,28 +133,7 @@ public class GotoActions
     }
 
     int jumpRow = model.getRow(jumpIndex);
-    table.scrollRectToVisible(getRowBounds(table, jumpRow));
+    table.scrollRectToVisible(TableUtil.getRowBounds(table, jumpRow, 3));
     table.getSelectionModel().setSelectionInterval(jumpRow, jumpRow);
-  }
-
-  /**
-   * Get bounds for row +/- 3 rows.
-   *
-   * @param table Table
-   * @param row row
-   */
-  private Rectangle getRowBounds(JTable table, int row)
-  {
-    int first = Math.max(0, row - 3);
-    int last = Math.min(table.getRowCount() - 1, row + 3);
-
-    Rectangle result = table.getCellRect(first, -1, true);
-    result = result.union(table.getCellRect(last, -1, true));
-    Insets i = table.getInsets();
-
-    result.x = i.left;
-    result.width = table.getWidth() - i.left - i.right;
-
-    return result;
   }
 }
