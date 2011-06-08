@@ -59,6 +59,7 @@ public class ReassemblerView extends JFrame
   private void init()
   {
     JSplitPane main = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+    main.setContinuousLayout(true);
     main.setOneTouchExpandable(true);
     add(main);
 

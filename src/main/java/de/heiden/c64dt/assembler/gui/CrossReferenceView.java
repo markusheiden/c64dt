@@ -65,6 +65,7 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
     columnModel.getColumn(1).setMaxWidth(40);
     table.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
     table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    table.setPreferredScrollableViewportSize(new Dimension(80, 0));
 
     table.addMouseListener(new MouseAdapter()
     {
@@ -77,7 +78,6 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
         }
       }
     });
-
 
     JScrollPane scroll = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     scroll.setBorder(BorderFactory.createTitledBorder("References"));
