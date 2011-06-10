@@ -88,6 +88,7 @@ public class ReassemblerView extends JFrame
     setJMenuBar(createMenu());
 
     pack();
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
 
     use(new Reassembler());
     // for testing purposes only...
