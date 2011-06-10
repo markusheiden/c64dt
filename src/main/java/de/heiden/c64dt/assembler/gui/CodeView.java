@@ -74,14 +74,15 @@ public class CodeView implements ApplicationListener<ReassemblerEvent>
   public JComponent createComponent()
   {
     table = new JTable(model);
-    table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
     TableColumnModel columnModel = table.getColumnModel();
     columnModel.getColumn(0).setMaxWidth(40);
     columnModel.getColumn(1).setMaxWidth(40);
     columnModel.getColumn(2).setMaxWidth(40);
-    columnModel.getColumn(3).setPreferredWidth(100);
+    columnModel.getColumn(3).setPreferredWidth(280);
+    columnModel.getColumn(3).setMaxWidth(280);
     columnModel.getColumn(4).setMaxWidth(100);
     columnModel.getColumn(5).setPreferredWidth(200);
+    table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
     table.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
     table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
