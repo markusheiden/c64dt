@@ -44,7 +44,7 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
   /**
    * Use another reassembler.
    *
-   * @param reassembler
+   * @param reassembler Reassembler
    */
   public void use(Reassembler reassembler)
   {
@@ -62,6 +62,7 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
     table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     TableColumnModel columnModel = table.getColumnModel();
     columnModel.getColumn(0).setMaxWidth(40);
+    columnModel.getColumn(0).setCellRenderer(new GreyRenderer());
     columnModel.getColumn(1).setMaxWidth(40);
     table.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
     table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

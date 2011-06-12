@@ -59,7 +59,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent>
   /**
    * Use another reassembler.
    *
-   * @param reassembler
+   * @param reassembler Reassembler
    */
   public void use(Reassembler reassembler)
   {
@@ -77,6 +77,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent>
     TableColumnModel columnModel = table.getColumnModel();
     columnModel.getColumn(0).setMaxWidth(40);
     columnModel.getColumn(1).setMaxWidth(40);
+    columnModel.getColumn(1).setCellRenderer(new GreyRenderer());
     columnModel.getColumn(2).setMaxWidth(40);
     columnModel.getColumn(3).setPreferredWidth(280);
     columnModel.getColumn(3).setMaxWidth(280);
