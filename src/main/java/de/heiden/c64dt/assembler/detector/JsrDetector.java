@@ -42,13 +42,13 @@ public class JsrDetector implements IDetector
   /**
    * Minimum ratio of unreachable code after JSR to detect a new subroutine.
    */
-  @XmlAttribute(name = "unreachable-ration")
+  @XmlAttribute(name = "unreachable-ratio")
   private double unreachableRatio = 0.2;
 
   /**
    * Minimum ratio of matches (check for expected argument type) to detect a new subroutine.
    */
-  @XmlAttribute(name = "match-ration")
+  @XmlAttribute(name = "match-ratio")
   private double matchRatio = 0.8;
 
   /**

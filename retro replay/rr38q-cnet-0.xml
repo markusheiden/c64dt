@@ -6,7 +6,7 @@
     <label/>
     <brk/>
     <bit/>
-    <jsr match-ration="0.8" max-length="256" min-matches="2" unreachable-ration="0.2"/>
+    <jsr match-ratio="0.8" max-length="256" min-matches="2" unreachable-ratio="0.2"/>
   </detectors>
   <commands>
     <code>
