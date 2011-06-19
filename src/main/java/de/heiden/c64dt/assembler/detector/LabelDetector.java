@@ -26,7 +26,8 @@ public class LabelDetector implements IDetector
       else if (hasConflictingCodeLabel(commands, iter))
       {
         // Mark current command as data, because it may not be an opcode
-        change |= iter.setType(CodeType.DATA);
+        // TODO mh: Currently disabled, because it sets too much code to data
+        // change |= iter.setType(CodeType.DATA);
 
         // Search for code label and mark the relative address as an opcode
         boolean notFound = true;
