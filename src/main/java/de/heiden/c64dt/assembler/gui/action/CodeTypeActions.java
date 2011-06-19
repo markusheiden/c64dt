@@ -1,6 +1,7 @@
 package de.heiden.c64dt.assembler.gui.action;
 
 import de.heiden.c64dt.assembler.CodeType;
+import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.gui.CodeTableModel;
@@ -149,7 +150,8 @@ public class CodeTypeActions
   private void mark(CodeType type)
   {
     CodeTableModel model = (CodeTableModel) table.getModel();
-    CommandBuffer commands = model.getReassembler().getCommands();
+    Reassembler reassembler = model.getReassembler();
+    CommandBuffer commands = reassembler.getCommands();
     for (int row : table.getSelectedRows())
     {
       int index = model.getIndex(row);
@@ -158,6 +160,7 @@ public class CodeTypeActions
       commands.setType(index, index + command.getSize(), type);
     }
 
+    reassembler.reassemble();
     model.update();
   }
 }
