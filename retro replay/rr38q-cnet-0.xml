@@ -18,6 +18,7 @@
       <address base="8000" index="0FBE"/>
       <address base="8000" index="1DB3"/>
       <address base="C000" index="1E00"/>
+      <address base="8000" index="1F52"/>
       <address base="8000" index="2000"/>
     </addresses>
     <subroutines>
