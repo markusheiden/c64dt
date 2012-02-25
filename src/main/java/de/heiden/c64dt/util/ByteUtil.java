@@ -27,6 +27,14 @@ public class ByteUtil
   }
 
   /**
+   * Convert unsigned word to int.
+   */
+  public static int toWord(int low, int high)
+  {
+    return toByte(low) + (toByte(high) << 8);
+  }
+
+  /**
    * Read word from byte array.
    */
   public static int toWord(byte[] data, int pos)
@@ -34,7 +42,7 @@ public class ByteUtil
     Assert.notNull(data, "Precondition: data != null");
     Assert.isTrue(pos + 1 < data.length, "Precondition: pos + 1 < data.length");
 
-    return toByte(data[pos]) + (toByte(data[pos + 1]) << 8);
+    return toWord(data[pos], data[pos + 1]);
   }
 
   /**
