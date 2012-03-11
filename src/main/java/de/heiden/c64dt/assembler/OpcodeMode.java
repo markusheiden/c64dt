@@ -141,7 +141,7 @@ public enum OpcodeMode
   /**
    * Number of bytes this address mode uses.
    */
-  public int getSize()
+  public final int getSize()
   {
     Assert.isTrue(size >= 0 && size <= 2, "Postcondition: result >= 0 && result <= 2");
     return size;
