@@ -3,12 +3,21 @@ package de.heiden.c64dt.assembler;
 /**
  * Interface for code buffers.
  */
-public interface ICodeBuffer
-{
+public interface ICodeBuffer {
+  /**
+   * The address of the current command.
+   */
+  public int getCommandAddress();
+
   /**
    * The index of the current command.
    */
   public int getCommandIndex();
+
+  /**
+   * The current address.
+   */
+  public int getCurrentAddress();
 
   /**
    * The current index.

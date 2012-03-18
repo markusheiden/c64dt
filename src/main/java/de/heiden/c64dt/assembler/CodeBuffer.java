@@ -5,25 +5,23 @@ import de.heiden.c64dt.util.ByteUtil;
 /**
  * Input stream for code.
  */
-public class CodeBuffer extends AbstractCodeBuffer
-{
+public class CodeBuffer extends AbstractCodeBuffer {
   private final byte[] code;
 
   /**
    * Constructor.
    *
+   * @param address start address of the code
    * @param code code
    */
-  public CodeBuffer(byte[] code)
-  {
-    super(code.length);
+  public CodeBuffer(int address, byte[] code) {
+    super(address, code.length);
 
     this.code = code;
   }
 
   @Override
-  protected int readByteAt(int index)
-  {
+  protected int readByteAt(int index) {
     return ByteUtil.toByte(code[index]);
   }
 }
