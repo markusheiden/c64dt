@@ -21,7 +21,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/junit-4.7.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/commons-logging-1.1.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -39,7 +39,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/commons-logging-1.1.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/org.springframework.asm-3.1.1.RELEASE.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -48,7 +48,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/org.springframework.core-3.0.5.RELEASE.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/org.springframework.beans-3.1.1.RELEASE.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -57,7 +57,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/org.springframework.oxm-3.0.5.RELEASE.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/org.springframework.context-3.1.1.RELEASE.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -66,7 +66,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/org.springframework.context-3.0.5.RELEASE.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/org.springframework.core-3.1.1.RELEASE.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -75,7 +75,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/org.springframework.beans-3.0.5.RELEASE.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/org.springframework.expression-3.1.1.RELEASE.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -84,7 +84,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/org.springframework.asm-3.0.5.RELEASE.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/org.springframework.oxm-3.1.1.RELEASE.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -93,7 +93,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/org.springframework.expression-3.0.5.RELEASE.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit-4.10.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
