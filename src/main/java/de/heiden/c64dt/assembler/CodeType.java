@@ -1,10 +1,12 @@
 package de.heiden.c64dt.assembler;
 
+import javax.xml.bind.annotation.XmlEnum;
+
 /**
  * Types for code classification.
  */
-public enum CodeType
-{
+@XmlEnum
+public enum CodeType {
   /**
    * Type of code is not known yet.
    */
@@ -45,40 +47,35 @@ public enum CodeType
    *
    * @param id ID
    */
-  private CodeType(String id)
-  {
+  private CodeType(String id) {
     this.id = id;
   }
 
   /**
    * ID.
    */
-  public String getId()
-  {
+  public String getId() {
     return id;
   }
 
   /**
    * Is the code type unknown?.
    */
-  public final boolean isUnknown()
-  {
+  public final boolean isUnknown() {
     return UNKNOWN.equals(this);
   }
 
   /**
    * Is it code?.
    */
-  public final boolean isCode()
-  {
+  public final boolean isCode() {
     return this == OPCODE || this == CODE;
   }
 
   /**
    * Is it data?.
    */
-  public final boolean isData()
-  {
+  public final boolean isData() {
     return this == DATA || this == ADDRESS;
   }
 }

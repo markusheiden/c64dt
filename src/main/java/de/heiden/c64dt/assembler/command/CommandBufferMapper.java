@@ -1,179 +1,168 @@
 package de.heiden.c64dt.assembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.util.AbstractXmlMapper;
-import de.heiden.c64dt.util.ByteUtil;
+import de.heiden.c64dt.util.HexByteAdapter;
+import de.heiden.c64dt.util.HexWordAdapter;
 import org.springframework.util.Assert;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 
-import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
-import static de.heiden.c64dt.util.HexUtil.hexPlain;
-import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
-import static de.heiden.c64dt.util.HexUtil.parseHexWordPlain;
-
 /**
- * XML-Mapper to read and write the reassembler model.
+ * XML-Mapper for {@link CommandBuffer}.
  */
-public class CommandBufferMapper extends AbstractXmlMapper<CommandBuffer>
-{
-  /**
-   * Constructor.
-   */
-  public CommandBufferMapper() throws Exception
-  {
-    super(CommandBuffer.class);
+@XmlType
+public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, CommandBuffer> {
+  @XmlElement(name = "code")
+  private byte[] code;
+
+  @XmlElement(name = "address")
+  @XmlElementWrapper(name = "addresses")
+  private final List<AddressMapper> addresses = new ArrayList<>();
+
+  @XmlType
+  public static class AddressMapper {
+    @XmlAttribute
+    @XmlJavaTypeAdapter(type = int.class, value = HexWordAdapter.class)
+    private int index;
+    @XmlAttribute
+    @XmlJavaTypeAdapter(type = int.class, value = HexWordAdapter.class)
+    private int base;
+  }
+
+  @XmlElement(name = "subroutine")
+  @XmlElementWrapper(name = "subroutines")
+  private final List<SubroutineMapper> subroutines = new ArrayList<>();
+
+  @XmlType
+  public static class SubroutineMapper {
+    @XmlAttribute
+    @XmlJavaTypeAdapter(type = int.class, value = HexWordAdapter.class)
+    private int address;
+    @XmlAttribute
+    @XmlJavaTypeAdapter(type = int.class, value = HexByteAdapter.class)
+    private int arguments;
+    @XmlValue
+    private CodeType type;
+  }
+
+  @XmlElement(name = "type")
+  @XmlElementWrapper(name = "types")
+  private final List<TypeMapper> types = new ArrayList<>();
+
+  @XmlType
+  public static class TypeMapper {
+    @XmlAttribute
+    @XmlJavaTypeAdapter(type = int.class, value = HexWordAdapter.class)
+    private int index;
+    @XmlAttribute
+    @XmlJavaTypeAdapter(type = Integer.class, value = HexWordAdapter.class)
+    private Integer end;
+    @XmlValue
+    private CodeType type;
   }
 
   @Override
-  public void write(CommandBuffer commands, Document document, Element commandsElement)
-  {
-    // code
-    Element codeElement = document.createElement("code");
-    commandsElement.appendChild(codeElement);
+  public CommandBufferMapper marshal(CommandBuffer commands) throws Exception {
+    CommandBufferMapper result = new CommandBufferMapper();
 
-    byte[] code = commands.getCode();
-    StringBuilder codeHex = new StringBuilder(code.length * 2);
-    for (int i = 0; i < code.length; i++)
-    {
-      codeHex.append(hexBytePlain(ByteUtil.toByte(code[i])));
-    }
-    codeElement.setTextContent(codeHex.toString());
+    result.code = commands.getCode();
 
     // start addresses
-    Element addressesElement = document.createElement("addresses");
-    commandsElement.appendChild(addressesElement);
-
     SortedMap<Integer, Integer> startAddresses = commands.getStartAddresses();
-    for (Entry<Integer, Integer> entry : startAddresses.entrySet())
-    {
-      Element addressElement = document.createElement("address");
-      addressElement.setAttribute("index", hexWordPlain(entry.getKey()));
-      addressElement.setAttribute("base", hexWordPlain(entry.getValue()));
-      addressesElement.appendChild(addressElement);
+    for (Entry<Integer, Integer> entry : startAddresses.entrySet()) {
+      AddressMapper address = new AddressMapper();
+      address.index = entry.getKey();
+      address.base = entry.getValue();
+      addresses.add(address);
     }
 
     // subroutines
-    Element subroutinesElement = document.createElement("subroutines");
-    commandsElement.appendChild(subroutinesElement);
-
-    for (Entry<Integer, Subroutine> entry : commands.getSubroutines().entrySet())
-    {
-      Element subroutineElement = document.createElement("subroutine");
-      subroutineElement.setAttribute("address", hexWordPlain(entry.getKey()));
-      subroutineElement.setAttribute("arguments", hexPlain(entry.getValue().getArguments()));
-      subroutineElement.setTextContent(entry.getValue().getType().toString());
-      subroutinesElement.appendChild(subroutineElement);
+    for (Entry<Integer, Subroutine> entry : commands.getSubroutines().entrySet()) {
+      SubroutineMapper subroutine = new SubroutineMapper();
+      subroutine.address = entry.getKey();
+      subroutine.arguments = entry.getValue().getArguments();
+      subroutine.type = entry.getValue().getType();
+      subroutines.add(subroutine);
     }
 
     // detected code types
-    Element typesElement = document.createElement("types");
-    commandsElement.appendChild(typesElement);
-
-    for (int index = 0; index < commands.getLength(); )
-    {
+    for (int index = 0; index < commands.getLength(); ) {
       int startIndex = index;
       CodeType type = commands.getType(index++);
-      if (type.isUnknown())
-      {
+      if (type.isUnknown()) {
         continue;
       }
 
       // count indexes with the same type
       int count = 1;
-      for (; index < commands.getLength(); index++, count++)
-      {
-        if (!commands.getType(index).equals(type))
-        {
+      for (; index < commands.getLength(); index++, count++) {
+        if (!commands.getType(index).equals(type)) {
           break;
         }
       }
 
-      Element typeElement = document.createElement("type");
-      typeElement.setAttribute("index", hexWordPlain(startIndex));
-      if (count > 1)
-      {
-        typeElement.setAttribute("end", hexWordPlain(index));
+      TypeMapper codeType = new TypeMapper();
+      codeType.index = startIndex;
+      if (count > 1) {
+        codeType.end = index;
       }
-      typeElement.setTextContent(type.name());
-      typesElement.appendChild(typeElement);
+      codeType.type = type;
+
+      types.add(codeType);
     }
+
+    return result;
   }
 
   @Override
-  public CommandBuffer read(Element commandsElement, CommandBuffer dummy)
-  {
-    // code
-    Node codeElement = commandsElement.getElementsByTagName("code").item(0);
-    String codeData = codeElement.getTextContent().trim();
-    byte[] code = new byte[codeData.length() / 2];
-    for (int i = 0; i < codeData.length(); i += 2)
-    {
-      code[i / 2] = (byte) parseHexWordPlain(codeData.substring(i, i + 2));
+  public CommandBuffer unmarshal(CommandBufferMapper xmlCommands) throws Exception {
+    try {
+      return unmarshalImpl(xmlCommands);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
     }
+  }
 
-    // base addresses
-    Element addressesElement = (Element) commandsElement.getElementsByTagName("addresses").item(0);
-    NodeList addressElements = addressesElement.getElementsByTagName("address");
+  public CommandBuffer unmarshalImpl(CommandBufferMapper xmlCommands) throws Exception {
+    List<AddressMapper> addresses = xmlCommands.addresses;
 
     // start address / first base address
-    Element startAddressElement = (Element) addressElements.item(0);
-    int startIndex = parseHexWordPlain(startAddressElement.getAttribute("index"));
+    AddressMapper firstAddress = addresses.get(0);
+    int startIndex = firstAddress.index;
     Assert.isTrue(startIndex == 0, "Check: startIndex == 0");
 
     // the start address is the first base address and automatically sets the end base address
-    int startAddress = parseHexWordPlain(startAddressElement.getAttribute("base"));
-    CommandBuffer commands = new CommandBuffer(code, startAddress);
+    CommandBuffer commands = new CommandBuffer(xmlCommands.code, firstAddress.base);
 
     // remaining base addresses
-    for (int i = 1; i < addressElements.getLength() - 1; i++)
-    {
-      Element addressElement = (Element) addressElements.item(i);
-      int index = parseHexWordPlain(addressElement.getAttribute("index"));
-      int address = parseHexWordPlain(addressElement.getAttribute("base"));
-      commands.rebase(index, address);
+    for (int i = 1; i < addresses.size() - 1; i++) {
+      AddressMapper address = addresses.get(i);
+      commands.rebase(address.index, address.base);
     }
 
     // end base address
-    Element endAddressElement = (Element) addressElements.item(addressElements.getLength() - 1);
-    int endIndex = parseHexWordPlain(endAddressElement.getAttribute("index"));
-    Assert.isTrue(endIndex == code.length, "Check: endIndex == code.length");
-    int endAddress = parseHexWordPlain(endAddressElement.getAttribute("base"));
-    Assert.isTrue(endAddress == startAddress, "Check: endAddress == startAddress");
+    AddressMapper lastAddress = addresses.get(addresses.size() - 1);
+    Assert.isTrue(lastAddress.index == xmlCommands.code.length, "Check: end index == code.length");
+    Assert.isTrue(lastAddress.base == firstAddress.base, "Check: end address == start address");
 
     // subroutines
-    Element subroutinesElement = (Element) commandsElement.getElementsByTagName("subroutines").item(0);
-    NodeList subroutineElements = subroutinesElement.getElementsByTagName("subroutine");
-    for (int i = 0; i < subroutineElements.getLength(); i++)
-    {
-      Element subroutineElement = (Element) subroutineElements.item(i);
-      int address = parseHexWordPlain(subroutineElement.getAttribute("address"));
-      int arguments = parseHexWordPlain(subroutineElement.getAttribute("arguments"));
-      CodeType type = CodeType.valueOf(subroutineElement.getTextContent().trim());
-      commands.addSubroutine(new Subroutine(address, arguments, type));
+    for (SubroutineMapper subroutineMapper : xmlCommands.subroutines) {
+      commands.addSubroutine(new Subroutine(subroutineMapper.address, subroutineMapper.arguments, subroutineMapper.type));
     }
 
     // detected code types
-    Element typesElement = (Element) commandsElement.getElementsByTagName("types").item(0);
-    NodeList typeElements = typesElement.getElementsByTagName("type");
-    for (int i = 0; i < typeElements.getLength(); i++)
-    {
-      Element typeElement = (Element) typeElements.item(i);
-      int index = parseHexWordPlain(typeElement.getAttribute("index"));
-      CodeType type = CodeType.valueOf(typeElement.getTextContent().trim());
-      if (typeElement.hasAttribute("end"))
-      {
-        int end = parseHexWordPlain(typeElement.getAttribute("end"));
-        commands.setType(index, end, type);
-      }
-      else
-      {
-        commands.setType(index, type);
+    for (TypeMapper typeMapper : xmlCommands.types) {
+      if (typeMapper.end != null) {
+        commands.setType(typeMapper.index, typeMapper.end, typeMapper.type);
+      } else {
+        commands.setType(typeMapper.index, typeMapper.type);
       }
     }
 

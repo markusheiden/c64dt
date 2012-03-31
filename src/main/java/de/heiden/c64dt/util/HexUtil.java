@@ -3,15 +3,13 @@ package de.heiden.c64dt.util;
 /**
  * Helper class for handling hexadecimal values.
  */
-public class HexUtil
-{
+public class HexUtil {
   /**
    * String representation of a byte.
    *
    * @require value < 0x100
    */
-  public static String hexBytePlain(int value)
-  {
+  public static String hexBytePlain(int value) {
     assert value >= 0 : "Precondition: value >= 0";
     assert value < 0x100 : "Precondition: value < 0x100";
 
@@ -24,8 +22,7 @@ public class HexUtil
    *
    * @require value < 0x100
    */
-  public static String hexByte(int value)
-  {
+  public static String hexByte(int value) {
     assert value >= 0 : "Precondition: value >= 0";
     assert value < 0x100 : "Precondition: value < 0x100";
 
@@ -39,8 +36,7 @@ public class HexUtil
    *
    * @require value < 0x10000
    */
-  public static String hexWordPlain(int value)
-  {
+  public static String hexWordPlain(int value) {
     assert value >= 0 : "Precondition: value >= 0";
     assert value < 0x10000 : "value < 0x10000";
 
@@ -53,8 +49,7 @@ public class HexUtil
    *
    * @require value < 0x10000
    */
-  public static String hexWord(int value)
-  {
+  public static String hexWord(int value) {
     assert value >= 0 : "Precondition: value >= 0";
     assert value < 0x10000 : "value < 0x10000";
 
@@ -68,12 +63,11 @@ public class HexUtil
    *
    * @require value < 0x10000
    */
-  public static String hexPlain(int value)
-  {
+  public static String hexPlain(int value) {
     assert value >= 0 : "Precondition: value >= 0";
     assert value < 0x10000 : "value < 0x10000";
 
-    return value < 0x100? hexBytePlain(value) : hexWordPlain(value);
+    return value < 0x100 ? hexBytePlain(value) : hexWordPlain(value);
   }
 
   /**
@@ -81,12 +75,11 @@ public class HexUtil
    *
    * @require value < 0x10000
    */
-  public static String hex(int value)
-  {
+  public static String hex(int value) {
     assert value >= 0 : "Precondition: value >= 0";
     assert value < 0x10000 : "value < 0x10000";
 
-    return value < 0x100? hexByte(value) : hexWord(value);
+    return value < 0x100 ? hexByte(value) : hexWord(value);
   }
 
   /**
@@ -94,11 +87,22 @@ public class HexUtil
    *
    * @param value String representation
    */
-  public static int parseHexWordPlain(String value)
-  {
+  public static int parseHexBytePlain(String value) {
     int result = Integer.parseInt(value, 16);
 
-    assert result >= 0 && result < 0x1000 : "Precondition: result >= 0 && result < 0x1000";
+    assert result >= 0 && result < 0x100 : "Precondition: result >= 0 && result < 0x100";
+    return result;
+  }
+
+  /**
+   * Parse string representation of a hex number.
+   *
+   * @param value String representation
+   */
+  public static int parseHexWordPlain(String value) {
+    int result = Integer.parseInt(value, 16);
+
+    assert result >= 0 && result < 0x10000 : "Precondition: result >= 0 && result < 0x10000";
     return result;
   }
 }

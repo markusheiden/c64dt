@@ -1,7 +1,7 @@
 package de.heiden.c64dt.assembler.gui;
 
 import de.heiden.c64dt.assembler.Reassembler;
-import de.heiden.c64dt.assembler.ReassemblerMapper;
+import de.heiden.c64dt.util.XmlUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,8 +21,7 @@ import java.io.IOException;
  * GUI for {@link de.heiden.c64dt.assembler.Reassembler}.
  */
 @Component
-public class ReassemblerView extends JFrame
-{
+public class ReassemblerView extends JFrame {
   private final Logger logger = Logger.getLogger(getClass());
 
   private Reassembler reassembler;
@@ -49,15 +48,13 @@ public class ReassemblerView extends JFrame
   /**
    * Constructor.
    */
-  public ReassemblerView()
-  {
+  public ReassemblerView() {
     setTitle("C64 Reassembler");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
 
   @PostConstruct
-  private void init()
-  {
+  private void init() {
     JSplitPane main = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
     main.setContinuousLayout(true);
     main.setOneTouchExpandable(true);
@@ -100,16 +97,14 @@ public class ReassemblerView extends JFrame
   /**
    * Just for testing purposes: Reassemble fixed code at startup.
    */
-  private void reassemble()
-  {
-    try
-    {
+  private void reassemble() {
+    try {
       File file = new File("retro replay", "rr38q-cnet-0.xml");
-      use(new ReassemblerMapper().read(new FileInputStream(file)));
+      Reassembler reassembler = XmlUtil.unmarshal(new FileInputStream(file), Reassembler.class);
+      reassembler.reassemble();
+      use(reassembler);
       currentFile = file;
-    }
-    catch (Exception e)
-    {
+    } catch (Exception e) {
       // this method is just for test, so just output the exception
       e.printStackTrace();
     }
@@ -120,8 +115,7 @@ public class ReassemblerView extends JFrame
    *
    * @param reassembler Reassembler
    */
-  public void use(Reassembler reassembler)
-  {
+  public void use(Reassembler reassembler) {
     Assert.notNull(reassembler, "Precondition: reassembler != null");
 
     this.currentFile = null;
@@ -134,11 +128,9 @@ public class ReassemblerView extends JFrame
   /**
    * Update GUI state.
    */
-  protected final void updateGUI()
-  {
+  protected final void updateGUI() {
     String title = "C64 Reassembler";
-    if (currentFile != null)
-    {
+    if (currentFile != null) {
       title = currentFile.getAbsolutePath() + " - " + title;
     }
     setTitle(title);
@@ -153,8 +145,7 @@ public class ReassemblerView extends JFrame
   /**
    * Create menu bar.
    */
-  private JMenuBar createMenu()
-  {
+  private JMenuBar createMenu() {
     JMenuBar menuBar = new JMenuBar();
 
     JMenu file = new JMenu("File");
@@ -162,24 +153,18 @@ public class ReassemblerView extends JFrame
 
     fileOpen = new JMenuItem("Reassemble...");
     file.add(fileOpen);
-    fileOpen.addActionListener(new ActionListener()
-    {
+    fileOpen.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent actionEvent)
-      {
-        try
-        {
+      public void actionPerformed(ActionEvent actionEvent) {
+        try {
           JFileChooser chooser = new JFileChooser();
           int result = chooser.showOpenDialog(ReassemblerView.this);
-          if (result == JFileChooser.APPROVE_OPTION)
-          {
+          if (result == JFileChooser.APPROVE_OPTION) {
             // TODO mh: ask for start address
             currentFile = null;
-            reassembler.reassemble(new FileInputStream(chooser.getSelectedFile()));
+            reassembler.reassemble(0x8000, new FileInputStream(chooser.getSelectedFile()));
           }
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
           logger.error("Failed to open file", e);
           use(new Reassembler());
           JOptionPane.showMessageDialog(ReassemblerView.this,
@@ -191,27 +176,20 @@ public class ReassemblerView extends JFrame
 
     fileLoad = new JMenuItem("Load...");
     file.add(fileLoad);
-    fileLoad.addActionListener(new ActionListener()
-    {
+    fileLoad.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent actionEvent)
-      {
-        try
-        {
+      public void actionPerformed(ActionEvent actionEvent) {
+        try {
           JFileChooser chooser = new JFileChooser();
-          if (currentFile != null)
-          {
+          if (currentFile != null) {
             chooser.setCurrentDirectory(currentFile.getParentFile());
           }
           int result = chooser.showOpenDialog(ReassemblerView.this);
-          if (result == JFileChooser.APPROVE_OPTION)
-          {
-            use(new ReassemblerMapper().read(new FileInputStream(chooser.getSelectedFile())));
+          if (result == JFileChooser.APPROVE_OPTION) {
+            use(XmlUtil.unmarshal(new FileInputStream(chooser.getSelectedFile()), Reassembler.class));
             currentFile = chooser.getSelectedFile();
           }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
           logger.error("Failed to open file", e);
           use(new Reassembler());
           JOptionPane.showMessageDialog(ReassemblerView.this,
@@ -223,17 +201,12 @@ public class ReassemblerView extends JFrame
 
     fileSave = new JMenuItem("Save");
     file.add(fileSave);
-    fileSave.addActionListener(new ActionListener()
-    {
+    fileSave.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent actionEvent)
-      {
-        try
-        {
-          new ReassemblerMapper().write(reassembler, new FileOutputStream(currentFile));
-        }
-        catch (Exception e)
-        {
+      public void actionPerformed(ActionEvent actionEvent) {
+        try {
+          XmlUtil.marshal(reassembler, new FileOutputStream(currentFile));
+        } catch (Exception e) {
           logger.error("Failed to save file", e);
           JOptionPane.showMessageDialog(ReassemblerView.this,
             "Failed to save file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
@@ -244,28 +217,21 @@ public class ReassemblerView extends JFrame
 
     fileSaveAs = new JMenuItem("Save as...");
     file.add(fileSaveAs);
-    fileSaveAs.addActionListener(new ActionListener()
-    {
+    fileSaveAs.addActionListener(new ActionListener() {
       @Override
-      public void actionPerformed(ActionEvent actionEvent)
-      {
-        try
-        {
+      public void actionPerformed(ActionEvent actionEvent) {
+        try {
           JFileChooser chooser = new JFileChooser();
-          if (currentFile != null)
-          {
+          if (currentFile != null) {
             chooser.setCurrentDirectory(currentFile.getParentFile());
             chooser.setSelectedFile(currentFile);
           }
           int result = chooser.showSaveDialog(ReassemblerView.this);
-          if (result == JFileChooser.APPROVE_OPTION)
-          {
-            new ReassemblerMapper().write(reassembler, new FileOutputStream(chooser.getSelectedFile()));
+          if (result == JFileChooser.APPROVE_OPTION) {
+            XmlUtil.marshal(reassembler, new FileOutputStream(chooser.getSelectedFile()));
             currentFile = chooser.getSelectedFile();
           }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
           logger.error("Failed to save file", e);
           JOptionPane.showMessageDialog(ReassemblerView.this,
             "Failed to save file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);

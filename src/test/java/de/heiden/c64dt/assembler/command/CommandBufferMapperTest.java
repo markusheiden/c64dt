@@ -1,19 +1,10 @@
 package de.heiden.c64dt.assembler.command;
 
-import de.heiden.c64dt.assembler.CodeType;
-import org.junit.Test;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.SortedMap;
-
-import static junit.framework.Assert.assertEquals;
-
 /**
  * Test for {@link CommandBufferMapper}.
  */
-public class CommandBufferMapperTest
-{
+public class CommandBufferMapperTest {
+/*
   @Test
   public void testWriteRead() throws Exception
   {
@@ -91,4 +82,5 @@ public class CommandBufferMapperTest
       assertEquals("Byte " + i, xml[i], readXml[i]);
     }
   }
+*/
 }

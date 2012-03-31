@@ -1,20 +1,10 @@
 package de.heiden.c64dt.assembler;
 
-import de.heiden.c64dt.assembler.command.CommandBuffer;
-import de.heiden.c64dt.assembler.detector.IDetector;
-import org.junit.Test;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.List;
-
-import static junit.framework.Assert.assertEquals;
-
 /**
  * Test for {@link ReassemblerMapper}.
  */
-public class ReassemblerMapperTest
-{
+public class ReassemblerMapperTest {
+/*
   @Test
   public void testWriteRead() throws Exception
   {
@@ -57,4 +47,5 @@ public class ReassemblerMapperTest
       assertEquals("Byte " + i, xml[i], readXml[i]);
     }
   }
+*/
 }

@@ -1,6 +1,7 @@
 package de.heiden.c64dt.assembler;
 
 import de.heiden.c64dt.assembler.command.CommandBuffer;
+import de.heiden.c64dt.assembler.command.CommandBufferMapper;
 import de.heiden.c64dt.assembler.command.CommandIterator;
 import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.detector.*;
@@ -13,6 +14,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
@@ -47,6 +49,7 @@ public class Reassembler {
    * Reassembled code.
    */
   @XmlElement(name = "commands")
+  @XmlJavaTypeAdapter(CommandBufferMapper.class)
   private CommandBuffer commands;
 
   /**
