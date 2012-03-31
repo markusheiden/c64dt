@@ -1,17 +1,24 @@
 package de.heiden.c64dt.assembler.command;
 
+import de.heiden.c64dt.assembler.CodeType;
+import de.heiden.c64dt.util.XmlUtil;
+import org.junit.Test;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.SortedMap;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * Test for {@link CommandBufferMapper}.
  */
 public class CommandBufferMapperTest {
-/*
   @Test
-  public void testWriteRead() throws Exception
-  {
+  public void testWriteRead() throws Exception {
     // code
     byte[] code = new byte[0xC000];
-    for (int i = 0; i < code.length; i++)
-    {
+    for (int i = 0; i < code.length; i++) {
       code[i] = (byte) i;
     }
 
@@ -36,51 +43,45 @@ public class CommandBufferMapperTest {
 
     // write to xml
     ByteArrayOutputStream os = new ByteArrayOutputStream();
-    mapper.write(commands, os);
+    XmlUtil.marshal(commands, os);
     byte[] xml = os.toByteArray();
 
     // read written xml
-    CommandBuffer read = mapper.read(new ByteArrayInputStream(xml));
+    CommandBuffer read = XmlUtil.unmarshal(new ByteArrayInputStream(xml), CommandBuffer.class);
 
     // code
     byte[] readCode = read.getCode();
-    for (int i = 0; i < code.length; i++)
-    {
+    for (int i = 0; i < code.length; i++) {
       assertEquals("Byte " + i + ":", code[i], readCode[i]);
     }
 
     // code types
-    for (int index = 0; index < commands.getLength(); index++)
-    {
+    for (int index = 0; index < commands.getLength(); index++) {
       assertEquals("Index " + index + ":", commands.getType(index), read.getType(index));
     }
 
     // addresses
     SortedMap<Integer, Integer> commandsStart = commands.getStartAddresses();
     SortedMap<Integer, Integer> readStart = read.getStartAddresses();
-    for (Integer index : commandsStart.keySet())
-    {
+    for (Integer index : commandsStart.keySet()) {
       assertEquals("Index " + index + ":", commandsStart.get(index), readStart.get(index));
     }
 
     // subroutines
     SortedMap<Integer, Integer> commandsSubroutines = commands.getStartAddresses();
     SortedMap<Integer, Integer> readSubroutines = read.getStartAddresses();
-    for (Integer address : commandsSubroutines.keySet())
-    {
+    for (Integer address : commandsSubroutines.keySet()) {
       assertEquals("Address " + address + ":", commandsSubroutines.get(address), readSubroutines.get(address));
     }
 
     // write read xml again
     os.reset();
-    mapper.write(read, os);
+    XmlUtil.marshal(read, os);
     byte[] readXml = os.toByteArray();
 
     assertEquals(xml.length, readXml.length);
-    for (int i = 0; i < xml.length; i++)
-    {
+    for (int i = 0; i < xml.length; i++) {
       assertEquals("Byte " + i, xml[i], readXml[i]);
     }
   }
-*/
 }
