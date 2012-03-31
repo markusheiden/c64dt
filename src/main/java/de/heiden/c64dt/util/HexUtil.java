@@ -13,8 +13,7 @@ public class HexUtil {
     assert value >= 0 : "Precondition: value >= 0";
     assert value < 0x100 : "Precondition: value < 0x100";
 
-    String result = Long.toHexString(value + 0x100).toUpperCase();
-    return result.substring(1);
+    return Long.toHexString(value + 0x100).toUpperCase().substring(1);
   }
 
   /**
@@ -35,8 +34,7 @@ public class HexUtil {
     assert value >= 0 : "Precondition: value >= 0";
     assert value < 0x10000 : "value < 0x10000";
 
-    String result = Long.toHexString(value + 0x10000).toUpperCase();
-    return result.substring(1);
+    return Long.toHexString(value + 0x10000).toUpperCase().substring(1);
   }
 
   /**
