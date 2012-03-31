@@ -13,7 +13,7 @@ public class HexUtil {
     assert value >= 0 : "Precondition: value >= 0";
     assert value < 0x100 : "Precondition: value < 0x100";
 
-    StringBuilder result = new StringBuilder(Long.toHexString(value + 0x100).toUpperCase());
+    String result = Long.toHexString(value + 0x100).toUpperCase();
     return result.substring(1);
   }
 
@@ -23,12 +23,7 @@ public class HexUtil {
    * @require value < 0x100
    */
   public static String hexByte(int value) {
-    assert value >= 0 : "Precondition: value >= 0";
-    assert value < 0x100 : "Precondition: value < 0x100";
-
-    StringBuilder result = new StringBuilder(Long.toHexString(value + 0x100).toUpperCase());
-    result.setCharAt(0, '$');
-    return result.toString();
+    return "$" + hexBytePlain(value);
   }
 
   /**
@@ -40,7 +35,7 @@ public class HexUtil {
     assert value >= 0 : "Precondition: value >= 0";
     assert value < 0x10000 : "value < 0x10000";
 
-    StringBuilder result = new StringBuilder(Long.toHexString(value + 0x10000).toUpperCase());
+    String result = Long.toHexString(value + 0x10000).toUpperCase();
     return result.substring(1);
   }
 
@@ -50,12 +45,7 @@ public class HexUtil {
    * @require value < 0x10000
    */
   public static String hexWord(int value) {
-    assert value >= 0 : "Precondition: value >= 0";
-    assert value < 0x10000 : "value < 0x10000";
-
-    StringBuilder result = new StringBuilder(Long.toHexString(value + 0x10000).toUpperCase());
-    result.setCharAt(0, '$');
-    return result.toString();
+    return "$" + hexWordPlain(value);
   }
 
   /**
@@ -76,10 +66,7 @@ public class HexUtil {
    * @require value < 0x10000
    */
   public static String hex(int value) {
-    assert value >= 0 : "Precondition: value >= 0";
-    assert value < 0x10000 : "value < 0x10000";
-
-    return value < 0x100 ? hexByte(value) : hexWord(value);
+    return "$" + hexPlain(value);
   }
 
   /**
