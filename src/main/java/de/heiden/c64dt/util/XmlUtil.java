@@ -1,8 +1,9 @@
 package de.heiden.c64dt.util;
 
+import org.springframework.util.FileCopyUtils;
+
 import javax.xml.bind.JAXB;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * XML utils.
@@ -28,5 +29,16 @@ public class XmlUtil {
    */
   public static <O> O unmarshal(InputStream stream, Class<O> clazz) throws Exception {
     return JAXB.unmarshal(stream, clazz);
+  }
+
+  /**
+   * Print xml to System.out.
+   *
+   * @param xml XML
+   */
+  public static void println(byte[] xml) throws Exception {
+    FileCopyUtils.copy(new InputStreamReader(new ByteArrayInputStream(xml), "utf8"), new PrintWriter(System.out));
+    System.out.println();
+    System.out.flush();
   }
 }
