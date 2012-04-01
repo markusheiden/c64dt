@@ -79,7 +79,7 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
       AddressMapper address = new AddressMapper();
       address.index = entry.getKey();
       address.base = entry.getValue();
-      addresses.add(address);
+      result.addresses.add(address);
     }
 
     // subroutines
@@ -88,7 +88,7 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
       subroutine.address = entry.getKey();
       subroutine.arguments = entry.getValue().getArguments();
       subroutine.type = entry.getValue().getType();
-      subroutines.add(subroutine);
+      result.subroutines.add(subroutine);
     }
 
     // detected code types
@@ -114,7 +114,7 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
       }
       codeType.type = type;
 
-      types.add(codeType);
+      result.types.add(codeType);
     }
 
     return result;
