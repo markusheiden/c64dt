@@ -4,12 +4,9 @@ import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.util.XmlUtil;
 import org.junit.Test;
-import org.springframework.util.FileCopyUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.SortedMap;
 
 import static org.junit.Assert.assertEquals;
@@ -81,16 +78,12 @@ public class CommandBufferMapperTest {
 
     // write read xml again
     os.reset();
-    XmlUtil.marshal(readCommands, os);
+    XmlUtil.marshal(readReassembler, os);
     byte[] readXml = os.toByteArray();
 
     assertEquals(xml.length, readXml.length);
     for (int i = 0; i < xml.length; i++) {
       assertEquals("Byte " + i, xml[i], readXml[i]);
     }
-  }
-
-  private void println(byte[] xml) throws Exception {
-    FileCopyUtils.copy(new InputStreamReader(new ByteArrayInputStream(xml), "utf8"), new PrintWriter(System.out));
   }
 }
