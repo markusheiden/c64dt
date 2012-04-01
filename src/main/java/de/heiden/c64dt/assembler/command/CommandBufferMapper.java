@@ -122,15 +122,6 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
 
   @Override
   public CommandBuffer unmarshal(CommandBufferMapper xmlCommands) throws Exception {
-    try {
-      return unmarshalImpl(xmlCommands);
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
-  }
-
-  public CommandBuffer unmarshalImpl(CommandBufferMapper xmlCommands) throws Exception {
     List<AddressMapper> addresses = xmlCommands.addresses;
 
     // start address / first base address
