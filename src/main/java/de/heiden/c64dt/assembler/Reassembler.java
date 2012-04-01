@@ -48,8 +48,6 @@ public class Reassembler {
   /**
    * Reassembled code.
    */
-  @XmlElement(name = "commands")
-  @XmlJavaTypeAdapter(CommandBufferMapper.class)
   private CommandBuffer commands;
 
   /**
@@ -70,8 +68,22 @@ public class Reassembler {
   /**
    * Command buffer.
    */
+  @XmlElement(name = "commands")
+  @XmlJavaTypeAdapter(CommandBufferMapper.class)
   public CommandBuffer getCommands() {
     return commands;
+  }
+
+  /**
+   * Set command buffer.
+   *
+   * @param commands Command buffer
+   */
+  private void setCommands(CommandBuffer commands) {
+    Assert.notNull(commands, "Precondition: commands != null");
+
+    this.commands = commands;
+    reassemble();
   }
 
   /**

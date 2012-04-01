@@ -101,7 +101,6 @@ public class ReassemblerView extends JFrame {
     try {
       File file = new File("retro replay", "rr38q-cnet-0.xml");
       Reassembler reassembler = XmlUtil.unmarshal(new FileInputStream(file), Reassembler.class);
-      reassembler.reassemble();
       use(reassembler);
       currentFile = file;
     } catch (Exception e) {

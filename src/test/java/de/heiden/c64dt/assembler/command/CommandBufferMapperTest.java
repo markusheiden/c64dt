@@ -1,11 +1,15 @@
 package de.heiden.c64dt.assembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
+import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.util.XmlUtil;
 import org.junit.Test;
+import org.springframework.util.FileCopyUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.SortedMap;
 
 import static org.junit.Assert.assertEquals;
@@ -22,7 +26,9 @@ public class CommandBufferMapperTest {
       code[i] = (byte) i;
     }
 
-    CommandBuffer commands = new CommandBuffer(code, 0x1000);
+    Reassembler reassembler = new Reassembler();
+    reassembler.reassemble(0x1000, code);
+    CommandBuffer commands = reassembler.getCommands();
 
     // addresses
     commands.rebase(0x0010, 0x2000);
@@ -39,49 +45,52 @@ public class CommandBufferMapperTest {
     commands.setType(0x9000, CodeType.OPCODE);
     commands.setType(0x9001, 0xA000, CodeType.CODE);
 
-    CommandBufferMapper mapper = new CommandBufferMapper();
-
     // write to xml
     ByteArrayOutputStream os = new ByteArrayOutputStream();
-    XmlUtil.marshal(commands, os);
+    XmlUtil.marshal(reassembler, os);
     byte[] xml = os.toByteArray();
 
     // read written xml
-    CommandBuffer read = XmlUtil.unmarshal(new ByteArrayInputStream(xml), CommandBuffer.class);
+    Reassembler readReassembler = XmlUtil.unmarshal(new ByteArrayInputStream(xml), Reassembler.class);
+    CommandBuffer readCommands = readReassembler.getCommands();
 
     // code
-    byte[] readCode = read.getCode();
+    byte[] readCode = readCommands.getCode();
     for (int i = 0; i < code.length; i++) {
       assertEquals("Byte " + i + ":", code[i], readCode[i]);
     }
 
     // code types
     for (int index = 0; index < commands.getLength(); index++) {
-      assertEquals("Index " + index + ":", commands.getType(index), read.getType(index));
+      assertEquals("Index " + index + ":", commands.getType(index), readCommands.getType(index));
     }
 
     // addresses
     SortedMap<Integer, Integer> commandsStart = commands.getStartAddresses();
-    SortedMap<Integer, Integer> readStart = read.getStartAddresses();
+    SortedMap<Integer, Integer> readStart = readCommands.getStartAddresses();
     for (Integer index : commandsStart.keySet()) {
       assertEquals("Index " + index + ":", commandsStart.get(index), readStart.get(index));
     }
 
     // subroutines
     SortedMap<Integer, Integer> commandsSubroutines = commands.getStartAddresses();
-    SortedMap<Integer, Integer> readSubroutines = read.getStartAddresses();
+    SortedMap<Integer, Integer> readSubroutines = readCommands.getStartAddresses();
     for (Integer address : commandsSubroutines.keySet()) {
       assertEquals("Address " + address + ":", commandsSubroutines.get(address), readSubroutines.get(address));
     }
 
     // write read xml again
     os.reset();
-    XmlUtil.marshal(read, os);
+    XmlUtil.marshal(readCommands, os);
     byte[] readXml = os.toByteArray();
 
     assertEquals(xml.length, readXml.length);
     for (int i = 0; i < xml.length; i++) {
       assertEquals("Byte " + i, xml[i], readXml[i]);
     }
+  }
+
+  private void println(byte[] xml) throws Exception {
+    FileCopyUtils.copy(new InputStreamReader(new ByteArrayInputStream(xml), "utf8"), new PrintWriter(System.out));
   }
 }
