@@ -38,9 +38,9 @@ public class Reassembler {
     @XmlElement(name = "brk", type = BrkDetector.class),
     @XmlElement(name = "jsr", type = JsrDetector.class),
     @XmlElement(name = "label", type = LabelDetector.class),
-    @XmlElement(name = "reachability", type = Reachability.class),
+    @XmlElement(name = "reachability", type = Reachability.class)
   })
-  private final List<IDetector> detectors = new ArrayList<IDetector>();
+  private final List<IDetector> detectors = new ArrayList<>();
 
   /**
    * Reassembled code.
