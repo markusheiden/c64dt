@@ -3,8 +3,7 @@ package de.heiden.c64dt.assembler.label;
 /**
  * Label.
  */
-public interface ILabel extends Comparable<ILabel>
-{
+public interface ILabel extends Comparable<ILabel> {
   /**
    * Address the label points to.
    */
@@ -12,7 +11,12 @@ public interface ILabel extends Comparable<ILabel>
 
   /**
    * String representation of this label.
-   * +/- X is add, if needed.
+   */
+  public String toString();
+
+  /**
+   * String representation of this label.
+   * +/- X will be added, if needed.
    *
    * @param address absolute address this label is used for
    */

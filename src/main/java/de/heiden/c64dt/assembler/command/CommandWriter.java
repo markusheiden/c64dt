@@ -17,14 +17,29 @@ import static de.heiden.c64dt.util.HexUtil.*;
  */
 public class CommandWriter {
   /**
+   * Writer to write output to.
+   */
+  private final Writer output;
+
+  /**
+   * Constructor.
+   *
+   * @param output writer to write output to
+   */
+  public CommandWriter(Writer output) {
+    Assert.notNull(output, "Precondition: output != null");
+
+    this.output = output;
+  }
+
+
+  /**
    * Write commands to output writer.
    *
    * @param commands Command buffer
-   * @param output writer to write output to
    */
-  public void write(CommandBuffer commands, Writer output) throws IOException {
+  public void write(CommandBuffer commands) throws IOException {
     Assert.notNull(commands, "Precondition: buffer != null");
-    Assert.notNull(output, "Precondition: output != null");
 
     CommandIterator iter = new CommandIterator(commands);
 
