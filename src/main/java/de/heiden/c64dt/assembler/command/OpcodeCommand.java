@@ -13,8 +13,7 @@ import java.util.List;
 /**
  * Command for an opcode.
  */
-public class OpcodeCommand extends AbstractCommand
-{
+public class OpcodeCommand extends AbstractCommand {
   private final Opcode opcode;
   private final int argument;
   private final int size;
@@ -25,8 +24,7 @@ public class OpcodeCommand extends AbstractCommand
    *
    * @param opcode opcode
    */
-  public OpcodeCommand(Opcode opcode)
-  {
+  public OpcodeCommand(Opcode opcode) {
     this(opcode, -1);
   }
 
@@ -37,8 +35,7 @@ public class OpcodeCommand extends AbstractCommand
    * @param opcode opcode
    * @param argument argument
    */
-  public OpcodeCommand(Opcode opcode, int argument)
-  {
+  public OpcodeCommand(Opcode opcode, int argument) {
     super(CodeType.OPCODE);
 
     Assert.notNull(opcode, "Precondition: opcode != null");
@@ -53,16 +50,14 @@ public class OpcodeCommand extends AbstractCommand
   /**
    * Opcode.
    */
-  public Opcode getOpcode()
-  {
+  public Opcode getOpcode() {
     return opcode;
   }
 
   /**
    * Argument for opcode, if any.
    */
-  public int getArgument()
-  {
+  public int getArgument() {
     Assert.isTrue(getSize() > 1, "Precondition: getSize() > 1");
 
     return argument;
@@ -71,16 +66,14 @@ public class OpcodeCommand extends AbstractCommand
   /**
    * Is the argument an (absolute) address?
    */
-  public boolean isArgumentAddress()
-  {
+  public boolean isArgumentAddress() {
     return opcode.getMode().isAddress();
   }
 
   /**
    * Get the opcode argument as absolute address.
    */
-  public int getArgumentAddress()
-  {
+  public int getArgumentAddress() {
     Assert.isTrue(isArgumentAddress(), "Precondition: isArgumentAddress()");
 
     return opcode.getMode().getAddress(getAddress(), getArgument());
@@ -89,36 +82,29 @@ public class OpcodeCommand extends AbstractCommand
   /**
    * Size of opcode including the argument.
    */
-  public final int getSize()
-  {
+  public final int getSize() {
     return size;
   }
 
   /**
    * Does the control flow may not reach the opcode directly after this opcode?
    */
-  public final boolean isEnd()
-  {
+  public final boolean isEnd() {
     return end;
   }
 
-  public String toString(CommandBuffer buffer)
-  {
+  public String toString(CommandBuffer buffer) {
     Assert.notNull(buffer, "Precondition: buffer != null");
 
     StringBuilder result = new StringBuilder();
     result.append(opcode.getType().toString());
     OpcodeMode mode = opcode.getMode();
-    if (mode.getSize() > 0)
-    {
+    if (mode.getSize() > 0) {
       result.append(" ");
-      ILabel label = mode.isAddress()? buffer.getLabel(mode.getAddress(getAddress(), argument)) : null;
-      if (label != null)
-      {
+      ILabel label = mode.isAddress() ? buffer.getLabel(mode.getAddress(getAddress(), argument)) : null;
+      if (label != null) {
         result.append(mode.toString(label.toString(mode.getAddress(getAddress(), argument))));
-      }
-      else
-      {
+      } else {
         result.append(mode.toString(getAddress(), argument));
       }
     }
@@ -126,16 +112,12 @@ public class OpcodeCommand extends AbstractCommand
     return result.toString();
   }
 
-  public List<Integer> toBytes()
-  {
-    List<Integer> result = new ArrayList<Integer>(getSize());
+  public List<Integer> toBytes() {
+    List<Integer> result = new ArrayList<>(getSize());
     result.add(opcode.getOpcode());
-    if (opcode.getMode().getSize() == 1)
-    {
+    if (opcode.getMode().getSize() == 1) {
       result.add(argument);
-    }
-    else if (opcode.getMode().getSize() == 2)
-    {
+    } else if (opcode.getMode().getSize() == 2) {
       result.add(ByteUtil.lo(argument));
       result.add(ByteUtil.hi(argument));
     }

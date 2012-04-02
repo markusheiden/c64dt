@@ -37,7 +37,7 @@ public class Reassembler {
     @XmlElement(name = "bit", type = BitDetector.class),
     @XmlElement(name = "brk", type = BrkDetector.class),
     @XmlElement(name = "jsr", type = JsrDetector.class),
-    @XmlElement(name = "label", type = LabelDetector.class),
+    @XmlElement(name = "label", type = LabelDetector.class)
   })
   private final List<IDetector> detectors = new ArrayList<>();
 

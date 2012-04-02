@@ -18,14 +18,11 @@ import java.util.List;
 /**
  * Hex editor.
  */
-public class JHexEditor extends JTable
-{
-  public JHexEditor()
-  {
+public class JHexEditor extends JTable {
+  public JHexEditor() {
     setTableHeader(null);
     byte[] bytes = new byte[256];
-    for (int i = 0; i < bytes.length; i++)
-    {
+    for (int i = 0; i < bytes.length; i++) {
       bytes[i] = (byte) i;
     }
     setBytes(bytes);
@@ -35,19 +32,14 @@ public class JHexEditor extends JTable
     setRowSelectionAllowed(false);
     setColumnSelectionAllowed(false);
     setCellSelectionEnabled(true);
-    setDefaultRenderer(byte[].class, new TableCellRenderer()
-    {
-      public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-      {
+    setDefaultRenderer(byte[].class, new TableCellRenderer() {
+      public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         byte[] text = (byte[]) value;
         JC64TextArea renderer = new JC64TextArea(text.length, 1, 2, false);
-        if (isSelected)
-        {
+        if (isSelected) {
           renderer.setBackground(getSelectionBackground());
           renderer.setForeground(getSelectionForeground());
-        }
-        else
-        {
+        } else {
           renderer.setBackground(getBackground());
           renderer.setForeground(getForeground());
         }
@@ -55,51 +47,33 @@ public class JHexEditor extends JTable
         return renderer;
       }
     });
-    setDefaultEditor(byte[].class, new TableCellEditor()
-    {
-      private List<CellEditorListener> listeners = new ArrayList<CellEditorListener>();
+    setDefaultEditor(byte[].class, new TableCellEditor() {
+      private List<CellEditorListener> listeners = new ArrayList<>();
 
-      public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, final int row, final int column)
-      {
+      public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, final int row, final int column) {
         byte[] text = (byte[]) value;
         JC64TextArea editor = new JC64TextArea(text.length, 1, 2, false);
-        if (isSelected)
-        {
+        if (isSelected) {
           editor.setBackground(getSelectionBackground());
           editor.setForeground(getSelectionForeground());
-        }
-        else
-        {
+        } else {
           editor.setBackground(getBackground());
           editor.setForeground(getForeground());
         }
         editor.setText(0, 0, text);
-        editor.addKeyListener(new KeyAdapter()
-        {
-          public void keyPressed(KeyEvent e)
-          {
-            if (e.getKeyCode() == KeyEvent.VK_DOWN)
-            {
+        editor.addKeyListener(new KeyAdapter() {
+          public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_DOWN) {
               JHexEditor.this.changeSelection(row + 1, column, false, false);
-            }
-            else if (e.getKeyCode() == KeyEvent.VK_UP)
-            {
+            } else if (e.getKeyCode() == KeyEvent.VK_UP) {
               JHexEditor.this.changeSelection(row - 1, column, false, false);
-            }
-            else if (e.getKeyCode() == KeyEvent.VK_LEFT)
-            {
+            } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
               JHexEditor.this.changeSelection(row, column - 1, false, false);
-            }
-            else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-            {
+            } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
               JHexEditor.this.changeSelection(row, column + 1, false, false);
-            }
-            else if (e.getKeyCode() == KeyEvent.VK_ENTER)
-            {
+            } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
               JHexEditor.this.changeSelection(row - 1, column, false, false);
-            }
-            else
-            {
+            } else {
               return;
             }
 
@@ -109,52 +83,42 @@ public class JHexEditor extends JTable
         return editor;
       }
 
-      public Object getCellEditorValue()
-      {
+      public Object getCellEditorValue() {
         return null;
       }
 
-      public boolean isCellEditable(EventObject anEvent)
-      {
+      public boolean isCellEditable(EventObject anEvent) {
         return true;
       }
 
-      public boolean shouldSelectCell(EventObject anEvent)
-      {
+      public boolean shouldSelectCell(EventObject anEvent) {
         return true;
       }
 
-      public boolean stopCellEditing()
-      {
-        for (CellEditorListener listener : new ArrayList<CellEditorListener>(listeners))
-        {
+      public boolean stopCellEditing() {
+        for (CellEditorListener listener : new ArrayList<>(listeners)) {
           listener.editingStopped(new ChangeEvent(this));
         }
         return true;
       }
 
-      public void cancelCellEditing()
-      {
-        for (CellEditorListener listener : new ArrayList<CellEditorListener>(listeners))
-        {
+      public void cancelCellEditing() {
+        for (CellEditorListener listener : new ArrayList<>(listeners)) {
           listener.editingStopped(new ChangeEvent(this));
         }
       }
 
-      public void addCellEditorListener(CellEditorListener l)
-      {
+      public void addCellEditorListener(CellEditorListener l) {
         listeners.add(l);
       }
 
-      public void removeCellEditorListener(CellEditorListener l)
-      {
+      public void removeCellEditorListener(CellEditorListener l) {
         listeners.remove(l);
       }
     });
   }
 
-  public void setBytes(final byte[] bytes)
-  {
+  public void setBytes(final byte[] bytes) {
     final int width = 16;
     setModel(new JHexEditorTableModel(bytes, width));
   }
@@ -163,31 +127,25 @@ public class JHexEditor extends JTable
   // Specific model class
   //
 
-  private static class JHexEditorTableModel extends AbstractTableModel
-  {
+  private static class JHexEditorTableModel extends AbstractTableModel {
     private final byte[] bytes;
     private final int width;
 
-    public JHexEditorTableModel(byte[] bytes, int width)
-    {
+    public JHexEditorTableModel(byte[] bytes, int width) {
       this.bytes = bytes;
       this.width = width;
     }
 
-    public int getRowCount()
-    {
+    public int getRowCount() {
       return (bytes.length + (width - 1)) / width;
     }
 
-    public int getColumnCount()
-    {
+    public int getColumnCount() {
       return 2;
     }
 
-    public String getColumnName(int columnIndex)
-    {
-      switch (columnIndex)
-      {
+    public String getColumnName(int columnIndex) {
+      switch (columnIndex) {
         case 0:
           return "Hex";
         case 1:
@@ -197,10 +155,8 @@ public class JHexEditor extends JTable
       }
     }
 
-    public Class<?> getColumnClass(int columnIndex)
-    {
-      switch (columnIndex)
-      {
+    public Class<?> getColumnClass(int columnIndex) {
+      switch (columnIndex) {
         case 0:
           return byte[].class;
         case 1:
@@ -210,17 +166,14 @@ public class JHexEditor extends JTable
       }
     }
 
-    public boolean isCellEditable(int rowIndex, int columnIndex)
-    {
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
       return true;
     }
 
-    public Object getValueAt(int rowIndex, int columnIndex)
-    {
+    public Object getValueAt(int rowIndex, int columnIndex) {
       byte[] line = new byte[width];
       System.arraycopy(bytes, rowIndex * width, line, 0, width);
-      switch (columnIndex)
-      {
+      switch (columnIndex) {
         case 0:
           return line;
         case 1:
@@ -230,8 +183,7 @@ public class JHexEditor extends JTable
       }
     }
 
-    public void setValueAt(Object aValue, int rowIndex, int columnIndex)
-    {
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
     }
   }
 
@@ -239,8 +191,7 @@ public class JHexEditor extends JTable
   // Test
   //
 
-  public static void main(String[] args)
-  {
+  public static void main(String[] args) {
     JHexEditor editor = new JHexEditor();
     editor.setPreferredSize(new Dimension(200, 200));
 

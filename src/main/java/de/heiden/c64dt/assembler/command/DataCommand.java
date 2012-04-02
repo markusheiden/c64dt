@@ -14,8 +14,7 @@ import static de.heiden.c64dt.util.HexUtil.hexByte;
 /**
  * Command for data.
  */
-public class DataCommand extends AbstractCommand
-{
+public class DataCommand extends AbstractCommand {
   /**
    * How many bytes a data line (!BYTE) should hold at max.
    */
@@ -31,11 +30,10 @@ public class DataCommand extends AbstractCommand
    *
    * @param dataByte byte this command represents
    */
-  public DataCommand(int dataByte)
-  {
+  public DataCommand(int dataByte) {
     super(CodeType.DATA);
 
-    this.data = new ArrayList<Integer>(MAX_BYTES);
+    this.data = new ArrayList<>(MAX_BYTES);
     this.data.add(dataByte);
   }
 
@@ -44,43 +42,36 @@ public class DataCommand extends AbstractCommand
    *
    * @param dataBytes bytes this command represents
    */
-  public DataCommand(int... dataBytes)
-  {
+  public DataCommand(int... dataBytes) {
     super(CodeType.DATA);
 
-    this.data = new ArrayList<Integer>(MAX_BYTES);
-    for (int dataByte : dataBytes)
-    {
+    this.data = new ArrayList<>(MAX_BYTES);
+    for (int dataByte : dataBytes) {
       this.data.add(dataByte);
     }
   }
 
   @Override
-  public final int getSize()
-  {
+  public final int getSize() {
     return data.size();
   }
 
   @Override
-  public final boolean isEnd()
-  {
+  public final boolean isEnd() {
     return true;
   }
 
   @Override
-  public boolean combineWith(ICommand command)
-  {
+  public boolean combineWith(ICommand command) {
     // Only other data commands may be merged
-    if (!(command instanceof DataCommand))
-    {
+    if (!(command instanceof DataCommand)) {
       return false;
     }
 
     DataCommand dataCommand = (DataCommand) command;
 
     // Only merge more than MAX_BYTES if result is a !FILL
-    if (data.size() >= MAX_BYTES && (!isSameByte() || !dataCommand.isSameByte() || !data.get(0).equals(dataCommand.data.get(0))))
-    {
+    if (data.size() >= MAX_BYTES && (!isSameByte() || !dataCommand.isSameByte() || !data.get(0).equals(dataCommand.data.get(0)))) {
       return false;
     }
 
@@ -89,13 +80,11 @@ public class DataCommand extends AbstractCommand
   }
 
   @Override
-  public String toString(CommandBuffer buffer)
-  {
+  public String toString(CommandBuffer buffer) {
     Assert.notNull(buffer, "Precondition: buffer != null");
 
     StringBuilder output = new StringBuilder(16 + data.size() * 8);
-    if (data.size() > 8 && isSameByte())
-    {
+    if (data.size() > 8 && isSameByte()) {
       // special case: the data consists of the same byte over and over again
 
       output.append("!FILL ");
@@ -103,22 +92,18 @@ public class DataCommand extends AbstractCommand
       output.append(", ");
       output.append(hexByte(data.get(0)));
 
-    }
-    else
-    {
+    } else {
       // default case: different data bytes
 
       output.append("!BYTE ");
       output.append(hexByte(data.get(0)));
-      for (int i = 1; i < data.size(); i++)
-      {
+      for (int i = 1; i < data.size(); i++) {
         output.append(", ");
         output.append(hexByte(data.get(i)));
       }
       output.append("; '");
       byte[] string = new byte[data.size()];
-      for (int i = 0; i < data.size(); i++)
-      {
+      for (int i = 0; i < data.size(); i++) {
         string[i] = data.get(i).byteValue();
       }
       output.append(C64Charset.LOWER.toString(string));
@@ -131,13 +116,10 @@ public class DataCommand extends AbstractCommand
   /**
    * Detect if the data consists of the same byte repeated multiple times.
    */
-  private boolean isSameByte()
-  {
+  private boolean isSameByte() {
     Integer content = data.get(0);
-    for (Integer dataByte : data)
-    {
-      if (!content.equals(dataByte))
-      {
+    for (Integer dataByte : data) {
+      if (!content.equals(dataByte)) {
         return false;
       }
     }
@@ -146,8 +128,7 @@ public class DataCommand extends AbstractCommand
   }
 
   @Override
-  public List<Integer> toBytes()
-  {
+  public List<Integer> toBytes() {
     return Collections.unmodifiableList(data);
   }
 }

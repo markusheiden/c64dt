@@ -34,10 +34,9 @@ public class Path extends AbstractPath {
   }
 
   protected IDirectory doDirectory() {
-    List<IFile> entries = new ArrayList<IFile>();
+    List<IFile> entries = new ArrayList<>();
     File[] files = directory.listFiles();
-    for (int i = 0; i < files.length; i++) {
-      File file = files[i];
+    for (File file : files) {
       int extensionPos = file.getName().lastIndexOf('.');
       String extension = extensionPos >= 0 ? file.getName().substring(extensionPos + 1) : "";
       FileMode mode = new FileMode(file.isDirectory() ? FileType.DIR : FileType.fileType(extension));
@@ -46,7 +45,7 @@ public class Path extends AbstractPath {
       entries.add(new de.heiden.c64dt.disk.File(mode, 1, 0, filename, size));
     }
     byte[] trimmedName = new byte[16];
-    Arrays.fill(trimmedName, (byte) SPACE);
+    Arrays.fill(trimmedName, SPACE);
     byte[] dirName = encode(trimTo16(directory.getName()));
     System.arraycopy(dirName, 0, trimmedName, 0, dirName.length);
     return new Directory(trimmedName, encode(">NET<"), entries, 0);

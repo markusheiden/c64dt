@@ -107,17 +107,17 @@ public class CommandBuffer {
     Arrays.fill(this.dataReferences, -1);
     this.externalReferences = new int[code.length];
     Arrays.fill(this.externalReferences, -1);
-    this.codeLabels = new HashMap<Integer, CodeLabel>();
-    this.dataLabels = new HashMap<Integer, DataLabel>();
-    this.externalLabels = new HashMap<Integer, ExternalLabel>();
+    this.codeLabels = new HashMap<>();
+    this.dataLabels = new HashMap<>();
+    this.externalLabels = new HashMap<>();
 
     this.code = code;
     this.types = new CodeType[code.length];
     Arrays.fill(this.types, CodeType.UNKNOWN);
-    this.startAddresses = new TreeMap<Integer, Integer>();
+    this.startAddresses = new TreeMap<>();
     this.startAddresses.put(0, startAddress);
     this.startAddresses.put(code.length, startAddress);
-    this.subroutines = new HashMap<Integer, Subroutine>();
+    this.subroutines = new HashMap<>();
     this.commands = new ICommand[code.length];
 
     this.index = 0;
@@ -497,7 +497,7 @@ public class CommandBuffer {
    * @param address Absolute address
    */
   public SortedSet<Integer> getReferences(int address) {
-    SortedSet<Integer> result = new TreeSet<Integer>();
+    SortedSet<Integer> result = new TreeSet<>();
     for (int i = 0; i < code.length; i++) {
       if (codeReferences[i] == address) {
         result.add(i);

@@ -17,8 +17,7 @@ import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
 /**
  * Table model for code view.
  */
-public class CodeTableModel extends DefaultTableModel
-{
+public class CodeTableModel extends DefaultTableModel {
   /**
    * Underlying representation: the reassembler.
    */
@@ -27,28 +26,25 @@ public class CodeTableModel extends DefaultTableModel
   /**
    * Mapping from row to relative address of the code shown in that row.
    */
-  private final Map<Integer, Integer> rowToIndex = new HashMap<Integer, Integer>();
-  private final Map<Integer, Integer> indexToRow = new HashMap<Integer, Integer>();
+  private final Map<Integer, Integer> rowToIndex = new HashMap<>();
+  private final Map<Integer, Integer> indexToRow = new HashMap<>();
 
   /**
    * Constructor.
    */
-  public CodeTableModel()
-  {
+  public CodeTableModel() {
     super(new String[]{"Flags", "Index", "Addr", "Bytes", "Label", "Code"}, 0);
   }
 
   @Override
-  public boolean isCellEditable(int row, int column)
-  {
+  public boolean isCellEditable(int row, int column) {
     return false;
   }
 
   /**
    * Get underlying reassembler.
    */
-  public Reassembler getReassembler()
-  {
+  public Reassembler getReassembler() {
     return reassembler;
   }
 
@@ -57,8 +53,7 @@ public class CodeTableModel extends DefaultTableModel
    *
    * @param reassembler Underlying representation
    */
-  public void use(Reassembler reassembler)
-  {
+  public void use(Reassembler reassembler) {
     this.reassembler = reassembler;
     update();
   }
@@ -66,16 +61,14 @@ public class CodeTableModel extends DefaultTableModel
   /**
    * Update table model from commands.
    */
-  public void update()
-  {
+  public void update() {
     // Clear old model
     setRowCount(0);
     rowToIndex.clear();
     indexToRow.clear();
 
     // no model -> no representation
-    if (reassembler == null)
-    {
+    if (reassembler == null) {
       return;
     }
 
@@ -84,25 +77,20 @@ public class CodeTableModel extends DefaultTableModel
     StringBuilder builder = new StringBuilder();
 
     CommandIterator iter = new CommandIterator(commands);
-    while (iter.hasNextCommand())
-    {
+    while (iter.hasNextCommand()) {
       ICommand command = iter.nextCommand();
       int index = iter.getIndex();
       int addr = commands.addressForIndex(index);
 
       builder.setLength(0);
-      if (!command.isReachable())
-      {
+      if (!command.isReachable()) {
         builder.append("U");
       }
-      for (int i = 1; i < command.getSize(); i++)
-      {
-        if (commands.hasCodeLabel(addr + i))
-        {
+      for (int i = 1; i < command.getSize(); i++) {
+        if (commands.hasCodeLabel(addr + i)) {
           builder.append("C");
         }
-        if (commands.hasDataLabel(addr + i))
-        {
+        if (commands.hasDataLabel(addr + i)) {
           builder.append("D");
         }
       }
@@ -111,8 +99,7 @@ public class CodeTableModel extends DefaultTableModel
       builder.setLength(0);
       List<Integer> data = command.toBytes();
       int i = index;
-      for (int dataByte : data)
-      {
+      for (int dataByte : data) {
         builder.append(" ");
         builder.append(commands.getType(i++).getId().toLowerCase());
         builder.append(hexBytePlain(dataByte));
@@ -121,20 +108,16 @@ public class CodeTableModel extends DefaultTableModel
 
       builder.setLength(0);
       ILabel label = iter.getLabel();
-      if (label != null)
-      {
+      if (label != null) {
         // TODO mh: check length of label?
         builder.append(label.toString(addr)).append(":");
       }
       String labelString = builder.toString();
 
       builder.setLength(0);
-      if (command != null)
-      {
+      if (command != null) {
         builder.append(command.toString(commands));
-      }
-      else
-      {
+      } else {
         // TODO mh: log error?
         builder.append("???");
       }
@@ -154,8 +137,7 @@ public class CodeTableModel extends DefaultTableModel
    * @param label Label
    * @param code Code
    */
-  private void addRow(int index, String flags, int address, String bytes, String label, String code)
-  {
+  private void addRow(int index, String flags, int address, String bytes, String label, String code) {
     rowToIndex.put(getRowCount(), index);
     indexToRow.put(index, getRowCount());
     addRow(new Object[]{flags, hexWordPlain(index), hexWordPlain(address), bytes, label, code});
@@ -166,8 +148,7 @@ public class CodeTableModel extends DefaultTableModel
    *
    * @param row Row
    */
-  public Integer getIndex(int row)
-  {
+  public Integer getIndex(int row) {
     return rowToIndex.get(row);
   }
 
@@ -176,8 +157,7 @@ public class CodeTableModel extends DefaultTableModel
    *
    * @param index Index
    */
-  public Integer getRow(int index)
-  {
+  public Integer getRow(int index) {
     return indexToRow.get(index);
   }
 }

@@ -13,8 +13,7 @@ import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
 /**
  * Table model for cross reference view.
  */
-public class CrossReferenceTableModel extends DefaultTableModel
-{
+public class CrossReferenceTableModel extends DefaultTableModel {
   /**
    * Underlying representation: the reassembler.
    */
@@ -23,8 +22,8 @@ public class CrossReferenceTableModel extends DefaultTableModel
   /**
    * Mapping from row to relative address of the code shown in that row.
    */
-  private final Map<Integer, Integer> rowToIndex = new HashMap<Integer, Integer>();
-  private final Map<Integer, Integer> indexToRow = new HashMap<Integer, Integer>();
+  private final Map<Integer, Integer> rowToIndex = new HashMap<>();
+  private final Map<Integer, Integer> indexToRow = new HashMap<>();
 
   /**
    * Relative address for which the references should be displayed.
@@ -34,22 +33,19 @@ public class CrossReferenceTableModel extends DefaultTableModel
   /**
    * Constructor.
    */
-  public CrossReferenceTableModel()
-  {
+  public CrossReferenceTableModel() {
     super(new String[]{"Index", "Addr"}, 0);
   }
 
   @Override
-  public boolean isCellEditable(int row, int column)
-  {
+  public boolean isCellEditable(int row, int column) {
     return false;
   }
 
   /**
    * Get underlying reassembler.
    */
-  public Reassembler getReassembler()
-  {
+  public Reassembler getReassembler() {
     return reassembler;
   }
 
@@ -58,8 +54,7 @@ public class CrossReferenceTableModel extends DefaultTableModel
    *
    * @param reassembler Underlying representation
    */
-  public void use(Reassembler reassembler)
-  {
+  public void use(Reassembler reassembler) {
     this.reassembler = reassembler;
     update();
   }
@@ -69,8 +64,7 @@ public class CrossReferenceTableModel extends DefaultTableModel
    *
    * @param index Relative address
    */
-  public void select(int index)
-  {
+  public void select(int index) {
     this.index = index;
     update();
   }
@@ -78,29 +72,25 @@ public class CrossReferenceTableModel extends DefaultTableModel
   /**
    * Update table model from commands.
    */
-  public void update()
-  {
+  public void update() {
     setRowCount(0);
     rowToIndex.clear();
     indexToRow.clear();
 
     // no model -> no representation
-    if (reassembler == null)
-    {
+    if (reassembler == null) {
       return;
     }
 
     CommandBuffer commands = reassembler.getCommands();
 
-    if (!commands.hasIndex(index))
-    {
+    if (!commands.hasIndex(index)) {
       // no row selected -> display nothing
       return;
     }
 
     SortedSet<Integer> references = commands.getReferences(commands.addressForIndex(index));
-    for (Integer reference : references)
-    {
+    for (Integer reference : references) {
       addRow(reference, commands.addressForIndex(reference));
     }
   }
@@ -111,8 +101,7 @@ public class CrossReferenceTableModel extends DefaultTableModel
    * @param index Relative address
    * @param address Absolute address
    */
-  private void addRow(int index, int address)
-  {
+  private void addRow(int index, int address) {
     rowToIndex.put(getRowCount(), index);
     indexToRow.put(index, getRowCount());
     addRow(new Object[]{hexWordPlain(index), hexWordPlain(address)});
@@ -123,8 +112,7 @@ public class CrossReferenceTableModel extends DefaultTableModel
    *
    * @param row Row
    */
-  public Integer getIndex(int row)
-  {
+  public Integer getIndex(int row) {
     return rowToIndex.get(row);
   }
 
@@ -133,8 +121,7 @@ public class CrossReferenceTableModel extends DefaultTableModel
    *
    * @param index Index
    */
-  public Integer getRow(int index)
-  {
+  public Integer getRow(int index) {
     return indexToRow.get(index);
   }
 }

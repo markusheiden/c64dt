@@ -103,7 +103,7 @@ public class JsrDetector implements IDetector {
    * @return Absolute address to list of relative addresses of JSR to that absolute address
    */
   protected Map<Integer, List<Integer>> crossReference(CommandBuffer commands) {
-    Map<Integer, List<Integer>> result = new HashMap<Integer, List<Integer>>();
+    Map<Integer, List<Integer>> result = new HashMap<>();
 
     for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand(); ) {
       ICommand command = iter.nextCommand();
@@ -117,7 +117,7 @@ public class JsrDetector implements IDetector {
         int address = opcodeCommand.getArgument();
         List<Integer> references = result.get(address);
         if (references == null) {
-          references = new ArrayList<Integer>();
+          references = new ArrayList<>();
           result.put(address, references);
         }
         references.add(iter.getIndex());
