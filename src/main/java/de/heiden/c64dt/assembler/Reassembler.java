@@ -83,7 +83,7 @@ public class Reassembler {
     Assert.notNull(commands, "Precondition: commands != null");
 
     this.commands = commands;
-    reassemble();
+    new Tokenizer().detect(commands);
   }
 
   /**
