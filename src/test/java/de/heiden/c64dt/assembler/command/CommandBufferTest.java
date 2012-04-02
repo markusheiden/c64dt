@@ -2,18 +2,14 @@ package de.heiden.c64dt.assembler.command;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Test for {@link CommandBuffer}.
  */
-public class CommandBufferTest
-{
+public class CommandBufferTest {
   @Test
-  public void testHasAddress() throws Exception
-  {
+  public void testHasAddress() throws Exception {
     CommandBuffer commands = new CommandBuffer(new byte[0x2000], 0x8000);
 
     assertFalse(commands.hasAddress(0x7FFF));
@@ -23,8 +19,7 @@ public class CommandBufferTest
   }
 
   @Test
-  public void testRebase() throws Exception
-  {
+  public void testRebase() throws Exception {
     CommandBuffer commands = new CommandBuffer(new byte[0x2000], 0x8000);
     commands.rebase(0x1E00, 0xC000);
 
@@ -39,8 +34,7 @@ public class CommandBufferTest
   }
 
   @Test
-  public void testAddressForIndex() throws Exception
-  {
+  public void testAddressForIndex() throws Exception {
     CommandBuffer commands = new CommandBuffer(new byte[0x2000], 0x8000);
     commands.rebase(0x1E00, 0xC000);
 

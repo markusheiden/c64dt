@@ -3,15 +3,12 @@ package de.heiden.c64dt.assembler.command;
 import de.heiden.c64dt.assembler.Opcode;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Test for {@link CommandIterator}.
  */
-public class CommandIteratorTest
-{
+public class CommandIteratorTest {
   /**
    * Test for
    * {@link CommandIterator#hasNextCommand()}
@@ -21,8 +18,7 @@ public class CommandIteratorTest
    * {@link CommandIterator#getAddress()}.
    */
   @Test
-  public void testNextCommand() throws Exception
-  {
+  public void testNextCommand() throws Exception {
     CommandBuffer commands = new CommandBuffer(new byte[6], 0x1000);
     // LDA $1234, STA $1234
     commands.addCommand(new OpcodeCommand(Opcode.OPCODE_AD, 0x1234));
@@ -57,8 +53,7 @@ public class CommandIteratorTest
    * {@link CommandIterator#previousCommand()}.
    */
   @Test
-  public void testPreviousCommand() throws Exception
-  {
+  public void testPreviousCommand() throws Exception {
     CommandBuffer commands = new CommandBuffer(new byte[6], 0x1000);
     // LDA $1234, STA $1234
     commands.addCommand(new OpcodeCommand(Opcode.OPCODE_AD, 0x1234));

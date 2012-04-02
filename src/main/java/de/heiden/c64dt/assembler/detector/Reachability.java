@@ -1,26 +1,18 @@
 package de.heiden.c64dt.assembler.detector;
 
 import de.heiden.c64dt.assembler.OpcodeType;
-import de.heiden.c64dt.assembler.command.BitCommand;
-import de.heiden.c64dt.assembler.command.CommandBuffer;
-import de.heiden.c64dt.assembler.command.CommandIterator;
-import de.heiden.c64dt.assembler.command.DummyCommand;
-import de.heiden.c64dt.assembler.command.ICommand;
-import de.heiden.c64dt.assembler.command.OpcodeCommand;
+import de.heiden.c64dt.assembler.command.*;
 
 /**
  * Detects reachability of code.
  * Computes transitive unreachability of commands.
  * Should be the second detector.
  */
-public class Reachability implements IDetector
-{
+public class Reachability implements IDetector {
   @Override
-  public boolean detect(CommandBuffer commands)
-  {
+  public boolean detect(CommandBuffer commands) {
     // initially mark all opcodes as reachable
-    for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand(); )
-    {
+    for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand(); ) {
       ICommand command = iter.nextCommand();
       command.setReachable(command instanceof OpcodeCommand || command instanceof BitCommand);
     }
@@ -29,8 +21,7 @@ public class Reachability implements IDetector
 
     // trace backward from unreachable command to the previous
     ICommand lastCommand = new DummyCommand();
-    while (iter.hasPreviousCommand())
-    {
+    while (iter.hasPreviousCommand()) {
       ICommand command = iter.previousCommand();
       /*
        * A code command is not reachable, if it leads to unreachable code.
@@ -39,8 +30,7 @@ public class Reachability implements IDetector
        * TODO mh: check JMP/JSR/Bxx targets for reachability?
        */
       if (!lastCommand.isReachable() &&
-        command.isReachable() && !command.isEnd() && !isJsr(command) && !iter.getType().isCode())
-      {
+        command.isReachable() && !command.isEnd() && !isJsr(command) && !iter.getType().isCode()) {
         command.setReachable(false);
         iter.removeReference();
       }
@@ -57,8 +47,7 @@ public class Reachability implements IDetector
    *
    * @param command Command
    */
-  private boolean isJsr(ICommand command)
-  {
+  private boolean isJsr(ICommand command) {
     return command instanceof OpcodeCommand && ((OpcodeCommand) command).getOpcode().getType().equals(OpcodeType.JSR);
   }
 }
