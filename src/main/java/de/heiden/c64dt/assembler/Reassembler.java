@@ -7,6 +7,7 @@ import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.detector.*;
 import de.heiden.c64dt.assembler.label.ExternalLabel;
 import de.heiden.c64dt.assembler.label.ILabel;
+import org.apache.log4j.Logger;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
@@ -31,6 +32,11 @@ import static de.heiden.c64dt.util.HexUtil.*;
  */
 @XmlRootElement(name = "reassembler")
 public class Reassembler {
+  /**
+   * Logger.
+   */
+  private final Logger logger = Logger.getLogger(getClass());
+
   /**
    * Code type detectors to use.
    */
@@ -143,33 +149,21 @@ public class Reassembler {
       // TODO check for basic header
     }
 
-    reassemble(new CommandBuffer(code, startAddress));
+    commands = new CommandBuffer(code, startAddress);
+    reassemble();
   }
 
   /**
    * Reassemble again.
    */
   public void reassemble() {
-    reassemble(commands);
-  }
-
-  /**
-   * Reassemble.
-   *
-   * @param commands command buffer
-   */
-  public void reassemble(CommandBuffer commands) {
-    Assert.notNull(commands, "Precondition: commands != null");
-
-    this.commands = commands;
-
     boolean change = true;
     for (int count = 0; change && count < 10; count++) {
+      logger.info("Iteration " + count);
       change = detectCodeType();
-      System.out.println(count);
     }
 
-    combine();
+    commands.tokenize();
   }
 
   /**
@@ -183,7 +177,7 @@ public class Reassembler {
     for (IDetector detector : detectors) {
       boolean detectorHit = detector.detect(commands);
       if (detectorHit) {
-        System.out.println(detector.getClass().getSimpleName());
+        logger.info(detector.getClass().getSimpleName() + " changed code types");
       }
       change |= detectorHit;
     }
@@ -194,26 +188,6 @@ public class Reassembler {
     // TODO mh: detect JSR with parameters afterwards
 
     return change;
-  }
-
-  /**
-   * Combine commands, if possible.
-   */
-  private void combine() {
-    Assert.notNull(commands, "Precondition: buffer != null");
-
-    CommandIterator iter = new CommandIterator(commands);
-
-    ICommand lastCommand = null;
-    while (iter.hasNextCommand()) {
-      ICommand command = iter.nextCommand();
-      if (!iter.hasLabel() && lastCommand != null && lastCommand.combineWith(command)) {
-        // TODO let command buffer handle this functionality?
-        iter.removeCommand();
-      } else {
-        lastCommand = command;
-      }
-    }
   }
 
   /**

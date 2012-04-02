@@ -626,7 +626,7 @@ public class CommandBuffer {
   /**
    * Tokenize command buffer.
    */
-  void tokenize() {
+  public void tokenize() {
     CodeBuffer code = new CodeBuffer(getStartAddress(), getCode());
 
     clear();
@@ -686,6 +686,26 @@ public class CommandBuffer {
           code.setCurrentIndex(codeIndex);
           addCommand(new DataCommand(code.readByte()));
         }
+      }
+    }
+
+    combine();
+  }
+
+  /**
+   * Combine commands, if possible.
+   */
+  private void combine() {
+    CommandIterator iter = new CommandIterator(this);
+
+    ICommand lastCommand = null;
+    while (iter.hasNextCommand()) {
+      ICommand command = iter.nextCommand();
+      if (!iter.hasLabel() && lastCommand != null && lastCommand.combineWith(command)) {
+        // TODO let command buffer handle this functionality?
+        iter.removeCommand();
+      } else {
+        lastCommand = command;
       }
     }
   }
