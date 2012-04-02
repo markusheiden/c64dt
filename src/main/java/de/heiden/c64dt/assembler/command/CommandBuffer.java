@@ -624,9 +624,18 @@ public class CommandBuffer {
   }
 
   /**
+   * Update commands.
+   */
+  public void update() {
+    tokenize();
+    combine();
+    unreachability();
+  }
+
+  /**
    * Tokenize command buffer.
    */
-  public void tokenize() {
+  private void tokenize() {
     CodeBuffer code = new CodeBuffer(getStartAddress(), getCode());
 
     clear();
@@ -688,8 +697,6 @@ public class CommandBuffer {
         }
       }
     }
-
-    combine();
   }
 
   /**
@@ -708,5 +715,50 @@ public class CommandBuffer {
         lastCommand = command;
       }
     }
+  }
+
+  /**
+   * Detects reachability of code.
+   * Computes transitive unreachability of commands.
+   */
+  private boolean unreachability() {
+    // initially mark all opcodes as reachable
+    for (CommandIterator iter = new CommandIterator(this); iter.hasNextCommand(); ) {
+      ICommand command = iter.nextCommand();
+      command.setReachable(command instanceof OpcodeCommand || command instanceof BitCommand);
+    }
+
+    CommandIterator iter = new CommandIterator(this).reverse();
+
+    // trace backward from unreachable command to the previous
+    ICommand lastCommand = new DummyCommand();
+    while (iter.hasPreviousCommand()) {
+      ICommand command = iter.previousCommand();
+      /*
+       * A code command is not reachable, if it leads to unreachable code.
+       * Exception is JSR, because its argument may follow directly after the instruction.
+       *
+       * TODO mh: check JMP/JSR/Bxx targets for reachability?
+       */
+      if (!lastCommand.isReachable() &&
+        command.isReachable() && !command.isEnd() && !isJsr(command) && !iter.getType().isCode()) {
+        command.setReachable(false);
+        iter.removeReference();
+      }
+
+      lastCommand = command;
+    }
+
+    // code types have not been changed
+    return false;
+  }
+
+  /**
+   * Check if command is a JSR.
+   *
+   * @param command Command
+   */
+  private boolean isJsr(ICommand command) {
+    return command instanceof OpcodeCommand && ((OpcodeCommand) command).getOpcode().getType().equals(OpcodeType.JSR);
   }
 }
