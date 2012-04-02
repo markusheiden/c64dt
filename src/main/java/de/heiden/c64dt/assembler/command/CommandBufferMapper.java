@@ -157,6 +157,8 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
       }
     }
 
+    commands.tokenize();
+
     return commands;
   }
 }

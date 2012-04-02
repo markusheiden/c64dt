@@ -41,13 +41,14 @@ public class Reassembler {
     @XmlElement(name = "jsr", type = JsrDetector.class),
     @XmlElement(name = "label", type = LabelDetector.class),
     @XmlElement(name = "reachability", type = Reachability.class),
-    @XmlElement(name = "tokenizer", type = Tokenizer.class)
   })
   private final List<IDetector> detectors = new ArrayList<IDetector>();
 
   /**
    * Reassembled code.
    */
+  @XmlElement(name = "commands")
+  @XmlJavaTypeAdapter(CommandBufferMapper.class)
   private CommandBuffer commands;
 
   /**
@@ -55,7 +56,6 @@ public class Reassembler {
    */
   public Reassembler() {
     // add default detectors
-    detectors.add(new Tokenizer());
     detectors.add(new Reachability());
     detectors.add(new LabelDetector());
     detectors.add(new BrkDetector());
@@ -68,22 +68,8 @@ public class Reassembler {
   /**
    * Command buffer.
    */
-  @XmlElement(name = "commands")
-  @XmlJavaTypeAdapter(CommandBufferMapper.class)
   public CommandBuffer getCommands() {
     return commands;
-  }
-
-  /**
-   * Set command buffer.
-   *
-   * @param commands Command buffer
-   */
-  private void setCommands(CommandBuffer commands) {
-    Assert.notNull(commands, "Precondition: commands != null");
-
-    this.commands = commands;
-    new Tokenizer().detect(commands);
   }
 
   /**
