@@ -23,7 +23,7 @@ public class DataCommand extends AbstractCommand {
   /**
    * Data bytes.
    */
-  private List<Integer> data;
+  private final List<Integer> data;
 
   /**
    * Constructor.

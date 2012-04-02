@@ -721,7 +721,7 @@ public class CommandBuffer {
    * Detects reachability of code.
    * Computes transitive unreachability of commands.
    */
-  private boolean unreachability() {
+  private void unreachability() {
     // initially mark all opcodes as reachable
     for (CommandIterator iter = new CommandIterator(this); iter.hasNextCommand(); ) {
       ICommand command = iter.nextCommand();
@@ -748,9 +748,6 @@ public class CommandBuffer {
 
       lastCommand = command;
     }
-
-    // code types have not been changed
-    return false;
   }
 
   /**

@@ -9,13 +9,11 @@ import java.awt.*;
 /**
  * GUI of the browser.
  */
-public class BrowserGUI extends JPanel
-{
+public class BrowserGUI extends JPanel {
   private JDirectory directory;
   private JBam bam;
 
-  public BrowserGUI()
-  {
+  public BrowserGUI() {
     setLayout(new BorderLayout());
 
     add(explorer(), BorderLayout.WEST);
@@ -24,20 +22,18 @@ public class BrowserGUI extends JPanel
     add(new JPanel(), BorderLayout.SOUTH);
   }
 
-  private Component explorer()
-  {
+  private Component explorer() {
     JPanel result = new JPanel();
     result.setLayout(new BorderLayout());
 
-    JList list = new JList(new String[]{"1", "2", "3"});
+    JList<String> list = new JList<>(new String[]{"1", "2", "3"});
     result.add(list, BorderLayout.CENTER);
 
     Assert.notNull(result, "Postcondition: result != null");
     return result;
   }
 
-  private Component directory()
-  {
+  private Component directory() {
     JPanel result = new JPanel();
     result.setLayout(new BorderLayout());
 
@@ -48,8 +44,7 @@ public class BrowserGUI extends JPanel
     return result;
   }
 
-  private Component details()
-  {
+  private Component details() {
     JPanel result = new JPanel();
     result.setLayout(new BorderLayout());
 
@@ -60,8 +55,7 @@ public class BrowserGUI extends JPanel
     return result;
   }
 
-  public void setDiskImage(IDiskImage diskImage)
-  {
+  public void setDiskImage(IDiskImage diskImage) {
     Assert.notNull(diskImage, "Precondition: diskImage != null");
 
     bam.setDiskImage(diskImage);

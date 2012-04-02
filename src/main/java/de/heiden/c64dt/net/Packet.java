@@ -5,8 +5,7 @@ import java.util.Arrays;
 /**
  * Packet.
  */
-public class Packet
-{
+public class Packet {
   private final byte[] data;
   private int length;
 
@@ -15,8 +14,7 @@ public class Packet
    *
    * @param max
    */
-  public Packet(int max)
-  {
+  public Packet(int max) {
     this.data = new byte[max];
     this.length = 0;
   }
@@ -26,8 +24,7 @@ public class Packet
    *
    * @param data
    */
-  public Packet(byte[] data)
-  {
+  public Packet(byte[] data) {
     this.data = data;
     this.length = data.length;
   }
@@ -37,8 +34,7 @@ public class Packet
    *
    * @param data data
    */
-  public void addByte(int data)
-  {
+  public void addByte(int data) {
     this.data[length++] = (byte) data;
   }
 
@@ -47,11 +43,9 @@ public class Packet
    *
    * @param data data
    */
-  public void addByte(int... data)
-  {
-    for (int i = 0; i < data.length; i++)
-    {
-      this.data[length++] = (byte) data[i];
+  public void addByte(int... data) {
+    for (int d : data) {
+      this.data[length++] = (byte) d;
     }
   }
 
@@ -60,8 +54,7 @@ public class Packet
    *
    * @param data data
    */
-  public void addData(byte... data)
-  {
+  public void addData(byte... data) {
     addData(data, 0, data.length);
   }
 
@@ -70,8 +63,7 @@ public class Packet
    *
    * @param data data
    */
-  public void addData(byte[] data, int offset, int length)
-  {
+  public void addData(byte[] data, int offset, int length) {
     System.arraycopy(data, offset, this.data, this.length, length);
     this.length += length;
   }
@@ -79,10 +71,8 @@ public class Packet
   /**
    * Add padding byte to packet if packet length is not even.
    */
-  public void pad()
-  {
-    if (length % 2 != 0)
-    {
+  public void pad() {
+    if (length % 2 != 0) {
       addByte(0x00);
     }
   }
@@ -90,8 +80,7 @@ public class Packet
   /**
    * Packet data.
    */
-  public byte[] getData()
-  {
+  public byte[] getData() {
     return Arrays.copyOf(data, length);
   }
 }
