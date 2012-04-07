@@ -15,9 +15,9 @@ public class LabelDetector implements IDetector
   {
     boolean change = false;
 
-    for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand(); )
+    for (CommandIterator iter = new CommandIterator(commands); iter.hasNext(); )
     {
-      ICommand command = iter.nextCommand();
+      ICommand command = iter.next();
       if (iter.hasCodeLabel())
       {
         // Mark all code label positions as a start of an opcode

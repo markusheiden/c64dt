@@ -703,14 +703,12 @@ public class CommandBuffer {
    * Combine commands, if possible.
    */
   private void combine() {
-    CommandIterator iter = new CommandIterator(this);
-
     ICommand lastCommand = null;
-    while (iter.hasNextCommand()) {
-      ICommand command = iter.nextCommand();
+    for (CommandIterator iter = new CommandIterator(this); iter.hasNext(); ) {
+      ICommand command = iter.next();
       if (!iter.hasLabel() && lastCommand != null && lastCommand.combineWith(command)) {
         // TODO let command buffer handle this functionality?
-        iter.removeCommand();
+        iter.remove();
       } else {
         lastCommand = command;
       }
@@ -723,8 +721,8 @@ public class CommandBuffer {
    */
   private void unreachability() {
     // initially mark all opcodes as reachable
-    for (CommandIterator iter = new CommandIterator(this); iter.hasNextCommand(); ) {
-      ICommand command = iter.nextCommand();
+    for (CommandIterator iter = new CommandIterator(this); iter.hasNext(); ) {
+      ICommand command = iter.next();
       command.setReachable(command instanceof OpcodeCommand || command instanceof BitCommand);
     }
 
@@ -732,8 +730,8 @@ public class CommandBuffer {
 
     // trace backward from unreachable command to the previous
     ICommand lastCommand = new DummyCommand();
-    while (iter.hasPreviousCommand()) {
-      ICommand command = iter.previousCommand();
+    while (iter.hasPrevious()) {
+      ICommand command = iter.previous();
       /*
        * A code command is not reachable, if it leads to unreachable code.
        * Exception is JSR, because its argument may follow directly after the instruction.

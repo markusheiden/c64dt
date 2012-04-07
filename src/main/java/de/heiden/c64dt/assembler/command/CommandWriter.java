@@ -41,8 +41,6 @@ public class CommandWriter {
   public void write(CommandBuffer commands) throws IOException {
     Assert.notNull(commands, "Precondition: buffer != null");
 
-    CommandIterator iter = new CommandIterator(commands);
-
     // start address
     output.append("*=").append(hexWord(commands.getStartAddress())).append("\n");
     output.append("\n");
@@ -56,8 +54,8 @@ public class CommandWriter {
 
     // code
     StringBuilder line = new StringBuilder(80);
-    while (iter.hasNextCommand()) {
-      ICommand command = iter.nextCommand();
+    for (CommandIterator iter = new CommandIterator(commands); iter.hasNext(); ) {
+      ICommand command = iter.next();
       int pc = command.getAddress();
 
       line.setLength(0);

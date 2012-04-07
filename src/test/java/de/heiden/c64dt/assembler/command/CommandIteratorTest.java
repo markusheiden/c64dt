@@ -11,9 +11,9 @@ import static org.junit.Assert.*;
 public class CommandIteratorTest {
   /**
    * Test for
-   * {@link CommandIterator#hasNextCommand()}
-   * {@link CommandIterator#nextCommand()}.
-   * {@link CommandIterator#peekCommand}.
+   * {@link CommandIterator#hasNext()}
+   * {@link CommandIterator#next()}.
+   * {@link CommandIterator#peek()}.
    * {@link CommandIterator#getIndex()}.
    * {@link CommandIterator#getAddress()}.
    */
@@ -26,31 +26,31 @@ public class CommandIteratorTest {
 
     CommandIterator iter = new CommandIterator(commands);
 
-    assertTrue(iter.hasNextCommand());
+    assertTrue(iter.hasNext());
 
     // $1000 LDA $1234
-    assertEquals(Opcode.OPCODE_AD, ((OpcodeCommand) iter.nextCommand()).getOpcode());
+    assertEquals(Opcode.OPCODE_AD, ((OpcodeCommand) iter.next()).getOpcode());
     assertEquals(0x0000, iter.getIndex());
     assertEquals(0x1000, iter.getAddress());
 
     // Look ahead at next command does not change iterator
-    assertEquals(Opcode.OPCODE_8D, ((OpcodeCommand) iter.peekCommand()).getOpcode());
+    assertEquals(Opcode.OPCODE_8D, ((OpcodeCommand) iter.peek()).getOpcode());
     assertEquals(0x0000, iter.getIndex());
     assertEquals(0x1000, iter.getAddress());
 
     // $1003 STA $1234
-    assertEquals(Opcode.OPCODE_8D, ((OpcodeCommand) iter.nextCommand()).getOpcode());
+    assertEquals(Opcode.OPCODE_8D, ((OpcodeCommand) iter.next()).getOpcode());
     assertEquals(0x0003, iter.getIndex());
     assertEquals(0x1003, iter.getAddress());
 
-    assertFalse(iter.hasNextCommand());
+    assertFalse(iter.hasNext());
   }
 
   /**
    * Test for
    * {@link CommandIterator#reverse()},
-   * {@link CommandIterator#hasPreviousCommand()}
-   * {@link CommandIterator#previousCommand()}.
+   * {@link CommandIterator#hasPrevious()}
+   * {@link CommandIterator#previous()}.
    */
   @Test
   public void testPreviousCommand() throws Exception {
@@ -61,18 +61,18 @@ public class CommandIteratorTest {
 
     CommandIterator iter = new CommandIterator(commands).reverse();
 
-    assertTrue(iter.hasPreviousCommand());
+    assertTrue(iter.hasPrevious());
 
     // $1003 STA $1234
-    assertEquals(Opcode.OPCODE_8D, ((OpcodeCommand) iter.previousCommand()).getOpcode());
+    assertEquals(Opcode.OPCODE_8D, ((OpcodeCommand) iter.previous()).getOpcode());
     assertEquals(0x0003, iter.getIndex());
     assertEquals(0x1003, iter.getAddress());
 
     // $1000 LDA $1234
-    assertEquals(Opcode.OPCODE_AD, ((OpcodeCommand) iter.previousCommand()).getOpcode());
+    assertEquals(Opcode.OPCODE_AD, ((OpcodeCommand) iter.previous()).getOpcode());
     assertEquals(0x0000, iter.getIndex());
     assertEquals(0x1000, iter.getAddress());
 
-    assertFalse(iter.hasPreviousCommand());
+    assertFalse(iter.hasPrevious());
   }
 }

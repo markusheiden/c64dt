@@ -105,15 +105,15 @@ public class JsrDetector implements IDetector {
   protected Map<Integer, List<Integer>> crossReference(CommandBuffer commands) {
     Map<Integer, List<Integer>> result = new HashMap<>();
 
-    for (CommandIterator iter = new CommandIterator(commands); iter.hasNextCommand(); ) {
-      ICommand command = iter.nextCommand();
+    for (CommandIterator iter = new CommandIterator(commands); iter.hasNext(); ) {
+      ICommand command = iter.next();
       if (!(command instanceof OpcodeCommand)) {
         continue;
       }
       OpcodeCommand opcodeCommand = (OpcodeCommand) command;
 
       Opcode opcode = opcodeCommand.getOpcode();
-      if (command.isReachable() && opcode.getType().equals(OpcodeType.JSR) && opcode.getMode().equals(OpcodeMode.ABS) && iter.hasNextCommand()) {
+      if (command.isReachable() && opcode.getType().equals(OpcodeType.JSR) && opcode.getMode().equals(OpcodeMode.ABS) && iter.hasNext()) {
         int address = opcodeCommand.getArgument();
         List<Integer> references = result.get(address);
         if (references == null) {

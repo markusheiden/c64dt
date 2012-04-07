@@ -4,10 +4,12 @@ import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.label.ILabel;
 import org.springframework.util.Assert;
 
+import java.util.Iterator;
+
 /**
  * Command iterator.
  */
-public class CommandIterator
+public class CommandIterator implements Iterator<ICommand>
 {
   /**
    * The command buffer to iterate.
@@ -117,7 +119,7 @@ public class CommandIterator
   /**
    * Is there one more command?
    */
-  public boolean hasNextCommand()
+  public boolean hasNext()
   {
     return commands.hasIndex(getNextIndex());
   }
@@ -125,7 +127,7 @@ public class CommandIterator
   /**
    * Iterate to next command and return it.
    */
-  public ICommand nextCommand()
+  public ICommand next()
   {
     index = getNextIndex();
     ICommand result = getCommand();
@@ -145,7 +147,7 @@ public class CommandIterator
   /**
    * Get the next command without iterating to it.
    */
-  public ICommand peekCommand()
+  public ICommand peek()
   {
     int nextIndex = getNextIndex();
     return commands.hasIndex(nextIndex)? commands.getCommand(nextIndex) : DummyCommand.DUMMY_COMMAND;
@@ -154,7 +156,7 @@ public class CommandIterator
   /**
    * Is there at least one command before the current command.
    */
-  public boolean hasPreviousCommand()
+  public boolean hasPrevious()
   {
     return index > 0;
   }
@@ -163,7 +165,7 @@ public class CommandIterator
    * Iterate to the previous command and return it.
    */
   @SuppressWarnings({"StatementWithEmptyBody"})
-  public ICommand previousCommand()
+  public ICommand previous()
   {
     // get start of current command for consistency check
     int endIndex = index;
@@ -187,7 +189,7 @@ public class CommandIterator
    * Removes the current command.
    * Traces back to the previous commands afterwards.
    */
-  public void removeCommand()
+  public void remove()
   {
     // remember position of current command
     int remove = index;
@@ -196,7 +198,7 @@ public class CommandIterator
     // delete current command
     commands.removeCommand(remove);
     // trace back to previous command
-    previousCommand();
+    previous();
   }
 
   //

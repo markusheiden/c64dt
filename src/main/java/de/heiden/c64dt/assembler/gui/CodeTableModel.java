@@ -77,8 +77,8 @@ public class CodeTableModel extends DefaultTableModel {
     StringBuilder builder = new StringBuilder();
 
     CommandIterator iter = new CommandIterator(commands);
-    while (iter.hasNextCommand()) {
-      ICommand command = iter.nextCommand();
+    while (iter.hasNext()) {
+      ICommand command = iter.next();
       int index = iter.getIndex();
       int addr = commands.addressForIndex(index);
 
