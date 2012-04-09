@@ -157,7 +157,7 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
       }
     }
 
-    commands.update();
+    new CommandCreator(commands).createCommands();
 
     return commands;
   }

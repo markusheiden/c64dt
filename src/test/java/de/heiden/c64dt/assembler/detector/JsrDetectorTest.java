@@ -14,22 +14,20 @@ import static org.junit.Assert.assertTrue;
 /**
  * Test for {@link JsrDetector}
  */
-public class JsrDetectorTest
-{
+public class JsrDetectorTest {
   @Test
-  public void testCrossReference()
-  {
+  public void testCrossReference() {
     CommandBuffer commands = new CommandBuffer(new byte[10], 0x1000);
     OpcodeCommand jsr0 = new OpcodeCommand(Opcode.OPCODE_20, 0x1000);
     jsr0.setReachable(true);
-    commands.addCommand(jsr0);
+    commands.setCommand(0, jsr0);
     OpcodeCommand jsr3 = new OpcodeCommand(Opcode.OPCODE_20, 0x1003);
     jsr3.setReachable(true);
-    commands.addCommand(jsr3);
+    commands.setCommand(3, jsr3);
     OpcodeCommand jsr6 = new OpcodeCommand(Opcode.OPCODE_20, 0x1000);
     jsr6.setReachable(true);
-    commands.addCommand(jsr6);
-    commands.addCommand(new OpcodeCommand(Opcode.OPCODE_EA));
+    commands.setCommand(6, jsr6);
+    commands.setCommand(9, new OpcodeCommand(Opcode.OPCODE_EA));
 
     JsrDetector detector = new JsrDetector();
     Map<Integer, List<Integer>> crossReference = detector.crossReference(commands);

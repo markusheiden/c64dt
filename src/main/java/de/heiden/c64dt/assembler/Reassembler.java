@@ -2,6 +2,7 @@ package de.heiden.c64dt.assembler;
 
 import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.CommandBufferMapper;
+import de.heiden.c64dt.assembler.command.CommandCreator;
 import de.heiden.c64dt.assembler.detector.*;
 import org.apache.log4j.Logger;
 import org.springframework.util.Assert;
@@ -140,6 +141,7 @@ public class Reassembler {
     }
 
     commands = new CommandBuffer(code, startAddress);
+    new CommandCreator(commands).createCommands();
     reassemble();
   }
 
@@ -153,7 +155,7 @@ public class Reassembler {
       change = detectCodeType();
     }
 
-    commands.update();
+    new CommandCreator(commands).createCommands();
   }
 
   /**

@@ -1,6 +1,6 @@
 package de.heiden.c64dt.assembler.command;
 
-import de.heiden.c64dt.assembler.*;
+import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.label.CodeLabel;
 import de.heiden.c64dt.assembler.label.DataLabel;
 import de.heiden.c64dt.assembler.label.ExternalLabel;
@@ -56,11 +56,6 @@ public class CommandBuffer {
    * Commands as detected by the reassembler.
    */
   private final ICommand[] commands;
-
-  /**
-   * Index of the last added command.
-   */
-  private int index;
 
   //
   // persistent attributes
@@ -119,10 +114,6 @@ public class CommandBuffer {
     this.startAddresses.put(code.length, startAddress);
     this.subroutines = new HashMap<>();
     this.commands = new ICommand[code.length];
-
-    this.index = 0;
-
-    tokenize();
   }
 
   /**
@@ -573,15 +564,6 @@ public class CommandBuffer {
     dataLabels.clear();
     externalLabels.clear();
     Arrays.fill(commands, null);
-
-    index = 0;
-  }
-
-  /**
-   * Current relative address.
-   */
-  public int getIndex() {
-    return index;
   }
 
   /**
@@ -596,11 +578,13 @@ public class CommandBuffer {
   }
 
   /**
-   * Add a command at the end of the buffer.
+   * Add a command at index.
    *
+   * @param index relative address
    * @param command command
    */
-  public void addCommand(ICommand command) {
+  public void setCommand(int index, ICommand command) {
+    Assert.isTrue(hasIndex(index), "Precondition: hasIndex(index)");
     Assert.notNull(command, "Precondition: command != null");
     Assert.isTrue(!command.hasAddress(), "Precondition: !command.hasAddress()");
 
@@ -621,139 +605,5 @@ public class CommandBuffer {
     Assert.isTrue(hasIndex(index), "Precondition: hasIndex(index)");
 
     commands[index] = null;
-  }
-
-  /**
-   * Update commands.
-   */
-  public void update() {
-    tokenize();
-    combine();
-    unreachability();
-  }
-
-  /**
-   * Tokenize command buffer.
-   */
-  private void tokenize() {
-    CodeBuffer code = new CodeBuffer(getStartAddress(), getCode());
-
-    clear();
-    while (code.has(1)) {
-      int codeIndex = code.getCurrentIndex();
-
-      int index = getIndex();
-      Assert.isTrue(codeIndex == index, "Check: codeIndex == index");
-      int pc = addressForIndex(index);
-      CodeType type = getType(index);
-
-      if (type == CodeType.BIT) {
-        // BIT opcode used just to skip the next opcode
-        Opcode opcode = code.readOpcode();
-        int modeSize = opcode.getMode().getSize();
-
-        if (opcode.getType().equals(OpcodeType.BIT) && modeSize > 0 && code.has(modeSize)) {
-          int argumentIndex = code.getCurrentIndex();
-          addCommand(new BitCommand(opcode, code.read(modeSize)));
-          // Reset code buffer to the argument, because this should be the skipped opcode
-          code.setCurrentIndex(argumentIndex);
-        } else {
-          // no BIT opcode -> assume data
-          code.setCurrentIndex(codeIndex);
-          addCommand(new DataCommand(code.readByte()));
-        }
-      } else if (type == CodeType.ADDRESS) {
-        // absolute address as data
-        int address;
-        if (code.has(2) && hasAddress(address = code.read(2))) {
-          addCommand(new AddressCommand(address));
-          addCodeReference(index, address);
-        } else {
-          code.setCurrentIndex(codeIndex);
-          addCommand(new DataCommand(code.readByte(), code.readByte()));
-        }
-      } else if (type == CodeType.DATA) {
-        // plain data
-        addCommand(new DataCommand(code.readByte()));
-      } else {
-        // unknown or code -> try to disassemble an opcode
-        Opcode opcode = code.readOpcode();
-        OpcodeMode mode = opcode.getMode();
-        int modeSize = mode.getSize();
-
-        if (code.has(modeSize) && (opcode.isLegal() || type == CodeType.OPCODE)) {
-          // TODO mh: log error if illegal opcode and type is OPCODE?
-          int argument = code.read(modeSize);
-          addCommand(new OpcodeCommand(opcode, argument));
-          if (mode.isAddress()) {
-            int address = mode.getAddress(pc, argument);
-            // track references of opcodes
-            addReference(opcode.getType().isJump(), index, address);
-          }
-        } else {
-          // not enough argument bytes for opcode or illegal opcode -> assume data
-          code.setCurrentIndex(codeIndex);
-          addCommand(new DataCommand(code.readByte()));
-        }
-      }
-    }
-  }
-
-  /**
-   * Combine commands, if possible.
-   */
-  private void combine() {
-    ICommand lastCommand = null;
-    for (CommandIterator iter = new CommandIterator(this); iter.hasNext(); ) {
-      ICommand command = iter.next();
-      if (!iter.hasLabel() && lastCommand != null && lastCommand.combineWith(command)) {
-        // TODO let command buffer handle this functionality?
-        iter.remove();
-      } else {
-        lastCommand = command;
-      }
-    }
-  }
-
-  /**
-   * Detects reachability of code.
-   * Computes transitive unreachability of commands.
-   */
-  private void unreachability() {
-    // initially mark all opcodes as reachable
-    for (CommandIterator iter = new CommandIterator(this); iter.hasNext(); ) {
-      ICommand command = iter.next();
-      command.setReachable(command instanceof OpcodeCommand || command instanceof BitCommand);
-    }
-
-    CommandIterator iter = new CommandIterator(this).reverse();
-
-    // trace backward from unreachable command to the previous
-    ICommand lastCommand = new DummyCommand();
-    while (iter.hasPrevious()) {
-      ICommand command = iter.previous();
-      /*
-       * A code command is not reachable, if it leads to unreachable code.
-       * Exception is JSR, because its argument may follow directly after the instruction.
-       *
-       * TODO mh: check JMP/JSR/Bxx targets for reachability?
-       */
-      if (!lastCommand.isReachable() &&
-        command.isReachable() && !command.isEnd() && !isJsr(command) && !iter.getType().isCode()) {
-        command.setReachable(false);
-        iter.removeReference();
-      }
-
-      lastCommand = command;
-    }
-  }
-
-  /**
-   * Check if command is a JSR.
-   *
-   * @param command Command
-   */
-  private boolean isJsr(ICommand command) {
-    return command instanceof OpcodeCommand && ((OpcodeCommand) command).getOpcode().getType().equals(OpcodeType.JSR);
   }
 }
