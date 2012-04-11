@@ -137,11 +137,9 @@ public class CommandCreator {
       command.setReachable(command instanceof OpcodeCommand || command instanceof BitCommand);
     }
 
-    CommandIterator iter = commandBuffer.iterator().reverse();
-
     // trace backward from unreachable command to the previous
     ICommand lastCommand = new DummyCommand();
-    while (iter.hasPrevious()) {
+    for (CommandIterator iter = commandBuffer.iterator().reverse(); iter.hasPrevious(); ) {
       ICommand command = iter.previous();
       /*
        * A code command is not reachable, if it leads to unreachable code.
