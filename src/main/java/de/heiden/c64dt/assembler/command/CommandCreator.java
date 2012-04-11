@@ -137,7 +137,7 @@ public class CommandCreator {
       command.setReachable(command instanceof OpcodeCommand || command instanceof BitCommand);
     }
 
-    CommandIterator iter = new CommandIterator(commandBuffer).reverse();
+    CommandIterator iter = commandBuffer.iterator().reverse();
 
     // trace backward from unreachable command to the previous
     ICommand lastCommand = new DummyCommand();
