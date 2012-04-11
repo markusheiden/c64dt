@@ -10,23 +10,18 @@ import de.heiden.c64dt.assembler.command.OpcodeCommand;
 /**
  * Detects unreachable brk commands as data.
  */
-public class BrkDetector implements IDetector
-{
+public class BrkDetector implements IDetector {
   @Override
-  public boolean detect(CommandBuffer commands)
-  {
+  public boolean detect(CommandBuffer commands) {
     boolean change = false;
 
-    for (CommandIterator iter = new CommandIterator(commands); iter.hasNext(); )
-    {
+    for (CommandIterator iter = commands.iterator(); iter.hasNext(); ) {
       ICommand command = iter.next();
       int index = iter.getIndex();
-      if (command instanceof OpcodeCommand)
-      {
+      if (command instanceof OpcodeCommand) {
         OpcodeCommand opcodeCommand = (OpcodeCommand) command;
 
-        if (opcodeCommand.getOpcode().getType().equals(OpcodeType.BRK) && !opcodeCommand.isReachable())
-        {
+        if (opcodeCommand.getOpcode().getType().equals(OpcodeType.BRK) && !opcodeCommand.isReachable()) {
           change |= commands.setType(index, CodeType.DATA);
         }
       }

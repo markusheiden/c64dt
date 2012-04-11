@@ -54,7 +54,7 @@ public class CommandWriter {
 
     // code
     StringBuilder line = new StringBuilder(80);
-    for (CommandIterator iter = new CommandIterator(commands); iter.hasNext(); ) {
+    for (CommandIterator iter = commands.iterator(); iter.hasNext(); ) {
       ICommand command = iter.next();
       int pc = command.getAddress();
 

@@ -15,7 +15,7 @@ import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
 /**
  * Input stream for code.
  */
-public class CommandBuffer {
+public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Index to referenced absolute address.
    * Target is code, e.g. if the reference is from a jmp $xxxx.
@@ -605,5 +605,10 @@ public class CommandBuffer {
     Assert.isTrue(hasIndex(index), "Precondition: hasIndex(index)");
 
     commands[index] = null;
+  }
+
+  @Override
+  public CommandIterator iterator() {
+    return new CommandIterator(this);
   }
 }

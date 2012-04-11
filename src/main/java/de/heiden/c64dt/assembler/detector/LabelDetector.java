@@ -8,46 +8,34 @@ import de.heiden.c64dt.assembler.command.ICommand;
 /**
  * Detects code label as code and data label as data.
  */
-public class LabelDetector implements IDetector
-{
+public class LabelDetector implements IDetector {
   @Override
-  public boolean detect(CommandBuffer commands)
-  {
+  public boolean detect(CommandBuffer commands) {
     boolean change = false;
 
-    for (CommandIterator iter = new CommandIterator(commands); iter.hasNext(); )
-    {
+    for (CommandIterator iter = commands.iterator(); iter.hasNext(); ) {
       ICommand command = iter.next();
-      if (iter.hasCodeLabel())
-      {
+      if (iter.hasCodeLabel()) {
         // Mark all code label positions as a start of an opcode
         change |= iter.setType(CodeType.OPCODE);
-      }
-      else if (hasConflictingCodeLabel(commands, iter))
-      {
+      } else if (hasConflictingCodeLabel(commands, iter)) {
         // Mark current command as data, because it may not be an opcode
         // TODO mh: Currently disabled, because it sets too much code to data
         // change |= iter.setType(CodeType.DATA);
 
         // Search for code label and mark the relative address as an opcode
         boolean notFound = true;
-        for (int index = iter.getIndex() + 1, count = 1; count < command.getSize(); index++, count++)
-        {
+        for (int index = iter.getIndex() + 1, count = 1; count < command.getSize(); index++, count++) {
           // TODO mh: move functionality to CommandBuffer: hasCodeLabel(int index)
-          if (commands.hasCodeLabel(commands.addressForIndex(index)))
-          {
+          if (commands.hasCodeLabel(commands.addressForIndex(index))) {
             change |= commands.setType(index, CodeType.OPCODE);
             notFound = false;
-          }
-          else if (notFound)
-          {
+          } else if (notFound) {
             // mark as data until first code label
             change |= commands.setType(index, CodeType.DATA);
           }
         }
-      }
-      else if (hasConflictingDataLabel(commands, iter))
-      {
+      } else if (hasConflictingDataLabel(commands, iter)) {
         // TODO mh: what may be the source for this reference? Move all references of conflicting labels?
 //          commands.addCodeReference(0, iter.getIndex());
       }
@@ -67,12 +55,9 @@ public class LabelDetector implements IDetector
    * @param commands command buffer
    * @param iter command iterator
    */
-  public boolean hasConflictingCodeLabel(CommandBuffer commands, CommandIterator iter)
-  {
-    for (int address = iter.getAddress() + 1, count = 1; count < iter.getCommand().getSize(); address++, count++)
-    {
-      if (commands.hasCodeLabel(address))
-      {
+  public boolean hasConflictingCodeLabel(CommandBuffer commands, CommandIterator iter) {
+    for (int address = iter.getAddress() + 1, count = 1; count < iter.getCommand().getSize(); address++, count++) {
+      if (commands.hasCodeLabel(address)) {
         return true;
       }
     }
@@ -86,12 +71,9 @@ public class LabelDetector implements IDetector
    * @param commands command buffer
    * @param iter command iterator
    */
-  public boolean hasConflictingDataLabel(CommandBuffer commands, CommandIterator iter)
-  {
-    for (int address = iter.getAddress() + 1, count = 1; count < iter.getCommand().getSize(); address++, count++)
-    {
-      if (commands.hasDataLabel(address))
-      {
+  public boolean hasConflictingDataLabel(CommandBuffer commands, CommandIterator iter) {
+    for (int address = iter.getAddress() + 1, count = 1; count < iter.getCommand().getSize(); address++, count++) {
+      if (commands.hasDataLabel(address)) {
         return true;
       }
     }

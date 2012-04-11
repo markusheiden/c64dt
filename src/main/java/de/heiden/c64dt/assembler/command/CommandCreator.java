@@ -116,7 +116,7 @@ public class CommandCreator {
    */
   private void combine() {
     ICommand lastCommand = null;
-    for (CommandIterator iter = new CommandIterator(commandBuffer); iter.hasNext(); ) {
+    for (CommandIterator iter = commandBuffer.iterator(); iter.hasNext(); ) {
       ICommand command = iter.next();
       if (!iter.hasLabel() && lastCommand != null && lastCommand.combineWith(command)) {
         // TODO let command buffer handle this functionality?
@@ -133,8 +133,7 @@ public class CommandCreator {
    */
   private void unreachability() {
     // initially mark all opcodes as reachable
-    for (CommandIterator iter = new CommandIterator(commandBuffer); iter.hasNext(); ) {
-      ICommand command = iter.next();
+    for (ICommand command : commandBuffer) {
       command.setReachable(command instanceof OpcodeCommand || command instanceof BitCommand);
     }
 
