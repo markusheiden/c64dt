@@ -3,10 +3,9 @@ package de.heiden.c64dt.assembler.command;
 import de.heiden.c64dt.assembler.CodeType;
 
 /**
- * Description of a soubroutine.
+ * Description of a subroutine.
  */
-public class Subroutine
-{
+public class Subroutine {
   /**
    * Absolute address of subroutine.
    */
@@ -28,8 +27,7 @@ public class Subroutine
    * @param address Absolute address of subroutine
    * @param arguments Number of bytes which follow the jsr as argument
    */
-  public Subroutine(int address, int arguments)
-  {
+  public Subroutine(int address, int arguments) {
     this(address, arguments, CodeType.DATA);
   }
 
@@ -40,8 +38,7 @@ public class Subroutine
    * @param arguments Number of bytes which follow the jsr as argument
    * @param type Code type of argument
    */
-  public Subroutine(int address, int arguments, CodeType type)
-  {
+  public Subroutine(int address, int arguments, CodeType type) {
     this.address = address;
     this.arguments = arguments;
     this.type = type;
@@ -50,24 +47,21 @@ public class Subroutine
   /**
    * Relative address of subroutine.
    */
-  public int getAddress()
-  {
+  public int getAddress() {
     return address;
   }
 
   /**
    * Number of bytes which follow the jsr as argument.
    */
-  public int getArguments()
-  {
+  public int getArguments() {
     return arguments;
   }
 
   /**
    * Code type of arguments bytes.
    */
-  public CodeType getType()
-  {
+  public CodeType getType() {
     return type;
   }
 }
