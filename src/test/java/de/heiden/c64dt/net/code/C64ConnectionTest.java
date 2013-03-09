@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.InetAddress;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test for {@linkC64ConnectionTest}.

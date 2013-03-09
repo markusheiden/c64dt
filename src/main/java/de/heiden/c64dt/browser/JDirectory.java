@@ -31,9 +31,9 @@ public class JDirectory extends JList
     Dimension size = new Dimension(16 * fontSize, 0);
     setPreferredSize(size);
     setMaximumSize(size);
-    setCellRenderer(new ListCellRenderer()
+    setCellRenderer(new ListCellRenderer<Object>()
     {
-      public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+      public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
       {
         byte[] text;
         if (index == 0)
@@ -148,7 +148,7 @@ public class JDirectory extends JList
       }
     }
 
-    setModel(new ListModel()
+    setModel(new ListModel<Object>()
     {
       public int getSize()
       {
