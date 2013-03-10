@@ -1,7 +1,7 @@
 package de.heiden.c64dt.disk;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import java.util.HashMap;
@@ -81,7 +81,10 @@ public enum Error {
    */
   UNKNOWN(0xFF);
 
-  private static final Log logger = LogFactory.getLog(Error.class);
+  /**
+   * Logger.
+   */
+  private static final Logger logger = LoggerFactory.getLogger(Error.class);
 
   private static Map<Byte, Error> errors;
 

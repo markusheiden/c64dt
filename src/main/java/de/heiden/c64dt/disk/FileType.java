@@ -1,7 +1,7 @@
 package de.heiden.c64dt.disk;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import java.util.HashMap;
@@ -60,7 +60,10 @@ public enum FileType {
    */
   UNKNOWN(-1, "XXX");
 
-  private static final Log logger = LogFactory.getLog(FileType.class);
+  /**
+   * Logger.
+   */
+  private static final Logger logger = LoggerFactory.getLogger(FileType.class);
 
   private static Map<Byte, FileType> types;
   private static Map<String, FileType> extensions;

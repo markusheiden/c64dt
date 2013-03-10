@@ -3,15 +3,18 @@ package de.heiden.c64dt.disk.d64;
 import de.heiden.c64dt.disk.AbstractDiskImageReader;
 import de.heiden.c64dt.disk.IDiskImage;
 import de.heiden.c64dt.disk.WrongDiskImageFormatException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 /**
  * Reads a D64 image from a file.
  */
 public class D64Reader extends AbstractDiskImageReader {
-  private final Log logger = LogFactory.getLog(getClass());
+  /**
+   * Logger.
+   */
+  private final Logger logger = LoggerFactory.getLogger(getClass());
 
   public static final int SIZE_35_TRACKS_NO_ERRORS = 174848;
   public static final int SIZE_35_TRACKS_WITH_ERRORS = 175531;

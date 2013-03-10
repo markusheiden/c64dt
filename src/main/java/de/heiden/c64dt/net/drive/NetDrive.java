@@ -1,7 +1,7 @@
 package de.heiden.c64dt.net.drive;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import java.io.File;
@@ -13,7 +13,10 @@ import java.net.SocketException;
  * Contains glue logic to connect drive connection with a device.
  */
 public class NetDrive {
-  private final Log logger = LogFactory.getLog(getClass());
+  /**
+   * Logger.
+   */
+  private final Logger logger = LoggerFactory.getLogger(getClass());
 
   private volatile boolean isRunning;
   private Thread thread;

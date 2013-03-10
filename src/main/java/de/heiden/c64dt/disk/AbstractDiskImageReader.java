@@ -1,7 +1,7 @@
 package de.heiden.c64dt.disk;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
@@ -13,7 +13,10 @@ import java.io.InputStream;
  * Abstract base class for disk image readers.
  */
 public abstract class AbstractDiskImageReader {
-  private final Log logger = LogFactory.getLog(getClass());
+  /**
+   * Logger.
+   */
+  private final Logger logger = LoggerFactory.getLogger(getClass());
 
   /**
    * Read disk image from file.
