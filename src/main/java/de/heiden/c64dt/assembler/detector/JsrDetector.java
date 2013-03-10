@@ -2,7 +2,8 @@ package de.heiden.c64dt.assembler.detector;
 
 import de.heiden.c64dt.assembler.*;
 import de.heiden.c64dt.assembler.command.*;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.util.Assert;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -22,7 +23,7 @@ public class JsrDetector implements IDetector {
   /**
    * Logger.
    */
-  private final Logger logger = Logger.getLogger(getClass());
+  private final Log logger = LogFactory.getLog(getClass());
 
   /**
    * Minimum number of matches (check for expected argument type) to detect a new subroutine.

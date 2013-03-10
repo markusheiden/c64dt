@@ -9,8 +9,13 @@
     </layout>
   </appender>
 
-  <logger name="org.serialthreads.transformer" additivity="false">
-    <level value="debug"/>
+  <logger name="org.serialthreads.agent" additivity="false">
+    <level value="info"/>
+    <appender-ref ref="console"/>
+  </logger>
+
+  <logger name="de.heiden.c64dt" additivity="false">
+    <level value="info"/>
     <appender-ref ref="console"/>
   </logger>
 

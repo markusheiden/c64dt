@@ -2,7 +2,8 @@ package de.heiden.c64dt.assembler.gui;
 
 import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.util.XmlUtil;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -22,7 +23,7 @@ import java.io.IOException;
  */
 @Component
 public class ReassemblerView extends JFrame {
-  private final Logger logger = Logger.getLogger(getClass());
+  private final Log logger = LogFactory.getLog(getClass());
 
   private Reassembler reassembler;
 

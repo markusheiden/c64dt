@@ -1,6 +1,7 @@
 package de.heiden.c64dt.net.drive;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.util.Assert;
 
 import java.io.File;
@@ -11,9 +12,8 @@ import java.net.SocketException;
  * Net drive server.
  * Contains glue logic to connect drive connection with a device.
  */
-public class NetDrive
-{
-  private final Logger logger = Logger.getLogger(getClass());
+public class NetDrive {
+  private final Log logger = LogFactory.getLog(getClass());
 
   private volatile boolean isRunning;
   private Thread thread;
@@ -25,8 +25,7 @@ public class NetDrive
    *
    * @param root root directory
    */
-  public NetDrive(File root) throws IOException
-  {
+  public NetDrive(File root) throws IOException {
     this(root, DriveConnection.DEFAULT_PORT);
   }
 
@@ -36,8 +35,7 @@ public class NetDrive
    * @param root root directory
    * @param port server port
    */
-  public NetDrive(File root, int port) throws IOException
-  {
+  public NetDrive(File root, int port) throws IOException {
     Assert.notNull(root, "Precondition: root != null");
     Assert.isTrue(root.isDirectory(), "Precondition: root.isDirectory()");
 
@@ -50,16 +48,14 @@ public class NetDrive
   /**
    * Is the server running?
    */
-  public boolean isRunning()
-  {
+  public boolean isRunning() {
     return isRunning;
   }
 
   /**
    * Start server.
    */
-  public void start() throws IOException
-  {
+  public void start() throws IOException {
     Assert.isTrue(!isRunning(), "Precondition: !isRunning()");
 
     isRunning = true;
@@ -70,139 +66,98 @@ public class NetDrive
   /**
    * Stop server.
    */
-  public void stop()
-  {
+  public void stop() {
     Assert.isTrue(isRunning(), "Precondition: isRunning()");
 
     isRunning = false;
     thread.interrupt();
-    try
-    {
+    try {
       connection.close();
-    }
-    catch (IOException e)
-    {
+    } catch (IOException e) {
       logger.error("Failed to close drive connection");
       return;
     }
-    try
-    {
+    try {
       thread.join();
-    }
-    catch (InterruptedException e)
-    {
+    } catch (InterruptedException e) {
       // ignore
     }
   }
 
-  private class Server implements Runnable
-  {
-    public void run()
-    {
-      while (isRunning)
-      {
+  private class Server implements Runnable {
+    public void run() {
+      while (isRunning) {
         logger.info("Net drive server up and running");
-        try
-        {
+        try {
           connection.open();
-          while (isRunning)
-          {
-            try
-            {
+          while (isRunning) {
+            try {
               DrivePacket received = connection.waitForRequest();
               logger.debug("Received packet from " + connection.getDestination());
-              switch (received.getService())
-              {
-                case DriveConnection.SERVICE_OPEN:
-                {
+              switch (received.getService()) {
+                case DriveConnection.SERVICE_OPEN: {
                   logger.info("OPEN " + received.getLogicalFile() + "," + received.getDevice() + "," + received.getChannel());
-                  try
-                  {
+                  try {
                     device.open(received.getChannel(), strip0(received.getData()));
                     connection.sendReply(Error.OK);
-                  }
-                  catch (DeviceException e)
-                  {
+                  } catch (DeviceException e) {
                     connection.sendReply(e.getError());
                   }
                   break;
                 }
-                case DriveConnection.SERVICE_CHKIN:
-                {
+                case DriveConnection.SERVICE_CHKIN: {
                   logger.info("CHKIN " + received.getLogicalFile() + "," + received.getDevice() + "," + received.getChannel());
-                  try
-                  {
+                  try {
                     device.incrementPosition(received.getChannel(), received.getData0());
                     connection.sendReply(Error.OK);
-                  }
-                  catch (DeviceException e)
-                  {
+                  } catch (DeviceException e) {
                     connection.sendReply(e.getError());
                   }
                   break;
                 }
-                case DriveConnection.SERVICE_READ:
-                {
+                case DriveConnection.SERVICE_READ: {
                   logger.info("READ " + received.getLogicalFile() + "," + received.getDevice() + "," + received.getChannel());
-                  try
-                  {
+                  try {
                     byte[] data = device.read(received.getChannel(), received.getData0());
                     connection.sendReply(data);
-                  }
-                  catch (DeviceException e)
-                  {
+                  } catch (DeviceException e) {
                     // TODO correct?
                     connection.sendReply(e.getError());
                   }
                   break;
                 }
-                case DriveConnection.SERVICE_WRITE:
-                {
+                case DriveConnection.SERVICE_WRITE: {
                   logger.info("WRITE " + received.getLogicalFile() + "," + received.getDevice() + "," + received.getChannel());
-                  try
-                  {
+                  try {
                     device.write(received.getChannel(), received.getData());
                     connection.sendReply(Error.OK);
-                  }
-                  catch (DeviceException e)
-                  {
+                  } catch (DeviceException e) {
                     connection.sendReply(e.getError());
                   }
                   break;
                 }
-                case DriveConnection.SERVICE_CLOSE:
-                {
+                case DriveConnection.SERVICE_CLOSE: {
                   logger.info("CLOSE " + received.getLogicalFile() + "," + received.getDevice() + "," + received.getChannel());
-                  try
-                  {
+                  try {
                     device.close(received.getChannel());
                     connection.sendReply(Error.OK);
-                  }
-                  catch (DeviceException e)
-                  {
+                  } catch (DeviceException e) {
                     connection.sendReply(e.getError());
                   }
                   break;
                 }
-                default:
-                {
+                default: {
                   logger.error("Unknown service " + Integer.toHexString(received.getService()));
                 }
               }
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
               logger.error("Server error", e);
             }
           }
-        }
-        catch (SocketException e)
-        {
+        } catch (SocketException e) {
           logger.info("Aborted waiting for connections");
           return;
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
           logger.error("Failed to connect to server port", e);
           return;
         }
@@ -212,10 +167,8 @@ public class NetDrive
     }
   }
 
-  private byte[] strip0(byte[] data)
-  {
-    if (data[data.length - 1] != 0x00)
-    {
+  private byte[] strip0(byte[] data) {
+    if (data[data.length - 1] != 0x00) {
       return data;
     }
 

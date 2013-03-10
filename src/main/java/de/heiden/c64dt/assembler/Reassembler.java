@@ -4,7 +4,8 @@ import de.heiden.c64dt.assembler.command.CommandBuffer;
 import de.heiden.c64dt.assembler.command.CommandBufferMapper;
 import de.heiden.c64dt.assembler.command.CommandCreator;
 import de.heiden.c64dt.assembler.detector.*;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
@@ -28,7 +29,7 @@ public class Reassembler {
   /**
    * Logger.
    */
-  private final Logger logger = Logger.getLogger(getClass());
+  private final Log logger = LogFactory.getLog(getClass());
 
   /**
    * Code type detectors to use.
