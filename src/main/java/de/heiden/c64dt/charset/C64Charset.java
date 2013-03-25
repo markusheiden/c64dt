@@ -8,8 +8,7 @@ import java.nio.charset.UnmappableCharacterException;
 /**
  * C64 charset.
  */
-public class C64Charset extends Charset
-{
+public class C64Charset extends Charset {
   /**
    * Default charset with only upper case chars.
    */
@@ -25,32 +24,27 @@ public class C64Charset extends Charset
   /**
    * Constructor.
    */
-  protected C64Charset(boolean upper)
-  {
-    super("C64_" + (upper? "UPPER" : "LOWER"), null);
+  protected C64Charset(boolean upper) {
+    super("C64_" + (upper ? "UPPER" : "LOWER"), null);
 
     this.upper = upper;
   }
 
-  public static C64Charset charset(boolean upper)
-  {
-    return upper? UPPER : LOWER;
+  public static C64Charset charset(boolean upper) {
+    return upper ? UPPER : LOWER;
   }
 
-  public boolean contains(Charset cs)
-  {
+  public boolean contains(Charset cs) {
     return cs instanceof C64Charset &&
       !upper || ((C64Charset) cs).upper;
   }
 
-  public AbstractDecoder newDecoder()
-  {
-    return upper? new C64DecoderUpper(this) : new C64DecoderLower(this);
+  public AbstractDecoder newDecoder() {
+    return upper ? new C64DecoderUpper(this) : new C64DecoderLower(this);
   }
 
-  public AbstractEncoder newEncoder()
-  {
-    return upper? new C64EncoderUpper(this) : new C64EncoderLower(this);
+  public AbstractEncoder newEncoder() {
+    return upper ? new C64EncoderUpper(this) : new C64EncoderLower(this);
   }
 
   //
@@ -62,8 +56,7 @@ public class C64Charset extends Charset
    *
    * @param bytes bytes
    */
-  public String toString(byte[] bytes)
-  {
+  public String toString(byte... bytes) {
     Assert.notNull(bytes, "Precondition: bytes != null");
 
     return toString(bytes, 0, bytes.length);
@@ -76,8 +69,7 @@ public class C64Charset extends Charset
    * @param pos position in bytes to start from
    * @param length number of bytes to convert
    */
-  public String toString(byte[] bytes, int pos, int length)
-  {
+  public String toString(byte[] bytes, int pos, int length) {
     Assert.notNull(bytes, "Precondition: bytes != null");
     Assert.isTrue(pos >= 0, "Precondition: pos >= 0");
     Assert.isTrue(length >= 0, "Precondition: length >= 0");
@@ -85,14 +77,10 @@ public class C64Charset extends Charset
 
     AbstractDecoder decoder = newDecoder();
     StringBuilder result = new StringBuilder(bytes.length);
-    for (int i = 0; i < length; i++, pos++)
-    {
-      try
-      {
+    for (int i = 0; i < length; i++, pos++) {
+      try {
         result.append(decoder.toChar(bytes[pos]));
-      }
-      catch (UnmappableCharacterException e)
-      {
+      } catch (UnmappableCharacterException e) {
         result.append(' ');
       }
     }
@@ -105,8 +93,7 @@ public class C64Charset extends Charset
    *
    * @param string string
    */
-  public byte[] toBytes(String string)
-  {
+  public byte[] toBytes(String string) {
     Assert.notNull(string, "Precondition: string != null");
 
     byte[] result = new byte[string.length()];
@@ -123,22 +110,17 @@ public class C64Charset extends Charset
    * @param bytes resulting bytes
    * @param pos position in bytes to write result to
    */
-  public void toBytes(String string, byte[] bytes, int pos)
-  {
+  public void toBytes(String string, byte[] bytes, int pos) {
     Assert.notNull(string, "Precondition: string != null");
     Assert.notNull(bytes, "Precondition: bytes != null");
     Assert.isTrue(pos >= 0, "Precondition: pos >= 0");
     Assert.isTrue(pos + string.length() <= bytes.length, "Precondition: pos + string.length() <= bytes.length");
 
     AbstractEncoder encoder = newEncoder();
-    for (int i = 0; i < string.length(); i++, pos++)
-    {
-      try
-      {
+    for (int i = 0; i < string.length(); i++, pos++) {
+      try {
         bytes[pos] = encoder.toByte(string.charAt(i));
-      }
-      catch (UnmappableCharacterException e)
-      {
+      } catch (UnmappableCharacterException e) {
         bytes[pos] = 0x20;
       }
     }
