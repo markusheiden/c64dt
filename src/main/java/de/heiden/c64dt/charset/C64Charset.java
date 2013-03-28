@@ -52,6 +52,19 @@ public class C64Charset extends Charset {
   //
 
   /**
+   * Convenience method to convert C64 encoded byte into a char.
+   *
+   * @param b Byte
+   */
+  public char toChar(byte b) {
+    try {
+      return newDecoder().toChar(b);
+    } catch (UnmappableCharacterException e) {
+      return ' ';
+    }
+  }
+
+  /**
    * Convenience method to convert C64 encoded bytes into a string.
    *
    * @param bytes bytes
