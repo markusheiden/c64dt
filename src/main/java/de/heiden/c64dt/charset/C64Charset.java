@@ -55,19 +55,6 @@ public class C64Charset extends Charset {
   //
 
   /**
-   * Convenience method to convert C64 encoded byte into a char.
-   *
-   * @param b Byte
-   */
-  public char toChar(byte b) {
-    try {
-      return newDecoder().toChar(b);
-    } catch (UnmappableCharacterException e) {
-      return ' ';
-    }
-  }
-
-  /**
    * Convenience method to convert C64 encoded bytes into a string.
    *
    * @param bytes bytes
@@ -94,14 +81,33 @@ public class C64Charset extends Charset {
     AbstractDecoder decoder = newDecoder();
     StringBuilder result = new StringBuilder(bytes.length);
     for (int i = 0; i < length; i++, pos++) {
-      try {
-        result.append(decoder.toChar(bytes[pos]));
-      } catch (UnmappableCharacterException e) {
-        result.append(' ');
-      }
+      result.append(toChar(bytes[pos], decoder));
     }
 
     return result.toString();
+  }
+
+  /**
+   * Convenience method to convert C64 encoded byte into a char.
+   *
+   * @param b Byte
+   */
+  public char toChar(byte b) {
+    return toChar(b, newDecoder());
+  }
+
+  /**
+   * Convenience method to convert C64 encoded byte into a char.
+   *
+   * @param b Byte
+   * @param decoder Decoder
+   */
+  private char toChar(byte b, AbstractDecoder decoder) {
+    try {
+      return decoder.toChar(b);
+    } catch (UnmappableCharacterException e) {
+      return ' ';
+    }
   }
 
   /**
@@ -134,11 +140,30 @@ public class C64Charset extends Charset {
 
     AbstractEncoder encoder = newEncoder();
     for (int i = 0; i < string.length(); i++, pos++) {
-      try {
-        bytes[pos] = encoder.toByte(string.charAt(i));
-      } catch (UnmappableCharacterException e) {
-        bytes[pos] = 0x20;
-      }
+      bytes[pos] = toByte(string.charAt(i), encoder);
+    }
+  }
+
+  /**
+   * Convenience method to convert a char into C64 encoded byte.
+   *
+   * @param c Character
+   */
+  public byte toByte(char c) {
+    return toByte(c, newEncoder());
+  }
+
+  /**
+   * Convenience method to convert a char into C64 encoded byte.
+   *
+   * @param c Character
+   * @param encoder Encoder
+   */
+  private byte toByte(char c, AbstractEncoder encoder) {
+    try {
+      return encoder.toByte(c);
+    } catch (UnmappableCharacterException e) {
+      return 0x20; // space
     }
   }
 }
