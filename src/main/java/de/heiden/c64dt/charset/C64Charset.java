@@ -1,14 +1,12 @@
 package de.heiden.c64dt.charset;
 
-import org.springframework.util.Assert;
-
 import java.nio.charset.Charset;
 import java.nio.charset.UnmappableCharacterException;
 
 /**
  * C64 charset.
  */
-public class C64Charset extends Charset {
+public class C64Charset extends AbstractCharset {
   /**
    * Default charset with only upper case chars.
    */
@@ -45,128 +43,218 @@ public class C64Charset extends Charset {
 
   @Override
   public AbstractDecoder newDecoder() {
-    return upper ? new C64DecoderUpper(this) : new C64DecoderLower(this);
+    return new AbstractDecoder(this, " ") {
+      @Override
+      protected char toChar(byte b) throws UnmappableCharacterException {
+        int c = b & 0x7F; // accept inverted chars too
+        if (c >= 0x01 && c <= 0x1A) {
+          char a = upper ? 'A' : 'a';
+          return (char) (c - 0x01 + a);
+        } else if (!upper && c >= 0x41 && c <= 0x5A) {
+          return (char) (c - 0x41 + 'A');
+        } else {
+          return toSymbolChar(b);
+        }
+      }
+    };
+  }
+
+  /**
+   * Map common symbol characters.
+   *
+   * @param c Character
+   */
+  protected char toSymbolChar(byte c) throws UnmappableCharacterException {
+    switch (c) {
+      case 0x00:
+        return '@';
+      case 0x1B:
+        return '[';
+//      case 0x1C: return ' '; // pound
+      case 0x1D:
+        return ']';
+//      case 0x1E: return '^'; // up arrow
+//      case 0x1F: return '<'; // left arrow
+      case 0x20:
+        return ' '; // blank
+      case 0x21:
+        return '!';
+      case 0x22:
+        return '"';
+      case 0x23:
+        return '#';
+      case 0x24:
+        return '$';
+      case 0x25:
+        return '%';
+      case 0x26:
+        return '&';
+      case 0x27:
+        return '\'';
+      case 0x28:
+        return '(';
+      case 0x29:
+        return ')';
+      case 0x2A:
+        return '*';
+      case 0x2B:
+        return '+';
+      case 0x2C:
+        return ',';
+      case 0x2D:
+        return '-';
+      case 0x2E:
+        return '.';
+      case 0x2F:
+        return '/';
+      case 0x30:
+        return '0';
+      case 0x31:
+        return '1';
+      case 0x32:
+        return '2';
+      case 0x33:
+        return '3';
+      case 0x34:
+        return '4';
+      case 0x35:
+        return '5';
+      case 0x36:
+        return '6';
+      case 0x37:
+        return '7';
+      case 0x38:
+        return '8';
+      case 0x39:
+        return '9';
+      case 0x3A:
+        return ':';
+      case 0x3B:
+        return ';';
+      case 0x3C:
+        return '<';
+      case 0x3D:
+        return '=';
+      case 0x3E:
+        return '>';
+      case 0x3F:
+        return '?';
+//      case 0x40: return '-'; // bold minus
+//      case 0x5B: return '+'; // bold plus
+      case 0x5D:
+        return '|';
+      case 0x64:
+        return '_';
+      default:
+        throw new UnmappableCharacterException(1);
+    }
   }
 
   @Override
   public AbstractEncoder newEncoder() {
-    return upper ? new C64EncoderUpper(this) : new C64EncoderLower(this);
-  }
-
-  //
-  // convenience methods
-  //
-
-  /**
-   * Convenience method to convert C64 encoded bytes into a string.
-   *
-   * @param bytes bytes
-   */
-  public String toString(byte... bytes) {
-    Assert.notNull(bytes, "Precondition: bytes != null");
-
-    return toString(bytes, 0, bytes.length);
+    return new AbstractEncoder(this, (byte) 0x20) {
+      @Override
+      protected byte toByte(char c) throws UnmappableCharacterException {
+        if (!upper && c >= 'a' && c <= 'z') {
+          return (byte) (c - 'a' + 0x01);
+        } else if (c >= 'A' && c <= 'Z') {
+          int a = upper ? 0x01 : 0x41;
+          return (byte) (c - 'A' + a);
+        } else {
+          return toSymbolByte(c);
+        }
+      }
+    };
   }
 
   /**
-   * Convenience method to convert C64 encoded bytes into a string.
+   * Map common symbol characters.
    *
-   * @param bytes bytes
-   * @param pos position in bytes to start from
-   * @param length number of bytes to convert
+   * @param c symbol character
    */
-  public String toString(byte[] bytes, int pos, int length) {
-    Assert.notNull(bytes, "Precondition: bytes != null");
-    Assert.isTrue(pos >= 0, "Precondition: pos >= 0");
-    Assert.isTrue(length >= 0, "Precondition: length >= 0");
-    Assert.isTrue(pos + length <= bytes.length, "Precondition: pos + length <= bytes.length");
-
-    AbstractDecoder decoder = newDecoder();
-    StringBuilder result = new StringBuilder(bytes.length);
-    for (int i = 0; i < length; i++, pos++) {
-      result.append(toChar(bytes[pos], decoder));
-    }
-
-    return result.toString();
-  }
-
-  /**
-   * Convenience method to convert C64 encoded byte into a char.
-   *
-   * @param b Byte
-   */
-  public char toChar(byte b) {
-    return toChar(b, newDecoder());
-  }
-
-  /**
-   * Convenience method to convert C64 encoded byte into a char.
-   *
-   * @param b Byte
-   * @param decoder Decoder
-   */
-  private char toChar(byte b, AbstractDecoder decoder) {
-    try {
-      return decoder.toChar(b);
-    } catch (UnmappableCharacterException e) {
-      return ' ';
-    }
-  }
-
-  /**
-   * Convenience method to convert a string into C64 encoded bytes.
-   *
-   * @param string string
-   */
-  public byte[] toBytes(String string) {
-    Assert.notNull(string, "Precondition: string != null");
-
-    byte[] result = new byte[string.length()];
-    toBytes(string, result, 0);
-
-    Assert.notNull(result, "Postcondition: result != null");
-    return result;
-  }
-
-  /**
-   * Convenience method to convert a string into C64 encoded bytes.
-   *
-   * @param string string
-   * @param bytes resulting bytes
-   * @param pos position in bytes to write result to
-   */
-  public void toBytes(String string, byte[] bytes, int pos) {
-    Assert.notNull(string, "Precondition: string != null");
-    Assert.notNull(bytes, "Precondition: bytes != null");
-    Assert.isTrue(pos >= 0, "Precondition: pos >= 0");
-    Assert.isTrue(pos + string.length() <= bytes.length, "Precondition: pos + string.length() <= bytes.length");
-
-    AbstractEncoder encoder = newEncoder();
-    for (int i = 0; i < string.length(); i++, pos++) {
-      bytes[pos] = toByte(string.charAt(i), encoder);
-    }
-  }
-
-  /**
-   * Convenience method to convert a char into C64 encoded byte.
-   *
-   * @param c Character
-   */
-  public byte toByte(char c) {
-    return toByte(c, newEncoder());
-  }
-
-  /**
-   * Convenience method to convert a char into C64 encoded byte.
-   *
-   * @param c Character
-   * @param encoder Encoder
-   */
-  private byte toByte(char c, AbstractEncoder encoder) {
-    try {
-      return encoder.toByte(c);
-    } catch (UnmappableCharacterException e) {
-      return 0x20; // space
+  protected byte toSymbolByte(char c) throws UnmappableCharacterException {
+    switch (c) {
+      case '@':
+        return 0x00;
+      case '[':
+        return 0x1B;
+//      case ' ': return 0x1C; // pound
+      case ']':
+        return 0x1D;
+//      case '^': return 0x1E; // up arrow
+//      case '<': return 0x1F; // left arrow
+      case ' ':
+        return 0x20; // blank
+      case '!':
+        return 0x21;
+      case '"':
+        return 0x22;
+      case '#':
+        return 0x23;
+      case '$':
+        return 0x24;
+      case '%':
+        return 0x25;
+      case '&':
+        return 0x26;
+      case '\'':
+        return 0x27;
+      case '(':
+        return 0x28;
+      case ')':
+        return 0x29;
+      case '*':
+        return 0x2A;
+      case '+':
+        return 0x2B;
+      case ',':
+        return 0x2C;
+      case '-':
+        return 0x2D;
+      case '.':
+        return 0x2E;
+      case '/':
+        return 0x2F;
+      case '0':
+        return 0x30;
+      case '1':
+        return 0x31;
+      case '2':
+        return 0x32;
+      case '3':
+        return 0x33;
+      case '4':
+        return 0x34;
+      case '5':
+        return 0x35;
+      case '6':
+        return 0x36;
+      case '7':
+        return 0x37;
+      case '8':
+        return 0x38;
+      case '9':
+        return 0x39;
+      case ':':
+        return 0x3A;
+      case ';':
+        return 0x3B;
+      case '<':
+        return 0x3C;
+      case '=':
+        return 0x3D;
+      case '>':
+        return 0x3E;
+      case '?':
+        return 0x3F;
+//      case '-': return 0x40; // bold minus
+//      case '+': return 0x5B; // bold plus
+      case '|':
+        return 0x5D;
+      case '_':
+        return 0x64;
+      default:
+        throw new UnmappableCharacterException(1);
     }
   }
 }
