@@ -12,8 +12,7 @@ import java.util.StringTokenizer;
 /**
  * Component for displaying C64 text.
  */
-public class JC64TextArea extends JC64CommonComponent
-{
+public class JC64TextArea extends JC64CommonComponent {
   private static final int ROW_HEIGHT = 8;
   private static final int COLUMN_WIDTH = 8;
 
@@ -39,8 +38,7 @@ public class JC64TextArea extends JC64CommonComponent
    * @param factor zoom factor
    * @param resizable Is the backing image resizable?
    */
-  public JC64TextArea(int columns, int rows, double factor, boolean resizable)
-  {
+  public JC64TextArea(int columns, int rows, double factor, boolean resizable) {
     super(columns * COLUMN_WIDTH, rows * ROW_HEIGHT, factor, resizable);
 
     _columns = columns;
@@ -52,13 +50,10 @@ public class JC64TextArea extends JC64CommonComponent
 
     buildBuffer();
 
-    if (resizable)
-    {
-      addComponentListener(new ComponentAdapter()
-      {
+    if (resizable) {
+      addComponentListener(new ComponentAdapter() {
         @Override
-        public void componentResized(ComponentEvent e)
-        {
+        public void componentResized(ComponentEvent e) {
           buildBuffer();
         }
       });
@@ -68,8 +63,7 @@ public class JC64TextArea extends JC64CommonComponent
   /**
    * Build text buffer.
    */
-  private void buildBuffer()
-  {
+  private void buildBuffer() {
     _columns = (int) Math.ceil(getImageWidth() / COLUMN_WIDTH);
     _rows = (int) Math.ceil(getImageHeight() / ROW_HEIGHT);
 
@@ -80,8 +74,7 @@ public class JC64TextArea extends JC64CommonComponent
   }
 
   @Override
-  public void addNotify()
-  {
+  public void addNotify() {
     // Clear after add, because the colors aren't set before
     clear();
   }
@@ -89,16 +82,11 @@ public class JC64TextArea extends JC64CommonComponent
   /**
    * Default charset.
    */
-  private static int[] getDefaultCharset()
-  {
-    if (_defaultCharsetROM == null)
-    {
-      try
-      {
+  private static int[] getDefaultCharset() {
+    if (_defaultCharsetROM == null) {
+      try {
         _defaultCharsetROM = ResourceLoader.load(0x1000, "/roms/character/display.bin");
-      }
-      catch (Exception e)
-      {
+      } catch (Exception e) {
         throw new IllegalArgumentException("Unable to load default charset", e);
       }
     }
@@ -109,32 +97,28 @@ public class JC64TextArea extends JC64CommonComponent
   /**
    * Number of character rows.
    */
-  public int getRows()
-  {
+  public int getRows() {
     return _rows;
   }
 
   /**
    * Height of rows.
    */
-  public int getRowHeight()
-  {
+  public int getRowHeight() {
     return (int) Math.round(ROW_HEIGHT * _factor);
   }
 
   /**
    * Number of character columns.
    */
-  public int getColumns()
-  {
+  public int getColumns() {
     return _columns;
   }
 
   /**
    * Height of rows.
    */
-  public int getColumnWidth()
-  {
+  public int getColumnWidth() {
     return (int) Math.round(COLUMN_WIDTH * _factor);
   }
 
@@ -143,8 +127,7 @@ public class JC64TextArea extends JC64CommonComponent
    *
    * @param upper use upper case only charset?
    */
-  public final void setCharset(boolean upper)
-  {
+  public final void setCharset(boolean upper) {
     _upper = upper;
     _charset = C64Charset.charset(upper);
   }
@@ -156,10 +139,8 @@ public class JC64TextArea extends JC64CommonComponent
    * @param row row
    * @param s characters
    */
-  public void setText(int column, int row, String s)
-  {
-    if (!s.contains("\n"))
-    {
+  public void setText(int column, int row, String s) {
+    if (!s.contains("\n")) {
       // optimization for single line text
       setText(column, row, _charset.toBytes(s));
       return;
@@ -167,8 +148,7 @@ public class JC64TextArea extends JC64CommonComponent
 
     // handle multiline text
     StringTokenizer tokenizer = new StringTokenizer(s, "\n");
-    for (int r = row; tokenizer.hasMoreTokens() && r < _rows; r++)
-    {
+    for (int r = row; tokenizer.hasMoreTokens() && r < _rows; r++) {
       setText(column, r, tokenizer.nextToken());
     }
   }
@@ -180,11 +160,9 @@ public class JC64TextArea extends JC64CommonComponent
    * @param row row
    * @param s characters
    */
-  public void setTextInverted(int column, int row, String s)
-  {
+  public void setTextInverted(int column, int row, String s) {
     byte[] characters = _charset.toBytes(s);
-    for (int i = 0; i < characters.length; i++)
-    {
+    for (int i = 0; i < characters.length; i++) {
       characters[i] |= 0x80;
     }
     setText(column, row, characters);
@@ -197,10 +175,8 @@ public class JC64TextArea extends JC64CommonComponent
    * @param row row
    * @param s characters in C64 encoding
    */
-  public void setText(int column, int row, byte... s)
-  {
-    for (int i = 0, c = column; i < s.length && c < _columns; i++, c++)
-    {
+  public void setText(int column, int row, byte... s) {
+    for (int i = 0, c = column; i < s.length && c < _columns; i++, c++) {
       setTextInternal(c, row, s[i]);
     }
     repaint();
@@ -213,8 +189,7 @@ public class JC64TextArea extends JC64CommonComponent
    * @param row row
    * @param c character in C64 encoding
    */
-  public void setText(int column, int row, byte c)
-  {
+  public void setText(int column, int row, byte c) {
     setTextInternal(column, row, c);
     repaint();
   }
@@ -226,10 +201,8 @@ public class JC64TextArea extends JC64CommonComponent
    * @param row row
    * @param c character in C64 encoding
    */
-  protected void setTextInternal(int column, int row, byte c)
-  {
-    if (column >= _columns || row >= _rows)
-    {
+  protected void setTextInternal(int column, int row, byte c) {
+    if (column >= _columns || row >= _rows) {
       // early exit, when the text exceeds the buffer.
       // this may happen, e.g. when the component has been resized to a smaller size than the initial size.
       return;
@@ -243,18 +216,15 @@ public class JC64TextArea extends JC64CommonComponent
   /**
    * Clear component with background color.
    */
-  public void clear()
-  {
+  public void clear() {
     byte space = _charset.toBytes(" ")[0];
     Color foreground = getForeground();
     Color background = getBackground();
-    for (int row = 0; row < _rows; row++)
-    {
+    for (int row = 0; row < _rows; row++) {
       byte[] charRow = _chars[row];
       Color[] foregroundRow = _foregrounds[row];
       Color[] backgroundRow = _backgrounds[row];
-      for (int column = 0; column < _columns; column++)
-      {
+      for (int column = 0; column < _columns; column++) {
         charRow[column] = space;
         foregroundRow[column] = foreground;
         backgroundRow[column] = background;
@@ -271,12 +241,9 @@ public class JC64TextArea extends JC64CommonComponent
    * @param g graphics
    */
   @Override
-  public void doPaintComponent(Graphics g)
-  {
-    for (int row = 0; row < _rows; row++)
-    {
-      for (int column = 0; column < _columns; column++)
-      {
+  public void doPaintComponent(Graphics g) {
+    for (int row = 0; row < _rows; row++) {
+      for (int column = 0; column < _columns; column++) {
         paintCharacter(column, row);
       }
     }
@@ -289,21 +256,18 @@ public class JC64TextArea extends JC64CommonComponent
    * @param column column
    * @param row row
    */
-  private void paintCharacter(int column, int row)
-  {
+  private void paintCharacter(int column, int row) {
     int[] imageData = getImageData();
     int foreground = _foregrounds[row][column].getRGB();
     int background = _backgrounds[row][column].getRGB();
 
-    int charOffset = _upper? 0x0000 : 0x0800;
+    int charOffset = _upper ? 0x0000 : 0x0800;
     int charPtr = charOffset + (_chars[row][column] & 0xFF) * 8;
-    for (int y = row * 8, lastY = y + 8; y < lastY; y++)
-    {
+    for (int y = row * 8, lastY = y + 8; y < lastY; y++) {
       int offset = y * getImageWidth() + column * 8;
       int data = _charsetROM[charPtr++];
-      for (int dx = 0, bit = 0x80; bit > 0; dx++, bit = bit >> 1)
-      {
-        imageData[offset + dx] = (data & bit) != 0? foreground : background;
+      for (int dx = 0, bit = 0x80; bit > 0; dx++, bit = bit >> 1) {
+        imageData[offset + dx] = (data & bit) != 0 ? foreground : background;
       }
     }
   }
@@ -312,8 +276,7 @@ public class JC64TextArea extends JC64CommonComponent
   // test
   //
 
-  public static void main(String[] args)
-  {
+  public static void main(String[] args) {
     JFrame frame = new JFrame();
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -338,10 +301,8 @@ public class JC64TextArea extends JC64CommonComponent
     text.setText(0, 5, "@[] !\"#$%&'()*+,-./1234567890:;<=>?|_");
 
     byte c = 0;
-    for (int y = 0; y < 16; y++)
-    {
-      for (int x = 0; x < 16; x++, c++)
-      {
+    for (int y = 0; y < 16; y++) {
+      for (int x = 0; x < 16; x++, c++) {
         text.setCharset(false);
         text.setForeground(C64Color.LIGHT_GREEN);
         text.setText(x, y + 8, c);

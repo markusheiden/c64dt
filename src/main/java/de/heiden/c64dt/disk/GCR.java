@@ -10,8 +10,7 @@ import java.util.Arrays;
  * GCR 5 to 4 scheme:
  * 11111222 22333334 44445555 56666677 77788888
  */
-public class GCR
-{
+public class GCR {
   public static final int[] GCR = {
     0x0A, 0x0B, 0x12, 0x13,
     0x0E, 0x0F, 0x16, 0x17,
@@ -19,16 +18,13 @@ public class GCR
     0x0D, 0x1D, 0x1E, 0x15
   };
 
-  public static void main(String[] args)
-  {
+  public static void main(String[] args) {
     new GCR().start();
   }
 
-  private void start()
-  {
+  private void start() {
     int[] result = calculate();
-    if (result == null)
-    {
+    if (result == null) {
       System.out.println("no match");
       return;
     }
@@ -37,8 +33,7 @@ public class GCR
     System.out.println(toString(result));
   }
 
-  private int[] calculate()
-  {
+  private int[] calculate() {
     int[][] nibbles = new int[][]
       {
         generate(0), // nibble1
@@ -54,8 +49,7 @@ public class GCR
     return calculate(nibbles);
   }
 
-  private int[] calculateNew()
-  {
+  private int[] calculateNew() {
     int[] result = null;
     int min = Integer.MAX_VALUE;
 
@@ -72,26 +66,21 @@ public class GCR
       };
 
     int[][] permutate = new int[8][];
-    for (int i = 0; i < (1 << 3) * 8; i++)
-    {
+    for (int i = 0; i < (1 << 3) * 8; i++) {
       Arrays.fill(permutate, null);
-      for (int j = 0, permutation = i; j < nibbles.length; j++)
-      {
+      for (int j = 0, permutation = i; j < nibbles.length; j++) {
         int index = permutation & 0x7;
         permutation >>= 3;
-        if (permutate[index] != null)
-        {
+        if (permutate[index] != null) {
           break;
         }
         permutate[index] = nibbles[j];
       }
 
       int[] merged = calculate(permutate);
-      if (merged != null)
-      {
+      if (merged != null) {
         int length = length(merged);
-        if (length < min)
-        {
+        if (length < min) {
           min = length;
           result = merged;
         }
@@ -107,15 +96,12 @@ public class GCR
    * @param shift the number of bits the gcr is shifted
    * @return reverse gcr table
    */
-  private int[] generate(int shift)
-  {
+  private int[] generate(int shift) {
     int[] nibble = new int[256];
     Arrays.fill(nibble, -1);
-    for (int i = 0; i < GCR.length; i++)
-    {
+    for (int i = 0; i < GCR.length; i++) {
       int gcr = GCR[i];
-      if (gcr >= 0)
-      {
+      if (gcr >= 0) {
         int shifted = gcr << shift;
         nibble[(shifted & 0xFF) | (shifted >> 8)] = i;
       }
@@ -130,25 +116,20 @@ public class GCR
    * @param nibbles reverse gcr tables
    * @return the merged reverse gcr table
    */
-  public int[] calculate(int[][] nibbles)
-  {
+  public int[] calculate(int[][] nibbles) {
     int[] result = new int[512];
     Arrays.fill(result, -1);
 
-    for (int[] nibble : nibbles)
-    {
+    for (int[] nibble : nibbles) {
       int i = 0; // -first(nibble);
-      for (; i < 256; i++)
-      {
-        if (match(nibble, result, i))
-        {
+      for (; i < 256; i++) {
+        if (match(nibble, result, i)) {
           copy(nibble, result, i);
           break;
         }
       }
 
-      if (i == 256)
-      {
+      if (i == 256) {
         return null;
       }
     }
@@ -163,16 +144,12 @@ public class GCR
    * @param result merged reversed gcr table
    * @param index the index to which nibble should be merged into result
    */
-  private boolean match(int[] nibble, int[] result, int index)
-  {
-    for (int i = 0, pos = index; i < nibble.length; i++, pos++)
-    {
-      if (pos < 0)
-      {
+  private boolean match(int[] nibble, int[] result, int index) {
+    for (int i = 0, pos = index; i < nibble.length; i++, pos++) {
+      if (pos < 0) {
         continue;
       }
-      if (nibble[i] >= 0 && result[i + index] >= 0)
-      {
+      if (nibble[i] >= 0 && result[i + index] >= 0) {
         return false;
       }
     }
@@ -187,16 +164,12 @@ public class GCR
    * @param result merged reversed gcr table
    * @param index the index to which nibble should be merged into result
    */
-  private void copy(int[] nibble, int[] result, int index)
-  {
-    for (int i = 0, pos = index; i < nibble.length; i++, pos++)
-    {
-      if (pos < 0)
-      {
+  private void copy(int[] nibble, int[] result, int index) {
+    for (int i = 0, pos = index; i < nibble.length; i++, pos++) {
+      if (pos < 0) {
         continue;
       }
-      if (nibble[i] >= 0)
-      {
+      if (nibble[i] >= 0) {
         result[i + index] = nibble[i];
       }
     }
@@ -208,15 +181,12 @@ public class GCR
    *
    * @param table gcr table
    */
-  private static int length(int[] table)
-  {
+  private static int length(int[] table) {
     int first = first(table);
 
     int last = table.length - 1;
-    for (; last >= 0; last--)
-    {
-      if (table[last] >= 0)
-      {
+    for (; last >= 0; last--) {
+      if (table[last] >= 0) {
         break;
       }
     }
@@ -224,13 +194,10 @@ public class GCR
     return last - first + 1;
   }
 
-  private static int first(int[] table)
-  {
+  private static int first(int[] table) {
     int first = 0;
-    for (; first < table.length; first++)
-    {
-      if (table[first] >= 0)
-      {
+    for (; first < table.length; first++) {
+      if (table[first] >= 0) {
         break;
       }
     }
@@ -243,16 +210,13 @@ public class GCR
    *
    * @param table gcr table
    */
-  private static String toString(int[] table)
-  {
+  private static String toString(int[] table) {
     StringBuilder out = new StringBuilder(256 * 5);
-    for (int i = 0; i < table.length; )
-    {
+    for (int i = 0; i < table.length; ) {
       out.append(HexUtil.hexWord(i));
       out.append(": ");
-      for (int j = 0; j < 16; i++, j++)
-      {
-        out.append(table[i] >= 0? HexUtil.hexByte(table[i]) : "---");
+      for (int j = 0; j < 16; i++, j++) {
+        out.append(table[i] >= 0 ? HexUtil.hexByte(table[i]) : "---");
         out.append(", ");
       }
       out.append("\n");

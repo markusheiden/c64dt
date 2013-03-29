@@ -7,8 +7,7 @@ import java.io.InputStream;
 /**
  * Util class to load resources as byte arrays.
  */
-public class ResourceLoader
-{
+public class ResourceLoader {
   /**
    * Load content from a file
    *
@@ -16,21 +15,18 @@ public class ResourceLoader
    * @param filename filename of content
    * @exception IOException
    */
-  public static int[] load(int length, String filename) throws IOException
-  {
+  public static int[] load(int length, String filename) throws IOException {
     InputStream stream = ResourceLoader.class.getResourceAsStream(filename);
     byte[] read = new byte[length];
     int size = stream.read(read);
     stream.close();
 
-    if (size != length)
-    {
+    if (size != length) {
       throw new IOException("ROM image '" + filename + "' has a wrong size");
     }
 
     int[] result = new int[length];
-    for (int i = 0; i < result.length; i++)
-    {
+    for (int i = 0; i < result.length; i++) {
       result[i] = read[i] & 0xFF;
     }
 
@@ -44,16 +40,14 @@ public class ResourceLoader
    * @param filename filename of content
    * @exception IOException
    */
-  public static int[] load(String filename) throws IOException
-  {
+  public static int[] load(String filename) throws IOException {
     InputStream stream = new FileInputStream(filename);
     byte[] read = new byte[65536];
     int size = stream.read(read);
     stream.close();
 
     int[] result = new int[size];
-    for (int i = 0; i < result.length; i++)
-    {
+    for (int i = 0; i < result.length; i++) {
       result[i] = read[i] & 0xFF;
     }
 

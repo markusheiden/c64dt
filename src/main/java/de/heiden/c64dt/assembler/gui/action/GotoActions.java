@@ -16,8 +16,7 @@ import java.awt.event.MouseEvent;
 /**
  * All types of "go to" actions
  */
-public class GotoActions
-{
+public class GotoActions {
   /**
    * The table.
    */
@@ -33,28 +32,22 @@ public class GotoActions
    *
    * @param table The table this action works on
    */
-  public GotoActions(final JTable table)
-  {
+  public GotoActions(final JTable table) {
     this.table = table;
 
     gotoAction = createGotoAction();
 
-    table.getSelectionModel().addListSelectionListener(new ListSelectionListener()
-    {
+    table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
       @Override
-      public void valueChanged(ListSelectionEvent listSelectionEvent)
-      {
+      public void valueChanged(ListSelectionEvent listSelectionEvent) {
         gotoAction.setEnabled(table.getSelectedRowCount() == 1);
       }
     });
 
-    table.addMouseListener(new MouseAdapter()
-    {
+    table.addMouseListener(new MouseAdapter() {
       @Override
-      public void mouseClicked(MouseEvent e)
-      {
-        if (e.getClickCount() == 2)
-        {
+      public void mouseClicked(MouseEvent e) {
+        if (e.getClickCount() == 2) {
           gotoDestination(table.rowAtPoint(e.getPoint()));
         }
       }
@@ -66,21 +59,17 @@ public class GotoActions
    *
    * @param menu Menu
    */
-  public void addToMenu(JPopupMenu menu)
-  {
+  public void addToMenu(JPopupMenu menu) {
     menu.add(gotoAction);
   }
 
   /**
    * Create action "Go to".
    */
-  private Action createGotoAction()
-  {
-    return new AbstractAction("Go to")
-    {
+  private Action createGotoAction() {
+    return new AbstractAction("Go to") {
       @Override
-      public void actionPerformed(ActionEvent actionEvent)
-      {
+      public void actionPerformed(ActionEvent actionEvent) {
         gotoDestination(table.getSelectedRow());
       }
     };
@@ -91,10 +80,8 @@ public class GotoActions
    *
    * @param row Row in which the event has been triggered or -1
    */
-  private void gotoDestination(int row)
-  {
-    if (row < 0)
-    {
+  private void gotoDestination(int row) {
+    if (row < 0) {
       // now row -> no jump
       return;
     }
@@ -106,29 +93,25 @@ public class GotoActions
 
     // just works for opcodes
     ICommand command = commands.getCommand(index);
-    if (!(command instanceof OpcodeCommand))
-    {
+    if (!(command instanceof OpcodeCommand)) {
       return;
     }
 
     // just works for opcodes with an address
     OpcodeCommand opcodeCommand = (OpcodeCommand) command;
-    if (!opcodeCommand.isArgumentAddress())
-    {
+    if (!opcodeCommand.isArgumentAddress()) {
       return;
     }
 
     // check if address is known
     int address = opcodeCommand.getArgumentAddress();
-    if (!commands.hasAddress(address))
-    {
+    if (!commands.hasAddress(address)) {
       return;
     }
 
     // do the jump
     int jumpIndex = commands.indexForAddress(address);
-    if (jumpIndex < 0)
-    {
+    if (jumpIndex < 0) {
       return;
     }
 
@@ -140,12 +123,10 @@ public class GotoActions
    *
    * @param index Relative address
    */
-  public void gotoIndex(int index)
-  {
+  public void gotoIndex(int index) {
     CodeTableModel model = (CodeTableModel) table.getModel();
 
-    if (!model.getReassembler().getCommands().hasIndex(index))
-    {
+    if (!model.getReassembler().getCommands().hasIndex(index)) {
       return;
     }
 

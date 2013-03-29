@@ -5,8 +5,7 @@ import java.io.IOException;
 /**
  * A file stream.
  */
-public interface IStream
-{
+public interface IStream {
   /**
    * Is stream open?
    */

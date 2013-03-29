@@ -14,8 +14,7 @@ import java.awt.event.ActionEvent;
 /**
  * "Mark as" actions.
  */
-public class CodeTypeActions
-{
+public class CodeTypeActions {
   /**
    * The table.
    */
@@ -46,8 +45,7 @@ public class CodeTypeActions
    *
    * @param table The table this action works on
    */
-  public CodeTypeActions(final JTable table)
-  {
+  public CodeTypeActions(final JTable table) {
     this.table = table;
 
     markAsUnknownAction = createMarkAsUnknownAction();
@@ -55,11 +53,9 @@ public class CodeTypeActions
     markAsDataAction = createMarkAsDataAction();
     markAsAbsoluteAddressAction = createMarkAsAbsoluteAddressAction();
 
-    table.getSelectionModel().addListSelectionListener(new ListSelectionListener()
-    {
+    table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
       @Override
-      public void valueChanged(ListSelectionEvent listSelectionEvent)
-      {
+      public void valueChanged(ListSelectionEvent listSelectionEvent) {
         boolean isSelection = table.getSelectedRowCount() > 0;
         markAsUnknownAction.setEnabled(isSelection);
         markAsCodeAction.setEnabled(isSelection);
@@ -74,8 +70,7 @@ public class CodeTypeActions
    *
    * @param menu Menu
    */
-  public void addToMenu(JPopupMenu menu)
-  {
+  public void addToMenu(JPopupMenu menu) {
     menu.add(markAsUnknownAction);
     menu.add(markAsCodeAction);
     menu.add(markAsDataAction);
@@ -85,13 +80,10 @@ public class CodeTypeActions
   /**
    * Create action "Mark as unknown".
    */
-  private Action createMarkAsUnknownAction()
-  {
-    return new AbstractAction("Mark as unknown")
-    {
+  private Action createMarkAsUnknownAction() {
+    return new AbstractAction("Mark as unknown") {
       @Override
-      public void actionPerformed(ActionEvent actionEvent)
-      {
+      public void actionPerformed(ActionEvent actionEvent) {
         mark(CodeType.UNKNOWN);
       }
     };
@@ -100,13 +92,10 @@ public class CodeTypeActions
   /**
    * Create action "Mark as code".
    */
-  private Action createMarkAsCodeAction()
-  {
-    return new AbstractAction("Mark as code")
-    {
+  private Action createMarkAsCodeAction() {
+    return new AbstractAction("Mark as code") {
       @Override
-      public void actionPerformed(ActionEvent actionEvent)
-      {
+      public void actionPerformed(ActionEvent actionEvent) {
         mark(CodeType.CODE);
       }
     };
@@ -115,13 +104,10 @@ public class CodeTypeActions
   /**
    * Create action "Mark as data".
    */
-  private Action createMarkAsDataAction()
-  {
-    return new AbstractAction("Mark as data")
-    {
+  private Action createMarkAsDataAction() {
+    return new AbstractAction("Mark as data") {
       @Override
-      public void actionPerformed(ActionEvent actionEvent)
-      {
+      public void actionPerformed(ActionEvent actionEvent) {
         mark(CodeType.DATA);
       }
     };
@@ -130,13 +116,10 @@ public class CodeTypeActions
   /**
    * Create action "Mark as absolute address".
    */
-  private Action createMarkAsAbsoluteAddressAction()
-  {
-    return new AbstractAction("Mark as absolute address")
-    {
+  private Action createMarkAsAbsoluteAddressAction() {
+    return new AbstractAction("Mark as absolute address") {
       @Override
-      public void actionPerformed(ActionEvent actionEvent)
-      {
+      public void actionPerformed(ActionEvent actionEvent) {
         mark(CodeType.ADDRESS);
       }
     };
@@ -147,13 +130,11 @@ public class CodeTypeActions
    *
    * @param type Code type
    */
-  private void mark(CodeType type)
-  {
+  private void mark(CodeType type) {
     CodeTableModel model = (CodeTableModel) table.getModel();
     Reassembler reassembler = model.getReassembler();
     CommandBuffer commands = reassembler.getCommands();
-    for (int row : table.getSelectedRows())
-    {
+    for (int row : table.getSelectedRows()) {
       int index = model.getIndex(row);
       ICommand command = commands.getCommand(index);
       // TODO mh: do not overwrite OPCODE etc.?

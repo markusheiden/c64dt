@@ -13,8 +13,7 @@ import static de.heiden.c64dt.util.HexUtil.hexWord;
 /**
  * Command for an absolute address referencing code.
  */
-public class AddressCommand extends AbstractCommand
-{
+public class AddressCommand extends AbstractCommand {
   /**
    * Referenced absolute code address.
    */
@@ -25,38 +24,33 @@ public class AddressCommand extends AbstractCommand
    *
    * @param address address
    */
-  public AddressCommand(int address)
-  {
+  public AddressCommand(int address) {
     super(CodeType.ADDRESS);
 
     this.address = address;
   }
 
   @Override
-  public final int getSize()
-  {
+  public final int getSize() {
     return 2;
   }
 
   @Override
-  public final boolean isEnd()
-  {
+  public final boolean isEnd() {
     return true;
   }
 
   @Override
-  public String toString(CommandBuffer buffer)
-  {
+  public String toString(CommandBuffer buffer) {
     Assert.notNull(buffer, "Precondition: buffer != null");
 
     ILabel label = buffer.getLabel(address);
     Assert.isTrue(label.getAddress() == address, "Check: label.getAddress() == address");
-    return "!WORD " + (label != null? label.toString(address) : hexWord(address));
+    return "!WORD " + (label != null ? label.toString(address) : hexWord(address));
   }
 
   @Override
-  public List<Integer> toBytes()
-  {
+  public List<Integer> toBytes() {
     return Arrays.asList(ByteUtil.lo(address), ByteUtil.hi(address));
   }
 }

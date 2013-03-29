@@ -8,15 +8,13 @@ import javax.swing.*;
 /**
  * Reassembler start class.
  */
-public class Reassembler
-{
+public class Reassembler {
   /**
    * Start reassembler gui.
    *
    * @param args arguments (currently not evaluated)
    */
-  public static void main(String[] args) throws Exception
-  {
+  public static void main(String[] args) throws Exception {
     // Just for Mac OS...
     System.setProperty("apple.laf.useScreenMenuBar", "true");
     System.setProperty("com.apple.mrj.application.apple.menu.about.name", "C64 Reassembler");

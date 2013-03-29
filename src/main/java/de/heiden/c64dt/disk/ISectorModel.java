@@ -3,8 +3,7 @@ package de.heiden.c64dt.disk;
 /**
  * Value type for a sector model.
  */
-public interface ISectorModel
-{
+public interface ISectorModel {
   /**
    * Number of sides.
    */

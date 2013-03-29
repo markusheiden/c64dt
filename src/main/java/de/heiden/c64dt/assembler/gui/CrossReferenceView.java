@@ -20,8 +20,7 @@ import java.awt.event.MouseEvent;
  * View for cross reference of current opcode.
  */
 @Component
-public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
-{
+public class CrossReferenceView implements ApplicationListener<ReassemblerEvent> {
   /**
    * Model.
    */
@@ -36,8 +35,7 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
   /**
    * Constructor.
    */
-  public CrossReferenceView()
-  {
+  public CrossReferenceView() {
     this.model = new CrossReferenceTableModel();
   }
 
@@ -46,8 +44,7 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
    *
    * @param reassembler Reassembler
    */
-  public void use(Reassembler reassembler)
-  {
+  public void use(Reassembler reassembler) {
     Assert.notNull(reassembler, "Precondition: reassembler != null");
 
     model.use(reassembler);
@@ -56,8 +53,7 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
   /**
    * Create GUI representation.
    */
-  public JComponent createComponent()
-  {
+  public JComponent createComponent() {
     final JTable table = new JTable(model);
     table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     TableColumnModel columnModel = table.getColumnModel();
@@ -68,13 +64,10 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
     table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     table.setPreferredScrollableViewportSize(new Dimension(80, 0));
 
-    table.addMouseListener(new MouseAdapter()
-    {
+    table.addMouseListener(new MouseAdapter() {
       @Override
-      public void mouseClicked(MouseEvent e)
-      {
-        if (e.getClickCount() == 2)
-        {
+      public void mouseClicked(MouseEvent e) {
+        if (e.getClickCount() == 2) {
           publisher.publishEvent(new GotoAddressEvent(this, model.getIndex(table.rowAtPoint(e.getPoint()))));
         }
       }
@@ -87,10 +80,8 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
   }
 
   @Override
-  public void onApplicationEvent(ReassemblerEvent event)
-  {
-    if (event instanceof AddressChangedEvent)
-    {
+  public void onApplicationEvent(ReassemblerEvent event) {
+    if (event instanceof AddressChangedEvent) {
       select(((AddressChangedEvent) event).getIndex());
     }
   }
@@ -100,8 +91,7 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
    *
    * @param index Relative address
    */
-  public void select(int index)
-  {
+  public void select(int index) {
     model.select(index);
   }
 }

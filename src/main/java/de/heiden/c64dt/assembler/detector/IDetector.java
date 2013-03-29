@@ -5,8 +5,7 @@ import de.heiden.c64dt.assembler.command.CommandBuffer;
 /**
  * Interface for code type detectors.
  */
-public interface IDetector
-{
+public interface IDetector {
   /**
    * Detect type of code.
    *

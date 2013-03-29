@@ -7,8 +7,7 @@ import java.util.List;
 /**
  * Command.
  */
-public interface ICommand
-{
+public interface ICommand {
   /**
    * Get code type this command handles.
    */

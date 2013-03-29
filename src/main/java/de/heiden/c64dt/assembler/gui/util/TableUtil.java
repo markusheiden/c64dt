@@ -6,8 +6,7 @@ import java.awt.*;
 /**
  * Static helpers for JTable.
  */
-public class TableUtil
-{
+public class TableUtil {
 
   /**
    * Get bounds for row +/- height rows.
@@ -16,8 +15,7 @@ public class TableUtil
    * @param row Row
    * @param height Height
    */
-  public static Rectangle getRowBounds(JTable table, int row, int height)
-  {
+  public static Rectangle getRowBounds(JTable table, int row, int height) {
     int first = Math.max(0, row - height);
     int last = Math.min(table.getRowCount() - 1, row + height);
 

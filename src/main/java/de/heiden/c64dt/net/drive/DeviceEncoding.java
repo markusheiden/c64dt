@@ -5,15 +5,13 @@ import de.heiden.c64dt.charset.C64Charset;
 /**
  * Encoding for the net drive.
  */
-public class DeviceEncoding
-{
+public class DeviceEncoding {
   /**
    * Encodes a char to c64 encoding.
    *
    * @param decoded char
    */
-  public static byte encode(char decoded)
-  {
+  public static byte encode(char decoded) {
     return encode(String.valueOf(decoded))[0];
   }
 
@@ -22,8 +20,7 @@ public class DeviceEncoding
    *
    * @param decoded string
    */
-  public static byte[] encode(String decoded)
-  {
+  public static byte[] encode(String decoded) {
     return C64Charset.LOWER.toBytes(decoded.toUpperCase());
   }
 
@@ -32,8 +29,7 @@ public class DeviceEncoding
    *
    * @param encoded c64 encoded string
    */
-  public static String decode(byte[] encoded)
-  {
+  public static String decode(byte[] encoded) {
     return C64Charset.LOWER.toString(encoded).toUpperCase();
   }
 }

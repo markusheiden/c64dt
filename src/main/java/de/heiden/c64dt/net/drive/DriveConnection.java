@@ -11,8 +11,7 @@ import java.net.InetSocketAddress;
 /**
  * Connection of net drive server.
  */
-public class DriveConnection extends AbstractConnection
-{
+public class DriveConnection extends AbstractConnection {
   public static final int DEFAULT_PORT = 6463;
 
   public static final byte SERVICE_OPEN = 0x01;
@@ -27,8 +26,7 @@ public class DriveConnection extends AbstractConnection
   /**
    * Constructor using the default port.
    */
-  public DriveConnection() throws IOException
-  {
+  public DriveConnection() throws IOException {
     this(DEFAULT_PORT);
   }
 
@@ -37,8 +35,7 @@ public class DriveConnection extends AbstractConnection
    *
    * @param port port to use
    */
-  public DriveConnection(int port) throws IOException
-  {
+  public DriveConnection(int port) throws IOException {
     super(new InetSocketAddress(InetAddress.getLocalHost(), port), null, MAX_PACKET, 0xAD, 0xF8);
   }
 
@@ -46,11 +43,9 @@ public class DriveConnection extends AbstractConnection
    * Wait for a request from the C64.
    * Handles resend request automatically.
    */
-  public synchronized DrivePacket waitForRequest() throws IOException
-  {
+  public synchronized DrivePacket waitForRequest() throws IOException {
     request = new DrivePacket(receivePacket().getData());
-    if (sequence == request.getSequence())
-    {
+    if (sequence == request.getSequence()) {
       // TODO 2011-01-09 mh: check, if at least one packet has been sent
       resendPacket();
     }
@@ -63,8 +58,7 @@ public class DriveConnection extends AbstractConnection
    *
    * @param error error code
    */
-  public synchronized void sendReply(Error error) throws IOException
-  {
+  public synchronized void sendReply(Error error) throws IOException {
     sequence = request.getSequence();
 
     // TODO 2011-01-09 mh: check packet creation
@@ -81,8 +75,7 @@ public class DriveConnection extends AbstractConnection
    *
    * @param data payload data
    */
-  public void sendReply(byte[] data) throws IOException
-  {
+  public void sendReply(byte[] data) throws IOException {
     Assert.notNull(data, "Precondition: data != null");
 
     byte size = (byte) data.length;

@@ -9,8 +9,7 @@ import java.text.NumberFormat;
 /**
  * Error constants.
  */
-public enum Error
-{
+public enum Error {
   OK(0x00, "", 0x00),
   PROTECTED(0x01, "", 0x01),
   NOTFOUND(62, "FILE NOT FOUND", 0x04),
@@ -32,8 +31,7 @@ public enum Error
    *
    * @param code error code
    */
-  private Error(int code, String description, int result)
-  {
+  private Error(int code, String description, int result) {
     Assert.notNull(description, "Precondition: description != null");
 
     this.code = (byte) code;
@@ -44,29 +42,25 @@ public enum Error
   /**
    * Error code.
    */
-  public byte getCode()
-  {
+  public byte getCode() {
     return code;
   }
 
   /**
    * Error description.
    */
-  public String getDescription()
-  {
+  public String getDescription() {
     return description;
   }
 
   /**
    * Error result code.
    */
-  public byte getResult()
-  {
+  public byte getResult() {
     return result;
   }
 
-  public String toString()
-  {
+  public String toString() {
     return FORMAT.format(code) + ", " + description;
   }
 
@@ -76,8 +70,7 @@ public enum Error
    * @param track track
    * @param sector sector
    */
-  public String toString(int track, int sector)
-  {
+  public String toString(int track, int sector) {
     return toString() + "," + FORMAT.format(track) + "," + FORMAT.format(sector);
   }
 
@@ -87,8 +80,7 @@ public enum Error
    * @param track track
    * @param sector sector
    */
-  public byte[] toBytes(int track, int sector)
-  {
+  public byte[] toBytes(int track, int sector) {
     return C64Charset.LOWER.toBytes(toString(track, sector));
   }
 }

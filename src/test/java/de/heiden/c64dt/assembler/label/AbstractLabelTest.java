@@ -8,19 +8,16 @@ import static org.junit.Assert.assertTrue;
 /**
  * Test for {@link AbstractLabel}.
  */
-public class AbstractLabelTest
-{
+public class AbstractLabelTest {
   @Test
-  public void testGetAddress() throws Exception
-  {
+  public void testGetAddress() throws Exception {
     AbstractLabel label = new DataLabel(0x1234);
 
     assertEquals(0x1234, label.getAddress());
   }
 
   @Test
-  public void testCompareTo() throws Exception
-  {
+  public void testCompareTo() throws Exception {
     AbstractLabel label1c = new CodeLabel(1);
     AbstractLabel label1d = new DataLabel(1);
     AbstractLabel label2d = new DataLabel(2);
@@ -32,8 +29,7 @@ public class AbstractLabelTest
   }
 
   @Test
-  public void testToString() throws Exception
-  {
+  public void testToString() throws Exception {
     AbstractLabel label = new DataLabel(0x1234);
 
     assertEquals("l_1234", label.toString(0x1234));

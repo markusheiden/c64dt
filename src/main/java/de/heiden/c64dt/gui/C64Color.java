@@ -7,8 +7,7 @@ import java.awt.*;
  * <p/>
  * From: Philip "Pepto" Timmermann, pepto@pepto.de
  */
-public enum C64Color
-{
+public enum C64Color {
   BLACK(0x00, 0x00, 0x00),
   WHITE(0xFF, 0xFF, 0xFF),
   RED(0x68, 0x37, 0x2B),
@@ -35,16 +34,14 @@ public enum C64Color
    * @param g green
    * @param b blue
    */
-  private C64Color(int r, int g, int b)
-  {
+  private C64Color(int r, int g, int b) {
     this.color = new Color(r, g, b);
   }
 
   /**
    * Color.
    */
-  public Color getColor()
-  {
+  public Color getColor() {
     return color;
   }
 }

@@ -3,8 +3,7 @@ package de.heiden.c64dt.assembler.gui.event;
 /**
  * Go to the given address event.
  */
-public class GotoAddressEvent extends ReassemblerEvent
-{
+public class GotoAddressEvent extends ReassemblerEvent {
   /**
    * The relative address to go to.
    */
@@ -15,8 +14,7 @@ public class GotoAddressEvent extends ReassemblerEvent
    *
    * @param eventSource Source of event
    */
-  public GotoAddressEvent(Object eventSource)
-  {
+  public GotoAddressEvent(Object eventSource) {
     this(eventSource, -1);
   }
 
@@ -26,8 +24,7 @@ public class GotoAddressEvent extends ReassemblerEvent
    * @param eventSource Source of event
    * @param index The relative address to go to
    */
-  public GotoAddressEvent(Object eventSource, int index)
-  {
+  public GotoAddressEvent(Object eventSource, int index) {
     super(eventSource);
 
     this.index = index;
@@ -38,8 +35,7 @@ public class GotoAddressEvent extends ReassemblerEvent
    *
    * @return Relative address
    */
-  public int getIndex()
-  {
+  public int getIndex() {
     return index;
   }
 }

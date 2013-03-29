@@ -9,8 +9,7 @@ import static de.heiden.c64dt.assembler.OpcodeType.*;
  * 6502 series opcodes.
  */
 @SuppressWarnings("unused")
-public enum Opcode
-{
+public enum Opcode {
   OPCODE_00(0x00, REG, BRK, DIR, 7),
   OPCODE_01(0x01, REG, ORA, IZX, 6),
   OPCODE_02(0x02, ILL, KIL, DIR, 0),
@@ -294,32 +293,28 @@ public enum Opcode
   /**
    * The byte representation of the opcode.
    */
-  public int getOpcode()
-  {
+  public int getOpcode() {
     return opcode;
   }
 
   /**
    * Is the opcode a legal one?.
    */
-  public boolean isLegal()
-  {
+  public boolean isLegal() {
     return legal;
   }
 
   /**
    * Type of opcode (mnemonic).
    */
-  public OpcodeType getType()
-  {
+  public OpcodeType getType() {
     return type;
   }
 
   /**
    * Addressing mode of opcode.
    */
-  public OpcodeMode getMode()
-  {
+  public OpcodeMode getMode() {
     return mode;
   }
 
@@ -328,8 +323,7 @@ public enum Opcode
    * <p/>
    * TODO rework detect all kinds of references, not just single location code references
    */
-  public boolean isCodeReference()
-  {
+  public boolean isCodeReference() {
     return type.isJump() && (mode == OpcodeMode.REL || mode == OpcodeMode.ABS);
   }
 
@@ -337,16 +331,14 @@ public enum Opcode
    * Cycles the opcode (normally) needs.
    * Does not consider varying execution times.
    */
-  public int getCycles()
-  {
+  public int getCycles() {
     return cycles;
   }
 
   /**
    * Size of the whole command.
    */
-  public int getSize()
-  {
+  public int getSize() {
     return 1 + mode.getSize();
   }
 
@@ -355,8 +347,7 @@ public enum Opcode
    *
    * @param opcode byte representation of opcode
    */
-  public static Opcode opcode(int opcode)
-  {
+  public static Opcode opcode(int opcode) {
     Assert.isTrue(opcode >= 0x00 && opcode <= 0xFF, "Precondition: opcode >= 0x00 && opcode <= 0xFF");
 
     Opcode result = values()[opcode];
@@ -369,8 +360,7 @@ public enum Opcode
    * Just for debugging purposes!
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return toString(0, 0);
   }
 
@@ -380,8 +370,7 @@ public enum Opcode
    * @param pc address of opcode
    * @param addr argument of opcode
    */
-  public String toString(int pc, int addr)
-  {
+  public String toString(int pc, int addr) {
     StringBuilder result = new StringBuilder();
 //    result.append(_legal ? ' ' : '*');
     result.append(type.toString());
@@ -399,8 +388,7 @@ public enum Opcode
    * @param mode address mode
    * @param cycles number of cycles (without exceptional additional cycles)
    */
-  private Opcode(int opcode, boolean legal, OpcodeType type, OpcodeMode mode, int cycles)
-  {
+  private Opcode(int opcode, boolean legal, OpcodeType type, OpcodeMode mode, int cycles) {
     Assert.isTrue(opcode >= 0x00 && opcode <= 0xFF, "Precondition: opcode >= 0x00 && opcode <= 0xFF");
     Assert.notNull(type, "Precondition: type != null");
     Assert.notNull(mode, "Precondition: mode != null");

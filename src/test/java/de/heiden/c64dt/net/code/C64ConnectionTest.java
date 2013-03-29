@@ -11,11 +11,9 @@ import static org.junit.Assert.assertEquals;
 /**
  * Test for {@linkC64ConnectionTest}.
  */
-public class C64ConnectionTest
-{
+public class C64ConnectionTest {
   @Test
-  public void testPing() throws Exception
-  {
+  public void testPing() throws Exception {
     TestConnection connection = new TestConnection();
     connection.open();
     connection.ping();
@@ -27,8 +25,7 @@ public class C64ConnectionTest
   }
 
   @Test
-  public void testWrite() throws Exception
-  {
+  public void testWrite() throws Exception {
     TestConnection connection = new TestConnection();
     connection.open();
     connection.write(0x1234, (byte) 5, (byte) 6, (byte) 7);
@@ -44,8 +41,7 @@ public class C64ConnectionTest
   }
 
   @Test
-  public void testFill() throws Exception
-  {
+  public void testFill() throws Exception {
     TestConnection connection = new TestConnection();
     connection.open();
     connection.fill(0x1234, 0x0102, 6);
@@ -61,8 +57,7 @@ public class C64ConnectionTest
   }
 
   @Test
-  public void testJump() throws Exception
-  {
+  public void testJump() throws Exception {
     TestConnection connection = new TestConnection();
     connection.open();
     connection.jump(0x1234);
@@ -75,8 +70,7 @@ public class C64ConnectionTest
   }
 
   @Test
-  public void testRun() throws Exception
-  {
+  public void testRun() throws Exception {
     TestConnection connection = new TestConnection();
     connection.open();
     connection.run();
@@ -87,35 +81,29 @@ public class C64ConnectionTest
     connection.close();
   }
 
-  public void assertSentData(int... expected)
-  {
+  public void assertSentData(int... expected) {
     assertEquals(expected.length, outputData.length);
-    for (int i = 0; i < expected.length; i++)
-    {
+    for (int i = 0; i < expected.length; i++) {
       assertEquals("Byte " + i, (byte) expected[i], outputData[i]);
     }
   }
 
   private byte[] outputData;
 
-  private class TestConnection extends C64Connection
-  {
-    public TestConnection() throws IOException
-    {
+  private class TestConnection extends C64Connection {
+    public TestConnection() throws IOException {
       super(InetAddress.getLocalHost());
     }
 
     @Override
-    public void sendPacket(Packet packet) throws IOException
-    {
+    public void sendPacket(Packet packet) throws IOException {
       super.sendPacket(packet);
       // Capture after sending, because packet may have been padded now
       outputData = packet.getData();
     }
 
     @Override
-    public Packet receivePacket() throws IOException
-    {
+    public Packet receivePacket() throws IOException {
       // Always acknowledge OK
       Packet ack = new Packet(4);
       ack.addByte(0xCA, 0x1F, 1, 1); // ACK OK

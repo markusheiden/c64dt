@@ -9,8 +9,7 @@ import java.awt.image.MemoryImageSource;
 /**
  * Base class for component displaying c64 content.
  */
-public abstract class JC64Component extends JComponent
-{
+public abstract class JC64Component extends JComponent {
   private int _width;
   private int _height;
   private final double _factor;
@@ -26,8 +25,7 @@ public abstract class JC64Component extends JComponent
    * @param factor zoom factor
    * @param resizable Is the backing image resizable?
    */
-  protected JC64Component(int width, int height, double factor, boolean resizable)
-  {
+  protected JC64Component(int width, int height, double factor, boolean resizable) {
     _height = height;
     _width = width;
     _factor = factor;
@@ -37,13 +35,10 @@ public abstract class JC64Component extends JComponent
     setSize(size);
     setMinimumSize(new Dimension(0, 0));
 
-    if (resizable)
-    {
-      addComponentListener(new ComponentAdapter()
-      {
+    if (resizable) {
+      addComponentListener(new ComponentAdapter() {
         @Override
-        public void componentResized(ComponentEvent e)
-        {
+        public void componentResized(ComponentEvent e) {
           // compute image size from new component size
           _width = Math.max(0, (int) Math.round(e.getComponent().getWidth() / _factor));
           _height = Math.max(0, (int) Math.round(e.getComponent().getHeight() / _factor));
@@ -59,16 +54,14 @@ public abstract class JC64Component extends JComponent
   /**
    * Width of backing image.
    */
-  public int getImageWidth()
-  {
+  public int getImageWidth() {
     return _width;
   }
 
   /**
    * Height of backing image.
    */
-  public int getImageHeight()
-  {
+  public int getImageHeight() {
     return _height;
   }
 
@@ -77,8 +70,7 @@ public abstract class JC64Component extends JComponent
    *
    * @param foreground foreground color index
    */
-  public void setForeground(int foreground)
-  {
+  public void setForeground(int foreground) {
     setForeground(C64Color.values()[foreground]);
   }
 
@@ -87,8 +79,7 @@ public abstract class JC64Component extends JComponent
    *
    * @param foreground foreground color
    */
-  public void setForeground(C64Color foreground)
-  {
+  public void setForeground(C64Color foreground) {
     super.setForeground(foreground.getColor());
   }
 
@@ -97,8 +88,7 @@ public abstract class JC64Component extends JComponent
    *
    * @param background background color index
    */
-  public void setBackground(int background)
-  {
+  public void setBackground(int background) {
     setBackground(C64Color.values()[background]);
   }
 
@@ -107,16 +97,13 @@ public abstract class JC64Component extends JComponent
    *
    * @param background background color
    */
-  public void setBackground(C64Color background)
-  {
+  public void setBackground(C64Color background) {
     super.setBackground(background.getColor());
   }
 
   @Override
-  public final void paintComponent(Graphics g)
-  {
-    if (_image == null)
-    {
+  public final void paintComponent(Graphics g) {
+    if (_image == null) {
       createImage();
     }
     doPaintComponent(g);
@@ -126,8 +113,7 @@ public abstract class JC64Component extends JComponent
   /**
    * Notify image source that the backing image data has been changed.
    */
-  protected void updateImageData()
-  {
+  protected void updateImageData() {
     _imageSource.newPixels();
   }
 
@@ -143,8 +129,7 @@ public abstract class JC64Component extends JComponent
    *
    * @param g graphics
    */
-  protected void drawImage(Graphics g)
-  {
+  protected void drawImage(Graphics g) {
     drawImageFixed(g);
   }
 
@@ -153,8 +138,7 @@ public abstract class JC64Component extends JComponent
    *
    * @param g graphics
    */
-  protected void drawImageFixed(Graphics g)
-  {
+  protected void drawImageFixed(Graphics g) {
     g.drawImage(_image, 0, 0, (int) Math.round(_width * _factor), (int) Math.round(_height * _factor), null);
   }
 
@@ -163,16 +147,14 @@ public abstract class JC64Component extends JComponent
    *
    * @param g graphics
    */
-  protected void drawImageResized(Graphics g)
-  {
+  protected void drawImageResized(Graphics g) {
     g.drawImage(_image, 0, 0, getWidth(), getHeight(), null);
   }
 
   /**
    * Lazily create image for screen display.
    */
-  private void createImage()
-  {
+  private void createImage() {
     // create image
     _image = createImage(_imageSource);
     _image.setAccelerationPriority(1);

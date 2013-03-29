@@ -12,8 +12,7 @@ import static de.heiden.c64dt.util.HexUtil.hexByte;
 /**
  * Command for using bit to skip the next opcode.
  */
-public class BitCommand extends AbstractCommand
-{
+public class BitCommand extends AbstractCommand {
   private final Opcode opcode;
   private final int argument;
 
@@ -23,8 +22,7 @@ public class BitCommand extends AbstractCommand
    * @param opcode Opcode
    * @param argument argument for opcode
    */
-  public BitCommand(Opcode opcode, int argument)
-  {
+  public BitCommand(Opcode opcode, int argument) {
     super(CodeType.BIT);
 
     this.opcode = opcode;
@@ -32,28 +30,24 @@ public class BitCommand extends AbstractCommand
   }
 
   @Override
-  public final int getSize()
-  {
+  public final int getSize() {
     return 1;
   }
 
   @Override
-  public final boolean isEnd()
-  {
+  public final boolean isEnd() {
     return false;
   }
 
   @Override
-  public String toString(CommandBuffer buffer)
-  {
+  public String toString(CommandBuffer buffer) {
     Assert.notNull(buffer, "Precondition: buffer != null");
 
     return "!BYTE " + hexByte(opcode.getOpcode()) + "; " + opcode.toString(getAddress(), argument);
   }
 
   @Override
-  public List<Integer> toBytes()
-  {
+  public List<Integer> toBytes() {
     return Collections.singletonList(opcode.getOpcode());
   }
 }

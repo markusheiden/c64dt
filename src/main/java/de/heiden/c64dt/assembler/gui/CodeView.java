@@ -25,8 +25,7 @@ import java.awt.event.MouseEvent;
  * View for reassembled code.
  */
 @Component
-public class CodeView implements ApplicationListener<ReassemblerEvent>
-{
+public class CodeView implements ApplicationListener<ReassemblerEvent> {
   /**
    * The table.
    */
@@ -51,8 +50,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent>
   /**
    * Constructor.
    */
-  public CodeView()
-  {
+  public CodeView() {
     model = new CodeTableModel();
   }
 
@@ -61,8 +59,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent>
    *
    * @param reassembler Reassembler
    */
-  public void use(Reassembler reassembler)
-  {
+  public void use(Reassembler reassembler) {
     Assert.notNull(reassembler, "Precondition: reassembler != null");
 
     model.use(reassembler);
@@ -71,8 +68,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent>
   /**
    * Create GUI representation.
    */
-  public JComponent createComponent()
-  {
+  public JComponent createComponent() {
     table = new JTable(model);
     TableColumnModel columnModel = table.getColumnModel();
     columnModel.getColumn(0).setMaxWidth(40);
@@ -92,21 +88,17 @@ public class CodeView implements ApplicationListener<ReassemblerEvent>
     contextMenu.add(new JSeparator());
     new CodeTypeActions(table).addToMenu(contextMenu);
 
-    table.addMouseListener(new MouseAdapter()
-    {
+    table.addMouseListener(new MouseAdapter() {
       @Override
-      public void mouseReleased(MouseEvent e)
-      {
-        if ((e.getButton() & MouseEvent.BUTTON2) == 0)
-        {
+      public void mouseReleased(MouseEvent e) {
+        if ((e.getButton() & MouseEvent.BUTTON2) == 0) {
           // not right mouse button -> ignore
           return;
         }
 
         // select row on click of the right mouse button too
         int row = table.rowAtPoint(e.getPoint());
-        if (row >= 0 && !table.getSelectionModel().isSelectedIndex(row))
-        {
+        if (row >= 0 && !table.getSelectionModel().isSelectedIndex(row)) {
           table.getSelectionModel().setSelectionInterval(row, row);
         }
 
@@ -115,13 +107,11 @@ public class CodeView implements ApplicationListener<ReassemblerEvent>
       }
     });
 
-    table.getSelectionModel().addListSelectionListener(new ListSelectionListener()
-    {
+    table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
       @Override
-      public void valueChanged(ListSelectionEvent listSelectionEvent)
-      {
+      public void valueChanged(ListSelectionEvent listSelectionEvent) {
         publisher.publishEvent(new AddressChangedEvent(this,
-          table.getSelectedRow() >= 0? model.getIndex(table.getSelectedRow()) : -1));
+          table.getSelectedRow() >= 0 ? model.getIndex(table.getSelectedRow()) : -1));
       }
     });
 
@@ -132,10 +122,8 @@ public class CodeView implements ApplicationListener<ReassemblerEvent>
   }
 
   @Override
-  public void onApplicationEvent(ReassemblerEvent event)
-  {
-    if (event instanceof GotoAddressEvent)
-    {
+  public void onApplicationEvent(ReassemblerEvent event) {
+    if (event instanceof GotoAddressEvent) {
       gotoIndex(((GotoAddressEvent) event).getIndex());
     }
   }
@@ -145,10 +133,8 @@ public class CodeView implements ApplicationListener<ReassemblerEvent>
    *
    * @param index Relative address
    */
-  public void gotoIndex(int index)
-  {
-    if (!model.getReassembler().getCommands().hasIndex(index))
-    {
+  public void gotoIndex(int index) {
+    if (!model.getReassembler().getCommands().hasIndex(index)) {
       return;
     }
 

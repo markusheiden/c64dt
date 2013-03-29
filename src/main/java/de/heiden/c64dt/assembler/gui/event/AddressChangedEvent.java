@@ -3,8 +3,7 @@ package de.heiden.c64dt.assembler.gui.event;
 /**
  * The select address has changed event.
  */
-public class AddressChangedEvent extends ReassemblerEvent
-{
+public class AddressChangedEvent extends ReassemblerEvent {
   /**
    * The current relative address.
    */
@@ -15,8 +14,7 @@ public class AddressChangedEvent extends ReassemblerEvent
    *
    * @param eventSource Source of event
    */
-  public AddressChangedEvent(Object eventSource)
-  {
+  public AddressChangedEvent(Object eventSource) {
     this(eventSource, -1);
   }
 
@@ -26,8 +24,7 @@ public class AddressChangedEvent extends ReassemblerEvent
    * @param eventSource Source of event
    * @param index The current relative address or -1
    */
-  public AddressChangedEvent(Object eventSource, int index)
-  {
+  public AddressChangedEvent(Object eventSource, int index) {
     super(eventSource);
 
     this.index = index;
@@ -38,8 +35,7 @@ public class AddressChangedEvent extends ReassemblerEvent
    *
    * @return Relative address or -1, if no address has been selected
    */
-  public int getIndex()
-  {
+  public int getIndex() {
     return index;
   }
 }

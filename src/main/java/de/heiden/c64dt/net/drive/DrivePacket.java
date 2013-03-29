@@ -8,8 +8,7 @@ import java.io.IOException;
 /**
  * Packet for drive.
  */
-public class DrivePacket
-{
+public class DrivePacket {
   private static final int IDX_SERVICE = 2;
   private static final int IDX_SEQUENCE = 3;
   private static final int IDX_LOGICAL_FILE = 4;
@@ -25,40 +24,35 @@ public class DrivePacket
    *
    * @param data
    */
-  public DrivePacket(byte[] data)
-  {
+  public DrivePacket(byte[] data) {
     this.data = data;
   }
 
   /**
    * Number of the requested service.
    */
-  public byte getService()
-  {
+  public byte getService() {
     return data[IDX_SERVICE];
   }
 
   /**
    * Number of the requested service.
    */
-  public void setService(byte service)
-  {
+  public void setService(byte service) {
     data[IDX_SERVICE] = service;
   }
 
   /**
    * Sequence number.
    */
-  public byte getSequence()
-  {
+  public byte getSequence() {
     return data[IDX_SEQUENCE];
   }
 
   /**
    * Logical file number.
    */
-  public int getLogicalFile()
-  {
+  public int getLogicalFile() {
     return ByteUtil.toByte(data[IDX_LOGICAL_FILE]);
   }
 
@@ -66,34 +60,29 @@ public class DrivePacket
    * Channel number.
    * 0-15
    */
-  public int getChannel()
-  {
+  public int getChannel() {
     return ByteUtil.toByte(data[IDX_CHANNEL] & 0x0F);
   }
 
   /**
    * Device number.
    */
-  public int getDevice()
-  {
+  public int getDevice() {
     return ByteUtil.toByte(data[IDX_DEVICE]);
   }
 
   /**
    * Get size of payload data.
    */
-  public int getSize()
-  {
+  public int getSize() {
     return ByteUtil.toByte(data[IDX_SIZE]);
   }
 
   /**
    * Get first byte of payload data.
    */
-  public int getData0() throws IOException
-  {
-    if (getSize() != 1)
-    {
+  public int getData0() throws IOException {
+    if (getSize() != 1) {
       throw new IOException("Invalid packet getSize");
     }
 
@@ -103,11 +92,9 @@ public class DrivePacket
   /**
    * Get payload data.
    */
-  public byte[] getData() throws IOException
-  {
+  public byte[] getData() throws IOException {
     int size = getSize();
-    if (size >= IDX_DATA + data.length)
-    {
+    if (size >= IDX_DATA + data.length) {
       throw new IOException("Invalid packet size");
     }
 

@@ -8,8 +8,7 @@ import java.awt.image.MemoryImageSource;
 /**
  * Base class for component displaying default rgb color c64 content.
  */
-public abstract class JC64CommonComponent extends JC64Component
-{
+public abstract class JC64CommonComponent extends JC64Component {
   private final ColorModel _colorModel;
   private int[] _imageData;
 
@@ -21,8 +20,7 @@ public abstract class JC64CommonComponent extends JC64Component
    * @param factor zoom factor
    * @param resizable Is the backing image resizable?
    */
-  protected JC64CommonComponent(int width, int height, double factor, boolean resizable)
-  {
+  protected JC64CommonComponent(int width, int height, double factor, boolean resizable) {
     super(width, height, factor, resizable);
 
     // create color model
@@ -30,13 +28,10 @@ public abstract class JC64CommonComponent extends JC64Component
 
     buildImage();
 
-    if (resizable)
-    {
-      addComponentListener(new ComponentAdapter()
-      {
+    if (resizable) {
+      addComponentListener(new ComponentAdapter() {
         @Override
-        public void componentResized(ComponentEvent e)
-        {
+        public void componentResized(ComponentEvent e) {
           buildImage();
         }
       });
@@ -46,8 +41,7 @@ public abstract class JC64CommonComponent extends JC64Component
   /**
    * Builder backing image.
    */
-  private void buildImage()
-  {
+  private void buildImage() {
     // create image data
     _imageData = new int[getImageWidth() * getImageHeight()];
 
@@ -60,8 +54,7 @@ public abstract class JC64CommonComponent extends JC64Component
   /**
    * Backing image.
    */
-  public int[] getImageData()
-  {
+  public int[] getImageData() {
     return _imageData;
   }
 }

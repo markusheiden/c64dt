@@ -3,8 +3,7 @@ package de.heiden.c64dt.assembler;
 /**
  * Opcode types.
  */
-public enum OpcodeType
-{
+public enum OpcodeType {
   // logical/arithmetic commands
   ORA(false, false),
   AND(false, false),
@@ -99,16 +98,14 @@ public enum OpcodeType
   /**
    * Is the address of this opcode a jump/branch destination?.
    */
-  public boolean isJump()
-  {
+  public boolean isJump() {
     return jump;
   }
 
   /**
    * Is the opcode right after this opcode not reachable from this opcode?
    */
-  public boolean isEnd()
-  {
+  public boolean isEnd() {
     return end;
   }
 
@@ -118,8 +115,7 @@ public enum OpcodeType
    * @param jump is the address a jump/branch destination?
    * @param end is the opcode right after this opcode not reachable from this opcode?
    */
-  private OpcodeType(boolean jump, boolean end)
-  {
+  private OpcodeType(boolean jump, boolean end) {
     this.jump = jump;
     this.end = end;
   }
