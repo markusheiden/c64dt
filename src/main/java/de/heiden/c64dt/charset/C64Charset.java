@@ -19,6 +19,9 @@ public class C64Charset extends Charset {
    */
   public static final C64Charset LOWER = new C64Charset(false);
 
+  /**
+   * Upper and lower case charset?.
+   */
   private final boolean upper;
 
   /**
