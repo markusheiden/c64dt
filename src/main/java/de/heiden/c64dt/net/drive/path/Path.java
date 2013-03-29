@@ -33,6 +33,7 @@ public class Path extends AbstractPath {
     this.directory = directory;
   }
 
+  @Override
   protected IDirectory doDirectory() {
     List<IFile> entries = new ArrayList<>();
     File[] files = directory.listFiles();
@@ -64,6 +65,7 @@ public class Path extends AbstractPath {
     return filename.substring(0, 16);
   }
 
+  @Override
   protected IPath doChangePath(byte[] path) throws FileNotFoundException {
     String decodedPath = decode(path);
     // TODO implement wildcard search
@@ -81,6 +83,7 @@ public class Path extends AbstractPath {
     }
   }
 
+  @Override
   protected IStream doFile(byte[] filename) throws FileNotFoundException {
     String decodedFilename = decode(filename);
     // TODO implement wildcard search

@@ -10,32 +10,26 @@ import java.nio.charset.UnmappableCharacterException;
 /**
  * Base class for simple (1 byte to 1 char) charset decoders.
  */
-public abstract class AbstractDecoder extends CharsetDecoder
-{
+public abstract class AbstractDecoder extends CharsetDecoder {
   /**
    * Constructor.
    *
    * @param cs charset
    */
-  protected AbstractDecoder(Charset cs)
-  {
+  protected AbstractDecoder(Charset cs) {
     super(cs, 1, 1);
     replaceWith(" ");
   }
 
-  protected CoderResult decodeLoop(ByteBuffer in, CharBuffer out)
-  {
-    try
-    {
-      while (in.hasRemaining() && out.hasRemaining())
-      {
+  @Override
+  protected CoderResult decodeLoop(ByteBuffer in, CharBuffer out) {
+    try {
+      while (in.hasRemaining() && out.hasRemaining()) {
         // characters above 0x7F just have inverted colors
         out.put(toChar((byte) (in.get() & 0x7F)));
       }
-      return in.hasRemaining()? CoderResult.OVERFLOW : CoderResult.UNDERFLOW;
-    }
-    catch (UnmappableCharacterException e)
-    {
+      return in.hasRemaining() ? CoderResult.OVERFLOW : CoderResult.UNDERFLOW;
+    } catch (UnmappableCharacterException e) {
       in.position(in.position() - 1);
       return CoderResult.unmappableForLength(1);
     }
@@ -53,10 +47,8 @@ public abstract class AbstractDecoder extends CharsetDecoder
    *
    * @param c Character
    */
-  protected char toSymbolChar(byte c) throws UnmappableCharacterException
-  {
-    switch (c)
-    {
+  protected char toSymbolChar(byte c) throws UnmappableCharacterException {
+    switch (c) {
       case 0x00:
         return '@';
       case 0x1B:

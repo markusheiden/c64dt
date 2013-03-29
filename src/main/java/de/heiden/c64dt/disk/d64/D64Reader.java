@@ -21,6 +21,7 @@ public class D64Reader extends AbstractDiskImageReader {
   public static final int SIZE_40_TRACKS_NO_ERRORS = 196608;
   public static final int SIZE_40_TRACKS_WITH_ERRORS = 197376;
 
+  @Override
   public IDiskImage read(byte[] data) throws WrongDiskImageFormatException {
     Assert.notNull(data, "Precondition: data != null");
 

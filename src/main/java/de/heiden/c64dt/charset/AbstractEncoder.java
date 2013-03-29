@@ -10,31 +10,25 @@ import java.nio.charset.UnmappableCharacterException;
 /**
  * Base class for simple (1 char to 1 byte) charset encoders.
  */
-public abstract class AbstractEncoder extends CharsetEncoder
-{
+public abstract class AbstractEncoder extends CharsetEncoder {
   /**
    * Constructor.
    *
    * @param cs charset
    */
-  protected AbstractEncoder(Charset cs)
-  {
+  protected AbstractEncoder(Charset cs) {
     super(cs, 1, 1);
     replaceWith(new byte[]{0x20}); // space
   }
 
-  protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out)
-  {
-    try
-    {
-      while (in.hasRemaining() && out.hasRemaining())
-      {
+  @Override
+  protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
+    try {
+      while (in.hasRemaining() && out.hasRemaining()) {
         out.put(toByte(in.get()));
       }
-      return in.hasRemaining()? CoderResult.OVERFLOW : CoderResult.UNDERFLOW;
-    }
-    catch (UnmappableCharacterException e)
-    {
+      return in.hasRemaining() ? CoderResult.OVERFLOW : CoderResult.UNDERFLOW;
+    } catch (UnmappableCharacterException e) {
       in.position(in.position() - 1);
       return CoderResult.unmappableForLength(1);
     }
@@ -52,10 +46,8 @@ public abstract class AbstractEncoder extends CharsetEncoder
    *
    * @param c symbol character
    */
-  protected byte toSymbolByte(char c) throws UnmappableCharacterException
-  {
-    switch (c)
-    {
+  protected byte toSymbolByte(char c) throws UnmappableCharacterException {
+    switch (c) {
       case '@':
         return 0x00;
       case '[':

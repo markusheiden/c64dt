@@ -9,8 +9,7 @@ import java.util.Arrays;
 /**
  * Common code for connections.
  */
-public abstract class AbstractConnection
-{
+public abstract class AbstractConnection {
   public static final int MAX_PACKET = 150;
 
   private static final int IDX_MAGIC1 = 0;
@@ -32,8 +31,7 @@ public abstract class AbstractConnection
   /**
    * Constructor.
    */
-  protected AbstractConnection(SocketAddress source, SocketAddress destination, int packetSize, int magic1, int magic2)
-  {
+  protected AbstractConnection(SocketAddress source, SocketAddress destination, int packetSize, int magic1, int magic2) {
     this.source = source;
     this.destination = destination;
     this.packetSize = packetSize;
@@ -50,33 +48,29 @@ public abstract class AbstractConnection
   /**
    * Source address.
    */
-  public String getSource()
-  {
+  public String getSource() {
     return source.toString();
   }
 
   /**
    * Remote address.
    */
-  public String getDestination()
-  {
-    SocketAddress result = destination != null? destination : lastDestination;
-    return result != null? result.toString() : "unknown";
+  public String getDestination() {
+    SocketAddress result = destination != null ? destination : lastDestination;
+    return result != null ? result.toString() : "unknown";
   }
 
   /**
    * Maximum packet size.
    */
-  public int getPacketSize()
-  {
+  public int getPacketSize() {
     return packetSize;
   }
 
   /**
    * Is connection open?
    */
-  public boolean isOpen()
-  {
+  public boolean isOpen() {
     return socket != null;
   }
 
@@ -85,8 +79,7 @@ public abstract class AbstractConnection
    *
    * @exception java.io.IOException
    */
-  public synchronized void open() throws IOException
-  {
+  public synchronized void open() throws IOException {
     socket = new DatagramSocket(source);
     socket.setSendBufferSize(256);
     socket.setReceiveBufferSize(256);
@@ -96,26 +89,23 @@ public abstract class AbstractConnection
   /**
    * Send a packet.
    */
-  public synchronized void sendPacket(Packet packet) throws IOException
-  {
+  public synchronized void sendPacket(Packet packet) throws IOException {
     packet.pad();
     byte[] data = packet.getData();
-    lastOutput = new DatagramPacket(data, data.length, destination != null? destination : lastDestination);
+    lastOutput = new DatagramPacket(data, data.length, destination != null ? destination : lastDestination);
     socket.send(lastOutput);
   }
 
   /**
    * Receive a packet.
    */
-  public synchronized Packet receivePacket() throws IOException
-  {
+  public synchronized Packet receivePacket() throws IOException {
     lastInput = new DatagramPacket(input, input.length);
     socket.receive(lastInput);
     lastDestination = lastInput.getSocketAddress();
 
     Packet result = new Packet(Arrays.copyOf(lastInput.getData(), lastInput.getLength()));
-    if (!isValid(result))
-    {
+    if (!isValid(result)) {
       throw new IOException("Invalid packet");
     }
 
@@ -125,16 +115,14 @@ public abstract class AbstractConnection
   /**
    * Send the last packet again.
    */
-  public synchronized void resendPacket() throws IOException
-  {
+  public synchronized void resendPacket() throws IOException {
     socket.send(lastOutput);
   }
 
   /**
    * Check magic bytes.
    */
-  protected boolean isValid(Packet packet)
-  {
+  protected boolean isValid(Packet packet) {
     byte[] data = packet.getData();
     return data[IDX_MAGIC1] == magic1 && data[IDX_MAGIC2] == magic2;
   }
@@ -142,17 +130,12 @@ public abstract class AbstractConnection
   /**
    * Close connection.
    */
-  public void close() throws IOException
-  {
-    try
-    {
-      if (socket != null)
-      {
+  public void close() throws IOException {
+    try {
+      if (socket != null) {
         socket.close();
       }
-    }
-    finally
-    {
+    } finally {
       socket = null;
     }
   }
@@ -162,14 +145,11 @@ public abstract class AbstractConnection
    * <p/>
    * Ensure that socket gets closed.
    */
-  protected void finalize() throws Throwable
-  {
-    try
-    {
+  @Override
+  protected void finalize() throws Throwable {
+    try {
       close();
-    }
-    finally
-    {
+    } finally {
       super.finalize();
     }
   }

@@ -9,8 +9,7 @@ import java.util.Iterator;
 /**
  * Command iterator.
  */
-public class CommandIterator implements Iterator<ICommand>
-{
+public class CommandIterator implements Iterator<ICommand> {
   /**
    * The command buffer to iterate.
    */
@@ -27,8 +26,7 @@ public class CommandIterator implements Iterator<ICommand>
    *
    * @param commands Command buffer to iterate
    */
-  public CommandIterator(CommandBuffer commands)
-  {
+  public CommandIterator(CommandBuffer commands) {
     Assert.notNull(commands, "Precondition: commands != null");
 
     this.commands = commands;
@@ -39,11 +37,9 @@ public class CommandIterator implements Iterator<ICommand>
    *
    * @return this, for method chaining
    */
-  public CommandIterator reverse()
-  {
+  public CommandIterator reverse() {
     // trace backward for last command
-    for (index = commands.getLength() - 1; index >= 0 && commands.getCommand(index) == null; index--)
-    {
+    for (index = commands.getLength() - 1; index >= 0 && commands.getCommand(index) == null; index--) {
       // search further
     }
     // set index after last command
@@ -59,8 +55,7 @@ public class CommandIterator implements Iterator<ICommand>
   /**
    * Get code type of the current opcode / command.
    */
-  public CodeType getType()
-  {
+  public CodeType getType() {
     return commands.getType(index);
   }
 
@@ -70,8 +65,7 @@ public class CommandIterator implements Iterator<ICommand>
    * @param type code type
    * @return whether a change has taken place
    */
-  public boolean setType(CodeType type)
-  {
+  public boolean setType(CodeType type) {
     return commands.setType(index, type);
   }
 
@@ -82,8 +76,7 @@ public class CommandIterator implements Iterator<ICommand>
   /**
    * The current relative address.
    */
-  public int getIndex()
-  {
+  public int getIndex() {
     return index;
   }
 
@@ -92,8 +85,7 @@ public class CommandIterator implements Iterator<ICommand>
    *
    * @param index relative address
    */
-  public void setIndex(int index)
-  {
+  public void setIndex(int index) {
     Assert.notNull(commands.getCommand(index), "Precondition: There is a command at the given index");
 
     this.index = index;
@@ -102,8 +94,7 @@ public class CommandIterator implements Iterator<ICommand>
   /**
    * The current absolute address.
    */
-  public int getAddress()
-  {
+  public int getAddress() {
     return commands.addressForIndex(index);
   }
 
@@ -111,24 +102,23 @@ public class CommandIterator implements Iterator<ICommand>
    * The next relative address.
    * This is the index from where the next command will be read.
    */
-  public int getNextIndex()
-  {
-    return index < 0? 0 : index + getCommand().getSize();
+  public int getNextIndex() {
+    return index < 0 ? 0 : index + getCommand().getSize();
   }
 
   /**
    * Is there one more command?
    */
-  public boolean hasNext()
-  {
+  @Override
+  public boolean hasNext() {
     return commands.hasIndex(getNextIndex());
   }
 
   /**
    * Iterate to next command and return it.
    */
-  public ICommand next()
-  {
+  @Override
+  public ICommand next() {
     index = getNextIndex();
     ICommand result = getCommand();
 
@@ -139,25 +129,22 @@ public class CommandIterator implements Iterator<ICommand>
   /**
    * Get the current command.
    */
-  public ICommand getCommand()
-  {
+  public ICommand getCommand() {
     return commands.getCommand(index);
   }
 
   /**
    * Get the next command without iterating to it.
    */
-  public ICommand peek()
-  {
+  public ICommand peek() {
     int nextIndex = getNextIndex();
-    return commands.hasIndex(nextIndex)? commands.getCommand(nextIndex) : DummyCommand.DUMMY_COMMAND;
+    return commands.hasIndex(nextIndex) ? commands.getCommand(nextIndex) : DummyCommand.DUMMY_COMMAND;
   }
 
   /**
    * Is there at least one command before the current command.
    */
-  public boolean hasPrevious()
-  {
+  public boolean hasPrevious() {
     return index > 0;
   }
 
@@ -165,13 +152,11 @@ public class CommandIterator implements Iterator<ICommand>
    * Iterate to the previous command and return it.
    */
   @SuppressWarnings({"StatementWithEmptyBody"})
-  public ICommand previous()
-  {
+  public ICommand previous() {
     // get start of current command for consistency check
     int endIndex = index;
     // trace backwards for previous command
-    while (index > 0 && commands.getCommand(--index) == null)
-    {
+    while (index > 0 && commands.getCommand(--index) == null) {
       // search further
     }
     ICommand result = getCommand();
@@ -189,8 +174,8 @@ public class CommandIterator implements Iterator<ICommand>
    * Removes the current command.
    * Traces back to the previous commands afterwards.
    */
-  public void remove()
-  {
+  @Override
+  public void remove() {
     // remember position of current command
     int remove = index;
     // skip current command
@@ -208,8 +193,7 @@ public class CommandIterator implements Iterator<ICommand>
   /**
    * Is a label at the current opcode / command?
    */
-  public boolean hasLabel()
-  {
+  public boolean hasLabel() {
     return commands.hasLabel(getCommand().getAddress());
   }
 
@@ -218,24 +202,21 @@ public class CommandIterator implements Iterator<ICommand>
    *
    * @return label representation or null if no label exists for the current address
    */
-  public ILabel getLabel()
-  {
+  public ILabel getLabel() {
     return commands.getLabel(getCommand().getAddress());
   }
 
   /**
    * Is a code label at the current opcode / command?
    */
-  public boolean hasCodeLabel()
-  {
+  public boolean hasCodeLabel() {
     return commands.hasCodeLabel(getCommand().getAddress());
   }
 
   /**
    * Is a data label at the current opcode / command?
    */
-  public boolean hasDataLabel()
-  {
+  public boolean hasDataLabel() {
     return commands.hasDataLabel(getCommand().getAddress());
   }
 
@@ -244,8 +225,7 @@ public class CommandIterator implements Iterator<ICommand>
    *
    * @return whether a label has been removed
    */
-  public boolean removeReference()
-  {
+  public boolean removeReference() {
     return commands.removeReference(index);
   }
 }

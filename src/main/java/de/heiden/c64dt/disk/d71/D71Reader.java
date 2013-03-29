@@ -19,6 +19,7 @@ public class D71Reader extends AbstractDiskImageReader {
   public static final int SIZE_70_TRACKS_NO_ERRORS = 2 * 174848;
   public static final int SIZE_70_TRACKS_WITH_ERRORS = 2 * 175531;
 
+  @Override
   public IDiskImage read(byte[] data) throws WrongDiskImageFormatException {
     Assert.notNull(data, "Precondition: data != null");
 

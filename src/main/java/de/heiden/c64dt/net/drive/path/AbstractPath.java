@@ -13,8 +13,7 @@ import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
 /**
  * Directory path.
  */
-public abstract class AbstractPath implements IPath
-{
+public abstract class AbstractPath implements IPath {
   private static final byte SEPARATOR = encode('/');
   private static final byte[] PARENT_DIR_PATH = encode("..");
   private static final byte[] CURRENTT_DIR_PATH = encode(".");
@@ -27,28 +26,24 @@ public abstract class AbstractPath implements IPath
    *
    * @param parent parent path, null means there is no parent
    */
-  protected AbstractPath(IPath parent)
-  {
+  protected AbstractPath(IPath parent) {
     // set this as parent, when no parent is specified to not leave root dir
-    this.parent = parent == null? this : parent;
+    this.parent = parent == null ? this : parent;
   }
 
-  public IPath getParent()
-  {
+  @Override
+  public IPath getParent() {
     Assert.notNull(parent, "Postcondition: result != null");
     return parent;
   }
 
-  public IStream getFile(byte[] filename) throws FileNotFoundException
-  {
+  @Override
+  public IStream getFile(byte[] filename) throws FileNotFoundException {
     Assert.notNull(filename, "Precondition: filename != null");
 
-    if (Arrays.equals(filename, DIRECTORY_NAME))
-    {
+    if (Arrays.equals(filename, DIRECTORY_NAME)) {
       return new DirectoryStream(doDirectory());
-    }
-    else
-    {
+    } else {
       return doFile(filename);
     }
   }
@@ -65,34 +60,26 @@ public abstract class AbstractPath implements IPath
    */
   protected abstract IStream doFile(byte[] filename) throws FileNotFoundException;
 
-  public IPath changePath(byte[] path) throws FileNotFoundException
-  {
+  @Override
+  public IPath changePath(byte[] path) throws FileNotFoundException {
     int separatorPos = indexOfSeparator(path);
 
     IPath result;
-    if (separatorPos < 0)
-    {
+    if (separatorPos < 0) {
       // plain path
       result = doChangePath(path);
-    }
-    else
-    {
+    } else {
       // separate path into head and tail
       byte[] head = new byte[separatorPos];
       System.arraycopy(path, 0, head, 0, head.length);
       byte[] tail = new byte[path.length - separatorPos - 1];
       System.arraycopy(path, separatorPos + 1, tail, 0, tail.length);
 
-      if (Arrays.equals(head, CURRENTT_DIR_PATH))
-      {
+      if (Arrays.equals(head, CURRENTT_DIR_PATH)) {
         result = changePath(tail);
-      }
-      else if (Arrays.equals(head, PARENT_DIR_PATH))
-      {
+      } else if (Arrays.equals(head, PARENT_DIR_PATH)) {
         result = getParent().changePath(tail);
-      }
-      else
-      {
+      } else {
         result = doChangePath(head).changePath(tail);
       }
     }
@@ -118,12 +105,9 @@ public abstract class AbstractPath implements IPath
    * @param path c64 encoded path
    * @return index of first separator char or -1 if none
    */
-  protected int indexOfSeparator(byte[] path)
-  {
-    for (int i = 0; i < path.length; i++)
-    {
-      if (path[i] == SEPARATOR)
-      {
+  protected int indexOfSeparator(byte[] path) {
+    for (int i = 0; i < path.length; i++) {
+      if (path[i] == SEPARATOR) {
         return i;
       }
     }

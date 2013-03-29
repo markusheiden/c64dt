@@ -33,6 +33,7 @@ public class JHexEditor extends JTable {
     setColumnSelectionAllowed(false);
     setCellSelectionEnabled(true);
     setDefaultRenderer(byte[].class, new TableCellRenderer() {
+      @Override
       public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         byte[] text = (byte[]) value;
         JC64TextArea renderer = new JC64TextArea(text.length, 1, 2, false);
@@ -50,6 +51,7 @@ public class JHexEditor extends JTable {
     setDefaultEditor(byte[].class, new TableCellEditor() {
       private List<CellEditorListener> listeners = new ArrayList<>();
 
+      @Override
       public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, final int row, final int column) {
         byte[] text = (byte[]) value;
         JC64TextArea editor = new JC64TextArea(text.length, 1, 2, false);
@@ -62,6 +64,7 @@ public class JHexEditor extends JTable {
         }
         editor.setText(0, 0, text);
         editor.addKeyListener(new KeyAdapter() {
+          @Override
           public void keyPressed(KeyEvent e) {
             if (e.getKeyCode() == KeyEvent.VK_DOWN) {
               JHexEditor.this.changeSelection(row + 1, column, false, false);
@@ -83,18 +86,22 @@ public class JHexEditor extends JTable {
         return editor;
       }
 
+      @Override
       public Object getCellEditorValue() {
         return null;
       }
 
+      @Override
       public boolean isCellEditable(EventObject anEvent) {
         return true;
       }
 
+      @Override
       public boolean shouldSelectCell(EventObject anEvent) {
         return true;
       }
 
+      @Override
       public boolean stopCellEditing() {
         for (CellEditorListener listener : new ArrayList<>(listeners)) {
           listener.editingStopped(new ChangeEvent(this));
@@ -102,16 +109,19 @@ public class JHexEditor extends JTable {
         return true;
       }
 
+      @Override
       public void cancelCellEditing() {
         for (CellEditorListener listener : new ArrayList<>(listeners)) {
           listener.editingStopped(new ChangeEvent(this));
         }
       }
 
+      @Override
       public void addCellEditorListener(CellEditorListener l) {
         listeners.add(l);
       }
 
+      @Override
       public void removeCellEditorListener(CellEditorListener l) {
         listeners.remove(l);
       }
@@ -136,14 +146,17 @@ public class JHexEditor extends JTable {
       this.width = width;
     }
 
+    @Override
     public int getRowCount() {
       return (bytes.length + (width - 1)) / width;
     }
 
+    @Override
     public int getColumnCount() {
       return 2;
     }
 
+    @Override
     public String getColumnName(int columnIndex) {
       switch (columnIndex) {
         case 0:
@@ -155,6 +168,7 @@ public class JHexEditor extends JTable {
       }
     }
 
+    @Override
     public Class<?> getColumnClass(int columnIndex) {
       switch (columnIndex) {
         case 0:
@@ -166,10 +180,12 @@ public class JHexEditor extends JTable {
       }
     }
 
+    @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
       return true;
     }
 
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
       byte[] line = new byte[width];
       System.arraycopy(bytes, rowIndex * width, line, 0, width);
@@ -183,6 +199,7 @@ public class JHexEditor extends JTable {
       }
     }
 
+    @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
     }
   }

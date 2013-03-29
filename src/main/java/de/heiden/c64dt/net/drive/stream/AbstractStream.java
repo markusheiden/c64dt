@@ -7,8 +7,7 @@ import java.io.IOException;
 /**
  * Base implementation of a stream.
  */
-public abstract class AbstractStream implements IStream
-{
+public abstract class AbstractStream implements IStream {
   private boolean isOpen;
   private int lastPosition;
   private int position;
@@ -16,30 +15,29 @@ public abstract class AbstractStream implements IStream
   /**
    * Constructor.
    */
-  protected AbstractStream()
-  {
+  protected AbstractStream() {
     isOpen = false;
     lastPosition = 0;
     position = 0;
   }
 
-  public boolean isOpen()
-  {
+  @Override
+  public boolean isOpen() {
     return isOpen;
   }
 
-  public void open(byte[] data)
-  {
+  @Override
+  public void open(byte[] data) {
     isOpen = true;
   }
 
-  public final void incrementPosition(int increment)
-  {
+  @Override
+  public final void incrementPosition(int increment) {
     position = lastPosition + increment;
   }
 
-  public final byte[] read(int length) throws IOException
-  {
+  @Override
+  public final byte[] read(int length) throws IOException {
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
     Assert.isTrue(length >= 0, "Precondition: length >= 0");
 
@@ -58,8 +56,8 @@ public abstract class AbstractStream implements IStream
    */
   protected abstract byte[] doRead(int length) throws IOException;
 
-  public final void write(byte[] data) throws IOException
-  {
+  @Override
+  public final void write(byte[] data) throws IOException {
     Assert.isTrue(isOpen(), "Precondition: isOpen()");
     Assert.notNull(data, "Precondition: data != null");
 
@@ -72,8 +70,7 @@ public abstract class AbstractStream implements IStream
    * @param total total number of bytes
    * @param length requested length
    */
-  protected int limitLength(int total, int length)
-  {
+  protected int limitLength(int total, int length) {
     return Math.min(length, total - position);
   }
 
@@ -84,16 +81,15 @@ public abstract class AbstractStream implements IStream
    */
   protected abstract void doWrite(byte[] data) throws IOException;
 
-  public void close()
-  {
+  @Override
+  public void close() {
     isOpen = false;
   }
 
   /**
    * Current position.
    */
-  public final int getPosition()
-  {
+  public final int getPosition() {
     return position;
   }
 }

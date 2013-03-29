@@ -7,8 +7,7 @@ import java.awt.image.MemoryImageSource;
 /**
  * Base class for component displaying c64 indexed color content.
  */
-public abstract class JC64ScreenComponent extends JC64Component
-{
+public abstract class JC64ScreenComponent extends JC64Component {
   /**
    * Constructor.
    *
@@ -16,8 +15,7 @@ public abstract class JC64ScreenComponent extends JC64Component
    * @param height height in pixel
    * @param factor zoom factor
    */
-  protected JC64ScreenComponent(int offset, int width, int lineLength, int height, double factor)
-  {
+  protected JC64ScreenComponent(int offset, int width, int lineLength, int height, double factor) {
     super(width, height, factor, false);
 
     _offset = offset;
@@ -40,15 +38,13 @@ public abstract class JC64ScreenComponent extends JC64Component
    * @param foreground foreground color
    */
   @Override
-  public void setForeground(C64Color foreground)
-  {
+  public void setForeground(C64Color foreground) {
     _foreground = (byte) foreground.ordinal();
     super.setForeground(foreground.getColor());
   }
 
   @Override
-  public void setForeground(Color fg)
-  {
+  public void setForeground(Color fg) {
     throw new UnsupportedOperationException("RGB colors not supported. Use C64 colors instead.");
   }
 
@@ -57,23 +53,21 @@ public abstract class JC64ScreenComponent extends JC64Component
    *
    * @param background background color
    */
-  public void setBackground(C64Color background)
-  {
+  @Override
+  public void setBackground(C64Color background) {
     _background = background.ordinal();
     super.setBackground(background.getColor());
   }
 
   @Override
-  public void setBackground(Color bg)
-  {
+  public void setBackground(Color bg) {
     throw new UnsupportedOperationException("RGB colors not supported. Use C64 colors instead.");
   }
 
   /**
    * Backing image.
    */
-  public byte[] getImageData()
-  {
+  public byte[] getImageData() {
     return _imageData;
   }
 
@@ -82,8 +76,7 @@ public abstract class JC64ScreenComponent extends JC64Component
    *
    * @param imageData new backing image data
    */
-  protected void updateImageData(byte[] imageData)
-  {
+  protected void updateImageData(byte[] imageData) {
     assert imageData != null : "Precondition: imageData != null";
     assert imageData.length == getImageData().length : "Precondition: imageData.length == getImageData().length";
 

@@ -79,6 +79,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
   /**
    * Read a byte from the code at the current position and advance.
    */
+  @Override
   public final int readByte() {
     return readByteAt(position++);
   }

@@ -34,15 +34,18 @@ public class C64Charset extends Charset {
     return upper ? UPPER : LOWER;
   }
 
+  @Override
   public boolean contains(Charset cs) {
     return cs instanceof C64Charset &&
       !upper || ((C64Charset) cs).upper;
   }
 
+  @Override
   public AbstractDecoder newDecoder() {
     return upper ? new C64DecoderUpper(this) : new C64DecoderLower(this);
   }
 
+  @Override
   public AbstractEncoder newEncoder() {
     return upper ? new C64EncoderUpper(this) : new C64EncoderLower(this);
   }

@@ -6,28 +6,21 @@ import java.nio.charset.UnmappableCharacterException;
 /**
  * C64 charset with lower and upper case chars encoder.
  */
-public class C64EncoderLower extends AbstractEncoder
-{
+public class C64EncoderLower extends AbstractEncoder {
   /**
    * Constructor.
    */
-  protected C64EncoderLower(Charset charset)
-  {
+  protected C64EncoderLower(Charset charset) {
     super(charset);
   }
 
-  protected byte toByte(char c) throws UnmappableCharacterException
-  {
-    if (c >= 'a' && c <= 'z')
-    {
+  @Override
+  protected byte toByte(char c) throws UnmappableCharacterException {
+    if (c >= 'a' && c <= 'z') {
       return (byte) (c - 'a' + 0x01);
-    }
-    else if (c >= 'A' && c <= 'Z')
-    {
+    } else if (c >= 'A' && c <= 'Z') {
       return (byte) (c - 'A' + 0x41);
-    }
-    else
-    {
+    } else {
       return toSymbolByte(c);
     }
   }

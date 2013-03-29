@@ -10,16 +10,14 @@ import static de.heiden.c64dt.disk.SectorModelUtil.assertTrack;
 /**
  * D64 (1541) disk image implementation.
  */
-public class D64 extends AbstractDiskImage
-{
+public class D64 extends AbstractDiskImage {
   /**
    * Constructor.
    *
    * @param tracks number of tracks
    * @param hasErrors support error informations?
    */
-  public D64(int tracks, boolean hasErrors)
-  {
+  public D64(int tracks, boolean hasErrors) {
     super(1, tracks, hasErrors);
   }
 
@@ -27,29 +25,22 @@ public class D64 extends AbstractDiskImage
   // ISectorModel
   //
 
-  public int getSectors()
-  {
+  @Override
+  public int getSectors() {
     return 21;
   }
 
-  public int getSectors(int track)
-  {
+  @Override
+  public int getSectors(int track) {
     assertTrack(this, track);
 
-    if (track < 18)
-    {
+    if (track < 18) {
       return 21;
-    }
-    else if (track < 25)
-    {
+    } else if (track < 25) {
       return 19;
-    }
-    else if (track < 31)
-    {
+    } else if (track < 31) {
       return 18;
-    }
-    else
-    {
+    } else {
       return 17;
     }
   }
@@ -58,16 +49,14 @@ public class D64 extends AbstractDiskImage
   // BAM, directory
   //
 
-  public IBAM getBAM()
-  {
+  @Override
+  public IBAM getBAM() {
     BAM result = new BAM(this);
 
     byte[] bam = getSector(18, 0);
     int tracks = getTracks();
-    for (int track = 1, pos = 0x04; track <= tracks; track++, pos += 4)
-    {
-      if (track == 37)
-      {
+    for (int track = 1, pos = 0x04; track <= tracks; track++, pos += 4) {
+      if (track == 37) {
         // TODO currently only Dolphin DOS support implemented
         pos = 0xAC;
       }
@@ -78,8 +67,8 @@ public class D64 extends AbstractDiskImage
     return result;
   }
 
-  protected int getBamEntrySize()
-  {
+  @Override
+  protected int getBamEntrySize() {
     return 4;
   }
 }

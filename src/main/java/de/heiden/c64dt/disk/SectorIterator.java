@@ -10,8 +10,7 @@ import static de.heiden.c64dt.disk.SectorModelUtil.assertSector;
 /**
  * Reads a chain of sectors.
  */
-public class SectorIterator implements Iterator<byte[]>
-{
+public class SectorIterator implements Iterator<byte[]> {
   private IDiskImage diskImage;
   private int track;
   private int sector;
@@ -23,8 +22,7 @@ public class SectorIterator implements Iterator<byte[]>
    * @param track start track
    * @param sector start sector
    */
-  public SectorIterator(IDiskImage diskImage, int track, int sector)
-  {
+  public SectorIterator(IDiskImage diskImage, int track, int sector) {
     Assert.notNull(diskImage, "Precondition: diskImage != null");
     assertSector(diskImage, track, sector);
 
@@ -33,13 +31,13 @@ public class SectorIterator implements Iterator<byte[]>
     this.sector = sector;
   }
 
-  public boolean hasNext()
-  {
+  @Override
+  public boolean hasNext() {
     return track != 0x00;
   }
 
-  public byte[] next()
-  {
+  @Override
+  public byte[] next() {
     Assert.isTrue(hasNext(), "Precondition: hasNext()");
 
     byte[] currentSector = diskImage.getSector(track, sector);
@@ -50,8 +48,8 @@ public class SectorIterator implements Iterator<byte[]>
     return currentSector;
   }
 
-  public void remove()
-  {
+  @Override
+  public void remove() {
     throw new UnsupportedOperationException();
   }
 }

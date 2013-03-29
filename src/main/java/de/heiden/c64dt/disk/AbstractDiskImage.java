@@ -54,14 +54,17 @@ public abstract class AbstractDiskImage implements IDiskImage {
   // ISectorModel
   //
 
+  @Override
   public int getSides() {
     return sides;
   }
 
+  @Override
   public int getTracks() {
     return tracks;
   }
 
+  @Override
   public int getTracksPerSide() {
     return tracksPerSide;
   }
@@ -70,12 +73,14 @@ public abstract class AbstractDiskImage implements IDiskImage {
   //
   //
 
+  @Override
   public byte[] getSector(int track, int sector) {
     assertSector(this, track, sector);
 
     return sectors[track - 1][sector];
   }
 
+  @Override
   public void setSector(int track, int sector, byte[] content) {
     assertSector(this, track, sector);
 
@@ -90,14 +95,17 @@ public abstract class AbstractDiskImage implements IDiskImage {
   // error support
   //
 
+  @Override
   public boolean hasErrors() {
     return hasErrors;
   }
 
+  @Override
   public boolean hasError(int track, int sector) {
     return hasErrors() && getError(track, sector).isError();
   }
 
+  @Override
   public Error getError(int track, int sector) {
     Assert.isTrue(hasErrors(), "Precondition: hasErrors()");
     assertSector(this, track, sector);
@@ -105,6 +113,7 @@ public abstract class AbstractDiskImage implements IDiskImage {
     return errors[track - 1][sector];
   }
 
+  @Override
   public void setError(int track, int sector, Error error) {
     Assert.isTrue(hasErrors(), "Precondition: hasErrors()");
     assertSector(this, track, sector);
@@ -159,6 +168,7 @@ public abstract class AbstractDiskImage implements IDiskImage {
     }
   }
 
+  @Override
   public IDirectory getDirectory() {
     byte[] name = new byte[16];
     System.arraycopy(getSector(18, 0), 0x90, name, 0, 16);

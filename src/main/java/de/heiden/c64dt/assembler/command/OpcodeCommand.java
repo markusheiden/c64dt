@@ -82,6 +82,7 @@ public class OpcodeCommand extends AbstractCommand {
   /**
    * Size of opcode including the argument.
    */
+  @Override
   public final int getSize() {
     return size;
   }
@@ -89,10 +90,12 @@ public class OpcodeCommand extends AbstractCommand {
   /**
    * Does the control flow may not reach the opcode directly after this opcode?
    */
+  @Override
   public final boolean isEnd() {
     return end;
   }
 
+  @Override
   public String toString(CommandBuffer buffer) {
     Assert.notNull(buffer, "Precondition: buffer != null");
 
@@ -112,6 +115,7 @@ public class OpcodeCommand extends AbstractCommand {
     return result.toString();
   }
 
+  @Override
   public List<Integer> toBytes() {
     List<Integer> result = new ArrayList<>(getSize());
     result.add(opcode.getOpcode());

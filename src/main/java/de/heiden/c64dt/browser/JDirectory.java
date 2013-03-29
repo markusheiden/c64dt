@@ -16,28 +16,24 @@ import java.util.List;
 /**
  * Directory.
  */
-public class JDirectory extends JList
-{
+public class JDirectory extends JList {
   private static final int columns = 28;
   private int fontSize = 8;
 
   /**
    * Constructor.
    */
-  public JDirectory()
-  {
+  public JDirectory() {
     setOpaque(true);
     setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     Dimension size = new Dimension(16 * fontSize, 0);
     setPreferredSize(size);
     setMaximumSize(size);
-    setCellRenderer(new ListCellRenderer<Object>()
-    {
-      public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
-      {
+    setCellRenderer(new ListCellRenderer<Object>() {
+      @Override
+      public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         byte[] text;
-        if (index == 0)
-        {
+        if (index == 0) {
           text = new byte[26];
           Arrays.fill(text, (byte) 0xA0);
 
@@ -58,13 +54,10 @@ public class JDirectory extends JList
           Assert.isTrue(i == text.length, "Check: i == text.length");
 
           // show directory header inverted
-          for (i = 2; i < text.length; i++)
-          {
+          for (i = 2; i < text.length; i++) {
             text[i] |= 0x80;
           }
-        }
-        else
-        {
+        } else {
           text = new byte[columns];
           Arrays.fill(text, (byte) 0x20);
 
@@ -83,20 +76,16 @@ public class JDirectory extends JList
           C64Charset.LOWER.toBytes(file.getMode().getType().toString(), text, i);
           i += 3;
           Assert.isTrue(i == text.length - 1, "Check: i == text.length - 1");
-          if (file.getMode().isLocked())
-          {
+          if (file.getMode().isLocked()) {
             text[i++] = 0x3C; // '<'
           }
         }
 
         JC64TextArea result = new JC64TextArea(text.length, 1, 2, false);
-        if (isSelected)
-        {
+        if (isSelected) {
           result.setForeground(getSelectionForeground());
           result.setBackground(getSelectionBackground());
-        }
-        else
-        {
+        } else {
           result.setForeground(getForeground());
           result.setBackground(getBackground());
         }
@@ -108,21 +97,16 @@ public class JDirectory extends JList
     });
   }
 
-  protected void writeInt(int size, byte[] text, int pos)
-  {
+  protected void writeInt(int size, byte[] text, int pos) {
     Assert.isTrue(size >= 0, "Precondition: getSize >= 0");
     Assert.notNull(text, "Precondition: text != null");
 
-    if (size == 0)
-    {
+    if (size == 0) {
       text[pos] = 0x30;
-    }
-    else
-    {
+    } else {
       int digits = ((int) Math.floor(Math.log10(size))) + 1;
       pos += digits;
-      while (size != 0)
-      {
+      while (size != 0) {
         text[--pos] = (byte) (size % 10 + 0x30);
         size = size / 10;
       }
@@ -134,46 +118,39 @@ public class JDirectory extends JList
    *
    * @param directory directory
    */
-  public void setDirectory(final IDirectory directory)
-  {
+  public void setDirectory(final IDirectory directory) {
     Assert.notNull(directory, "Precondition: directory != null");
 
     final List<IFile> files = directory.getFiles();
-    for (Iterator<IFile> iter = files.iterator(); iter.hasNext(); )
-    {
+    for (Iterator<IFile> iter = files.iterator(); iter.hasNext(); ) {
       IFile file = iter.next();
-      if (!file.getMode().isVisible())
-      {
+      if (!file.getMode().isVisible()) {
         iter.remove();
       }
     }
 
-    setModel(new ListModel<Object>()
-    {
-      public int getSize()
-      {
+    setModel(new ListModel<Object>() {
+      @Override
+      public int getSize() {
         return files.size() + 1;
       }
 
-      public Object getElementAt(int index)
-      {
+      @Override
+      public Object getElementAt(int index) {
         Assert.isTrue(index <= directory.getFiles().size(), "Precondition: index <= directory.getFiles().fontSize()");
-        if (index == 0)
-        {
+        if (index == 0) {
           return directory;
-        }
-        else
-        {
+        } else {
           return files.get(index - 1);
         }
       }
 
-      public void addListDataListener(ListDataListener l)
-      {
+      @Override
+      public void addListDataListener(ListDataListener l) {
       }
 
-      public void removeListDataListener(ListDataListener l)
-      {
+      @Override
+      public void removeListDataListener(ListDataListener l) {
       }
     });
 

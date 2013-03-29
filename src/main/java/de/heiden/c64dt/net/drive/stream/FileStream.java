@@ -10,38 +10,31 @@ import java.io.RandomAccessFile;
 /**
  * Stream for a java.io.File.
  */
-public class FileStream extends AbstractStream
-{
+public class FileStream extends AbstractStream {
   private RandomAccessFile file;
 
-  public FileStream(File file) throws FileNotFoundException
-  {
+  public FileStream(File file) throws FileNotFoundException {
     Assert.notNull(file, "Precondition: file != null");
 
-    if (!file.isFile())
-    {
+    if (!file.isFile()) {
       throw new FileNotFoundException(file.getPath() + " is no file");
     }
-    if (!file.exists())
-    {
+    if (!file.exists()) {
       throw new FileNotFoundException(file.getPath() + " not found");
     }
 
     this.file = new RandomAccessFile(file, "rw");
   }
 
-  public byte[] doRead(int length) throws IOException
-  {
+  @Override
+  public byte[] doRead(int length) throws IOException {
     file.seek(getPosition());
     byte[] result = new byte[length];
     int read = file.read(result);
 
-    if (read < 0)
-    {
+    if (read < 0) {
       result = new byte[0];
-    }
-    else if (read < length)
-    {
+    } else if (read < length) {
       byte[] trimmed = new byte[read];
       System.arraycopy(result, 0, trimmed, 0, read);
       result = trimmed;
@@ -51,8 +44,8 @@ public class FileStream extends AbstractStream
     return result;
   }
 
-  public void doWrite(byte[] data) throws IOException
-  {
+  @Override
+  public void doWrite(byte[] data) throws IOException {
     file.seek(getPosition());
     file.write(data);
   }
