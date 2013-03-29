@@ -15,7 +15,7 @@ public class PetSCIICharset extends AbstractCharset {
    * Constructor.
    */
   public PetSCIICharset() {
-    super("PetSCII", null);
+    super("PetSCII");
   }
 
   @Override

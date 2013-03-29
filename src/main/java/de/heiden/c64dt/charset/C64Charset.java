@@ -26,7 +26,7 @@ public class C64Charset extends AbstractCharset {
    * Constructor.
    */
   protected C64Charset(boolean upper) {
-    super("C64_" + (upper ? "UPPER" : "LOWER"), null);
+    super("C64_" + (upper ? "UPPER" : "LOWER"));
 
     this.upper = upper;
   }
