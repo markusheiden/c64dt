@@ -13,8 +13,15 @@ import java.util.StringTokenizer;
  * Component for displaying C64 text.
  */
 public class JC64TextArea extends JC64CommonComponent {
-  private static final int ROW_HEIGHT = 8;
-  private static final int COLUMN_WIDTH = 8;
+  /**
+   * Row height in pixel.
+   */
+  public static final int ROW_HEIGHT = 8;
+
+  /**
+   * Columns width in pixel.
+   */
+  public static final int COLUMN_WIDTH = 8;
 
   private int _columns;
   private int _rows;
@@ -70,12 +77,6 @@ public class JC64TextArea extends JC64CommonComponent {
     _chars = new byte[_rows][_columns];
     _foregrounds = new Color[_rows][_columns];
     _backgrounds = new Color[_rows][_columns];
-    clear();
-  }
-
-  @Override
-  public void addNotify() {
-    // Clear after add, because the colors aren't set before
     clear();
   }
 
@@ -258,8 +259,16 @@ public class JC64TextArea extends JC64CommonComponent {
    */
   private void paintCharacter(int column, int row) {
     int[] imageData = getImageData();
-    int foreground = _foregrounds[row][column].getRGB();
-    int background = _backgrounds[row][column].getRGB();
+    Color foregroundColor = _foregrounds[row][column];
+    if (foregroundColor == null) {
+      foregroundColor = C64Color.BLACK.getColor();
+    }
+    Color backgroundColor = _backgrounds[row][column];
+    if (backgroundColor == null) {
+      backgroundColor = C64Color.WHITE.getColor();
+    }
+    int foreground = foregroundColor.getRGB();
+    int background = backgroundColor.getRGB();
 
     int charOffset = _upper ? 0x0000 : 0x0800;
     int charPtr = charOffset + (_chars[row][column] & 0xFF) * 8;
