@@ -10,11 +10,29 @@ import java.awt.image.MemoryImageSource;
  * Base class for component displaying c64 content.
  */
 public abstract class JC64Component extends JComponent {
+  /**
+   * Width,
+   */
   private int _width;
+
+  /**
+   * Height.
+   */
   private int _height;
+
+  /**
+   * Scale factor for image.
+   */
   private final double _factor;
 
+  /**
+   * Image source.
+   */
   protected MemoryImageSource _imageSource;
+
+  /**
+   * Image.
+   */
   private Image _image;
 
   /**

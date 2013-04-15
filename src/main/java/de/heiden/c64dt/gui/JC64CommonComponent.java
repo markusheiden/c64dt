@@ -9,7 +9,14 @@ import java.awt.image.MemoryImageSource;
  * Base class for component displaying default rgb color c64 content.
  */
 public abstract class JC64CommonComponent extends JC64Component {
+  /**
+   * Color model.
+   */
   private final ColorModel _colorModel;
+
+  /**
+   * Image.
+   */
   private int[] _imageData;
 
   /**
@@ -26,22 +33,21 @@ public abstract class JC64CommonComponent extends JC64Component {
     // create color model
     _colorModel = ColorModel.getRGBdefault();
 
-    buildImage();
-
+    onResize();
     if (resizable) {
       addComponentListener(new ComponentAdapter() {
         @Override
         public void componentResized(ComponentEvent e) {
-          buildImage();
+          onResize();
         }
       });
     }
   }
 
   /**
-   * Builder backing image.
+   * Resizing.
    */
-  private void buildImage() {
+  private void onResize() {
     // create image data
     _imageData = new int[getImageWidth() * getImageHeight()];
 

@@ -55,22 +55,21 @@ public class JC64TextArea extends JC64CommonComponent {
     setCharset(false);
     _charsetROM = getDefaultCharset();
 
-    buildBuffer();
-
+    onResize();
     if (resizable) {
       addComponentListener(new ComponentAdapter() {
         @Override
         public void componentResized(ComponentEvent e) {
-          buildBuffer();
+          onResize();
         }
       });
     }
   }
 
   /**
-   * Build text buffer.
+   * Resizing.
    */
-  private void buildBuffer() {
+  private void onResize() {
     _columns = (int) Math.ceil(getImageWidth() / COLUMN_WIDTH);
     _rows = (int) Math.ceil(getImageHeight() / ROW_HEIGHT);
 
@@ -261,11 +260,11 @@ public class JC64TextArea extends JC64CommonComponent {
     int[] imageData = getImageData();
     Color foregroundColor = _foregrounds[row][column];
     if (foregroundColor == null) {
-      foregroundColor = C64Color.BLACK.getColor();
+      return;
     }
     Color backgroundColor = _backgrounds[row][column];
     if (backgroundColor == null) {
-      backgroundColor = C64Color.WHITE.getColor();
+      return;
     }
     int foreground = foregroundColor.getRGB();
     int background = backgroundColor.getRGB();
