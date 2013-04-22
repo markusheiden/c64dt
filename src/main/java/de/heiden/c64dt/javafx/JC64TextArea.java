@@ -1,12 +1,13 @@
 package de.heiden.c64dt.javafx;
 
 import de.heiden.c64dt.charset.C64Charset;
-import de.heiden.c64dt.gui.C64Color;
 import de.heiden.c64dt.util.ResourceLoader;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.util.StringTokenizer;
 
 /**
@@ -55,28 +56,29 @@ public class JC64TextArea extends JC64Component {
     setCharset(false);
     _charsetROM = getDefaultCharset();
 
-    onResize();
-    if (resizable) {
-      addComponentListener(new ComponentAdapter() {
-        @Override
-        public void componentResized(ComponentEvent e) {
-          onResize();
-        }
-      });
+    init();
+    clear();
+  }
+
+  @Override
+  protected void layoutChildren() {
+    super.layoutChildren();
+
+    if (_resizable) {
+      init();
     }
   }
 
   /**
-   * Resizing.
+   * Init fields.
    */
-  private void onResize() {
+  private void init() {
     _columns = (int) Math.ceil(getImageWidth() / COLUMN_WIDTH);
     _rows = (int) Math.ceil(getImageHeight() / ROW_HEIGHT);
 
     _chars = new byte[_rows][_columns];
     _foregrounds = new Color[_rows][_columns];
     _backgrounds = new Color[_rows][_columns];
-    clear();
   }
 
   /**
@@ -209,8 +211,8 @@ public class JC64TextArea extends JC64Component {
     }
 
     _chars[row][column] = c;
-    _foregrounds[row][column] = getForeground();
-    _backgrounds[row][column] = getBackground();
+    _foregrounds[row][column] = getForegroundColor();
+    _backgrounds[row][column] = getBackgroundColor();
   }
 
   /**
@@ -218,8 +220,8 @@ public class JC64TextArea extends JC64Component {
    */
   public void clear() {
     byte space = _charset.toBytes(" ")[0];
-    Color foreground = getForeground();
-    Color background = getBackground();
+    Color foreground = getForegroundColor();
+    Color background = getBackgroundColor();
     for (int row = 0; row < _rows; row++) {
       byte[] charRow = _chars[row];
       Color[] foregroundRow = _foregrounds[row];
@@ -235,19 +237,16 @@ public class JC64TextArea extends JC64Component {
   }
 
   /**
-   * A repaint has been requested.
-   * So the backing image will be updated.
-   *
-   * @param g graphics
+   * Update canvas.
    */
-  @Override
-  public void doPaintComponent(Graphics g) {
+  private void repaint() {
     for (int row = 0; row < _rows; row++) {
       for (int column = 0; column < _columns; column++) {
         paintCharacter(column, row);
       }
     }
-    updateImageData();
+
+    drawImage();
   }
 
   /**
@@ -257,7 +256,6 @@ public class JC64TextArea extends JC64Component {
    * @param row row
    */
   private void paintCharacter(int column, int row) {
-    int[] imageData = getImageData();
     Color foregroundColor = _foregrounds[row][column];
     if (foregroundColor == null) {
       return;
@@ -266,16 +264,15 @@ public class JC64TextArea extends JC64Component {
     if (backgroundColor == null) {
       return;
     }
-    int foreground = foregroundColor.getRGB();
-    int background = backgroundColor.getRGB();
+
+    PixelWriter writer = _image.getPixelWriter();
 
     int charOffset = _upper ? 0x0000 : 0x0800;
     int charPtr = charOffset + (_chars[row][column] & 0xFF) * 8;
     for (int y = row * 8, lastY = y + 8; y < lastY; y++) {
-      int offset = y * getImageWidth() + column * 8;
       int data = _charsetROM[charPtr++];
-      for (int dx = 0, bit = 0x80; bit > 0; dx++, bit = bit >> 1) {
-        imageData[offset + dx] = (data & bit) != 0 ? foreground : background;
+      for (int x = column * 8, bit = 0x80; bit > 0; x++, bit = bit >> 1) {
+        writer.setColor(x, y, (data & bit) != 0 ? foregroundColor : backgroundColor);
       }
     }
   }
@@ -284,43 +281,49 @@ public class JC64TextArea extends JC64Component {
   // test
   //
 
+  /**
+   * Start a small demo app for this control.
+   */
   public static void main(String[] args) {
-    JFrame frame = new JFrame();
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    TestApp.launch(TestApp.class);
+  }
 
-    JC64TextArea text = new JC64TextArea(40, 25, 2, false);
-    frame.add(text);
+  /**
+   * Demo app for this control.
+   */
+  public static class TestApp extends Application {
+    @Override
+    public void start(Stage stage) throws Exception {
+      JC64TextArea text = new JC64TextArea(40, 25, 2, true);
 
-    frame.pack();
-    frame.setVisible(true);
+      text.setForegroundColor(C64Color.LIGHT_BLUE);
+      text.setBackgroundColor(C64Color.BLUE);
+      text.clear();
 
-    text.setForeground(de.heiden.c64dt.gui.C64Color.LIGHT_BLUE);
-    text.setBackground(de.heiden.c64dt.gui.C64Color.BLUE);
-    text.clear();
+      text.setCharset(false);
+      text.setText(0, 0, "This is a test azAZ");
+      text.setTextInverted(0, 1, "This is a test azAZ");
+      text.setText(0, 2, "@[] !\"#$%&'()*+,-./1234567890:;<=>?|_");
 
-    text.setCharset(false);
-    text.setText(0, 0, "This is a test azAZ");
-    text.setTextInverted(0, 1, "This is a test azAZ");
-    text.setText(0, 2, "@[] !\"#$%&'()*+,-./1234567890:;<=>?|_");
+      text.setCharset(true);
+      text.setText(0, 3, "THIS IS A TEST AZ");
+      text.setTextInverted(0, 4, "THIS IS A TEST AZ");
+      text.setText(0, 5, "@[] !\"#$%&'()*+,-./1234567890:;<=>?|_");
 
-    text.setCharset(true);
-    text.setText(0, 3, "THIS IS A TEST AZ");
-    text.setTextInverted(0, 4, "THIS IS A TEST AZ");
-    text.setText(0, 5, "@[] !\"#$%&'()*+,-./1234567890:;<=>?|_");
-
-    byte c = 0;
-    for (int y = 0; y < 16; y++) {
-      for (int x = 0; x < 16; x++, c++) {
-        text.setCharset(false);
-        text.setForeground(de.heiden.c64dt.gui.C64Color.LIGHT_GREEN);
-        text.setText(x, y + 8, c);
-        text.setCharset(true);
-        text.setForeground(C64Color.LIGHT_RED);
-        text.setText(x + 20, y + 8, c);
+      byte c = 0;
+      for (int y = 0; y < 16; y++) {
+        for (int x = 0; x < 16; x++, c++) {
+          text.setCharset(false);
+          text.setForegroundColor(C64Color.LIGHT_GREEN);
+          text.setText(x, y + 8, c);
+          text.setCharset(true);
+          text.setForegroundColor(C64Color.LIGHT_RED);
+          text.setText(x + 20, y + 8, c);
+        }
       }
-    }
 
-    // TODO 2010-03-07 mh: why is this repaint() needed???
-    frame.repaint();
+      stage.setScene(new Scene(text, 400, 100));
+      stage.show();
+    }
   }
 }

@@ -1,6 +1,7 @@
 package de.heiden.c64dt.javafx;
 
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -27,12 +28,12 @@ public abstract class JC64Component extends Pane {
   /**
    * Should the component be resizable?.
    */
-  private final boolean _resizable;
+  protected final boolean _resizable;
 
   /**
    * The canvas.
    */
-  private final Canvas _canvas;
+  protected final Canvas _canvas;
 
   /**
    * Image.
@@ -84,6 +85,15 @@ public abstract class JC64Component extends Pane {
   }
 
   /**
+   * Draw backing image to canvas.
+   */
+  protected final void drawImage() {
+    GraphicsContext context = _canvas.getGraphicsContext2D();
+    // context.scale(_factor, _factor);
+    context.drawImage(_image, 0, 0);
+  }
+
+  /**
    * Width of backing image.
    */
   public int getImageWidth() {
@@ -95,6 +105,13 @@ public abstract class JC64Component extends Pane {
    */
   public int getImageHeight() {
     return _height;
+  }
+
+  /**
+   * Foreground color.
+   */
+  public Color getForegroundColor() {
+    return _foreground;
   }
 
   /**
@@ -113,6 +130,13 @@ public abstract class JC64Component extends Pane {
    */
   public void setForegroundColor(C64Color foreground) {
     _foreground = foreground.getColor();
+  }
+
+  /**
+   * Background color.
+   */
+  public Color getBackgroundColor() {
+    return _background;
   }
 
   /**
