@@ -1,7 +1,6 @@
 package de.heiden.c64dt.javafx;
 
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -33,7 +32,7 @@ public abstract class JC64Component extends Pane {
   /**
    * The canvas.
    */
-  protected final Canvas _canvas;
+  private final Canvas _canvas;
 
   /**
    * Image.
@@ -67,30 +66,38 @@ public abstract class JC64Component extends Pane {
     _canvas = new Canvas(Math.ceil(width * factor), Math.ceil(height * factor));
     getChildren().add(_canvas);
 
-    _image = new WritableImage((int) _canvas.getWidth(), (int) _canvas.getHeight());
+    setScaleX(_factor);
+    setScaleY(_factor);
+
+    _image = new WritableImage(_width, _height);
   }
 
   @Override
   protected void layoutChildren() {
     if (_resizable) {
-      // compute image size from new component size
-      _width = Math.max(0, (int) Math.floor(getWidth() / _factor));
-      _height = Math.max(0, (int) Math.floor(getHeight() / _factor));
-
-      _canvas.setWidth(_width);
-      _canvas.setHeight(_height);
-
-      _image = new WritableImage((int) _canvas.getWidth(), (int) _canvas.getHeight());
+      init();
     }
+  }
+
+  /**
+   * Init fields.
+   */
+  private void init() {
+    // compute image size from new component size
+    _width = Math.max(0, (int) Math.floor(getWidth() / _factor));
+    _height = Math.max(0, (int) Math.floor(getHeight() / _factor));
+
+    _canvas.setWidth(getWidth());
+    _canvas.setHeight(getHeight());
+
+    _image = new WritableImage(_width, _height);
   }
 
   /**
    * Draw backing image to canvas.
    */
   protected final void drawImage() {
-    GraphicsContext context = _canvas.getGraphicsContext2D();
-    // context.scale(_factor, _factor);
-    context.drawImage(_image, 0, 0);
+    _canvas.getGraphicsContext2D().drawImage(_image, 0, 0);
   }
 
   /**
