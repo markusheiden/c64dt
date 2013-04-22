@@ -79,6 +79,8 @@ public class JC64TextArea extends JC64Component {
     _chars = new byte[_rows][_columns];
     _foregrounds = new Color[_rows][_columns];
     _backgrounds = new Color[_rows][_columns];
+
+    repaint();
   }
 
   /**
@@ -322,7 +324,7 @@ public class JC64TextArea extends JC64Component {
         }
       }
 
-      stage.setScene(new Scene(text, 400, 100));
+      stage.setScene(new Scene(text, text.getWidth(), text.getHeight()));
       stage.show();
     }
   }

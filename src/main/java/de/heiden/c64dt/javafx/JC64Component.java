@@ -63,7 +63,10 @@ public abstract class JC64Component extends Pane {
     _factor = factor;
     _resizable = resizable;
 
-    _canvas = new Canvas(Math.ceil(width * factor), Math.ceil(height * factor));
+    setWidth(Math.ceil(width * factor));
+    setHeight(Math.ceil(height * factor));
+
+    _canvas = new Canvas(getWidth(), getHeight());
     getChildren().add(_canvas);
 
     setScaleX(_factor);
@@ -83,12 +86,12 @@ public abstract class JC64Component extends Pane {
    * Init fields.
    */
   private void init() {
-    // compute image size from new component size
-    _width = Math.max(0, (int) Math.floor(getWidth() / _factor));
-    _height = Math.max(0, (int) Math.floor(getHeight() / _factor));
-
     _canvas.setWidth(getWidth());
     _canvas.setHeight(getHeight());
+
+    // compute image size from new component size
+    _width = Math.max(0, (int) (Math.floor(_canvas.getWidth() / _factor)));
+    _height = Math.max(0, (int) (Math.floor(_canvas.getHeight() / _factor)));
 
     _image = new WritableImage(_width, _height);
   }
