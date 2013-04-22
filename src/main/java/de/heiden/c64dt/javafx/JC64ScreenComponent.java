@@ -35,7 +35,9 @@ public abstract class JC64ScreenComponent extends JC64Component {
   /**
    * Constructor.
    *
+   * @param offset Offset of first pixel in byte buffer
    * @param width width in pixel
+   * @param lineLength Length of a line in the byte buffer
    * @param height height in pixel
    * @param factor zoom factor
    */
@@ -47,7 +49,7 @@ public abstract class JC64ScreenComponent extends JC64Component {
   }
 
   /**
-   * Update backing image data at image source.
+   * Update backing image.
    *
    * @param imageData new backing image data
    */
