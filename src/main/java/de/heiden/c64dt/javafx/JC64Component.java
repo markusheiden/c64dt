@@ -63,8 +63,8 @@ public abstract class JC64Component extends Region {
     setHeight(Math.ceil(height * factor));
 
     _view = new ImageView(new WritableImage(_width, _height));
-    _view.setTranslateX(_width / _factor);
-    _view.setTranslateY(_height / _factor);
+    _view.setTranslateX(_width * (_factor - 1) / 2);
+    _view.setTranslateY(_height * (_factor - 1) / 2);
     _view.setScaleX(_factor);
     _view.setScaleY(_factor);
     getChildren().add(_view);
