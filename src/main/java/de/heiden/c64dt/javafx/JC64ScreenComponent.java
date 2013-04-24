@@ -56,6 +56,6 @@ public abstract class JC64ScreenComponent extends JC64Component {
   protected void updateImageData(byte[] imageData) {
     assert imageData != null : "Precondition: imageData != null";
 
-    _image.getPixelWriter().setPixels(0, 0, getImageWidth(), getImageHeight(), format, imageData, _offset, _lineLength);
+    getPixelWriter().setPixels(0, 0, getImageWidth(), getImageHeight(), format, imageData, _offset, _lineLength);
   }
 }

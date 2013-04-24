@@ -37,6 +37,10 @@ public class JC64TextArea extends JC64Component {
 
   private static int[] _defaultCharsetROM;
 
+  //
+  //
+  //
+
   /**
    * Constructor.
    * The lower charset is used as default.
@@ -56,23 +60,14 @@ public class JC64TextArea extends JC64Component {
     setCharset(false);
     _charsetROM = getDefaultCharset();
 
-    init();
+    onResize();
     clear();
-  }
-
-  @Override
-  protected void layoutChildren() {
-    super.layoutChildren();
-
-    if (_resizable) {
-      init();
-    }
   }
 
   /**
    * Init fields.
    */
-  private void init() {
+  private void onResize() {
     _columns = (int) Math.ceil(getImageWidth() / COLUMN_WIDTH);
     _rows = (int) Math.ceil(getImageHeight() / ROW_HEIGHT);
 
@@ -80,7 +75,7 @@ public class JC64TextArea extends JC64Component {
     _foregrounds = new Color[_rows][_columns];
     _backgrounds = new Color[_rows][_columns];
 
-    repaint();
+    restoreImage();
   }
 
   /**
@@ -150,7 +145,7 @@ public class JC64TextArea extends JC64Component {
       return;
     }
 
-    // handle multiline text
+    // handle multi line text
     StringTokenizer tokenizer = new StringTokenizer(s, "\n");
     for (int r = row; tokenizer.hasMoreTokens() && r < _rows; r++) {
       setText(column, r, tokenizer.nextToken());
@@ -180,10 +175,10 @@ public class JC64TextArea extends JC64Component {
    * @param s characters in C64 encoding
    */
   public void setText(int column, int row, byte... s) {
+    PixelWriter writer = getPixelWriter();
     for (int i = 0, c = column; i < s.length && c < _columns; i++, c++) {
-      setTextInternal(c, row, s[i]);
+      setTextInternal(c, row, s[i], writer);
     }
-    repaint();
   }
 
   /**
@@ -194,8 +189,7 @@ public class JC64TextArea extends JC64Component {
    * @param c character in C64 encoding
    */
   public void setText(int column, int row, byte c) {
-    setTextInternal(column, row, c);
-    repaint();
+    setTextInternal(column, row, c, getPixelWriter());
   }
 
   /**
@@ -204,8 +198,9 @@ public class JC64TextArea extends JC64Component {
    * @param column column
    * @param row row
    * @param c character in C64 encoding
+   * @param writer Pixel writer for backing image
    */
-  protected void setTextInternal(int column, int row, byte c) {
+  protected void setTextInternal(int column, int row, byte c, PixelWriter writer) {
     if (column >= _columns || row >= _rows) {
       // early exit, when the text exceeds the buffer.
       // this may happen, e.g. when the component has been resized to a smaller size than the initial size.
@@ -215,6 +210,8 @@ public class JC64TextArea extends JC64Component {
     _chars[row][column] = c;
     _foregrounds[row][column] = getForegroundColor();
     _backgrounds[row][column] = getBackgroundColor();
+
+    paintCharacter(column, row, writer);
   }
 
   /**
@@ -235,20 +232,17 @@ public class JC64TextArea extends JC64Component {
       }
     }
 
-    repaint();
+    restoreImage();
   }
 
-  /**
-   * Update canvas.
-   */
-  private void repaint() {
+  @Override
+  protected void restoreImage() {
+    PixelWriter writer = getPixelWriter();
     for (int row = 0; row < _rows; row++) {
       for (int column = 0; column < _columns; column++) {
-        paintCharacter(column, row);
+        paintCharacter(column, row, writer);
       }
     }
-
-    drawImage();
   }
 
   /**
@@ -256,8 +250,9 @@ public class JC64TextArea extends JC64Component {
    *
    * @param column column
    * @param row row
+   * @param writer Pixel writer for backing image
    */
-  private void paintCharacter(int column, int row) {
+  private void paintCharacter(int column, int row, PixelWriter writer) {
     Color foregroundColor = _foregrounds[row][column];
     if (foregroundColor == null) {
       return;
@@ -266,8 +261,6 @@ public class JC64TextArea extends JC64Component {
     if (backgroundColor == null) {
       return;
     }
-
-    PixelWriter writer = _image.getPixelWriter();
 
     int charOffset = _upper ? 0x0000 : 0x0800;
     int charPtr = charOffset + (_chars[row][column] & 0xFF) * 8;

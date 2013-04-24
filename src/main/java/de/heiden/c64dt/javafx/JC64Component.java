@@ -1,14 +1,15 @@
 package de.heiden.c64dt.javafx;
 
-import javafx.scene.canvas.Canvas;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 
 /**
  * Base class for component displaying c64 content.
  */
-public abstract class JC64Component extends Pane {
+public abstract class JC64Component extends Region {
   /**
    * Width,
    */
@@ -32,12 +33,7 @@ public abstract class JC64Component extends Pane {
   /**
    * The canvas.
    */
-  private final Canvas _canvas;
-
-  /**
-   * Image.
-   */
-  protected WritableImage _image;
+  private final ImageView _view;
 
   /**
    * Foreground color.
@@ -66,41 +62,37 @@ public abstract class JC64Component extends Pane {
     setWidth(Math.ceil(width * factor));
     setHeight(Math.ceil(height * factor));
 
-    _canvas = new Canvas(getWidth(), getHeight());
-    getChildren().add(_canvas);
-
-    setScaleX(_factor);
-    setScaleY(_factor);
-
-    _image = new WritableImage(_width, _height);
-  }
-
-  @Override
-  protected void layoutChildren() {
-    if (_resizable) {
-      init();
-    }
+    _view = new ImageView(new WritableImage(_width, _height));
+    _view.setTranslateX(_width / _factor);
+    _view.setTranslateY(_height / _factor);
+    _view.setScaleX(_factor);
+    _view.setScaleY(_factor);
+    getChildren().add(_view);
   }
 
   /**
    * Init fields.
    */
-  private void init() {
-    _canvas.setWidth(getWidth());
-    _canvas.setHeight(getHeight());
-
+  private void onResize() {
     // compute image size from new component size
-    _width = Math.max(0, (int) (Math.floor(_canvas.getWidth() / _factor)));
-    _height = Math.max(0, (int) (Math.floor(_canvas.getHeight() / _factor)));
+    _width = Math.max(0, (int) (Math.floor(getWidth() / _factor)));
+    _height = Math.max(0, (int) (Math.floor(getHeight() / _factor)));
 
-    _image = new WritableImage(_width, _height);
+    _view.imageProperty().set(new WritableImage(_width, _height));
+    restoreImage();
   }
 
   /**
-   * Draw backing image to canvas.
+   * Restore content of backing image.
    */
-  protected final void drawImage() {
-    _canvas.getGraphicsContext2D().drawImage(_image, 0, 0);
+  protected void restoreImage() {
+  }
+
+  /**
+   * Writer for backing image.
+   */
+  protected final PixelWriter getPixelWriter() {
+    return ((WritableImage) _view.getImage()).getPixelWriter();
   }
 
   /**
