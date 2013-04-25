@@ -26,6 +26,21 @@ public enum C64Color {
   LIGHT_GRAY(0x95, 0x95, 0x95);
 
   /**
+   * Red as byte.
+   */
+  private final int r;
+
+  /**
+   * Green as byte.
+   */
+  private final int g;
+
+  /**
+   * Blue as byte.
+   */
+  private final int b;
+
+  /**
    * The color.
    */
   private final Color color;
@@ -38,7 +53,17 @@ public enum C64Color {
    * @param b blue
    */
   private C64Color(int r, int g, int b) {
+    this.r = r;
+    this.g = g;
+    this.b = b;
     this.color = Color.rgb(r, g, b);
+  }
+
+  /**
+   * Integer representation of color.
+   */
+  public int toArgb() {
+    return (0xFF << 24) + (r << 16) + (g << 8) + b;
   }
 
   /**
@@ -46,5 +71,18 @@ public enum C64Color {
    */
   public Color getColor() {
     return color;
+  }
+
+  /**
+   * All colors in their integer representation.
+   */
+  public static int[] colorsAsArgb() {
+    C64Color[] colors = values();
+    int[] result = new int[colors.length];
+    for (int i = 0; i < result.length; i++) {
+      result[i] = colors[i].toArgb();
+    }
+
+    return result;
   }
 }

@@ -1,8 +1,11 @@
 package de.heiden.c64dt.javafx;
 
+import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.scene.image.PixelFormat;
+import javafx.stage.Stage;
 
-import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
 /**
  * Base class for component displaying c64 indexed color content.
@@ -25,8 +28,12 @@ public abstract class JC64ScreenComponent extends JC64Component {
   /**
    * Pixel format.
    */
-  private final PixelFormat<ByteBuffer> format = PixelFormat.createByteIndexedInstance(
-    new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15});
+  private final PixelFormat<IntBuffer> format = PixelFormat.getIntArgbPreInstance();
+
+  /**
+   * Pixels converted to rgb representation.
+   */
+  private final int[] pixels;
 
   //
   //
@@ -46,6 +53,8 @@ public abstract class JC64ScreenComponent extends JC64Component {
 
     _offset = offset;
     _lineLength = lineLength;
+
+    pixels = new int[width * height];
   }
 
   /**
@@ -56,6 +65,44 @@ public abstract class JC64ScreenComponent extends JC64Component {
   protected void updateImageData(byte[] imageData) {
     assert imageData != null : "Precondition: imageData != null";
 
-    getPixelWriter().setPixels(0, 0, getImageWidth(), getImageHeight(), format, imageData, _offset, _lineLength);
+    int[] colors = C64Color.colorsAsArgb();
+    for (int p = 0, i = _offset, row = 0; row < getImageHeight(); row++) {
+      for (int column = 0; column < getImageWidth(); column++) {
+        pixels[p++] = colors[imageData[i++]];
+      }
+      i += _lineLength - getImageWidth();
+    }
+
+    getPixelWriter().setPixels(0, 0, getImageWidth(), getImageHeight(), format, pixels, 0, getImageWidth());
+  }
+
+  //
+  // test
+  //
+
+  /**
+   * Start a small demo app for this control.
+   */
+  public static void main(String[] args) {
+    TestApp.launch(TestApp.class);
+  }
+
+  /**
+   * Demo app for this control.
+   */
+  public static class TestApp extends Application {
+    @Override
+    public void start(Stage stage) throws Exception {
+      JC64ScreenComponent screen = new JC64ScreenComponent(0, 160, 160, 160, 1) {
+      };
+      byte[] data = new byte[screen.getImageWidth() * screen.getImageHeight()];
+      for (int i = 0; i < data.length; i++) {
+        data[i] = (byte) ((i / 1600) & 0x0F);
+      }
+      screen.updateImageData(data);
+
+      stage.setScene(new Scene(screen, screen.getWidth(), screen.getHeight()));
+      stage.show();
+    }
   }
 }
