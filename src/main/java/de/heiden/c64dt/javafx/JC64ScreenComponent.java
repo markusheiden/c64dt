@@ -31,7 +31,7 @@ public abstract class JC64ScreenComponent extends JC64Component {
   private final PixelFormat<IntBuffer> format = PixelFormat.getIntArgbPreInstance();
 
   /**
-   * Pixels converted to rgb representation.
+   * Pixels converted to argb representation.
    */
   private final int[] pixels;
 
@@ -66,11 +66,13 @@ public abstract class JC64ScreenComponent extends JC64Component {
     assert imageData != null : "Precondition: imageData != null";
 
     int[] colors = C64Color.colorsAsArgb();
+    int lineOffset = _lineLength - getImageWidth();
+
     for (int p = 0, i = _offset, row = 0; row < getImageHeight(); row++) {
       for (int column = 0; column < getImageWidth(); column++) {
         pixels[p++] = colors[imageData[i++]];
       }
-      i += _lineLength - getImageWidth();
+      i += lineOffset;
     }
 
     getPixelWriter().setPixels(0, 0, getImageWidth(), getImageHeight(), format, pixels, 0, getImageWidth());
