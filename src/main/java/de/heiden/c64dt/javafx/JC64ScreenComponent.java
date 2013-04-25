@@ -35,6 +35,11 @@ public abstract class JC64ScreenComponent extends JC64Component {
    */
   private final int[] pixels;
 
+  /**
+   * C64 colors in argb representation.
+   */
+  private static final int[] COLOR = C64Color.colorsAsArgb();
+
   //
   //
   //
@@ -65,12 +70,11 @@ public abstract class JC64ScreenComponent extends JC64Component {
   protected void updateImageData(byte[] imageData) {
     assert imageData != null : "Precondition: imageData != null";
 
-    int[] colors = C64Color.colorsAsArgb();
     int lineOffset = _lineLength - getImageWidth();
 
     for (int p = 0, i = _offset, row = 0; row < getImageHeight(); row++) {
       for (int column = 0; column < getImageWidth(); column++) {
-        pixels[p++] = colors[imageData[i++]];
+        pixels[p++] = COLOR[imageData[i++]];
       }
       i += lineOffset;
     }
