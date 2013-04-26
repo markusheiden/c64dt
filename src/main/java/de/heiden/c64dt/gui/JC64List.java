@@ -124,7 +124,7 @@ public class JC64List extends JList<String> {
    * @param foreground foreground color index
    */
   public void setForeground(int foreground) {
-    setForeground(C64Color.values()[foreground]);
+    setForeground(SwingColors.COLOR[foreground]);
   }
 
   /**
@@ -133,7 +133,7 @@ public class JC64List extends JList<String> {
    * @param foreground foreground color
    */
   public void setForeground(C64Color foreground) {
-    super.setForeground(foreground.getColor());
+    setForeground(foreground.ordinal());
   }
 
   /**
@@ -142,7 +142,7 @@ public class JC64List extends JList<String> {
    * @param background background color index
    */
   public void setBackground(int background) {
-    setBackground(C64Color.values()[background]);
+    setBackground(SwingColors.COLOR[background]);
   }
 
   /**
@@ -151,7 +151,7 @@ public class JC64List extends JList<String> {
    * @param background background color
    */
   public void setBackground(C64Color background) {
-    super.setBackground(background.getColor());
+    setBackground(background.ordinal());
   }
 
   //

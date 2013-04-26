@@ -8,6 +8,22 @@ import java.awt.image.MemoryImageSource;
  * Base class for component displaying c64 indexed color content.
  */
 public abstract class JC64ScreenComponent extends JC64Component {
+  //
+  // attributes
+  //
+
+  protected int _foreground;
+  protected int _background;
+
+  private final int _offset;
+  private final int _lineLength;
+  private final ColorModel _colorModel;
+  private byte[] _imageData;
+
+  //
+  //
+  //
+
   /**
    * Constructor.
    *
@@ -32,15 +48,10 @@ public abstract class JC64ScreenComponent extends JC64Component {
     _imageSource.setFullBufferUpdates(true);
   }
 
-  /**
-   * Set foreground color.
-   *
-   * @param foreground foreground color
-   */
   @Override
-  public void setForeground(C64Color foreground) {
-    _foreground = (byte) foreground.ordinal();
-    super.setForeground(foreground.getColor());
+  public void setForeground(int foreground) {
+    _foreground = foreground;
+    super.setForeground(SwingColors.COLOR[foreground]);
   }
 
   @Override
@@ -48,15 +59,10 @@ public abstract class JC64ScreenComponent extends JC64Component {
     throw new UnsupportedOperationException("RGB colors not supported. Use C64 colors instead.");
   }
 
-  /**
-   * Set background color.
-   *
-   * @param background background color
-   */
   @Override
-  public void setBackground(C64Color background) {
-    _background = background.ordinal();
-    super.setBackground(background.getColor());
+  public void setBackground(int background) {
+    _background = background;
+    super.setBackground(SwingColors.COLOR[background]);
   }
 
   @Override
@@ -83,16 +89,4 @@ public abstract class JC64ScreenComponent extends JC64Component {
     _imageData = imageData;
     _imageSource.newPixels(imageData, _colorModel, _offset, _lineLength);
   }
-
-  //
-  // attributes
-  //
-
-  protected int _foreground;
-  protected int _background;
-
-  private final int _offset;
-  private final int _lineLength;
-  private final ColorModel _colorModel;
-  private byte[] _imageData;
 }

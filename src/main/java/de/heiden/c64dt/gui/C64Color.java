@@ -1,7 +1,5 @@
 package de.heiden.c64dt.gui;
 
-import java.awt.*;
-
 /**
  * Color constants in correct order.
  * <p/>
@@ -25,7 +23,20 @@ public enum C64Color {
   LIGHT_BLUE(0x6C, 0x5E, 0xB5),
   LIGHT_GRAY(0x95, 0x95, 0x95);
 
-  private final Color color;
+  /**
+   * Red as byte.
+   */
+  private final int r;
+
+  /**
+   * Green as byte.
+   */
+  private final int g;
+
+  /**
+   * Blue as byte.
+   */
+  private final int b;
 
   /**
    * Constructor.
@@ -35,13 +46,29 @@ public enum C64Color {
    * @param b blue
    */
   private C64Color(int r, int g, int b) {
-    this.color = new Color(r, g, b);
+    this.r = r;
+    this.g = g;
+    this.b = b;
   }
 
   /**
-   * Color.
+   * Red.
    */
-  public Color getColor() {
-    return color;
+  public int getRed() {
+    return r;
+  }
+
+  /**
+   * Green.
+   */
+  public int getGreen() {
+    return g;
+  }
+
+  /**
+   * Blue.
+   */
+  public int getBlue() {
+    return b;
   }
 }

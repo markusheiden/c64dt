@@ -1,5 +1,6 @@
 package de.heiden.c64dt.javafx;
 
+import de.heiden.c64dt.gui.C64Color;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.PixelFormat;
@@ -38,7 +39,15 @@ public abstract class JC64ScreenComponent extends JC64Component {
   /**
    * C64 colors in argb representation.
    */
-  private static final int[] COLOR = C64Color.colorsAsArgb();
+  private static final int[] COLOR = new int[C64Color.values().length];
+
+  static {
+    C64Color[] colors = C64Color.values();
+    for (int i = 0; i < colors.length; i++) {
+      C64Color color = colors[i];
+      COLOR[i] = (0xFF << 24) | (color.getRed() << 16) | (color.getGreen() << 8) | color.getBlue();
+    }
+  }
 
   //
   //

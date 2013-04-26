@@ -1,6 +1,5 @@
 package de.heiden.c64dt.gui;
 
-import java.awt.*;
 import java.awt.image.IndexColorModel;
 
 /**
@@ -18,7 +17,7 @@ public class C64IndexColorModel extends IndexColorModel {
     G = new byte[colors.length];
     B = new byte[colors.length];
     for (int i = 0; i < colors.length; i++) {
-      Color color = colors[i].getColor();
+      C64Color color = colors[i];
       R[i] = (byte) color.getRed();
       G[i] = (byte) color.getGreen();
       B[i] = (byte) color.getBlue();

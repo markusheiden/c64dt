@@ -89,7 +89,7 @@ public abstract class JC64Component extends JComponent {
    * @param foreground foreground color index
    */
   public void setForeground(int foreground) {
-    setForeground(C64Color.values()[foreground]);
+    setForeground(SwingColors.COLOR[foreground]);
   }
 
   /**
@@ -98,7 +98,7 @@ public abstract class JC64Component extends JComponent {
    * @param foreground foreground color
    */
   public void setForeground(C64Color foreground) {
-    super.setForeground(foreground.getColor());
+    setForeground(foreground.ordinal());
   }
 
   /**
@@ -107,7 +107,7 @@ public abstract class JC64Component extends JComponent {
    * @param background background color index
    */
   public void setBackground(int background) {
-    setBackground(C64Color.values()[background]);
+    setBackground(SwingColors.COLOR[background]);
   }
 
   /**
@@ -116,7 +116,7 @@ public abstract class JC64Component extends JComponent {
    * @param background background color
    */
   public void setBackground(C64Color background) {
-    super.setBackground(background.getColor());
+    setBackground(background.ordinal());
   }
 
   @Override

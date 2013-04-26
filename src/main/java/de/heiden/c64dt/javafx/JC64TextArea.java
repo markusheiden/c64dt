@@ -1,6 +1,7 @@
 package de.heiden.c64dt.javafx;
 
 import de.heiden.c64dt.charset.C64Charset;
+import de.heiden.c64dt.gui.C64Color;
 import de.heiden.c64dt.util.ResourceLoader;
 import javafx.application.Application;
 import javafx.scene.Scene;

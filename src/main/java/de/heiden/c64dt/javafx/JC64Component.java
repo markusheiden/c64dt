@@ -1,5 +1,6 @@
 package de.heiden.c64dt.javafx;
 
+import de.heiden.c64dt.gui.C64Color;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
@@ -122,7 +123,7 @@ public abstract class JC64Component extends Region {
    * @param foreground foreground color index
    */
   public void setForegroundColor(int foreground) {
-    setForegroundColor(C64Color.values()[foreground]);
+    _foreground = JavaFXColors.COLOR[foreground];
   }
 
   /**
@@ -131,7 +132,7 @@ public abstract class JC64Component extends Region {
    * @param foreground foreground color
    */
   public void setForegroundColor(C64Color foreground) {
-    _foreground = foreground.getColor();
+    setForegroundColor(foreground.ordinal());
   }
 
   /**
@@ -147,7 +148,7 @@ public abstract class JC64Component extends Region {
    * @param background background color index
    */
   public void setBackgroundColor(int background) {
-    setBackgroundColor(C64Color.values()[background]);
+    _background = JavaFXColors.COLOR[background];
   }
 
   /**
@@ -156,6 +157,6 @@ public abstract class JC64Component extends Region {
    * @param background background color
    */
   public void setBackgroundColor(C64Color background) {
-    _background = background.getColor();
+    setBackgroundColor(background.ordinal());
   }
 }
