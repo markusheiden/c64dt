@@ -63,7 +63,7 @@ public enum C64Color {
    * Integer representation of color.
    */
   public int toArgb() {
-    return (0xFF << 24) + (r << 16) + (g << 8) + b;
+    return (0xFF << 24) | (r << 16) | (g << 8) | b;
   }
 
   /**
