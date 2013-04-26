@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
 /**
  * Component for displaying C64 text.
  */
-public class JC64TextArea extends JC64Component {
+public class C64TextArea extends C64Component {
   /**
    * Row height in pixel.
    */
@@ -51,7 +51,7 @@ public class JC64TextArea extends JC64Component {
    * @param factor zoom factor
    * @param resizable Is the backing image resizable?
    */
-  public JC64TextArea(int columns, int rows, double factor, boolean resizable) {
+  public C64TextArea(int columns, int rows, double factor, boolean resizable) {
     super(columns * COLUMN_WIDTH, rows * ROW_HEIGHT, factor, resizable);
 
     _columns = columns;
@@ -290,7 +290,7 @@ public class JC64TextArea extends JC64Component {
   public static class TestApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-      JC64TextArea text = new JC64TextArea(40, 25, 2, true);
+      C64TextArea text = new C64TextArea(40, 25, 2, true);
 
       text.setForegroundColor(C64Color.LIGHT_BLUE);
       text.setBackgroundColor(C64Color.BLUE);

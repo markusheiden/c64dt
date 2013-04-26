@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 /**
  * Base class for component displaying c64 content.
  */
-public abstract class JC64Component extends Region {
+public abstract class C64Component extends Region {
   /**
    * Width,
    */
@@ -54,7 +54,7 @@ public abstract class JC64Component extends Region {
    * @param factor zoom factor
    * @param resizable Is the backing image resizable?
    */
-  protected JC64Component(int width, int height, double factor, boolean resizable) {
+  protected C64Component(int width, int height, double factor, boolean resizable) {
     _height = height;
     _width = width;
     _factor = factor;

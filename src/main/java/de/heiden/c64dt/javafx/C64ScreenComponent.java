@@ -11,7 +11,7 @@ import java.nio.IntBuffer;
 /**
  * Base class for component displaying c64 indexed color content.
  */
-public abstract class JC64ScreenComponent extends JC64Component {
+public abstract class C64ScreenComponent extends C64Component {
   //
   // attributes
   //
@@ -62,7 +62,7 @@ public abstract class JC64ScreenComponent extends JC64Component {
    * @param height height in pixel
    * @param factor zoom factor
    */
-  protected JC64ScreenComponent(int offset, int width, int lineLength, int height, double factor) {
+  protected C64ScreenComponent(int offset, int width, int lineLength, int height, double factor) {
     super(width, height, factor, false);
 
     _offset = offset;
@@ -108,7 +108,7 @@ public abstract class JC64ScreenComponent extends JC64Component {
   public static class TestApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-      JC64ScreenComponent screen = new JC64ScreenComponent(0, 160, 160, 160, 1) {
+      C64ScreenComponent screen = new C64ScreenComponent(0, 160, 160, 160, 1) {
       };
       byte[] data = new byte[screen.getImageWidth() * screen.getImageHeight()];
       for (int i = 0; i < data.length; i++) {
