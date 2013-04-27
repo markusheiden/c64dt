@@ -70,10 +70,14 @@ public abstract class C64Component extends Region {
     }
 
     _view = new ImageView(new WritableImage(_width, _height));
+    // Translate image to start at 0, 0 after scaling
     _view.setTranslateX(_width * (_factor - 1) / 2);
     _view.setTranslateY(_height * (_factor - 1) / 2);
+    // Scale
     _view.setScaleX(_factor);
     _view.setScaleY(_factor);
+    // Avoid interpolation of scaled pixels
+    _view.setSmooth(false);
     getChildren().add(_view);
   }
 
