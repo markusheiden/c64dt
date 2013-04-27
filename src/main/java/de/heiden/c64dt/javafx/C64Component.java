@@ -62,6 +62,12 @@ public abstract class C64Component extends Region {
 
     setWidth(Math.ceil(width * factor));
     setHeight(Math.ceil(height * factor));
+    if (!resizable) {
+      setMinWidth(getWidth());
+      setMinHeight(getHeight());
+      setMaxWidth(getWidth());
+      setMaxHeight(getHeight());
+    }
 
     _view = new ImageView(new WritableImage(_width, _height));
     _view.setTranslateX(_width * (_factor - 1) / 2);
