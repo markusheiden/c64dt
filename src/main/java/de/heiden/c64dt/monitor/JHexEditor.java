@@ -7,7 +7,6 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -32,21 +31,18 @@ public class JHexEditor extends JTable {
     setRowSelectionAllowed(false);
     setColumnSelectionAllowed(false);
     setCellSelectionEnabled(true);
-    setDefaultRenderer(byte[].class, new TableCellRenderer() {
-      @Override
-      public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        byte[] text = (byte[]) value;
-        JC64TextArea renderer = new JC64TextArea(text.length, 1, 2, false);
-        if (isSelected) {
-          renderer.setBackground(getSelectionBackground());
-          renderer.setForeground(getSelectionForeground());
-        } else {
-          renderer.setBackground(getBackground());
-          renderer.setForeground(getForeground());
-        }
-        renderer.setText(0, 0, text);
-        return renderer;
+    setDefaultRenderer(byte[].class, (table, value, isSelected, hasFocus, row, column) -> {
+      byte[] text = (byte[]) value;
+      JC64TextArea renderer = new JC64TextArea(text.length, 1, 2, false);
+      if (isSelected) {
+        renderer.setBackground(getSelectionBackground());
+        renderer.setForeground(getSelectionForeground());
+      } else {
+        renderer.setBackground(getBackground());
+        renderer.setForeground(getForeground());
       }
+      renderer.setText(0, 0, text);
+      return renderer;
     });
     setDefaultEditor(byte[].class, new TableCellEditor() {
       private List<CellEditorListener> listeners = new ArrayList<>();

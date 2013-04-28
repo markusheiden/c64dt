@@ -7,8 +7,6 @@ import de.heiden.c64dt.assembler.gui.CodeTableModel;
 import de.heiden.c64dt.assembler.gui.util.TableUtil;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -37,12 +35,7 @@ public class GotoActions {
 
     gotoAction = createGotoAction();
 
-    table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-      @Override
-      public void valueChanged(ListSelectionEvent listSelectionEvent) {
-        gotoAction.setEnabled(table.getSelectedRowCount() == 1);
-      }
-    });
+    table.getSelectionModel().addListSelectionListener(listSelectionEvent -> gotoAction.setEnabled(table.getSelectedRowCount() == 1));
 
     table.addMouseListener(new MouseAdapter() {
       @Override

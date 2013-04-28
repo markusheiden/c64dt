@@ -7,8 +7,6 @@ import de.heiden.c64dt.assembler.command.ICommand;
 import de.heiden.c64dt.assembler.gui.CodeTableModel;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 
 /**
@@ -53,15 +51,12 @@ public class CodeTypeActions {
     markAsDataAction = createMarkAsDataAction();
     markAsAbsoluteAddressAction = createMarkAsAbsoluteAddressAction();
 
-    table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-      @Override
-      public void valueChanged(ListSelectionEvent listSelectionEvent) {
-        boolean isSelection = table.getSelectedRowCount() > 0;
-        markAsUnknownAction.setEnabled(isSelection);
-        markAsCodeAction.setEnabled(isSelection);
-        markAsDataAction.setEnabled(isSelection);
-        markAsAbsoluteAddressAction.setEnabled(isSelection);
-      }
+    table.getSelectionModel().addListSelectionListener(listSelectionEvent -> {
+      boolean isSelection = table.getSelectedRowCount() > 0;
+      markAsUnknownAction.setEnabled(isSelection);
+      markAsCodeAction.setEnabled(isSelection);
+      markAsDataAction.setEnabled(isSelection);
+      markAsAbsoluteAddressAction.setEnabled(isSelection);
     });
   }
 

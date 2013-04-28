@@ -11,8 +11,6 @@ import org.springframework.util.Assert;
 import javax.annotation.PostConstruct;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -156,91 +154,79 @@ public class ReassemblerView extends JFrame {
 
     fileOpen = new JMenuItem("Reassemble...");
     file.add(fileOpen);
-    fileOpen.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent actionEvent) {
-        try {
-          JFileChooser chooser = new JFileChooser();
-          int result = chooser.showOpenDialog(ReassemblerView.this);
-          if (result == JFileChooser.APPROVE_OPTION) {
-            // TODO mh: ask for start address
-            currentFile = null;
-            reassembler.reassemble(0x8000, new FileInputStream(chooser.getSelectedFile()));
-          }
-        } catch (IOException e) {
-          logger.error("Failed to open file", e);
-          use(new Reassembler());
-          JOptionPane.showMessageDialog(ReassemblerView.this,
-            "Failed to open file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
+    fileOpen.addActionListener(actionEvent -> {
+      try {
+        JFileChooser chooser = new JFileChooser();
+        int result = chooser.showOpenDialog(ReassemblerView.this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+          // TODO mh: ask for start address
+          currentFile = null;
+          reassembler.reassemble(0x8000, new FileInputStream(chooser.getSelectedFile()));
         }
-        updateGUI();
+      } catch (IOException e) {
+        logger.error("Failed to open file", e);
+        use(new Reassembler());
+        JOptionPane.showMessageDialog(ReassemblerView.this,
+          "Failed to open file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
       }
+      updateGUI();
     });
 
     fileLoad = new JMenuItem("Load...");
     file.add(fileLoad);
-    fileLoad.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent actionEvent) {
-        try {
-          JFileChooser chooser = new JFileChooser();
-          if (currentFile != null) {
-            chooser.setCurrentDirectory(currentFile.getParentFile());
-          }
-          int result = chooser.showOpenDialog(ReassemblerView.this);
-          if (result == JFileChooser.APPROVE_OPTION) {
-            use(XmlUtil.unmarshal(new FileInputStream(chooser.getSelectedFile()), Reassembler.class));
-            currentFile = chooser.getSelectedFile();
-          }
-        } catch (Exception e) {
-          logger.error("Failed to open file", e);
-          use(new Reassembler());
-          JOptionPane.showMessageDialog(ReassemblerView.this,
-            "Failed to open file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
+    fileLoad.addActionListener(actionEvent -> {
+      try {
+        JFileChooser chooser = new JFileChooser();
+        if (currentFile != null) {
+          chooser.setCurrentDirectory(currentFile.getParentFile());
         }
-        updateGUI();
+        int result = chooser.showOpenDialog(ReassemblerView.this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+          use(XmlUtil.unmarshal(new FileInputStream(chooser.getSelectedFile()), Reassembler.class));
+          currentFile = chooser.getSelectedFile();
+        }
+      } catch (Exception e) {
+        logger.error("Failed to open file", e);
+        use(new Reassembler());
+        JOptionPane.showMessageDialog(ReassemblerView.this,
+          "Failed to open file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
       }
+      updateGUI();
     });
 
     fileSave = new JMenuItem("Save");
     file.add(fileSave);
-    fileSave.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent actionEvent) {
-        try {
-          XmlUtil.marshal(reassembler, new FileOutputStream(currentFile));
-        } catch (Exception e) {
-          logger.error("Failed to save file", e);
-          JOptionPane.showMessageDialog(ReassemblerView.this,
-            "Failed to save file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
-        }
-        updateGUI();
+    fileSave.addActionListener(actionEvent -> {
+      try {
+        XmlUtil.marshal(reassembler, new FileOutputStream(currentFile));
+      } catch (Exception e) {
+        logger.error("Failed to save file", e);
+        JOptionPane.showMessageDialog(ReassemblerView.this,
+          "Failed to save file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
       }
+      updateGUI();
     });
 
     fileSaveAs = new JMenuItem("Save as...");
     file.add(fileSaveAs);
-    fileSaveAs.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent actionEvent) {
-        try {
-          JFileChooser chooser = new JFileChooser();
-          if (currentFile != null) {
-            chooser.setCurrentDirectory(currentFile.getParentFile());
-            chooser.setSelectedFile(currentFile);
-          }
-          int result = chooser.showSaveDialog(ReassemblerView.this);
-          if (result == JFileChooser.APPROVE_OPTION) {
-            XmlUtil.marshal(reassembler, new FileOutputStream(chooser.getSelectedFile()));
-            currentFile = chooser.getSelectedFile();
-          }
-        } catch (Exception e) {
-          logger.error("Failed to save file", e);
-          JOptionPane.showMessageDialog(ReassemblerView.this,
-            "Failed to save file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
+    fileSaveAs.addActionListener(actionEvent -> {
+      try {
+        JFileChooser chooser = new JFileChooser();
+        if (currentFile != null) {
+          chooser.setCurrentDirectory(currentFile.getParentFile());
+          chooser.setSelectedFile(currentFile);
         }
-        updateGUI();
+        int result = chooser.showSaveDialog(ReassemblerView.this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+          XmlUtil.marshal(reassembler, new FileOutputStream(chooser.getSelectedFile()));
+          currentFile = chooser.getSelectedFile();
+        }
+      } catch (Exception e) {
+        logger.error("Failed to save file", e);
+        JOptionPane.showMessageDialog(ReassemblerView.this,
+          "Failed to save file:\n" + e.getMessage(), "File error", JOptionPane.ERROR_MESSAGE);
       }
+      updateGUI();
     });
 
     return menuBar;
