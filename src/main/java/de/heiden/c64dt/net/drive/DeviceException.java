@@ -6,7 +6,7 @@ import org.springframework.util.Assert;
  * Exception for device operations.
  */
 public class DeviceException extends Exception {
-  private Error error;
+  private final Error error;
 
   public DeviceException(Error error) {
     super(error.toString());

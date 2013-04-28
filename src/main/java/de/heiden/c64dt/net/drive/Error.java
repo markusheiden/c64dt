@@ -22,9 +22,9 @@ public enum Error {
 
   private static final NumberFormat FORMAT = new DecimalFormat("##");
 
-  private byte code;
-  private String description;
-  private byte result;
+  private final byte code;
+  private final String description;
+  private final byte result;
 
   /**
    * Constructor.

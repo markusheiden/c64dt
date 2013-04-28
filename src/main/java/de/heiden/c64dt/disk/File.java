@@ -8,11 +8,11 @@ import org.springframework.util.Assert;
  * File implementation.
  */
 public class File implements IFile {
-  private FileMode mode;
-  private int track;
-  private int sector;
-  private byte[] name;
-  private int size;
+  private final FileMode mode;
+  private final int track;
+  private final int sector;
+  private final byte[] name;
+  private final int size;
 
   /**
    * Constructor.

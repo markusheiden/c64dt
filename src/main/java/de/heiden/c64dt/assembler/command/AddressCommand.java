@@ -17,7 +17,7 @@ public class AddressCommand extends AbstractCommand {
   /**
    * Referenced absolute code address.
    */
-  private int address;
+  private final int address;
 
   /**
    * Command for absolute address.

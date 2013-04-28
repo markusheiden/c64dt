@@ -4,10 +4,10 @@ package de.heiden.c64dt.disk;
  * Mode of a file.
  */
 public class FileMode {
-  private FileType type;
-  private boolean replaced;
-  private boolean locked;
-  private boolean closed;
+  private final FileType type;
+  private final boolean replaced;
+  private final boolean locked;
+  private final boolean closed;
 
   /**
    * Get type.

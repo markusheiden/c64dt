@@ -13,7 +13,7 @@ public class CommandIterator implements Iterator<ICommand> {
   /**
    * The command buffer to iterate.
    */
-  private CommandBuffer commands;
+  private final CommandBuffer commands;
 
   /**
    * Index of the current command / the iterator.

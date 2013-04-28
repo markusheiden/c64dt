@@ -11,7 +11,7 @@ import static de.heiden.c64dt.disk.SectorModelUtil.assertSector;
  * Reads a chain of sectors.
  */
 public class SectorIterator implements Iterator<byte[]> {
-  private IDiskImage diskImage;
+  private final IDiskImage diskImage;
   private int track;
   private int sector;
 

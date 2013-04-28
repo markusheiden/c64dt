@@ -13,12 +13,12 @@ import static de.heiden.c64dt.disk.SectorModelUtil.assertSector;
  * Abstract disk image implementation.
  */
 public abstract class AbstractDiskImage implements IDiskImage {
-  private int sides;
-  private int tracks;
-  private int tracksPerSide;
-  private boolean hasErrors;
-  private byte[][][] sectors;
-  private Error[][] errors;
+  private final int sides;
+  private final int tracks;
+  private final int tracksPerSide;
+  private final boolean hasErrors;
+  private final byte[][][] sectors;
+  private final Error[][] errors;
 
   /**
    * Constructor.

@@ -8,12 +8,12 @@ import java.util.List;
  * Directory implementation.
  */
 public class Directory implements IDirectory {
-  private byte[] name;
-  private byte[] idAndType;
-  private byte[] id;
-  private byte[] dosType;
-  private List<IFile> files;
-  private int freeBlocks;
+  private final byte[] name;
+  private final byte[] idAndType;
+  private final byte[] id;
+  private final byte[] dosType;
+  private final List<IFile> files;
+  private final int freeBlocks;
 
   /**
    * Constructor.

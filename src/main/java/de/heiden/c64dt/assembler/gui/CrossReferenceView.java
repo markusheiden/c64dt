@@ -24,7 +24,7 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
   /**
    * Model.
    */
-  private CrossReferenceTableModel model;
+  private final CrossReferenceTableModel model;
 
   /**
    * Spring event publisher.

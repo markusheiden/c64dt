@@ -10,7 +10,7 @@ public abstract class AbstractLabel implements ILabel {
   /**
    * Absolute address this label stands for.
    */
-  private int address;
+  private final int address;
 
   /**
    * Constructor.

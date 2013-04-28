@@ -9,9 +9,9 @@ import static de.heiden.c64dt.disk.SectorModelUtil.assertTrack;
  * Block allocation map implementation.
  */
 public class BAM implements IBAM {
-  private ISectorModel sectorModel;
-  private boolean[][] isFree;
-  private int[] freeSectors;
+  private final ISectorModel sectorModel;
+  private final boolean[][] isFree;
+  private final int[] freeSectors;
 
   public BAM(ISectorModel sectorModel) {
     Assert.notNull(sectorModel, "Precondition: sectorModel != null");

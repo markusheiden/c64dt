@@ -45,7 +45,7 @@ public class JHexEditor extends JTable {
       return renderer;
     });
     setDefaultEditor(byte[].class, new TableCellEditor() {
-      private List<CellEditorListener> listeners = new ArrayList<>();
+      private final List<CellEditorListener> listeners = new ArrayList<>();
 
       @Override
       public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, final int row, final int column) {

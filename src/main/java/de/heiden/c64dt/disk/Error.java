@@ -88,7 +88,7 @@ public enum Error {
 
   private static Map<Byte, Error> errors;
 
-  private byte error;
+  private final byte error;
 
   /**
    * Get error code.

@@ -19,7 +19,7 @@ public abstract class AbstractPath implements IPath {
   private static final byte[] CURRENT_DIR_PATH = encode(".");
   private static final byte[] DIRECTORY_NAME = encode("$");
 
-  private IPath parent;
+  private final IPath parent;
 
   /**
    * Constructor.

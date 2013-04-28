@@ -12,7 +12,7 @@ import static de.heiden.c64dt.disk.SectorModelUtil.assertSector;
  * Reads a file from a chain of sectors.
  */
 public class SectorInputStream extends InputStream {
-  private IDiskImage diskImage;
+  private final IDiskImage diskImage;
   private int track;
   private int sector;
 

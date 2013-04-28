@@ -68,7 +68,7 @@ public enum FileType {
   private static Map<Byte, FileType> types;
   private static Map<String, FileType> extensions;
 
-  private byte code;
+  private final byte code;
   private String extension;
 
   /**
