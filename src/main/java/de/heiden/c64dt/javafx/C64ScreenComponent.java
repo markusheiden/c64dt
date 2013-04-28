@@ -85,6 +85,7 @@ public abstract class C64ScreenComponent extends C64Component {
     final int height = getImageHeight();
     final int lineOffset = _lineLength - width;
 
+    // convert color indexes to argb colors
     for (int p = 0, d = _offset, row = 0; row < height; row++) {
       for (int column = 0; column < width; column++) {
         pixels[p++] = COLOR[imageData[d++]];
@@ -93,12 +94,7 @@ public abstract class C64ScreenComponent extends C64Component {
     }
 
     final PixelWriter writer = getPixelWriter();
-    Platform.runLater(new Runnable() {
-      @Override
-      public void run() {
-        writer.setPixels(0, 0, width, height, format, pixels, 0, width);
-      }
-    });
+    Platform.runLater(() -> writer.setPixels(0, 0, width, height, format, pixels, 0, width));
   }
 
   //
