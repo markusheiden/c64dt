@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Directory.
  */
-public class JDirectory extends JList {
+public class JDirectory extends JList<Object> {
   private static final int columns = 28;
   private int fontSize = 8;
 
