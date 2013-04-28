@@ -18,9 +18,9 @@ public class TextUtil {
   /**
    * Strip trailing 0xA0 from file names etc.
    *
-   * @param text text in C64 encoding
-   * @param pos
-   * @param length
+   * @param text Text buffer in C64 encoding
+   * @param pos Start index of text
+   * @param length Length of text
    */
   public static byte[] strip(byte[] text, int pos, int length) {
     Assert.notNull(text, "Precondition: text != null");

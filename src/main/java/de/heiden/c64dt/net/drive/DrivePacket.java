@@ -22,7 +22,7 @@ public class DrivePacket {
   /**
    * Constructor.
    *
-   * @param data
+   * @param data Data
    */
   public DrivePacket(byte[] data) {
     this.data = data;

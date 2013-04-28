@@ -149,7 +149,7 @@ public enum OpcodeMode {
   /**
    * Compute absolute address.
    *
-   * @param pc
+   * @param pc Program counter
    */
   public int getAddress(int pc, int argument) {
     Assert.isTrue(isAddress(), "Precondition: isAddress()");

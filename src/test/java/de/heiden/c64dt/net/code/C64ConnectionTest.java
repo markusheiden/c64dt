@@ -9,7 +9,7 @@ import java.net.InetAddress;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Test for {@linkC64ConnectionTest}.
+ * Test for {@link C64Connection}.
  */
 public class C64ConnectionTest {
   @Test

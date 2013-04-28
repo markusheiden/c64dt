@@ -14,7 +14,6 @@ public class XmlUtil {
    *
    * @param object Object
    * @param stream Output stream to write to
-   * @return Xml representation, needs to be imported
    */
   public static void marshal(Object object, OutputStream stream) throws Exception {
     JAXB.marshal(object, stream);

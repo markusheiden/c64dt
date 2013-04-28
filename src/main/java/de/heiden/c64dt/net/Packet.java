@@ -12,7 +12,7 @@ public class Packet {
   /**
    * Constructor for empty packet.
    *
-   * @param max
+   * @param max Maximum packet size
    */
   public Packet(int max) {
     this.data = new byte[max];
@@ -22,7 +22,7 @@ public class Packet {
   /**
    * Constructor for packet with given data.
    *
-   * @param data
+   * @param data Data
    */
   public Packet(byte[] data) {
     this.data = data;

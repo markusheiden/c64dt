@@ -55,7 +55,7 @@ public class Path extends AbstractPath {
   /**
    * Trim filename length to max. 16 characters.
    *
-   * @param filename
+   * @param filename File name
    */
   protected String trimTo16(String filename) {
     if (filename.length() <= 16) {
