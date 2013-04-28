@@ -45,7 +45,7 @@ public class AddressCommand extends AbstractCommand {
     Assert.notNull(buffer, "Precondition: buffer != null");
 
     ILabel label = buffer.getLabel(address);
-    Assert.isTrue(label.getAddress() == address, "Check: label.getAddress() == address");
+    Assert.isTrue(label == null || label.getAddress() == address, "Check: label.getAddress() == address");
     return "!WORD " + (label != null ? label.toString(address) : hexWord(address));
   }
 

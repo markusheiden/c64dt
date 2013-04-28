@@ -286,7 +286,7 @@ public class JC64TextArea extends JC64CommonComponent {
 
   public static void main(String[] args) {
     JFrame frame = new JFrame();
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
     JC64TextArea text = new JC64TextArea(40, 25, 2, false);
     frame.add(text);

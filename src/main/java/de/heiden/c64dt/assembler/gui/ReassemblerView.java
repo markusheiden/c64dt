@@ -52,7 +52,7 @@ public class ReassemblerView extends JFrame {
    */
   public ReassemblerView() {
     setTitle("C64 Reassembler");
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
   }
 
   @PostConstruct

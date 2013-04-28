@@ -211,7 +211,7 @@ public class JHexEditor extends JTable {
     JFrame frame = new JFrame();
     frame.getContentPane().add(editor);
     frame.pack();
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     frame.setVisible(true);
   }
 }

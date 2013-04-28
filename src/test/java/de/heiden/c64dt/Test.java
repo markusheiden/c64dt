@@ -32,7 +32,7 @@ public class Test {
     JFrame frame = new JFrame();
     frame.getContentPane().add(browser);
     frame.pack();
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     frame.setVisible(true);
   }
 }

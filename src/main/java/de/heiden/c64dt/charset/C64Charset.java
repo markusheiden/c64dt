@@ -38,7 +38,7 @@ public class C64Charset extends AbstractCharset {
   @Override
   public boolean contains(Charset cs) {
     return cs instanceof C64Charset &&
-      !upper || ((C64Charset) cs).upper;
+      (!upper || ((C64Charset) cs).upper);
   }
 
   @Override

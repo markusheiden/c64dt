@@ -160,7 +160,7 @@ public class JC64List extends JList<String> {
 
   public static void main(String[] args) {
     JFrame frame = new JFrame();
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
     DefaultListModel<String> model = new DefaultListModel<>();
     model.add(0, "Test1 blah");
