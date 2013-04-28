@@ -17,7 +17,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
    * @param address start address of the code
    * @param length length of the code
    */
-  public AbstractCodeBuffer(int address, int length) {
+  protected AbstractCodeBuffer(int address, int length) {
     Assert.isTrue(length >= 0, "Precondition: length >= 0");
 
     this.address = address;

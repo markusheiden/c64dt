@@ -27,7 +27,7 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param tracks number of tracks
    * @param hasErrors support error informations?
    */
-  public AbstractDiskImage(int sides, int tracks, boolean hasErrors) {
+  protected AbstractDiskImage(int sides, int tracks, boolean hasErrors) {
     Assert.isTrue(sides >= 1 && sides <= 2, "Precondition: sides >= 1 && sides <= 2");
     Assert.isTrue(tracks >= 0, "Precondition: tracks >= 0");
     Assert.isTrue(tracks % sides == 0, "Precondition: tracks % sides == 0");
