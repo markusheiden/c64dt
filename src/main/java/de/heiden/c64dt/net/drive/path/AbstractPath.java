@@ -16,7 +16,7 @@ import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
 public abstract class AbstractPath implements IPath {
   private static final byte SEPARATOR = encode('/');
   private static final byte[] PARENT_DIR_PATH = encode("..");
-  private static final byte[] CURRENTT_DIR_PATH = encode(".");
+  private static final byte[] CURRENT_DIR_PATH = encode(".");
   private static final byte[] DIRECTORY_NAME = encode("$");
 
   private IPath parent;
@@ -75,7 +75,7 @@ public abstract class AbstractPath implements IPath {
       byte[] tail = new byte[path.length - separatorPos - 1];
       System.arraycopy(path, separatorPos + 1, tail, 0, tail.length);
 
-      if (Arrays.equals(head, CURRENTT_DIR_PATH)) {
+      if (Arrays.equals(head, CURRENT_DIR_PATH)) {
         result = changePath(tail);
       } else if (Arrays.equals(head, PARENT_DIR_PATH)) {
         result = getParent().changePath(tail);

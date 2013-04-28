@@ -34,12 +34,12 @@ public abstract class C64ScreenComponent extends C64Component {
   private final PixelFormat<IntBuffer> format = PixelFormat.getIntArgbPreInstance();
 
   /**
-   * Pixels converted to argb representation.
+   * Pixels converted to ARGB representation.
    */
   private final int[] pixels;
 
   /**
-   * C64 colors in argb representation.
+   * C64 colors in ARGB representation.
    */
   private static final int[] COLOR = new int[C64Color.values().length];
 
@@ -85,7 +85,7 @@ public abstract class C64ScreenComponent extends C64Component {
     final int height = getImageHeight();
     final int lineOffset = _lineLength - width;
 
-    // convert color indexes to argb colors
+    // convert color indexes to ARGB colors
     for (int p = 0, d = _offset, row = 0; row < height; row++) {
       for (int column = 0; column < width; column++) {
         pixels[p++] = COLOR[imageData[d++]];
