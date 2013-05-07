@@ -1,0 +1,46 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'de.heiden'
+archivesBaseName = 'c64dt'
+version = '1.0-SNAPSHOT'
+
+def spring_version = '4.0.0.BUILD-SNAPSHOT'
+
+repositories {
+  mavenCentral()
+  maven {
+    url = 'http://repo.springsource.org/snapshot'
+  }
+}
+
+dependencies {
+  compile(group: 'ch.qos.logback', name: 'logback-classic', version: '1.+')
+  runtime(group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.+')
+  compile(group: 'org.springframework', name: 'spring-core', version: spring_version) {
+    exclude group: 'commons-logging'
+  }
+  compile(group: 'org.springframework', name: 'spring-beans', version: spring_version)
+  compile(group: 'org.springframework', name: 'spring-context', version: spring_version)
+  testCompile(group: 'junit', name: 'junit', version: '4.+')
+}
+
+
+jar {
+  manifest {
+    attributes(
+      "Implementation-Title": "C64DT",
+      "Implementation-Version": version)
+  }
+}
+
+test {
+  // ignore failing tests
+  ignoreFailures = true
+
+  // workaround for gradle (included asm) not supporting jdk8
+  scanForTestClasses = false
+  // probably have to tweak the include and exclude patterns, depending on the naming scheme you use
+  include '**/*Test.*'
+  exclude '**/*Abstract*.*'
+}
