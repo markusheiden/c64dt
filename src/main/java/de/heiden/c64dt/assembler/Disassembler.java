@@ -1,5 +1,6 @@
 package de.heiden.c64dt.assembler;
 
+import de.heiden.c64dt.charset.C64Charset;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
@@ -15,6 +16,27 @@ import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
  * Reassembler.
  */
 public class Disassembler {
+  /**
+   * Charset.
+   */
+  private final C64Charset charset = C64Charset.LOWER;
+
+  /**
+   * BASIC commands.
+   */
+  private static final String[] BASIC = {
+    "END", "FOR", "NEXT", "DATA", "INPUT#", "INPUT", "DIM", "READ",
+    "LET", "GOTO", "RUN", "IF", "RESTORE", "GOSUB", "RETURN", "REM",
+    "STOP", "ON", "WAIT", "LOAD", "SAVE", "VERIFY", "DEF", "POKE",
+    "PRINT#", "PRINT", "CONT", "LIST", "CLR", "CMD", "SYS", "OPEN",
+    "CLOSE", "GET", "NEW", "TAB(", "TO", "FN", "SPC(", "THEN",
+    "NOT", "STOP", "+", "-", "*", "/", "^", "AND",
+    "OR", "<", "=", ">", "SGN", "INT", "ABS", "USR",
+    "FRE", "POS", "SQR", "RND", "LOG", "EXP", "COS", "SIN",
+    "TAN", "ATN", "PEEK", "LEN", "STR$", "VAL", "ASC", "CHR$",
+    "LEFT$", "RIGHT$", "MID$", "GO"
+  };
+
   /**
    * Reassemble program.
    *
@@ -60,19 +82,7 @@ public class Disassembler {
     CodeBuffer buffer = new CodeBuffer(startAddress, code);
 
     if (startAddress == 0x0801) {
-      while (true) {
-        int pc = buffer.getCurrentAddress();
-        int nextAddress = buffer.readWord();
-        if (nextAddress == 0) {
-          break;
-        }
-
-        output.append(hexWordPlain(pc));
-        output.append("          Basic command\n");
-        // TODO mh: list basic command
-        // skip basic line
-        buffer.setCurrentAddress(nextAddress);
-      }
+      list(buffer, output);
     }
 
     while (buffer.has(1)) {
@@ -80,6 +90,79 @@ public class Disassembler {
     }
 
     output.flush();
+  }
+
+  /**
+   * List BASIC program.
+   *
+   * @param buffer Code buffer
+   * @param output output for BASIC listing
+   */
+  public void list(ICodeBuffer buffer, Writer output) throws IOException {
+    while (listLine(buffer, output)) {
+      // continue listing
+    }
+  }
+
+  /**
+   * List one BASIC line.
+   *
+   * @param buffer Code buffer
+   * @param output output for BASIC listing
+   * @return Are there more commands?
+   */
+  private boolean listLine(ICodeBuffer buffer, Writer output) throws IOException {
+    int pc = buffer.getCurrentAddress();
+    final int nextAddress = buffer.readWord();
+    if (nextAddress == 0) {
+      return false;
+    }
+
+    output.append(hexWordPlain(pc));
+    output.append(" ");
+    // line number
+    output.append(Integer.toString(buffer.readWord()));
+    output.append(" ");
+
+    boolean escaped = false;
+    while (buffer.has(1) && buffer.getCurrentAddress() < nextAddress - 1) {
+      escaped = listByte(buffer, output, escaped);
+    }
+    // skip trailing zero
+    buffer.readByte();
+    output.append("\n");
+
+    return true;
+  }
+
+  /**
+   * List one BASIC byte.
+   *
+   * @param buffer Code buffer
+   * @param output output for BASIC listing
+   * @param escaped Escape mode active?
+   * @return New escape mode
+   */
+  private boolean listByte(ICodeBuffer buffer, Writer output, boolean escaped) throws IOException {
+    int b = buffer.readByte();
+
+    if (b == 0x22) {
+      // " toggles escape mode
+      escaped = !escaped;
+    }
+
+    if (b == 0xFF) {
+      // Pi
+      output.append("<PI>");
+    } else if (b < 0x80 || escaped) {
+      // output char unmodified
+      output.append(charset.toString((byte) b));
+    } else {
+      // command
+      output.append(BASIC[b - 128]);
+    }
+
+    return escaped;
   }
 
   /**
