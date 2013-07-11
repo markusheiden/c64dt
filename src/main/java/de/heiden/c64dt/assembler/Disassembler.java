@@ -102,6 +102,7 @@ public class Disassembler {
     while (listLine(buffer, output)) {
       // continue listing
     }
+    output.append("\n");
   }
 
   /**
@@ -113,6 +114,7 @@ public class Disassembler {
    */
   private boolean listLine(ICodeBuffer buffer, Writer output) throws IOException {
     int pc = buffer.getCurrentAddress();
+    // next address is not used for searching for the next command, because the linking may be broken
     final int nextAddress = buffer.readWord();
     if (nextAddress == 0) {
       return false;
@@ -125,11 +127,13 @@ public class Disassembler {
     output.append(" ");
 
     boolean escaped = false;
-    while (buffer.has(1) && buffer.getCurrentAddress() < nextAddress - 1) {
-      escaped = listByte(buffer, output, escaped);
+    while (buffer.has(1)) {
+      int b = buffer.readByte();
+      if (b == 0x00) {
+        break;
+      }
+      escaped = listByte(b, output, escaped);
     }
-    // skip trailing zero
-    buffer.readByte();
     output.append("\n");
 
     return true;
@@ -138,14 +142,12 @@ public class Disassembler {
   /**
    * List one BASIC byte.
    *
-   * @param buffer Code buffer
+   * @param b BASIC byte
    * @param output output for BASIC listing
    * @param escaped Escape mode active?
    * @return New escape mode
    */
-  private boolean listByte(ICodeBuffer buffer, Writer output, boolean escaped) throws IOException {
-    int b = buffer.readByte();
-
+  private boolean listByte(int b, Writer output, boolean escaped) throws IOException {
     if (b == 0x22) {
       // " toggles escape mode
       escaped = !escaped;
