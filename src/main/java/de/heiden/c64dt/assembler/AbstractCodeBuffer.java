@@ -6,7 +6,7 @@ import org.springframework.util.Assert;
  * Abstract implementation of input stream for code.
  */
 public abstract class AbstractCodeBuffer implements ICodeBuffer {
-  private final int address;
+  private final int startAddress;
   private final int length;
   private int position;
   private int opcode;
@@ -14,13 +14,13 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
   /**
    * Constructor.
    *
-   * @param address start address of the code
+   * @param startAddress start address of the code
    * @param length length of the code
    */
-  protected AbstractCodeBuffer(int address, int length) {
+  protected AbstractCodeBuffer(int startAddress, int length) {
     Assert.isTrue(length >= 0, "Precondition: length >= 0");
 
-    this.address = address;
+    this.startAddress = startAddress;
     this.length = length;
     this.position = 0;
     this.opcode = -1;
@@ -28,7 +28,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
 
   @Override
   public final int getCommandAddress() {
-    return address + getCommandIndex();
+    return startAddress + getCommandIndex();
   }
 
   @Override
@@ -38,7 +38,12 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
 
   @Override
   public final int getCurrentAddress() {
-    return address + getCurrentIndex();
+    return startAddress + getCurrentIndex();
+  }
+
+  @Override
+  public void setCurrentAddress(int address) {
+    setCurrentIndex(address - startAddress);
   }
 
   @Override
@@ -73,15 +78,17 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
       return -1;
     }
 
-    return number == 1 ? readByte() : readByte() + (readByte() << 8);
+    return number == 1 ? readByte() : readWord();
   }
 
-  /**
-   * Read a byte from the code at the current position and advance.
-   */
   @Override
   public final int readByte() {
     return readByteAt(position++);
+  }
+
+  @Override
+  public final int readWord() {
+    return readByteAt(position++) + (readByteAt(position++) << 8);
   }
 
   /**

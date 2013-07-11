@@ -20,6 +20,13 @@ public interface ICodeBuffer {
   public int getCurrentAddress();
 
   /**
+   * Set the current address.
+   *
+   * @param address address
+   */
+  public void setCurrentAddress(int address);
+
+  /**
    * The current index.
    */
   public int getCurrentIndex();
@@ -59,4 +66,9 @@ public interface ICodeBuffer {
    * Read a byte from the code at the current position and advance.
    */
   public int readByte();
+
+  /**
+   * Read a word from the code at the current position and advance.
+   */
+  public int readWord();
 }

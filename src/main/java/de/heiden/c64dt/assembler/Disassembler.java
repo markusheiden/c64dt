@@ -60,7 +60,19 @@ public class Disassembler {
     CodeBuffer buffer = new CodeBuffer(startAddress, code);
 
     if (startAddress == 0x0801) {
-      // TODO check for basic header
+      while (true) {
+        int pc = buffer.getCurrentAddress();
+        int nextAddress = buffer.readWord();
+        if (nextAddress == 0) {
+          break;
+        }
+
+        output.append(hexWordPlain(pc));
+        output.append("          Basic command\n");
+        // TODO mh: list basic command
+        // skip basic line
+        buffer.setCurrentAddress(nextAddress);
+      }
     }
 
     while (buffer.has(1)) {
