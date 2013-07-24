@@ -102,7 +102,7 @@ public class Disassembler {
     }
 
     output.append(hexWordPlain(pc));
-    output.append(" ");
+    output.append("  ");
     // line number
     output.append(Integer.toString(code.readWord()));
     output.append(" ");
@@ -161,7 +161,7 @@ public class Disassembler {
 
     int pc = code.getCommandAddress();
     output.append(hexWordPlain(pc));
-    output.append(" ");
+    output.append("  ");
     output.append(hexBytePlain(opcode.getOpcode()));
 
     if (opcode.isLegal() && code.has(size)) {
@@ -170,12 +170,12 @@ public class Disassembler {
 
         output.append(size >= 1 ? " " + hexBytePlain(lo(argument)) : "   ");
         output.append(size >= 2 ? " " + hexBytePlain(hi(argument)) : "   ");
-        output.append(" ");
+        output.append("  ");
         output.append(opcode.getType().toString());
         output.append(" ");
         output.append(mode.toString(pc, argument));
       } else {
-        output.append("       ");
+        output.append("        ");
         output.append(opcode.getType().toString());
       }
     } else {
@@ -215,14 +215,31 @@ public class Disassembler {
     Assert.notNull(code, "Precondition: code != null");
     Assert.notNull(output, "Precondition: output != null");
 
+    C64Charset charset = C64Charset.LOWER;
+
+    StringBuilder chars = new StringBuilder(16);
     while (code.hasMore()) {
       output.append(hexWordPlain(code.getCurrentAddress()));
-      output.append(" ");
-      for (int i = 0; code.hasMore() && i < 16; i++) {
-        output.append(hexBytePlain(code.readByte()));
-        output.append(" ");
+      output.append("  ");
+      for (int i = 0; i < 16; i++) {
+        if (code.hasMore()) {
+          int b = code.readByte();
+          output.append(hexBytePlain(b));
+          output.append(" ");
+
+          char c = charset.toChar((byte) b);
+          chars.append(c != 0 ? c : '.');
+        } else {
+          output.append("   ");
+        }
       }
+
+      output.append("  ");
+      output.append(chars);
+
       output.newLine();
+
+      chars.setLength(0);
     }
   }
 }
