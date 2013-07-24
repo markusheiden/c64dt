@@ -1,5 +1,6 @@
 package de.heiden.c64dt.assembler.command;
 
+import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.util.XmlUtil;
@@ -24,7 +25,7 @@ public class CommandBufferMapperTest {
     }
 
     Reassembler reassembler = new Reassembler();
-    reassembler.reassemble(0x1000, code);
+    reassembler.reassemble(new CodeBuffer(0x1000, code));
     CommandBuffer commands = reassembler.getCommands();
 
     // addresses

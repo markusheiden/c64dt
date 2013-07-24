@@ -1,14 +1,15 @@
 package de.heiden.c64dt.assembler;
 
 import de.heiden.c64dt.charset.C64Charset;
+import de.heiden.c64dt.util.NonClosingBufferedWriter;
 import org.springframework.util.Assert;
-import org.springframework.util.FileCopyUtils;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Writer;
 
-import static de.heiden.c64dt.util.ByteUtil.*;
+import static de.heiden.c64dt.util.ByteUtil.hi;
+import static de.heiden.c64dt.util.ByteUtil.lo;
 import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
 import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
 
@@ -38,84 +39,64 @@ public class Disassembler {
   };
 
   /**
-   * Reassemble program.
-   *
-   * @param input program with start address
-   * @param output output for reassembled code
-   */
-  public void disassemble(InputStream input, Writer output) throws IOException {
-    Assert.notNull(input, "Precondition: input != null");
-    Assert.notNull(output, "Precondition: output != null");
-
-    disassemble(FileCopyUtils.copyToByteArray(input), output);
-  }
-
-  /**
-   * Reassemble program.
-   *
-   * @param program program with start address
-   * @param output output for reassembled code
-   */
-  public void disassemble(byte[] program, Writer output) throws IOException {
-    Assert.notNull(program, "Precondition: program != null");
-    Assert.isTrue(program.length >= 2, "Precondition: program.length >= 2");
-    Assert.notNull(output, "Precondition: output != null");
-
-    int address = toWord(program, 0);
-    byte[] code = new byte[program.length - 2];
-    System.arraycopy(program, 2, code, 0, code.length);
-    disassemble(address, code, output);
-  }
-
-  /**
    * Reassemble.
    *
-   * @param startAddress start address of code
-   * @param code code
+   * @param code Code buffer
    * @param output output for reassembled code
    */
-  public void disassemble(int startAddress, byte[] code, Writer output) throws IOException {
-    Assert.isTrue(startAddress >= 0, "Precondition: startAddress >= 0");
+  public void disassemble(ICodeBuffer code, Writer output) throws IOException {
     Assert.notNull(code, "Precondition: code != null");
     Assert.notNull(output, "Precondition: output != null");
 
-    CodeBuffer buffer = new CodeBuffer(startAddress, code);
+    try (BufferedWriter out = new NonClosingBufferedWriter(output)) {
+      if (code.getCurrentAddress() == 0x0801) {
+        list(code, out);
+      }
 
-    if (startAddress == 0x0801) {
-      list(buffer, output);
+      while (code.hasMore()) {
+        disassembleOpcode(code, out);
+      }
     }
-
-    while (buffer.has(1)) {
-      disassemble(buffer, output);
-    }
-
     output.flush();
   }
 
   /**
    * List BASIC program.
    *
-   * @param buffer Code buffer
+   * @param code Code buffer
    * @param output output for BASIC listing
    */
-  public void list(ICodeBuffer buffer, Writer output) throws IOException {
-    while (listLine(buffer, output)) {
+  public void list(ICodeBuffer code, Writer output) throws IOException {
+    try (BufferedWriter out = new NonClosingBufferedWriter(output)) {
+      list(code, out);
+    }
+    output.flush();
+  }
+
+  /**
+   * List BASIC program.
+   *
+   * @param code Code buffer
+   * @param output output for BASIC listing
+   */
+  private void list(ICodeBuffer code, BufferedWriter output) throws IOException {
+    while (listLine(code, output)) {
       // continue listing
     }
-    output.append("\n");
+    output.newLine();
   }
 
   /**
    * List one BASIC line.
    *
-   * @param buffer Code buffer
+   * @param code Code buffer
    * @param output output for BASIC listing
    * @return Are there more commands?
    */
-  private boolean listLine(ICodeBuffer buffer, Writer output) throws IOException {
-    int pc = buffer.getCurrentAddress();
+  private boolean listLine(ICodeBuffer code, BufferedWriter output) throws IOException {
+    int pc = code.getCurrentAddress();
     // next address is not used for searching for the next command, because the linking may be broken
-    final int nextAddress = buffer.readWord();
+    final int nextAddress = code.readWord();
     if (nextAddress == 0) {
       return false;
     }
@@ -123,18 +104,18 @@ public class Disassembler {
     output.append(hexWordPlain(pc));
     output.append(" ");
     // line number
-    output.append(Integer.toString(buffer.readWord()));
+    output.append(Integer.toString(code.readWord()));
     output.append(" ");
 
     boolean escaped = false;
-    while (buffer.has(1)) {
-      int b = buffer.readByte();
+    while (code.hasMore()) {
+      int b = code.readByte();
       if (b == 0x00) {
         break;
       }
       escaped = listByte(b, output, escaped);
     }
-    output.append("\n");
+    output.newLine();
 
     return true;
   }
@@ -147,7 +128,7 @@ public class Disassembler {
    * @param escaped Escape mode active?
    * @return New escape mode
    */
-  private boolean listByte(int b, Writer output, boolean escaped) throws IOException {
+  private boolean listByte(int b, BufferedWriter output, boolean escaped) throws IOException {
     if (b == 0x22) {
       // " toggles escape mode
       escaped = !escaped;
@@ -170,22 +151,22 @@ public class Disassembler {
   /**
    * Disassemble one opcode.
    *
-   * @param buffer Code buffer
+   * @param code Code buffer
    * @param output output for reassembled code
    */
-  public void disassemble(ICodeBuffer buffer, Writer output) throws IOException {
-    Opcode opcode = buffer.readOpcode();
+  private void disassembleOpcode(ICodeBuffer code, BufferedWriter output) throws IOException {
+    Opcode opcode = code.readOpcode();
     OpcodeMode mode = opcode.getMode();
     int size = mode.getSize();
 
-    int pc = buffer.getCommandAddress();
+    int pc = code.getCommandAddress();
     output.append(hexWordPlain(pc));
     output.append(" ");
     output.append(hexBytePlain(opcode.getOpcode()));
 
-    if (opcode.isLegal() && buffer.has(size)) {
+    if (opcode.isLegal() && code.has(size)) {
       if (size > 0) {
-        int argument = buffer.read(mode.getSize());
+        int argument = code.read(mode.getSize());
 
         output.append(size >= 1 ? " " + hexBytePlain(lo(argument)) : "   ");
         output.append(size >= 2 ? " " + hexBytePlain(hi(argument)) : "   ");
@@ -200,6 +181,48 @@ public class Disassembler {
     } else {
       output.append("       ???");
     }
-    output.append("\n");
+    output.newLine();
+  }
+
+  //
+  //
+  //
+
+
+  /**
+   * Dump memory.
+   *
+   * @param code Code buffer
+   * @param output output for reassembled code
+   */
+  public void dump(ICodeBuffer code, Writer output) throws IOException {
+    Assert.notNull(code, "Precondition: code != null");
+    Assert.notNull(output, "Precondition: output != null");
+
+    try (BufferedWriter out = new NonClosingBufferedWriter(output)) {
+      dump(code, out);
+    }
+    output.flush();
+  }
+
+  /**
+   * Dump memory.
+   *
+   * @param code Code buffer
+   * @param output output for reassembled code
+   */
+  private void dump(ICodeBuffer code, BufferedWriter output) throws IOException {
+    Assert.notNull(code, "Precondition: code != null");
+    Assert.notNull(output, "Precondition: output != null");
+
+    while (code.hasMore()) {
+      output.append(hexWordPlain(code.getCurrentAddress()));
+      output.append(" ");
+      for (int i = 0; code.hasMore() && i < 16; i++) {
+        output.append(hexBytePlain(code.readByte()));
+        output.append(" ");
+      }
+      output.newLine();
+    }
   }
 }

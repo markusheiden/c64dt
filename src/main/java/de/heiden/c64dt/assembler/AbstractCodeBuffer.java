@@ -57,6 +57,11 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
   }
 
   @Override
+  public final boolean hasMore() {
+    return position < length;
+  }
+
+  @Override
   public final boolean has(int number) {
     Assert.isTrue(number >= 0, "Precondition: number >= 0");
 

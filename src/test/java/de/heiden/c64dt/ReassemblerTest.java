@@ -1,10 +1,12 @@
 package de.heiden.c64dt;
 
+import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.assembler.Disassembler;
 import de.heiden.c64dt.assembler.Reassembler;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
@@ -17,22 +19,21 @@ public class ReassemblerTest {
   }
 
   public static void disassemble() throws Exception {
-    byte[] data = FileCopyUtils.copyToByteArray(new File("./dummy2.prg"));
-    Disassembler disassembler = new Disassembler();
-    disassembler.disassemble(data, new OutputStreamWriter(System.out));
+    new Disassembler().disassemble(
+      CodeBuffer.fromProgram(new FileInputStream("./dummy2.prg")),
+      new OutputStreamWriter(System.out));
   }
 
   public static void reassemble() throws Exception {
-    byte[] data = FileCopyUtils.copyToByteArray(new File("./dummy2.prg"));
     Reassembler reassembler = new Reassembler();
-    reassembler.reassemble(data);
+    reassembler.reassemble(CodeBuffer.fromProgram(new FileInputStream("./dummy2.prg")));
   }
 
   public static void reassemblerPerformanceTest() throws Exception {
     byte[] data = FileCopyUtils.copyToByteArray(new File("./dummy2.prg"));
     Reassembler reassembler = new Reassembler();
     for (int i = 0; i < 64; i++) {
-      reassembler.reassemble(data);
+      reassembler.reassemble(CodeBuffer.fromProgram(data));
     }
   }
 

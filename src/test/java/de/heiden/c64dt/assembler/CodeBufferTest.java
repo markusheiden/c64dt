@@ -9,6 +9,14 @@ import static org.junit.Assert.*;
  */
 public class CodeBufferTest {
   @Test
+  public void testHasMore() {
+    CodeBuffer buffer = new CodeBuffer(0, new byte[1]);
+    assertTrue(buffer.hasMore());
+    buffer.readByte();
+    assertFalse(buffer.hasMore());
+  }
+
+  @Test
   public void testHas() {
     CodeBuffer buffer = new CodeBuffer(0, new byte[2]);
     assertTrue(buffer.has(0));

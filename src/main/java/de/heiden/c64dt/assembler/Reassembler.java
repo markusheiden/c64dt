@@ -7,7 +7,6 @@ import de.heiden.c64dt.assembler.detector.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
-import org.springframework.util.FileCopyUtils;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -15,11 +14,8 @@ import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import static de.heiden.c64dt.util.ByteUtil.toWord;
 
 /**
  * Reassembler.
@@ -90,58 +86,18 @@ public class Reassembler {
   }
 
   /**
-   * Reassemble program.
-   *
-   * @param input program with start address
-   */
-  public void reassemble(InputStream input) throws IOException {
-    Assert.notNull(input, "Precondition: input != null");
-
-    reassemble(FileCopyUtils.copyToByteArray(input));
-  }
-
-  /**
-   * Reassemble program.
-   *
-   * @param program program with start address
-   */
-  public void reassemble(byte[] program) throws IOException {
-    Assert.notNull(program, "Precondition: program != null");
-    Assert.isTrue(program.length >= 2, "Precondition: program.length >= 2");
-
-    int address = toWord(program, 0);
-    byte[] code = new byte[program.length - 2];
-    System.arraycopy(program, 2, code, 0, code.length);
-    reassemble(address, code);
-  }
-
-  /**
    * Reassemble.
    *
-   * @param startAddress start address of code
-   * @param code program without start address
+   * @param code Code buffer
    */
-  public void reassemble(int startAddress, InputStream code) throws IOException {
-    Assert.notNull(code, "Precondition: input != null");
-
-    reassemble(startAddress, FileCopyUtils.copyToByteArray(code));
-  }
-
-  /**
-   * Reassemble.
-   *
-   * @param startAddress start address of code
-   * @param code program without start address
-   */
-  public void reassemble(int startAddress, byte[] code) throws IOException {
-    Assert.isTrue(startAddress >= 0, "Precondition: startAddress >= 0");
+  public void reassemble(CodeBuffer code) throws IOException {
     Assert.notNull(code, "Precondition: code != null");
 
-    if (startAddress == 0x0801) {
+    if (code.getCurrentAddress() == 0x0801) {
       // TODO check for basic header
     }
 
-    commands = new CommandBuffer(code, startAddress);
+    commands = new CommandBuffer(code.getCode(), code.getCurrentAddress());
     new CommandCreator(commands).createCommands();
     reassemble();
   }

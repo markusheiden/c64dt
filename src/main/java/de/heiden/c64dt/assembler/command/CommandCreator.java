@@ -39,7 +39,7 @@ public class CommandCreator {
     CodeBuffer code = new CodeBuffer(commandBuffer.getStartAddress(), commandBuffer.getCode());
 
     commandBuffer.clear();
-    while (code.has(1)) {
+    while (code.hasMore()) {
       int codeIndex = code.getCurrentIndex();
 
       Assert.isTrue(codeIndex == index, "Check: codeIndex == index");

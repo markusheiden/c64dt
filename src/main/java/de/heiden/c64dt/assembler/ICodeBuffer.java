@@ -43,6 +43,11 @@ public interface ICodeBuffer {
   //
 
   /**
+   * Is there at least one byte left to read?
+   */
+  public boolean hasMore();
+
+  /**
    * Are there 'number' bytes left to read?
    *
    * @param number number of bytes

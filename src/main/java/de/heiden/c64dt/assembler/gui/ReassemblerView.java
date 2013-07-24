@@ -1,5 +1,6 @@
 package de.heiden.c64dt.assembler.gui;
 
+import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.assembler.Reassembler;
 import de.heiden.c64dt.util.XmlUtil;
 import org.slf4j.Logger;
@@ -161,7 +162,7 @@ public class ReassemblerView extends JFrame {
         if (result == JFileChooser.APPROVE_OPTION) {
           // TODO mh: ask for start address
           currentFile = null;
-          reassembler.reassemble(0x8000, new FileInputStream(chooser.getSelectedFile()));
+          reassembler.reassemble(CodeBuffer.fromCode(0x8000, new FileInputStream(chooser.getSelectedFile())));
         }
       } catch (IOException e) {
         logger.error("Failed to open file", e);
