@@ -179,7 +179,7 @@ public class Disassembler {
         output.append(opcode.getType().toString());
       }
     } else {
-      output.append("       ???");
+      output.append("        ???");
     }
     output.newLine();
   }
