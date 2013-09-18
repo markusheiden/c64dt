@@ -142,7 +142,7 @@ public class Disassembler {
       output.append(charset.toString((byte) b));
     } else {
       // command
-      output.append(BASIC[b - 128]);
+      output.append(BASIC[b - 0x80]);
     }
 
     return escaped;
