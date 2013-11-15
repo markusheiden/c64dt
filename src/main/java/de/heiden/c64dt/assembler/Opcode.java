@@ -372,7 +372,7 @@ public enum Opcode {
    */
   public String toString(int pc, int addr) {
     StringBuilder result = new StringBuilder();
-//    result.append(_legal ? ' ' : '*');
+//    result.append(legal ? ' ' : '*');
     result.append(type.toString());
     result.append(' ');
     result.append(mode.toString(pc, addr));
