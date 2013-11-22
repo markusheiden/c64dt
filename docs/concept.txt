@@ -1,0 +1,22 @@
+Reassembler:
+============
+
+P0,    ... , Pn, L0, ... , Ln
+
+T, F , ... , pn, T, P, F, L0, ... , Ln
+
+
+Copy
+----
+
+TF
+
+TF -> First Call
+
+Return -> nothing
+Continue -> TF -> local TF?
+
+
+=================================
+
+isDebug etc. raus, varargs nutzen
