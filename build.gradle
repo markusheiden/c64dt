@@ -5,7 +5,7 @@ group = 'de.heiden'
 archivesBaseName = 'c64dt'
 version = '1.0-SNAPSHOT'
 
-def spring_version = '4.0.0.BUILD-SNAPSHOT'
+def spring_version = '4.0.1.RELEASE'
 
 repositories {
   mavenCentral()
