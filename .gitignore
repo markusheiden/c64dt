@@ -1,2 +1,5 @@
 target
 *.iws
+.gradle
+build
+
