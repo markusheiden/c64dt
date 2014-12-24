@@ -64,9 +64,9 @@ public abstract class AbstractDiskImageReader {
     // read sector contents
     byte[] content = new byte[256];
     for (int track = 1; track <= diskImage.getTracks(); track++) {
-      logger.debug("Reading track " + track);
+      logger.debug("Reading track {}", track);
       for (int sector = 0; sector < diskImage.getSectors(track); sector++) {
-        logger.debug("Reading sector " + sector + " from " + Integer.toHexString(i));
+        logger.debug("Reading sector {} from {}", sector, Integer.toHexString(i));
         System.arraycopy(data, i, content, 0, content.length);
         diskImage.setSector(track, sector, content);
         i += content.length;

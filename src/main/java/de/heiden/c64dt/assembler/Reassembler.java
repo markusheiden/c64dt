@@ -108,7 +108,7 @@ public class Reassembler {
   public void reassemble() {
     boolean change = true;
     for (int count = 0; change && count < 10; count++) {
-      logger.info("Iteration " + count);
+      logger.info("Iteration {}", count);
       change = detectCodeType();
     }
 
@@ -126,7 +126,7 @@ public class Reassembler {
     for (IDetector detector : detectors) {
       boolean detectorHit = detector.detect(commands);
       if (detectorHit) {
-        logger.info(detector.getClass().getSimpleName() + " changed code types");
+        logger.info("{} changed code types", detector.getClass().getSimpleName());
       }
       change |= detectorHit;
     }

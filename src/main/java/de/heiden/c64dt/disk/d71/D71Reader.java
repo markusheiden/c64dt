@@ -36,7 +36,7 @@ public class D71Reader extends AbstractDiskImageReader {
         throw new WrongDiskImageFormatException(data.length);
     }
 
-    logger.info("Detected 70 tracks image " + (hasErrors ? "with" : "without") + " error informations");
+    logger.info("Detected 70 tracks image {} error information", hasErrors ? "with" : "without");
 
     return read(data, new D71(tracks, hasErrors));
   }

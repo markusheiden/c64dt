@@ -97,10 +97,10 @@ public class NetDrive {
           while (isRunning) {
             try {
               DrivePacket received = connection.waitForRequest();
-              logger.debug("Received packet from " + connection.getDestination());
+              logger.debug("Received packet from {}", connection.getDestination());
               switch (received.getService()) {
                 case DriveConnection.SERVICE_OPEN: {
-                  logger.info("OPEN " + received.getLogicalFile() + "," + received.getDevice() + "," + received.getChannel());
+                  logger.info("OPEN {},{},{}", received.getLogicalFile(), received.getDevice(), received.getChannel());
                   try {
                     device.open(received.getChannel(), strip0(received.getData()));
                     connection.sendReply(Error.OK);
@@ -110,7 +110,7 @@ public class NetDrive {
                   break;
                 }
                 case DriveConnection.SERVICE_CHKIN: {
-                  logger.info("CHKIN " + received.getLogicalFile() + "," + received.getDevice() + "," + received.getChannel());
+                  logger.info("CHKIN {},{},{}", received.getLogicalFile(), received.getDevice(), received.getChannel());
                   try {
                     device.incrementPosition(received.getChannel(), received.getData0());
                     connection.sendReply(Error.OK);
@@ -120,7 +120,7 @@ public class NetDrive {
                   break;
                 }
                 case DriveConnection.SERVICE_READ: {
-                  logger.info("READ " + received.getLogicalFile() + "," + received.getDevice() + "," + received.getChannel());
+                  logger.info("READ {},{},{}", received.getLogicalFile(), received.getDevice(), received.getChannel());
                   try {
                     byte[] data = device.read(received.getChannel(), received.getData0());
                     connection.sendReply(data);
@@ -131,7 +131,7 @@ public class NetDrive {
                   break;
                 }
                 case DriveConnection.SERVICE_WRITE: {
-                  logger.info("WRITE " + received.getLogicalFile() + "," + received.getDevice() + "," + received.getChannel());
+                  logger.info("WRITE {},{},{}", received.getLogicalFile(), received.getDevice(), received.getChannel());
                   try {
                     device.write(received.getChannel(), received.getData());
                     connection.sendReply(Error.OK);
@@ -141,7 +141,7 @@ public class NetDrive {
                   break;
                 }
                 case DriveConnection.SERVICE_CLOSE: {
-                  logger.info("CLOSE " + received.getLogicalFile() + "," + received.getDevice() + "," + received.getChannel());
+                  logger.info("CLOSE {},{},{}", received.getLogicalFile(), received.getDevice(), received.getChannel());
                   try {
                     device.close(received.getChannel());
                     connection.sendReply(Error.OK);
@@ -151,7 +151,7 @@ public class NetDrive {
                   break;
                 }
                 default: {
-                  logger.error("Unknown service " + Integer.toHexString(received.getService()));
+                  logger.error("Unknown service {}", Integer.toHexString(received.getService()));
                 }
               }
             } catch (IOException e) {

@@ -112,7 +112,7 @@ public enum Error {
   public static Error error(int error) {
     Error result = errors.get((byte) error);
     if (result == null) {
-      logger.info("Unknow error code " + Integer.toHexString(error));
+      logger.info("Unknow error code {}", Integer.toHexString(error));
       result = UNKNOWN;
     }
 

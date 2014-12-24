@@ -93,7 +93,7 @@ public enum FileType {
   public static FileType fileType(int code) {
     FileType result = types.get((byte) code);
     if (result == null) {
-      logger.info("Unknown file type code " + Integer.toHexString(code));
+      logger.info("Unknown file type code {}", Integer.toHexString(code));
       result = UNKNOWN;
     }
 
@@ -112,7 +112,7 @@ public enum FileType {
 
     FileType result = extensions.get(extension.toUpperCase());
     if (result == null || result.code < 0) {
-      logger.debug("Unknown file extension " + extension);
+      logger.debug("Unknown file extension {}", extension);
       result = ANY;
     }
 

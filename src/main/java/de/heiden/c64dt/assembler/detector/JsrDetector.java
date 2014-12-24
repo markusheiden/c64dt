@@ -75,7 +75,7 @@ public class JsrDetector implements IDetector {
         CodeType type = subroutine.getType();
 
         if (arguments == 0) {
-          logger.debug("Known subroutine with zero terminated argument (" + type + ") at address " + hexWord(address) + ", referenced at index " + hexWord(index));
+          logger.debug("Known subroutine with zero terminated argument ({}) at address {}, referenced at index {}", type, hexWord(address), hexWord(index));
 
           // search the zero which is terminating the argument
           int endIndex = search0(commands, index + 3, false);
@@ -85,7 +85,7 @@ public class JsrDetector implements IDetector {
 
           change |= markJSR(commands, index, endIndex, type);
         } else if (arguments > 0) {
-          logger.debug("Known subroutine with " + arguments + " byte argument (" + type + ") at address " + hexWord(address) + ", referenced at index " + hexWord(index));
+          logger.debug("Known subroutine with {} byte argument ({}) at address {}, referenced at index {}", arguments, type, hexWord(address), hexWord(index));
 
           // fixed length argument
           change |= markJSR(commands, index, index + 3 + arguments, type);
@@ -211,12 +211,12 @@ public class JsrDetector implements IDetector {
     double detectedUnreachableRatio = ((double) unreachable) / ((double) count);
     double detectedMatchRatio = ((double) matches) / ((double) count);
     if (matches < minMatches || checkUnreachable && detectedUnreachableRatio < unreachableRatio || detectedMatchRatio < matchRatio) {
-      logger.debug("Potential subroutine with " + kind + " at address " + hexWord(address) + ": Probability " + matches + " (" + unreachable + ") / " + count);
+      logger.debug("Potential subroutine with {} at address {}: Probability {} ({}) / {}", kind, hexWord(address), matches, unreachable, count);
       return null;
     }
 
     // Met all conditions -> create subroutine
-    logger.debug("Detected subroutine with " + kind + " at address " + hexWord(address) + ": Probability " + matches + " (" + unreachable + ") / " + count);
+    logger.debug("Detected subroutine with {} at address {}: Probability {} ({}) / {}", kind, hexWord(address), matches, unreachable, count);
     Subroutine result = new Subroutine(address, arguments, type);
     commands.addSubroutine(result);
 

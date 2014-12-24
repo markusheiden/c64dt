@@ -48,7 +48,7 @@ public class D64Reader extends AbstractDiskImageReader {
         throw new WrongDiskImageFormatException(data.length);
     }
 
-    logger.info("Detected " + tracks + " tracks image " + (hasErrors ? "with" : "without") + " error informations");
+    logger.info("Detected {} tracks image {} error information", tracks, hasErrors ? "with" : "without");
 
     return read(data, new D64(tracks, hasErrors));
   }
