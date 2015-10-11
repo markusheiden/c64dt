@@ -77,7 +77,7 @@ public abstract class AbstractConnection {
   /**
    * Open connection.
    *
-   * @exception java.io.IOException
+   * @throws IOException
    */
   public synchronized void open() throws IOException {
     socket = new DatagramSocket(source);
