@@ -139,6 +139,8 @@ public class PetSCIIDecoder extends AbstractDecoder {
           throw new UnmappableCharacterException(1);
         case 0xA0:
           return ' ';
+        case 0xAF:
+          return '_';
         default:
           // System.out.println(">" + Integer.toHexString(c) + "<");
           throw new UnmappableCharacterException(1);
