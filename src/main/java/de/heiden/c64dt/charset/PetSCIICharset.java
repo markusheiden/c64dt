@@ -9,13 +9,24 @@ public class PetSCIICharset extends AbstractCharset {
   /**
    * Upper case and graphic chars?
    */
-  boolean upper = true;
+  boolean upper;
 
   /**
    * Constructor.
    */
   public PetSCIICharset() {
+    this(true);
+  }
+
+  /**
+   * Constructor.
+   *
+   * @param upper Use upper case charset (true) or lower case charset (false) at start.
+   */
+  public PetSCIICharset(boolean upper) {
     super("PetSCII");
+
+    this.upper = upper;
   }
 
   @Override
