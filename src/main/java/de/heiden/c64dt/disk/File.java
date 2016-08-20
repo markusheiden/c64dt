@@ -1,8 +1,9 @@
 package de.heiden.c64dt.disk;
 
+import org.springframework.util.Assert;
+
 import de.heiden.c64dt.charset.C64Charset;
 import de.heiden.c64dt.util.TextUtil;
-import org.springframework.util.Assert;
 
 /**
  * File implementation.
@@ -25,8 +26,8 @@ public class File implements IFile {
    */
   public File(FileMode mode, int track, int sector, byte[] name, int size) {
     Assert.notNull(mode, "Precondition: mode != null");
-    Assert.isTrue(track >= 1, "Precondition: track >= 1");
-    Assert.isTrue(sector >= 0, "Precondition: sector >= 0");
+    Assert.isTrue(mode.isDeleted() || track >= 1, "Precondition: track >= 1");
+    Assert.isTrue(mode.isDeleted() || sector >= 0, "Precondition: sector >= 0");
     Assert.notNull(name, "Precondition: name != null");
     Assert.isTrue(name.length <= 16, "Precondition: name.length <= 16");
     Assert.isTrue(size >= 0, "Precondition: getSize >= 0");

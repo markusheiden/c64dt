@@ -1,18 +1,29 @@
 package de.heiden.c64dt.disk;
 
-import de.heiden.c64dt.util.ByteUtil;
-import de.heiden.c64dt.util.TextUtil;
-import org.springframework.util.Assert;
+import static de.heiden.c64dt.disk.SectorModelUtil.assertSector;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static de.heiden.c64dt.disk.SectorModelUtil.assertSector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
+import org.springframework.util.FileCopyUtils;
+
+import de.heiden.c64dt.util.ByteUtil;
+import de.heiden.c64dt.util.TextUtil;
 
 /**
  * Abstract disk image implementation.
  */
 public abstract class AbstractDiskImage implements IDiskImage {
+  /**
+   * Logger.
+   */
+  private final Logger log = LoggerFactory.getLogger(getClass());
+
   private final int sides;
   private final int tracks;
   private final int tracksPerSide;
@@ -46,6 +57,19 @@ public abstract class AbstractDiskImage implements IDiskImage {
       for (int sector = 0; sector < spt; sector++) {
         sectors[track - 1][sector] = new byte[256];
         errors[track - 1][sector] = Error.NO_ERROR;
+      }
+    }
+  }
+
+  /**
+   * Load D64 from binary representation.
+   */
+  public void load(InputStream stream) throws IOException {
+    byte[] bytes = FileCopyUtils.copyToByteArray(stream);
+    for (int pos = 0, track = 1; track <= getTracks(); track++) {
+      for (int sector = 0; sector < getSectors(track) && pos < bytes.length; sector++, pos += 256) {
+        log.info("Reading track {} sector {}.", track, sector);
+        System.arraycopy(bytes, pos, sectors[track - 1][sector], 0, 256);
       }
     }
   }
@@ -206,5 +230,4 @@ public abstract class AbstractDiskImage implements IDiskImage {
 
     return new File(mode, track, sector, name, size);
   }
-
 }

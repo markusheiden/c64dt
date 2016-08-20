@@ -47,6 +47,13 @@ public class FileMode {
   }
 
   /**
+   * Is the file deleted?.
+   */
+  public boolean isDeleted() {
+    return getType().equals(FileType.DEL);
+  }
+
+  /**
    * Get mode for mode code.
    *
    * @param mode mode code
