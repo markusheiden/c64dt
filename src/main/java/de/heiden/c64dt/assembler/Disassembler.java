@@ -1,33 +1,55 @@
 package de.heiden.c64dt.assembler;
 
-import de.heiden.c64dt.util.NonClosingBufferedWriter;
-import org.springframework.util.Assert;
+import static de.heiden.c64dt.util.ByteUtil.hi;
+import static de.heiden.c64dt.util.ByteUtil.lo;
+import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
+import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-import static de.heiden.c64dt.util.ByteUtil.hi;
-import static de.heiden.c64dt.util.ByteUtil.lo;
-import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
-import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
+import org.springframework.util.Assert;
+
+import de.heiden.c64dt.util.NonClosingBufferedWriter;
 
 /**
  * Reassembler.
  */
 public class Disassembler {
   /**
-   * Reassemble.
+   * List basic header and disassemble.
    *
-   * @param code Code buffer
-   * @param output output for reassembled code
+   * @param code Code buffer.
+   * @param output Output for reassembled code.
+   */
+  public void listAndDisassemble(ICodeBuffer code, Writer output) throws IOException {
+    listAndDisassemble(code, output, true);
+  }
+
+  /**
+   * List basic header if program starts at $0801 and disassemble.
+   *
+   * @param code Code buffer.
+   * @param output Output for reassembled code.
    */
   public void disassemble(ICodeBuffer code, Writer output) throws IOException {
+    listAndDisassemble(code, output, code.getCurrentAddress() == 0x0801);
+  }
+
+  /**
+   * List basic header and disassemble.
+   *
+   * @param code Code buffer.
+   * @param output Output for reassembled code.
+   * @param list List Basic header?.
+   */
+  public void listAndDisassemble(ICodeBuffer code, Writer output, boolean list) throws IOException {
     Assert.notNull(code, "Precondition: code != null");
     Assert.notNull(output, "Precondition: output != null");
 
     try (BufferedWriter out = new NonClosingBufferedWriter(output)) {
-      if (code.getCurrentAddress() == 0x0801) {
+      if (list) {
         new Lister().list(code, out);
       }
 
