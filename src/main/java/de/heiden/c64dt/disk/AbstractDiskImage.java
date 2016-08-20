@@ -230,4 +230,31 @@ public abstract class AbstractDiskImage implements IDiskImage {
 
     return new File(mode, track, sector, name, size);
   }
+
+  /**
+   * Read file content.
+   */
+  public byte[] read(IFile file) {
+    int track = file.getTrack();
+    int sector = file.getSector();
+    byte[] content = new byte[file.getSize() * 256];
+    int pos = 0;
+    while (track > 0) {
+      byte[] sectorContent = getSector(track, sector);
+      track = ByteUtil.toByte(sectorContent, 0);
+      sector = ByteUtil.toByte(sectorContent, 1);
+      if (track == 0) {
+        System.arraycopy(sectorContent, 2, content, pos, sector);
+        pos += sector;
+      } else {
+        System.arraycopy(sectorContent, 2, content, pos, 254);
+        pos += 254;
+      }
+    }
+
+    // Resize array to actual file size.
+    byte[] result = new byte[pos];
+    System.arraycopy(content, 0, result, 0, pos);
+    return result;
+  }
 }
