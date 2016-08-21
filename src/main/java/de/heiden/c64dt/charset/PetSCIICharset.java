@@ -13,13 +13,6 @@ public class PetSCIICharset extends AbstractCharset {
 
   /**
    * Constructor.
-   */
-  public PetSCIICharset() {
-    this(true);
-  }
-
-  /**
-   * Constructor.
    *
    * @param upper Use upper case charset (true) or lower case charset (false) at start.
    */

@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 public class PetSCIICharsetTest {
   @Test
   public void decode() throws Exception {
-    PetSCIICharset charset = new PetSCIICharset();
+    PetSCIICharset charset = new PetSCIICharset(true);
 
     assertEquals('A', charset.toChar((byte) 0x41));
     assertEquals('Z', charset.toChar((byte) 0x5A));
