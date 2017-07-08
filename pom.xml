@@ -10,6 +10,7 @@
 
   <modules>
     <module>base</module>
+    <module>charset</module>
   </modules>
 
   <prerequisites>
@@ -52,6 +53,18 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- Project modules, which can be used as dependencies. -->
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>base</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+     <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>charset</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
