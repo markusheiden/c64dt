@@ -9,7 +9,7 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>base</module>
+    <module>assembler</module>
     <module>browser</module>
     <module>bytes</module>
     <module>charset</module>
@@ -61,7 +61,7 @@
       <!-- Project modules, which can be used as dependencies. -->
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>base</artifactId>
+        <artifactId>assembler</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
