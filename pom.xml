@@ -16,6 +16,7 @@
     <module>disk</module>
     <module>gui</module>
     <module>net</module>
+    <module>reassembler</module>
   </modules>
 
   <prerequisites>
