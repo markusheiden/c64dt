@@ -10,7 +10,7 @@
   </parent>
 
   <groupId>de.heiden.c64dt</groupId>
-  <artifactId>reassembler</artifactId>
+  <artifactId>reassembler-gui</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <prerequisites>
@@ -21,15 +21,7 @@
     <!-- Other modules -->
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>bytes</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>charset</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>assembler</artifactId>
+      <artifactId>reassembler</artifactId>
     </dependency>
 
     <dependency>

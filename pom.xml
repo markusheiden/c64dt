@@ -17,6 +17,7 @@
     <module>gui</module>
     <module>net</module>
     <module>reassembler</module>
+    <module>reassembler-gui</module>
   </modules>
 
   <prerequisites>
@@ -93,6 +94,16 @@
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>net</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>reassembler</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>reassembler-gui</artifactId>
         <version>${project.version}</version>
       </dependency>
 

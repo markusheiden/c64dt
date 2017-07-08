@@ -1,6 +1,5 @@
-package de.heiden.c64dt.reassembler;
+package de.heiden.c64dt.reassembler.gui;
 
-import de.heiden.c64dt.reassembler.gui.ReassemblerView;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.swing.*;
