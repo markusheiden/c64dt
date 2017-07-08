@@ -10,7 +10,7 @@
   </parent>
 
   <groupId>de.heiden.c64dt</groupId>
-  <artifactId>drive</artifactId>
+  <artifactId>disk</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <prerequisites>

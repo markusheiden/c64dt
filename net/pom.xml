@@ -21,7 +21,7 @@
     <!-- Other modules -->
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>drive</artifactId>
+      <artifactId>disk</artifactId>
     </dependency>
 
     <dependency>
