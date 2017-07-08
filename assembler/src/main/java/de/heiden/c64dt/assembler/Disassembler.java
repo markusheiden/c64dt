@@ -1,6 +1,5 @@
 package de.heiden.c64dt.assembler;
 
-import de.heiden.c64dt.assembler.util.NonClosingBufferedWriter;
 import org.springframework.util.Assert;
 
 import java.io.BufferedWriter;

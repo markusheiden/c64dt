@@ -1,4 +1,4 @@
-package de.heiden.c64dt.assembler.util;
+package de.heiden.c64dt.assembler;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.io.Writer;
  * {@link BufferedWriter} which does not close its output stream.
  * Needed for try-with-resource with {@link System#out}.
  */
-public class NonClosingBufferedWriter extends BufferedWriter {
+class NonClosingBufferedWriter extends BufferedWriter {
   /**
    * {@inheritDoc}.
    */

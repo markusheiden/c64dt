@@ -1,8 +1,8 @@
 package de.heiden.c64dt.reassembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.reassembler.util.HexByteAdapter;
-import de.heiden.c64dt.reassembler.util.HexWordAdapter;
+import de.heiden.c64dt.reassembler.xml.HexByteAdapter;
+import de.heiden.c64dt.reassembler.xml.HexWordAdapter;
 import org.springframework.util.Assert;
 
 import javax.xml.bind.annotation.*;

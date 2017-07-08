@@ -8,7 +8,7 @@ import javax.swing.*;
 /**
  * Reassembler start class.
  */
-public class ReassemblerStartup {
+public class Startup {
   /**
    * Start reassembler gui.
    *

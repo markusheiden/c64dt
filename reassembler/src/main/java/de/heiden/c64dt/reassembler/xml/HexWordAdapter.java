@@ -1,4 +1,4 @@
-package de.heiden.c64dt.reassembler.util;
+package de.heiden.c64dt.reassembler.xml;
 
 import de.heiden.c64dt.bytes.HexUtil;
 

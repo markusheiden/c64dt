@@ -1,6 +1,5 @@
 package de.heiden.c64dt.assembler;
 
-import de.heiden.c64dt.assembler.util.NonClosingBufferedWriter;
 import de.heiden.c64dt.bytes.HexUtil;
 import de.heiden.c64dt.charset.C64Charset;
 

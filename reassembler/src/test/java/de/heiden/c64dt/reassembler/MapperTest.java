@@ -3,7 +3,7 @@ package de.heiden.c64dt.reassembler;
 import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.reassembler.command.Subroutine;
-import de.heiden.c64dt.reassembler.util.XmlUtil;
+import de.heiden.c64dt.reassembler.xml.XmlUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
