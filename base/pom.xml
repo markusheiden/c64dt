@@ -21,7 +21,15 @@
     <!-- Other modules -->
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>bytes</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>charset</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>gui</artifactId>
     </dependency>
 
     <dependency>

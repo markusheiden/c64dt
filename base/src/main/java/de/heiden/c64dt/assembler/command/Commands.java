@@ -10,7 +10,7 @@ import org.springframework.util.Assert;
 import java.util.*;
 import java.util.Map.Entry;
 
-import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
+import static de.heiden.c64dt.bytes.AddressUtil.assertValidAddress;
 
 /**
  * Input stream for code.

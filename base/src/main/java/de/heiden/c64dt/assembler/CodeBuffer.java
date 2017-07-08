@@ -1,13 +1,13 @@
 package de.heiden.c64dt.assembler;
 
-import de.heiden.c64dt.util.ByteUtil;
+import de.heiden.c64dt.bytes.ByteUtil;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import static de.heiden.c64dt.util.ByteUtil.toWord;
+import static de.heiden.c64dt.bytes.ByteUtil.toWord;
 
 /**
  * Input stream for code.

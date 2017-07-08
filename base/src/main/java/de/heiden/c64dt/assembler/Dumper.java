@@ -1,7 +1,7 @@
 package de.heiden.c64dt.assembler;
 
+import de.heiden.c64dt.bytes.HexUtil;
 import de.heiden.c64dt.charset.C64Charset;
-import de.heiden.c64dt.util.HexUtil;
 import de.heiden.c64dt.util.NonClosingBufferedWriter;
 import org.springframework.util.Assert;
 

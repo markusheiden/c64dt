@@ -7,7 +7,7 @@ import org.springframework.util.Assert;
 import java.util.Collections;
 import java.util.List;
 
-import static de.heiden.c64dt.util.HexUtil.hexByte;
+import static de.heiden.c64dt.bytes.HexUtil.hexByte;
 
 /**
  * Command for using bit to skip the next opcode.

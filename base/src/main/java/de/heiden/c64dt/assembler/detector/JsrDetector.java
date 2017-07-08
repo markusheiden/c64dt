@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static de.heiden.c64dt.util.HexUtil.hexWord;
+import static de.heiden.c64dt.bytes.HexUtil.hexWord;
 
 /**
  * Detects JSR commands to predefined address which are followed by fixed length or zero-terminated arguments.

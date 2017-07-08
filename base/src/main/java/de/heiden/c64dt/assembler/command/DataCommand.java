@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static de.heiden.c64dt.util.HexUtil.hex;
-import static de.heiden.c64dt.util.HexUtil.hexByte;
+import static de.heiden.c64dt.bytes.HexUtil.hex;
+import static de.heiden.c64dt.bytes.HexUtil.hexByte;
 
 /**
  * Command for data.

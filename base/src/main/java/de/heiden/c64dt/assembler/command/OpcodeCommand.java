@@ -4,7 +4,7 @@ import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Opcode;
 import de.heiden.c64dt.assembler.OpcodeMode;
 import de.heiden.c64dt.assembler.label.ILabel;
-import de.heiden.c64dt.util.ByteUtil;
+import de.heiden.c64dt.bytes.ByteUtil;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;

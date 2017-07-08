@@ -1,5 +1,7 @@
 package de.heiden.c64dt.util;
 
+import de.heiden.c64dt.bytes.HexUtil;
+
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**

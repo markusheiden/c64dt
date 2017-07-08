@@ -10,7 +10,12 @@
 
   <modules>
     <module>base</module>
+    <module>browser</module>
+    <module>bytes</module>
     <module>charset</module>
+    <module>drive</module>
+    <module>gui</module>
+    <module>net</module>
   </modules>
 
   <prerequisites>
@@ -59,9 +64,34 @@
         <artifactId>base</artifactId>
         <version>${project.version}</version>
       </dependency>
-     <dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>browser</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>bytes</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>charset</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>drive</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>gui</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>net</artifactId>
         <version>${project.version}</version>
       </dependency>
 

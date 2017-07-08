@@ -10,10 +10,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
 
-import static de.heiden.c64dt.util.HexUtil.hex;
-import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
-import static de.heiden.c64dt.util.HexUtil.hexWord;
-import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
+import static de.heiden.c64dt.bytes.HexUtil.hex;
+import static de.heiden.c64dt.bytes.HexUtil.hexBytePlain;
+import static de.heiden.c64dt.bytes.HexUtil.hexWord;
+import static de.heiden.c64dt.bytes.HexUtil.hexWordPlain;
 
 /**
  * Write assembler source from {@link CommandBuffer}.

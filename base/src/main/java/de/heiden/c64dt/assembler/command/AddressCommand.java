@@ -2,13 +2,13 @@ package de.heiden.c64dt.assembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.label.ILabel;
-import de.heiden.c64dt.util.ByteUtil;
+import de.heiden.c64dt.bytes.ByteUtil;
 import org.springframework.util.Assert;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static de.heiden.c64dt.util.HexUtil.hexWord;
+import static de.heiden.c64dt.bytes.HexUtil.hexWord;
 
 /**
  * Command for an absolute address referencing code.

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedSet;
 
-import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
+import static de.heiden.c64dt.bytes.HexUtil.hexWordPlain;
 
 /**
  * Table model for cross reference view.

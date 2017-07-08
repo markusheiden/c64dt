@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static de.heiden.c64dt.util.HexUtil.hexBytePlain;
-import static de.heiden.c64dt.util.HexUtil.hexWordPlain;
+import static de.heiden.c64dt.bytes.HexUtil.hexBytePlain;
+import static de.heiden.c64dt.bytes.HexUtil.hexWordPlain;
 
 /**
  * Table model for code view.

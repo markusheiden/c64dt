@@ -1,7 +1,7 @@
 package de.heiden.c64dt.assembler.label;
 
-import static de.heiden.c64dt.util.AddressUtil.assertValidAddress;
-import static de.heiden.c64dt.util.HexUtil.hexPlain;
+import static de.heiden.c64dt.bytes.AddressUtil.assertValidAddress;
+import static de.heiden.c64dt.bytes.HexUtil.hexPlain;
 
 /**
  * Base implementation of labels.
