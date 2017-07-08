@@ -1,6 +1,5 @@
-package de.heiden.c64dt.reassembler;
+package de.heiden.c64dt.assembler;
 
-import de.heiden.c64dt.assembler.AbstractCodeBuffer;
 import de.heiden.c64dt.bytes.ByteUtil;
 import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;

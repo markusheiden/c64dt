@@ -1,10 +1,6 @@
 package de.heiden.c64dt.reassembler.detector;
 
-import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.assembler.Opcode;
-import de.heiden.c64dt.assembler.OpcodeMode;
-import de.heiden.c64dt.assembler.OpcodeType;
-import de.heiden.c64dt.reassembler.CodeBuffer;
+import de.heiden.c64dt.assembler.*;
 import de.heiden.c64dt.reassembler.command.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

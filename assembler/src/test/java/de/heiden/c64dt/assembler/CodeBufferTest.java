@@ -1,4 +1,4 @@
-package de.heiden.c64dt.reassembler;
+package de.heiden.c64dt.assembler;
 
 import org.junit.Test;
 

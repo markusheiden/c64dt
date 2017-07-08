@@ -1,5 +1,6 @@
 package de.heiden.c64dt.reassembler;
 
+import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.reassembler.command.CommandBuffer;
 import de.heiden.c64dt.reassembler.command.CommandBufferMapper;
 import de.heiden.c64dt.reassembler.command.CommandCreator;

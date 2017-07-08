@@ -1,5 +1,6 @@
 package de.heiden.c64dt.reassembler;
 
+import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.assembler.Disassembler;
 import org.springframework.util.FileCopyUtils;
 
