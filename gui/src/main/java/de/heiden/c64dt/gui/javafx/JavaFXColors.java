@@ -1,4 +1,4 @@
-package de.heiden.c64dt.javafx;
+package de.heiden.c64dt.gui.javafx;
 
 import de.heiden.c64dt.gui.C64Color;
 import javafx.scene.paint.Color;

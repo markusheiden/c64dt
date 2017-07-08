@@ -1,4 +1,4 @@
-package de.heiden.c64dt.gui;
+package de.heiden.c64dt.gui.swing;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;

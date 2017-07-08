@@ -1,4 +1,4 @@
-package de.heiden.c64dt.browser;
+package de.heiden.c64dt.gui.swing.browser;
 
 import de.heiden.c64dt.disk.IBAM;
 import de.heiden.c64dt.disk.IDiskImage;

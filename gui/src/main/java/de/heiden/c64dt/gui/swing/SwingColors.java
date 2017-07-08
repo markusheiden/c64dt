@@ -1,4 +1,6 @@
-package de.heiden.c64dt.gui;
+package de.heiden.c64dt.gui.swing;
+
+import de.heiden.c64dt.gui.C64Color;
 
 import java.awt.*;
 

@@ -1,6 +1,5 @@
-package de.heiden.c64dt;
+package de.heiden.c64dt.gui.swing.browser;
 
-import de.heiden.c64dt.browser.BrowserGUI;
 import de.heiden.c64dt.charset.C64Charset;
 import de.heiden.c64dt.disk.IDiskImage;
 import de.heiden.c64dt.disk.SectorInputStream;

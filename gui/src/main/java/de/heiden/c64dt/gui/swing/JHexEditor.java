@@ -1,6 +1,4 @@
-package de.heiden.c64dt.monitor;
-
-import de.heiden.c64dt.gui.JC64TextArea;
+package de.heiden.c64dt.gui.swing;
 
 import javax.swing.*;
 import javax.swing.event.CellEditorListener;

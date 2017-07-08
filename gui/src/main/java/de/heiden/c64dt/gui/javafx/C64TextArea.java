@@ -1,18 +1,20 @@
-package de.heiden.c64dt.gui;
+package de.heiden.c64dt.gui.javafx;
 
 import de.heiden.c64dt.bytes.ResourceLoader;
 import de.heiden.c64dt.charset.C64Charset;
+import de.heiden.c64dt.gui.C64Color;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.util.StringTokenizer;
 
 /**
  * Component for displaying C64 text.
  */
-public class JC64TextArea extends JC64CommonComponent {
+public class C64TextArea extends C64Component {
   /**
    * Row height in pixel.
    */
@@ -36,6 +38,10 @@ public class JC64TextArea extends JC64CommonComponent {
 
   private static int[] _defaultCharsetROM;
 
+  //
+  //
+  //
+
   /**
    * Constructor.
    * The lower charset is used as default.
@@ -45,7 +51,7 @@ public class JC64TextArea extends JC64CommonComponent {
    * @param factor zoom factor
    * @param resizable Is the backing image resizable?
    */
-  public JC64TextArea(int columns, int rows, double factor, boolean resizable) {
+  public C64TextArea(int columns, int rows, double factor, boolean resizable) {
     super(columns * COLUMN_WIDTH, rows * ROW_HEIGHT, factor, resizable);
 
     _columns = columns;
@@ -56,18 +62,11 @@ public class JC64TextArea extends JC64CommonComponent {
     _charsetROM = getDefaultCharset();
 
     onResize();
-    if (resizable) {
-      addComponentListener(new ComponentAdapter() {
-        @Override
-        public void componentResized(ComponentEvent e) {
-          onResize();
-        }
-      });
-    }
+    clear();
   }
 
   /**
-   * Resizing.
+   * Init fields.
    */
   private void onResize() {
     _columns = (int) Math.ceil(getImageWidth() / COLUMN_WIDTH);
@@ -76,7 +75,8 @@ public class JC64TextArea extends JC64CommonComponent {
     _chars = new byte[_rows][_columns];
     _foregrounds = new Color[_rows][_columns];
     _backgrounds = new Color[_rows][_columns];
-    clear();
+
+    restoreImage();
   }
 
   /**
@@ -146,7 +146,7 @@ public class JC64TextArea extends JC64CommonComponent {
       return;
     }
 
-    // handle multiline text
+    // handle multi line text
     StringTokenizer tokenizer = new StringTokenizer(s, "\n");
     for (int r = row; tokenizer.hasMoreTokens() && r < _rows; r++) {
       setText(column, r, tokenizer.nextToken());
@@ -176,10 +176,10 @@ public class JC64TextArea extends JC64CommonComponent {
    * @param s characters in C64 encoding
    */
   public void setText(int column, int row, byte... s) {
+    PixelWriter writer = getPixelWriter();
     for (int i = 0, c = column; i < s.length && c < _columns; i++, c++) {
-      setTextInternal(c, row, s[i]);
+      setTextInternal(c, row, s[i], writer);
     }
-    repaint();
   }
 
   /**
@@ -190,8 +190,7 @@ public class JC64TextArea extends JC64CommonComponent {
    * @param c character in C64 encoding
    */
   public void setText(int column, int row, byte c) {
-    setTextInternal(column, row, c);
-    repaint();
+    setTextInternal(column, row, c, getPixelWriter());
   }
 
   /**
@@ -200,8 +199,9 @@ public class JC64TextArea extends JC64CommonComponent {
    * @param column column
    * @param row row
    * @param c character in C64 encoding
+   * @param writer Pixel writer for backing image
    */
-  protected void setTextInternal(int column, int row, byte c) {
+  protected void setTextInternal(int column, int row, byte c, PixelWriter writer) {
     if (column >= _columns || row >= _rows) {
       // early exit, when the text exceeds the buffer.
       // this may happen, e.g. when the component has been resized to a smaller size than the initial size.
@@ -209,8 +209,10 @@ public class JC64TextArea extends JC64CommonComponent {
     }
 
     _chars[row][column] = c;
-    _foregrounds[row][column] = getForeground();
-    _backgrounds[row][column] = getBackground();
+    _foregrounds[row][column] = getForegroundColor();
+    _backgrounds[row][column] = getBackgroundColor();
+
+    paintCharacter(column, row, writer);
   }
 
   /**
@@ -218,8 +220,8 @@ public class JC64TextArea extends JC64CommonComponent {
    */
   public void clear() {
     byte space = _charset.toBytes(" ")[0];
-    Color foreground = getForeground();
-    Color background = getBackground();
+    Color foreground = getForegroundColor();
+    Color background = getBackgroundColor();
     for (int row = 0; row < _rows; row++) {
       byte[] charRow = _chars[row];
       Color[] foregroundRow = _foregrounds[row];
@@ -231,23 +233,17 @@ public class JC64TextArea extends JC64CommonComponent {
       }
     }
 
-    repaint();
+    restoreImage();
   }
 
-  /**
-   * A repaint has been requested.
-   * So the backing image will be updated.
-   *
-   * @param g graphics
-   */
   @Override
-  public void doPaintComponent(Graphics g) {
+  protected void restoreImage() {
+    PixelWriter writer = getPixelWriter();
     for (int row = 0; row < _rows; row++) {
       for (int column = 0; column < _columns; column++) {
-        paintCharacter(column, row);
+        paintCharacter(column, row, writer);
       }
     }
-    updateImageData();
   }
 
   /**
@@ -255,9 +251,9 @@ public class JC64TextArea extends JC64CommonComponent {
    *
    * @param column column
    * @param row row
+   * @param writer Pixel writer for backing image
    */
-  private void paintCharacter(int column, int row) {
-    int[] imageData = getImageData();
+  private void paintCharacter(int column, int row, PixelWriter writer) {
     Color foregroundColor = _foregrounds[row][column];
     if (foregroundColor == null) {
       return;
@@ -266,16 +262,13 @@ public class JC64TextArea extends JC64CommonComponent {
     if (backgroundColor == null) {
       return;
     }
-    int foreground = foregroundColor.getRGB();
-    int background = backgroundColor.getRGB();
 
     int charOffset = _upper ? 0x0000 : 0x0800;
     int charPtr = charOffset + (_chars[row][column] & 0xFF) * 8;
     for (int y = row * 8, lastY = y + 8; y < lastY; y++) {
-      int offset = y * getImageWidth() + column * 8;
       int data = _charsetROM[charPtr++];
-      for (int dx = 0, bit = 0x80; bit > 0; dx++, bit = bit >> 1) {
-        imageData[offset + dx] = (data & bit) != 0 ? foreground : background;
+      for (int x = column * 8, bit = 0x80; bit > 0; x++, bit = bit >> 1) {
+        writer.setColor(x, y, (data & bit) != 0 ? foregroundColor : backgroundColor);
       }
     }
   }
@@ -284,43 +277,49 @@ public class JC64TextArea extends JC64CommonComponent {
   // test
   //
 
+  /**
+   * Start a small demo app for this control.
+   */
   public static void main(String[] args) {
-    JFrame frame = new JFrame();
-    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    TestApp.launch(TestApp.class);
+  }
 
-    JC64TextArea text = new JC64TextArea(40, 25, 2, false);
-    frame.add(text);
+  /**
+   * Demo app for this control.
+   */
+  public static class TestApp extends Application {
+    @Override
+    public void start(Stage stage) throws Exception {
+      C64TextArea text = new C64TextArea(40, 25, 2, true);
 
-    frame.pack();
-    frame.setVisible(true);
+      text.setForegroundColor(C64Color.LIGHT_BLUE);
+      text.setBackgroundColor(C64Color.BLUE);
+      text.clear();
 
-    text.setForeground(C64Color.LIGHT_BLUE);
-    text.setBackground(C64Color.BLUE);
-    text.clear();
+      text.setCharset(false);
+      text.setText(0, 0, "This is a test azAZ");
+      text.setTextInverted(0, 1, "This is a test azAZ");
+      text.setText(0, 2, "@[] !\"#$%&'()*+,-./1234567890:;<=>?|_");
 
-    text.setCharset(false);
-    text.setText(0, 0, "This is a test azAZ");
-    text.setTextInverted(0, 1, "This is a test azAZ");
-    text.setText(0, 2, "@[] !\"#$%&'()*+,-./1234567890:;<=>?|_");
+      text.setCharset(true);
+      text.setText(0, 3, "THIS IS A TEST AZ");
+      text.setTextInverted(0, 4, "THIS IS A TEST AZ");
+      text.setText(0, 5, "@[] !\"#$%&'()*+,-./1234567890:;<=>?|_");
 
-    text.setCharset(true);
-    text.setText(0, 3, "THIS IS A TEST AZ");
-    text.setTextInverted(0, 4, "THIS IS A TEST AZ");
-    text.setText(0, 5, "@[] !\"#$%&'()*+,-./1234567890:;<=>?|_");
-
-    byte c = 0;
-    for (int y = 0; y < 16; y++) {
-      for (int x = 0; x < 16; x++, c++) {
-        text.setCharset(false);
-        text.setForeground(C64Color.LIGHT_GREEN);
-        text.setText(x, y + 8, c);
-        text.setCharset(true);
-        text.setForeground(C64Color.LIGHT_RED);
-        text.setText(x + 20, y + 8, c);
+      byte c = 0;
+      for (int y = 0; y < 16; y++) {
+        for (int x = 0; x < 16; x++, c++) {
+          text.setCharset(false);
+          text.setForegroundColor(C64Color.LIGHT_GREEN);
+          text.setText(x, y + 8, c);
+          text.setCharset(true);
+          text.setForegroundColor(C64Color.LIGHT_RED);
+          text.setText(x + 20, y + 8, c);
+        }
       }
-    }
 
-    // TODO 2010-03-07 mh: why is this repaint() needed???
-    frame.repaint();
+      stage.setScene(new Scene(text, text.getWidth(), text.getHeight()));
+      stage.show();
+    }
   }
 }

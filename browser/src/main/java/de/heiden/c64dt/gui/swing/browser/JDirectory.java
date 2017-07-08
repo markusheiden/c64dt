@@ -1,9 +1,9 @@
-package de.heiden.c64dt.browser;
+package de.heiden.c64dt.gui.swing.browser;
 
 import de.heiden.c64dt.charset.C64Charset;
 import de.heiden.c64dt.disk.IDirectory;
 import de.heiden.c64dt.disk.IFile;
-import de.heiden.c64dt.gui.JC64TextArea;
+import de.heiden.c64dt.gui.swing.JC64TextArea;
 import org.springframework.util.Assert;
 
 import javax.swing.*;
