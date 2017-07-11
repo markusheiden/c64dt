@@ -5,7 +5,6 @@ import de.heiden.c64dt.reassembler.label.CodeLabel;
 import de.heiden.c64dt.reassembler.label.DataLabel;
 import de.heiden.c64dt.reassembler.label.ExternalLabel;
 import de.heiden.c64dt.reassembler.label.ILabel;
-import org.springframework.util.Assert;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -264,7 +263,8 @@ public class CommandBuffer implements Iterable<ICommand> {
     requireValidAddress(address);
 
     Integer removed = startAddresses.put(startIndex, address - startIndex);
-    Assert.isNull(removed, "Precondition: Not based the same index twice");
+    // Check that the same index is not based twice.
+    requireThat(removed, "removed").isNull();
   }
 
   //
@@ -280,7 +280,8 @@ public class CommandBuffer implements Iterable<ICommand> {
     requireThat(subroutine, "subroutine").isNotNull();
 
     Subroutine removed = subroutines.put(subroutine.getAddress(), subroutine);
-    Assert.isNull(removed, "Precondition: no doubled subroutines");
+    // Check that there are no doubled subroutines.
+    requireThat(removed, "removed").isNull();
   }
 
   /**

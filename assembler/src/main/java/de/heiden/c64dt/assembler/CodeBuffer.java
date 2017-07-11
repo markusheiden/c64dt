@@ -1,7 +1,7 @@
 package de.heiden.c64dt.assembler;
 
 import de.heiden.c64dt.bytes.ByteUtil;
-import org.springframework.util.FileCopyUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,7 +57,7 @@ public class CodeBuffer extends AbstractCodeBuffer {
     requireThat(startAddr, "startAddr").isGreaterThanOrEqualTo(0);
     requireThat(code, "code").isNotNull();
 
-    return new CodeBuffer(startAddr, FileCopyUtils.copyToByteArray(code));
+    return new CodeBuffer(startAddr, IOUtils.toByteArray(code));
   }
 
   /**
@@ -69,7 +69,7 @@ public class CodeBuffer extends AbstractCodeBuffer {
   public static CodeBuffer fromProgram(InputStream program) throws IOException {
     requireThat(program, "program").isNotNull();
 
-    return fromProgram(FileCopyUtils.copyToByteArray(program));
+    return fromProgram(IOUtils.toByteArray(program));
   }
 
   /**

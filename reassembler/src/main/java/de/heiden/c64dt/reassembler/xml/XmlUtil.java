@@ -1,6 +1,6 @@
 package de.heiden.c64dt.reassembler.xml;
 
-import org.springframework.util.FileCopyUtils;
+import org.apache.commons.io.IOUtils;
 
 import javax.xml.bind.JAXB;
 import java.io.*;
@@ -36,7 +36,7 @@ public class XmlUtil {
    * @param xml XML
    */
   public static void println(byte[] xml) throws Exception {
-    FileCopyUtils.copy(new InputStreamReader(new ByteArrayInputStream(xml), "utf8"), new PrintWriter(System.out));
+    IOUtils.copy(new InputStreamReader(new ByteArrayInputStream(xml), "utf8"), new PrintWriter(System.out));
     System.out.println();
     System.out.flush();
   }

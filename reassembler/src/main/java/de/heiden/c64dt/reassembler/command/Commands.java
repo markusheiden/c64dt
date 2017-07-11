@@ -5,7 +5,6 @@ import de.heiden.c64dt.reassembler.label.CodeLabel;
 import de.heiden.c64dt.reassembler.label.DataLabel;
 import de.heiden.c64dt.reassembler.label.ExternalLabel;
 import de.heiden.c64dt.reassembler.label.ILabel;
-import org.springframework.util.Assert;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -249,7 +248,8 @@ public class Commands {
     requireValidAddress(baseAddress);
 
     Integer removed = startAddresses.put(startIndex, baseAddress);
-    Assert.isNull(removed, "Precondition: Not rebased the same index twice");
+    // Check that the same index is not rebased twice.
+    requireThat(removed, "removed").isNull();
   }
 
   /**
@@ -263,7 +263,8 @@ public class Commands {
     requireValidAddress(address);
 
     Integer removed = startAddresses.put(startIndex, address - startIndex);
-    Assert.isNull(removed, "Precondition: Not based the same index twice");
+    // Check that the same index is not based twice.
+    requireThat(removed, "removed").isNull();
   }
 
   //
@@ -279,7 +280,8 @@ public class Commands {
     requireThat(subroutine, "subroutine").isNotNull();
 
     Subroutine removed = subroutines.put(subroutine.getAddress(), subroutine);
-    Assert.isNull(removed, "Precondition: no doubled subroutines");
+    // Check that there are no doubled subroutines.
+    requireThat(removed, "removed").isNull();
   }
 
   /**
