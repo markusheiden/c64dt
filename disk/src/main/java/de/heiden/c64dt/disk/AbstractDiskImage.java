@@ -2,9 +2,9 @@ package de.heiden.c64dt.disk;
 
 import de.heiden.c64dt.bytes.ByteUtil;
 import de.heiden.c64dt.charset.TextUtil;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.FileCopyUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,7 +64,7 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * Load D64 from binary representation.
    */
   public void load(InputStream stream) throws IOException {
-    byte[] bytes = FileCopyUtils.copyToByteArray(stream);
+    byte[] bytes = IOUtils.toByteArray(stream);
     for (int pos = 0, track = 1; track <= getTracks(); track++) {
       for (int sector = 0; sector < getSectors(track) && pos < bytes.length; sector++, pos += 256) {
         log.info("Reading track {} sector {}.", track, sector);

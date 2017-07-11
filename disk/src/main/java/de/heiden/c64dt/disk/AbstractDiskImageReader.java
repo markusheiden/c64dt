@@ -1,8 +1,9 @@
 package de.heiden.c64dt.disk;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +28,7 @@ public abstract class AbstractDiskImageReader {
   public IDiskImage read(File file) throws IOException, WrongDiskImageFormatException {
     requireThat(file, "file").isNotNull();
 
-    return read(FileCopyUtils.copyToByteArray(file));
+    return read(FileUtils.readFileToByteArray(file));
   }
 
   /**
@@ -39,7 +40,7 @@ public abstract class AbstractDiskImageReader {
   public IDiskImage read(InputStream stream) throws IOException, WrongDiskImageFormatException {
     requireThat(stream, "stream").isNotNull();
 
-    return read(FileCopyUtils.copyToByteArray(stream));
+    return read(IOUtils.toByteArray(stream));
   }
 
   /**

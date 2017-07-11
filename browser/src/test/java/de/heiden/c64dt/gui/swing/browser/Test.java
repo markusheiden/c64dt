@@ -4,7 +4,8 @@ import de.heiden.c64dt.charset.C64Charset;
 import de.heiden.c64dt.disk.IDiskImage;
 import de.heiden.c64dt.disk.SectorInputStream;
 import de.heiden.c64dt.disk.d64.D64Reader;
-import org.springframework.util.FileCopyUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import javax.swing.*;
 import java.io.*;
@@ -22,9 +23,9 @@ public class Test {
     BrowserGUI browser = new BrowserGUI();
     browser.setDiskImage(diskImage);
     InputStream is = new SectorInputStream(diskImage, diskImage.getDirectory().getFiles().get(5));
-    byte[] boulderDash = FileCopyUtils.copyToByteArray(is);
+    byte[] boulderDash = IOUtils.toByteArray(is);
     System.out.println("Length: " + boulderDash.length);
-    FileCopyUtils.copy(boulderDash, new File("./dummy.prg"));
+    FileUtils.writeByteArrayToFile(new File("./dummy.prg"), boulderDash);
 
 //    JaC64.main(new String[]{"doubleScreen", "1", "autostartPGM", "./dummy.prg", "soundOn", "1"});
 
