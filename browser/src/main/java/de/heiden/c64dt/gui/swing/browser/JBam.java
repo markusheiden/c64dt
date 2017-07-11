@@ -2,11 +2,12 @@ package de.heiden.c64dt.gui.swing.browser;
 
 import de.heiden.c64dt.disk.IBAM;
 import de.heiden.c64dt.disk.IDiskImage;
-import org.springframework.util.Assert;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Component for displaying a bam.
@@ -41,7 +42,7 @@ public class JBam extends JComponent {
    * @param diskImage disk image
    */
   public void setDiskImage(IDiskImage diskImage) {
-    Assert.notNull(diskImage, "Precondition: diskImage != null");
+    requireThat(diskImage, "diskImage").isNotNull();
 
     this.diskImage = diskImage;
 
@@ -69,7 +70,7 @@ public class JBam extends JComponent {
 
   @Override
   protected void paintComponent(Graphics g) {
-    Assert.notNull(g, "Precondition: g != null");
+    requireThat(g, "g").isNotNull();
 
     IBAM bam = diskImage.getBAM();
 

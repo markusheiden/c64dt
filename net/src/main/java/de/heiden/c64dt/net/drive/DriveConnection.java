@@ -2,11 +2,12 @@ package de.heiden.c64dt.net.drive;
 
 import de.heiden.c64dt.net.AbstractConnection;
 import de.heiden.c64dt.net.Packet;
-import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Connection of net drive server.
@@ -76,7 +77,7 @@ public class DriveConnection extends AbstractConnection {
    * @param data payload data
    */
   public void sendReply(byte[] data) throws IOException {
-    Assert.notNull(data, "Precondition: data != null");
+    requireThat(data, "data").isNotNull();
 
     byte size = (byte) data.length;
 //    if (IDX_DATA + size >= MAX_PACKET) {

@@ -1,9 +1,8 @@
 package de.heiden.c64dt.assembler;
 
-import org.springframework.util.Assert;
-
 import static de.heiden.c64dt.bytes.HexUtil.hexByte;
 import static de.heiden.c64dt.bytes.HexUtil.hexWord;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Opcode address mode.
@@ -128,7 +127,7 @@ public enum OpcodeMode {
    * Number of bytes this address mode uses.
    */
   public final int getSize() {
-    Assert.isTrue(size >= 0 && size <= 2, "Postcondition: result >= 0 && result <= 2");
+    requireThat(size, "size").isGreaterThanOrEqualTo(0).isLessThanOrEqualTo(2);
     return size;
   }
 
@@ -152,7 +151,7 @@ public enum OpcodeMode {
    * @param pc Program counter
    */
   public int getAddress(int pc, int argument) {
-    Assert.isTrue(isAddress(), "Precondition: isAddress()");
+    requireThat(isAddress(), "isAddress()").isTrue();
 
     return argument;
   }
@@ -182,8 +181,8 @@ public enum OpcodeMode {
    * @param size number of bytes the argument takes
    * @param isAddress is the argument a (non zero page) address?
    */
-  private OpcodeMode(int size, boolean isAddress) {
-    Assert.isTrue(size >= 0 && size <= 2, "Precondition: getSize >= 0 && getSize <= 2");
+  OpcodeMode(int size, boolean isAddress) {
+    requireThat(size, "size").isGreaterThanOrEqualTo(0).isLessThanOrEqualTo(2);
 
     this.size = size;
     this.isAddress = isAddress;

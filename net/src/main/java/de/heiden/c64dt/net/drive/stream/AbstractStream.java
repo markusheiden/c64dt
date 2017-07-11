@@ -1,8 +1,8 @@
 package de.heiden.c64dt.net.drive.stream;
 
-import org.springframework.util.Assert;
-
 import java.io.IOException;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Base implementation of a stream.
@@ -38,14 +38,14 @@ public abstract class AbstractStream implements IStream {
 
   @Override
   public final byte[] read(int length) throws IOException {
-    Assert.isTrue(isOpen(), "Precondition: isOpen()");
-    Assert.isTrue(length >= 0, "Precondition: length >= 0");
+    requireThat(isOpen(), "isOpen()").isTrue();
+    requireThat(length, "length").isGreaterThanOrEqualTo(0);
 
     lastPosition = position;
     byte[] result = doRead(length);
     position += result.length;
 
-    Assert.notNull(result, "Postcondition: result != null");
+    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -58,8 +58,8 @@ public abstract class AbstractStream implements IStream {
 
   @Override
   public final void write(byte[] data) throws IOException {
-    Assert.isTrue(isOpen(), "Precondition: isOpen()");
-    Assert.notNull(data, "Precondition: data != null");
+    requireThat(isOpen(), "isOpen()").isTrue();
+    requireThat(data, "data").isNotNull();
 
     doWrite(data);
   }

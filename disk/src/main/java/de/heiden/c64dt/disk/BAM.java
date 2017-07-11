@@ -1,9 +1,8 @@
 package de.heiden.c64dt.disk;
 
-import org.springframework.util.Assert;
-
-import static de.heiden.c64dt.disk.SectorModelUtil.assertSector;
-import static de.heiden.c64dt.disk.SectorModelUtil.assertTrack;
+import static de.heiden.c64dt.disk.SectorModelUtil.requireValidSector;
+import static de.heiden.c64dt.disk.SectorModelUtil.requireValidTrack;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Block allocation map implementation.
@@ -14,7 +13,7 @@ public class BAM implements IBAM {
   private final int[] freeSectors;
 
   public BAM(ISectorModel sectorModel) {
-    Assert.notNull(sectorModel, "Precondition: sectorModel != null");
+    requireThat(sectorModel, "sectorModel").isNotNull();
 
     this.sectorModel = sectorModel;
 
@@ -33,14 +32,14 @@ public class BAM implements IBAM {
 
   @Override
   public boolean isFree(int track, int sector) {
-    assertSector(sectorModel, track, sector);
+    requireValidSector(sectorModel, track, sector);
 
     return isFree[track - 1][sector];
   }
 
   @Override
   public void setFree(int track, int sector, boolean isFree) {
-    assertSector(sectorModel, track, sector);
+    requireValidSector(sectorModel, track, sector);
 
     this.isFree[track - 1][sector] = isFree;
   }
@@ -57,14 +56,14 @@ public class BAM implements IBAM {
 
   @Override
   public int getFreeSectors(int track) {
-    assertTrack(sectorModel, track);
+    requireValidTrack(sectorModel, track);
 
     return freeSectors[track - 1];
   }
 
   @Override
   public void setFreeSectors(int track, int freeSectors) {
-    assertTrack(sectorModel, track);
+    requireValidTrack(sectorModel, track);
 
     this.freeSectors[track - 1] = freeSectors;
   }

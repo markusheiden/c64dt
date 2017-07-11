@@ -2,12 +2,13 @@ package de.heiden.c64dt.disk;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Abstract base class for disk image readers.
@@ -24,7 +25,7 @@ public abstract class AbstractDiskImageReader {
    * @param file file
    */
   public IDiskImage read(File file) throws IOException, WrongDiskImageFormatException {
-    Assert.notNull(file, "Precondition: file != null");
+    requireThat(file, "file").isNotNull();
 
     return read(FileCopyUtils.copyToByteArray(file));
   }
@@ -36,7 +37,7 @@ public abstract class AbstractDiskImageReader {
    * @param stream stream
    */
   public IDiskImage read(InputStream stream) throws IOException, WrongDiskImageFormatException {
-    Assert.notNull(stream, "Precondition: stream != null");
+    requireThat(stream, "stream").isNotNull();
 
     return read(FileCopyUtils.copyToByteArray(stream));
   }
@@ -56,8 +57,8 @@ public abstract class AbstractDiskImageReader {
    * @return diskImage for method chaining
    */
   protected IDiskImage read(byte[] data, IDiskImage diskImage) {
-    Assert.notNull(data, "Precondition: data != null");
-    Assert.notNull(diskImage, "Precondition: diskImage != null");
+    requireThat(data, "data").isNotNull();
+    requireThat(diskImage, "diskImage").isNotNull();
 
     int i = 0;
 
@@ -84,9 +85,9 @@ public abstract class AbstractDiskImageReader {
       }
     }
 
-    Assert.isTrue(i == data.length, "Check: i == data.length");
+    requireThat(i, "i").isEqualTo(data.length, "data.length");
 
-    Assert.notNull(diskImage, "Postcondition: result != null");
+    requireThat(diskImage, "diskImage").isNotNull();
     return diskImage;
   }
 }

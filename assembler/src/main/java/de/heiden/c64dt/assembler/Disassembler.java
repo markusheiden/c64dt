@@ -1,7 +1,5 @@
 package de.heiden.c64dt.assembler;
 
-import org.springframework.util.Assert;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -10,6 +8,7 @@ import static de.heiden.c64dt.bytes.ByteUtil.hi;
 import static de.heiden.c64dt.bytes.ByteUtil.lo;
 import static de.heiden.c64dt.bytes.HexUtil.hexBytePlain;
 import static de.heiden.c64dt.bytes.HexUtil.hexWordPlain;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Reassembler.
@@ -43,8 +42,8 @@ public class Disassembler {
    * @param list List Basic header?.
    */
   public void listAndDisassemble(ICodeBuffer code, Writer output, boolean list) throws IOException {
-    Assert.notNull(code, "Precondition: code != null");
-    Assert.notNull(output, "Precondition: output != null");
+    requireThat(code, "code").isNotNull();
+    requireThat(output, "output").isNotNull();
 
     try (BufferedWriter out = new NonClosingBufferedWriter(output)) {
       if (list) {

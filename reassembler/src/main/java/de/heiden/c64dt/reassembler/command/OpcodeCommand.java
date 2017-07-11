@@ -5,10 +5,11 @@ import de.heiden.c64dt.assembler.Opcode;
 import de.heiden.c64dt.assembler.OpcodeMode;
 import de.heiden.c64dt.bytes.ByteUtil;
 import de.heiden.c64dt.reassembler.label.ILabel;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Command for an opcode.
@@ -38,7 +39,7 @@ public class OpcodeCommand extends AbstractCommand {
   public OpcodeCommand(Opcode opcode, int argument) {
     super(CodeType.OPCODE);
 
-    Assert.notNull(opcode, "Precondition: opcode != null");
+    requireThat(opcode, "opcode").isNotNull();
 
     this.opcode = opcode;
     this.argument = argument;
@@ -58,7 +59,7 @@ public class OpcodeCommand extends AbstractCommand {
    * Argument for opcode, if any.
    */
   public int getArgument() {
-    Assert.isTrue(getSize() > 1, "Precondition: getSize() > 1");
+    requireThat(getSize() > 1, "Precondition: getSize() > 1");
 
     return argument;
   }
@@ -74,7 +75,7 @@ public class OpcodeCommand extends AbstractCommand {
    * Get the opcode argument as absolute address.
    */
   public int getArgumentAddress() {
-    Assert.isTrue(isArgumentAddress(), "Precondition: isArgumentAddress()");
+    requireThat(isArgumentAddress(), "Precondition: isArgumentAddress()");
 
     return opcode.getMode().getAddress(getAddress(), getArgument());
   }
@@ -97,7 +98,7 @@ public class OpcodeCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    Assert.notNull(buffer, "Precondition: buffer != null");
+    requireThat(buffer, "Precondition: buffer != null");
 
     StringBuilder result = new StringBuilder();
     result.append(opcode.getType().toString());
@@ -127,7 +128,7 @@ public class OpcodeCommand extends AbstractCommand {
     }
 
 
-    Assert.notNull(result, "Postcondition: result != null");
+    requireThat(result, "Postcondition: result != null");
     return result;
   }
 }

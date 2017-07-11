@@ -1,9 +1,8 @@
 package de.heiden.c64dt.assembler;
 
-import org.springframework.util.Assert;
-
 import static de.heiden.c64dt.assembler.OpcodeMode.*;
 import static de.heiden.c64dt.assembler.OpcodeType.*;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * 6502 series opcodes.
@@ -348,11 +347,11 @@ public enum Opcode {
    * @param opcode byte representation of opcode
    */
   public static Opcode opcode(int opcode) {
-    Assert.isTrue(opcode >= 0x00 && opcode <= 0xFF, "Precondition: opcode >= 0x00 && opcode <= 0xFF");
+    requireThat(opcode, "opcode").isGreaterThanOrEqualTo(0x00).isLessThanOrEqualTo(0xFF);
 
     Opcode result = values()[opcode];
 
-    Assert.isTrue(result.getOpcode() == opcode, "Postcondition: result.getOpcode() == opcode");
+    requireThat(result.getOpcode(), "result.getOpcode()").isEqualTo(opcode, "opcode");
     return result;
   }
 
@@ -389,11 +388,13 @@ public enum Opcode {
    * @param cycles number of cycles (without exceptional additional cycles)
    */
   private Opcode(int opcode, boolean legal, OpcodeType type, OpcodeMode mode, int cycles) {
-    Assert.isTrue(opcode >= 0x00 && opcode <= 0xFF, "Precondition: opcode >= 0x00 && opcode <= 0xFF");
-    Assert.notNull(type, "Precondition: type != null");
-    Assert.notNull(mode, "Precondition: mode != null");
-    Assert.isTrue(type == KIL || cycles >= 0, "Precondition: type == KIL || cycles >= 0");
-    Assert.isTrue(cycles <= 8, "Precondition: cycles <= 8");
+    requireThat(opcode, "opcode").isGreaterThanOrEqualTo(0x00).isLessThanOrEqualTo(0xFF);
+    requireThat(type, "type").isNotNull();
+    requireThat(mode, "mode").isNotNull();
+    if (type != KIL) {
+      requireThat(cycles, "cycles").isGreaterThan(0);
+    }
+    requireThat(cycles, "cycles").isLessThanOrEqualTo(8);
 
     this.opcode = opcode;
     this.legal = legal;

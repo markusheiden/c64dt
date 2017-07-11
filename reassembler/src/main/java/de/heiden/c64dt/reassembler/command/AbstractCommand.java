@@ -1,7 +1,8 @@
 package de.heiden.c64dt.reassembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
-import org.springframework.util.Assert;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Base implementation for commands.
@@ -32,13 +33,13 @@ public abstract class AbstractCommand implements ICommand {
 
   @Override
   public int getAddress() {
-    Assert.isTrue(hasAddress(), "Precondition: hasAddress()");
+    requireThat(hasAddress(), "hasAddress()").isTrue();
     return address;
   }
 
   @Override
   public void setAddress(int address) {
-    Assert.isTrue(!hasAddress(), "Precondition: !hasAddress()");
+    requireThat(hasAddress(), "hasAddress()").isFalse();
 
     this.address = address;
   }

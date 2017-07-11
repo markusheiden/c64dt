@@ -2,11 +2,12 @@ package de.heiden.c64dt.assembler;
 
 import de.heiden.c64dt.bytes.HexUtil;
 import de.heiden.c64dt.charset.C64Charset;
-import org.springframework.util.Assert;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Dumps memory.
@@ -24,8 +25,8 @@ public class Dumper {
    * @param output output for reassembled code
    */
   public void dump(ICodeBuffer code, Writer output) throws IOException {
-    Assert.notNull(code, "Precondition: code != null");
-    Assert.notNull(output, "Precondition: output != null");
+    requireThat(code, "code").isNotNull();
+    requireThat(output, "output").isNotNull();
 
     try (BufferedWriter out = new NonClosingBufferedWriter(output)) {
       dump(code, out);
@@ -40,8 +41,8 @@ public class Dumper {
    * @param output output for reassembled code
    */
   private void dump(ICodeBuffer code, BufferedWriter output) throws IOException {
-    Assert.notNull(code, "Precondition: code != null");
-    Assert.notNull(output, "Precondition: output != null");
+    requireThat(code, "code").isNotNull();
+    requireThat(output, "output").isNotNull();
 
     StringBuilder chars = new StringBuilder(16);
     while (code.hasMore()) {

@@ -1,13 +1,13 @@
 package de.heiden.c64dt.assembler;
 
 import de.heiden.c64dt.bytes.ByteUtil;
-import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 import static de.heiden.c64dt.bytes.ByteUtil.toWord;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Input stream for code.
@@ -54,8 +54,8 @@ public class CodeBuffer extends AbstractCodeBuffer {
    * @param code Code
    */
   public static CodeBuffer fromCode(int startAddr, InputStream code) throws IOException {
-    Assert.isTrue(startAddr >= 0, "Precondition: startAddr >= 0");
-    Assert.notNull(code, "Precondition: code != null");
+    requireThat(startAddr, "startAddr").isGreaterThanOrEqualTo(0);
+    requireThat(code, "code").isNotNull();
 
     return new CodeBuffer(startAddr, FileCopyUtils.copyToByteArray(code));
   }
@@ -67,7 +67,7 @@ public class CodeBuffer extends AbstractCodeBuffer {
    * @param program program with start address
    */
   public static CodeBuffer fromProgram(InputStream program) throws IOException {
-    Assert.notNull(program, "Precondition: program != null");
+    requireThat(program, "program").isNotNull();
 
     return fromProgram(FileCopyUtils.copyToByteArray(program));
   }
@@ -79,8 +79,8 @@ public class CodeBuffer extends AbstractCodeBuffer {
    * @param program program with start address
    */
   public static CodeBuffer fromProgram(byte[] program) throws IOException {
-    Assert.notNull(program, "Precondition: program != null");
-    Assert.isTrue(program.length >= 2, "Precondition: program.length >= 2");
+    requireThat(program, "program").isNotNull();
+    requireThat(program.length, "program.length").isGreaterThanOrEqualTo(2);
 
     int address = toWord(program, 0);
     byte[] code = new byte[program.length - 2];

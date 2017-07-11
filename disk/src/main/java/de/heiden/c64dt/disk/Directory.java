@@ -1,8 +1,8 @@
 package de.heiden.c64dt.disk;
 
-import org.springframework.util.Assert;
-
 import java.util.List;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Directory implementation.
@@ -23,12 +23,12 @@ public class Directory implements IDirectory {
    * @param files files
    */
   public Directory(byte[] name, byte[] idAndType, List<IFile> files, int freeBlocks) {
-    Assert.notNull(name, "Precondition: name != null");
-    Assert.isTrue(name.length == 16, "Precondition: name.length == 16");
-    Assert.notNull(idAndType, "Precondition: idAndType != null");
-    Assert.isTrue(idAndType.length == 5, "Precondition: idAndType.length == 5");
-    Assert.notNull(files, "Precondition: files != null");
-    Assert.isTrue(freeBlocks >= 0, "Precondition: freeBlocks >= 0");
+    requireThat(name, "name").isNotNull();
+    requireThat(name.length, "name.length").isEqualTo(16);
+    requireThat(idAndType, "idAndType").isNotNull();
+    requireThat(idAndType.length, "idAndType.length").isEqualTo(5);
+    requireThat(files, "files").isNotNull();
+    requireThat(freeBlocks, "freeBlocks").isGreaterThanOrEqualTo(0);
 
     this.name = name;
     this.idAndType = idAndType;
@@ -42,29 +42,29 @@ public class Directory implements IDirectory {
 
   @Override
   public byte[] getName() {
-    Assert.notNull(name, "Postcondition: result != null");
-    Assert.isTrue(name.length == 16, "Postcondition: name.length == 16");
+    requireThat(name, "name").isNotNull();
+    requireThat(name.length, "name.length").isEqualTo(16);
     return name;
   }
 
   @Override
   public byte[] getIdAndType() {
-    Assert.notNull(idAndType, "Postcondition: result != null");
-    Assert.isTrue(idAndType.length == 5, "Postcondition: result.length == 5");
+    requireThat(idAndType, "idAndType").isNotNull();
+    requireThat(idAndType.length, "idAndType.length").isEqualTo(5);
     return idAndType;
   }
 
   @Override
   public byte[] getId() {
-    Assert.notNull(id, "Postcondition: result != null");
-    Assert.isTrue(id.length == 2, "Postcondition: result.length == 2");
+    requireThat(id, "id").isNotNull();
+    requireThat(id.length, "id.length").isEqualTo(2);
     return id;
   }
 
   @Override
   public byte[] getDosType() {
-    Assert.notNull(dosType, "Postcondition: result != null");
-    Assert.isTrue(dosType.length == 2, "Postcondition: result.length == 2");
+    requireThat(dosType, "id").isNotNull();
+    requireThat(dosType.length, "dosType.length").isEqualTo(2);
     return dosType;
   }
 

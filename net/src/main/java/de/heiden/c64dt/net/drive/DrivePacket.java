@@ -1,9 +1,10 @@
 package de.heiden.c64dt.net.drive;
 
 import de.heiden.c64dt.bytes.ByteUtil;
-import org.springframework.util.Assert;
 
 import java.io.IOException;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Packet for drive.
@@ -101,7 +102,7 @@ public class DrivePacket {
     byte[] result = new byte[size];
     System.arraycopy(data, IDX_DATA, result, 0, result.length);
 
-    Assert.notNull(result, "Postcondition: result != null");
+    requireThat(result, "result").isNotNull();
     return result;
   }
 }

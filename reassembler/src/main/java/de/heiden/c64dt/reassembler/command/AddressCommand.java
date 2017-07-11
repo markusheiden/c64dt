@@ -3,12 +3,12 @@ package de.heiden.c64dt.reassembler.command;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.bytes.ByteUtil;
 import de.heiden.c64dt.reassembler.label.ILabel;
-import org.springframework.util.Assert;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static de.heiden.c64dt.bytes.HexUtil.hexWord;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Command for an absolute address referencing code.
@@ -42,11 +42,15 @@ public class AddressCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    Assert.notNull(buffer, "Precondition: buffer != null");
+    requireThat(buffer, "buffer").isNotNull();
 
     ILabel label = buffer.getLabel(address);
-    Assert.isTrue(label == null || label.getAddress() == address, "Check: label.getAddress() == address");
-    return "!WORD " + (label != null ? label.toString(address) : hexWord(address));
+    if (label == null) {
+      return "!WORD " + hexWord(address);
+    }
+
+    requireThat(label.getAddress(), "label.getAddress()").isEqualTo(address);
+    return "!WORD " + label.toString(address);
   }
 
   @Override

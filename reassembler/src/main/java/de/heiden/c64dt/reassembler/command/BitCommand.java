@@ -2,12 +2,12 @@ package de.heiden.c64dt.reassembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Opcode;
-import org.springframework.util.Assert;
 
 import java.util.Collections;
 import java.util.List;
 
 import static de.heiden.c64dt.bytes.HexUtil.hexByte;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Command for using bit to skip the next opcode.
@@ -41,7 +41,7 @@ public class BitCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    Assert.notNull(buffer, "Precondition: buffer != null");
+    requireThat(buffer, "buffer").isNotNull();
 
     return "!BYTE " + hexByte(opcode.getOpcode()) + "; " + opcode.toString(getAddress(), argument);
   }

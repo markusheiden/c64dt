@@ -2,16 +2,16 @@ package de.heiden.c64dt.net.code;
 
 import de.heiden.c64dt.net.AbstractConnection;
 import de.heiden.c64dt.net.Packet;
-import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
 
-import static de.heiden.c64dt.bytes.AddressUtil.assertValidAddress;
+import static de.heiden.c64dt.bytes.AddressUtil.requireValidAddress;
 import static de.heiden.c64dt.bytes.ByteUtil.hi;
 import static de.heiden.c64dt.bytes.ByteUtil.lo;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * IP connection to a c64.
@@ -45,7 +45,7 @@ public class C64Connection extends AbstractConnection {
    */
   public C64Connection(int sourcePort, InetAddress address, int destinationPort) throws IOException {
     super(new InetSocketAddress(InetAddress.getLocalHost(), sourcePort), new InetSocketAddress(address, destinationPort), MAX_PACKET, MAGIC1, MAGIC2);
-    Assert.notNull(address, "Precondition: address != null");
+    requireThat(address, "address").isNotNull();
   }
 
   /**
@@ -68,10 +68,10 @@ public class C64Connection extends AbstractConnection {
    * @param data data
    */
   public synchronized void write(int address, byte... data) throws IOException {
-    assertValidAddress(address);
-    Assert.notNull(data, "Precondition: data != null");
-    Assert.isTrue(4 + data.length <= getPacketSize(), "Precondition: 4 + data.length <= getPacketSize()");
-    Assert.isTrue(isOpen(), "Precondition: isOpen()");
+    requireValidAddress(address);
+    requireThat(data, "data").isNotNull();
+    requireThat(4 + data.length, "4 + data.length").isLessThanOrEqualTo(getPacketSize());
+    requireThat(isOpen(), "isOpen()").isTrue();
 
     for (int ptr = 0, remain = data.length; remain > 0; ptr += 128, remain -= 128) {
       int length = remain > 128 ? 128 : remain;
@@ -89,8 +89,8 @@ public class C64Connection extends AbstractConnection {
    * @param fill fill byte
    */
   public synchronized void fill(int address, int length, int fill) throws IOException {
-    assertValidAddress(address);
-    Assert.isTrue(isOpen(), "Precondition: isOpen()");
+    requireValidAddress(address);
+    requireThat(isOpen(), "isOpen()").isTrue();
 
     Packet packet = createPacket(5, hi(address), lo(address), hi(length), lo(length), fill, (byte) 0x00);
     sendPacketGetReply(packet);
@@ -102,8 +102,8 @@ public class C64Connection extends AbstractConnection {
    * @param address address
    */
   public synchronized void jump(int address) throws IOException {
-    assertValidAddress(address);
-    Assert.isTrue(isOpen(), "Precondition: isOpen()");
+    requireValidAddress(address);
+    requireThat(isOpen(), "isOpen()").isTrue();
 
     Packet packet = createPacket(6, hi(address), lo(address));
     sendPacketGetReply(packet);
@@ -113,7 +113,7 @@ public class C64Connection extends AbstractConnection {
    * Execute basic program by "RUN".
    */
   public synchronized void run() throws IOException {
-    Assert.isTrue(isOpen(), "Precondition: isOpen()");
+    requireThat(isOpen(), "isOpen()").isTrue();
 
     Packet packet = createPacket(7);
     sendPacketGetReply(packet);
@@ -130,8 +130,8 @@ public class C64Connection extends AbstractConnection {
    * @return read data
    */
   public synchronized byte[] read(int address, int length) throws IOException {
-    assertValidAddress(address);
-    Assert.isTrue(isOpen(), "Precondition: isOpen()");
+    requireValidAddress(address);
+    requireThat(isOpen(), "isOpen()").isTrue();
 
     Packet packet = createPacket(8, hi(address), lo(address), hi(length), lo(length));
     Packet answer = sendPacketGetReply(packet);

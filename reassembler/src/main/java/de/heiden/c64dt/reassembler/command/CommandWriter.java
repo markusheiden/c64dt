@@ -2,7 +2,6 @@ package de.heiden.c64dt.reassembler.command;
 
 import de.heiden.c64dt.reassembler.label.ExternalLabel;
 import de.heiden.c64dt.reassembler.label.ILabel;
-import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -14,6 +13,7 @@ import static de.heiden.c64dt.bytes.HexUtil.hex;
 import static de.heiden.c64dt.bytes.HexUtil.hexBytePlain;
 import static de.heiden.c64dt.bytes.HexUtil.hexWord;
 import static de.heiden.c64dt.bytes.HexUtil.hexWordPlain;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Write assembler source from {@link CommandBuffer}.
@@ -30,7 +30,7 @@ public class CommandWriter {
    * @param output writer to write output to
    */
   public CommandWriter(Writer output) {
-    Assert.notNull(output, "Precondition: output != null");
+    requireThat(output, "output").isNotNull();
 
     this.output = output;
   }
@@ -42,7 +42,7 @@ public class CommandWriter {
    * @param commands Command buffer
    */
   public void write(CommandBuffer commands) throws IOException {
-    Assert.notNull(commands, "Precondition: buffer != null");
+    requireThat(commands, "commands").isNotNull();
 
     // start address
     output.append("*=").append(hexWord(commands.getStartAddress())).append("\n");

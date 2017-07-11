@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
 import javax.swing.*;
@@ -16,6 +15,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * GUI for {@link Reassembler}.
@@ -118,7 +119,7 @@ public class ReassemblerView extends JFrame {
    * @param reassembler Reassembler
    */
   public void use(Reassembler reassembler) {
-    Assert.notNull(reassembler, "Precondition: reassembler != null");
+    requireThat(reassembler, "reassembler").isNotNull();
 
     this.currentFile = null;
     this.reassembler = reassembler;

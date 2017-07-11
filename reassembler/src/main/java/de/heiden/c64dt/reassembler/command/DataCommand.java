@@ -2,7 +2,6 @@ package de.heiden.c64dt.reassembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.charset.C64Charset;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +9,7 @@ import java.util.List;
 
 import static de.heiden.c64dt.bytes.HexUtil.hex;
 import static de.heiden.c64dt.bytes.HexUtil.hexByte;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Command for data.
@@ -81,7 +81,7 @@ public class DataCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    Assert.notNull(buffer, "Precondition: buffer != null");
+    requireThat(buffer, "buffer").isNotNull();
 
     StringBuilder output = new StringBuilder(16 + data.size() * 8);
     if (data.size() > 8 && isSameByte()) {

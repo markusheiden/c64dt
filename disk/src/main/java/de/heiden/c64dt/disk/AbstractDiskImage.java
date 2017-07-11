@@ -4,7 +4,6 @@ import de.heiden.c64dt.bytes.ByteUtil;
 import de.heiden.c64dt.charset.TextUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.IOException;
@@ -12,7 +11,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static de.heiden.c64dt.disk.SectorModelUtil.assertSector;
+import static de.heiden.c64dt.disk.SectorModelUtil.requireValidSector;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Abstract disk image implementation.
@@ -38,9 +38,9 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param hasErrors support error informations?
    */
   protected AbstractDiskImage(int sides, int tracks, boolean hasErrors) {
-    Assert.isTrue(sides >= 1 && sides <= 2, "Precondition: sides >= 1 && sides <= 2");
-    Assert.isTrue(tracks >= 0, "Precondition: tracks >= 0");
-    Assert.isTrue(tracks % sides == 0, "Precondition: tracks % sides == 0");
+    requireThat(sides, "sides").isGreaterThanOrEqualTo(1).isLessThanOrEqualTo(2);
+    requireThat(tracks, "tracks").isGreaterThanOrEqualTo(0);
+    requireThat(tracks % sides, "tracks % sides").isEqualTo(0);
 
     this.sides = sides;
     this.tracks = tracks;
@@ -98,14 +98,14 @@ public abstract class AbstractDiskImage implements IDiskImage {
 
   @Override
   public byte[] getSector(int track, int sector) {
-    assertSector(this, track, sector);
+    requireValidSector(this, track, sector);
 
     return sectors[track - 1][sector];
   }
 
   @Override
   public void setSector(int track, int sector, byte[] content) {
-    assertSector(this, track, sector);
+    requireValidSector(this, track, sector);
 
     if (content.length != 256) {
       throw new IllegalArgumentException("Illegal sector content");
@@ -130,17 +130,17 @@ public abstract class AbstractDiskImage implements IDiskImage {
 
   @Override
   public Error getError(int track, int sector) {
-    Assert.isTrue(hasErrors(), "Precondition: hasErrors()");
-    assertSector(this, track, sector);
+    requireThat(hasErrors(), "hasErrors()").isTrue();
+    requireValidSector(this, track, sector);
 
     return errors[track - 1][sector];
   }
 
   @Override
   public void setError(int track, int sector, Error error) {
-    Assert.isTrue(hasErrors(), "Precondition: hasErrors()");
-    assertSector(this, track, sector);
-    Assert.notNull(error, "Precondition: error != null");
+    requireThat(hasErrors(), "hasErrors()").isTrue();
+    requireValidSector(this, track, sector);
+    requireThat(error, "Precondition: error != null");
 
     errors[track - 1][sector] = error;
   }
@@ -163,8 +163,8 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param pos position in sector buffer
    */
   protected void readBAM(IBAM bam, int track, byte[] content, int pos) {
-    Assert.notNull(bam, "Precondition: bam != null");
-    Assert.notNull(content, "Precondition: content != null");
+    requireThat(bam, "bam").isNotNull();
+    requireThat(content, "content").isNotNull();
 
     int free = ByteUtil.toByte(content[pos + 0x00]);
     bam.setFreeSectors(track, free);
@@ -182,7 +182,7 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param b byte to read
    */
   protected void readBAM(IBAM bam, int track, int sector, byte b) {
-    Assert.notNull(bam, "Precondition: bam != null");
+    requireThat(bam, "bam").isNotNull();
 
     int map = ByteUtil.toByte(b);
     for (int i = 0; i < 8 && sector < getSectors(track); i++, sector++) {

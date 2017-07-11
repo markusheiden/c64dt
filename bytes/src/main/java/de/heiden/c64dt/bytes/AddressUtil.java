@@ -1,6 +1,6 @@
 package de.heiden.c64dt.bytes;
 
-import org.springframework.util.Assert;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Helper for handling address.
@@ -9,7 +9,7 @@ public class AddressUtil {
   /**
    * Check validity of a given address.
    */
-  public static void assertValidAddress(int address) {
-    Assert.isTrue(address >= 0 && address <= 0xFFFF, "Precondition: address >= 0 && address <= 0xFFFF");
+  public static void requireValidAddress(int address) {
+    requireThat(address, "address").isGreaterThanOrEqualTo(0x0000).isLessThanOrEqualTo(0xFFFF);
   }
 }

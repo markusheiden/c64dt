@@ -1,6 +1,6 @@
 package de.heiden.c64dt.net.drive;
 
-import org.springframework.util.Assert;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Exception for device operations.
@@ -18,7 +18,7 @@ public class DeviceException extends Exception {
    * Error.
    */
   public Error getError() {
-    Assert.notNull(error, "Postcondition: result != null");
+    requireThat(error, "result").isNotNull();
     return error;
   }
 }

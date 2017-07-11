@@ -1,9 +1,9 @@
 package de.heiden.c64dt.charset;
 
-import org.springframework.util.Assert;
-
 import java.nio.charset.Charset;
 import java.nio.charset.UnmappableCharacterException;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Charset with some convenience methods.
@@ -28,7 +28,7 @@ public abstract class AbstractCharset extends Charset {
    * @param bytes bytes
    */
   public String toString(byte... bytes) {
-    Assert.notNull(bytes, "Precondition: bytes != null");
+    requireThat(bytes, "bytes").isNotNull();
 
     return toString(bytes, 0, bytes.length);
   }
@@ -41,10 +41,10 @@ public abstract class AbstractCharset extends Charset {
    * @param length number of bytes to convert
    */
   public String toString(byte[] bytes, int pos, int length) {
-    Assert.notNull(bytes, "Precondition: bytes != null");
-    Assert.isTrue(pos >= 0, "Precondition: pos >= 0");
-    Assert.isTrue(length >= 0, "Precondition: length >= 0");
-    Assert.isTrue(pos + length <= bytes.length, "Precondition: pos + length <= bytes.length");
+    requireThat(bytes, "bytes").isNotNull();
+    requireThat(pos, "pos").isGreaterThanOrEqualTo(0);
+    requireThat(length, "length").isGreaterThanOrEqualTo(0);
+    requireThat(pos + length, "pos + length").isLessThanOrEqualTo(bytes.length, "bytes.length");
 
     AbstractDecoder decoder = newDecoder();
     StringBuilder result = new StringBuilder(bytes.length);
@@ -92,12 +92,12 @@ public abstract class AbstractCharset extends Charset {
    * @param string string
    */
   public byte[] toBytes(String string) {
-    Assert.notNull(string, "Precondition: string != null");
+    requireThat(string, "string").isNotNull();
 
     byte[] result = new byte[string.length()];
     toBytes(string, result, 0);
 
-    Assert.notNull(result, "Postcondition: result != null");
+    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -109,10 +109,10 @@ public abstract class AbstractCharset extends Charset {
    * @param pos position in bytes to write result to
    */
   public void toBytes(String string, byte[] bytes, int pos) {
-    Assert.notNull(string, "Precondition: string != null");
-    Assert.notNull(bytes, "Precondition: bytes != null");
-    Assert.isTrue(pos >= 0, "Precondition: pos >= 0");
-    Assert.isTrue(pos + string.length() <= bytes.length, "Precondition: pos + string.length() <= bytes.length");
+    requireThat(string, "string").isNotNull();
+    requireThat(bytes, "bytes").isNotNull();
+    requireThat(pos, "pos").isGreaterThanOrEqualTo(0);
+    requireThat(pos + string.length(), "pos + string.length()").isLessThanOrEqualTo(bytes.length, "bytes.length");
 
     AbstractEncoder encoder = newEncoder();
     for (int i = 0; i < string.length(); i++, pos++) {

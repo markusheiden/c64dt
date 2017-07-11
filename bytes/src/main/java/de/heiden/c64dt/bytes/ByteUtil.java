@@ -1,6 +1,6 @@
 package de.heiden.c64dt.bytes;
 
-import org.springframework.util.Assert;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Util class for handling bytes.
@@ -17,8 +17,8 @@ public class ByteUtil {
    * Read byte from byte array.
    */
   public static int toByte(byte[] data, int pos) {
-    Assert.notNull(data, "Precondition: data != null");
-    Assert.isTrue(pos < data.length, "Precondition: pos < data.length");
+    requireThat(data, "data").isNotNull();
+    requireThat(pos, "pos").isLessThanOrEqualTo(data.length, "data.length");
 
     return toByte(data[pos]);
   }
@@ -34,8 +34,8 @@ public class ByteUtil {
    * Read word from byte array.
    */
   public static int toWord(byte[] data, int pos) {
-    Assert.notNull(data, "Precondition: data != null");
-    Assert.isTrue(pos + 1 < data.length, "Precondition: pos + 1 < data.length");
+    requireThat(data, "data").isNotNull();
+    requireThat(pos + 1, "pos + 1").isLessThan(data.length, "data.length");
 
     return toWord(data[pos], data[pos + 1]);
   }
@@ -46,7 +46,7 @@ public class ByteUtil {
    * @param word 16 bit word
    */
   public static int hi(int word) {
-    Assert.isTrue(word >= 0x0000 && word <= 0xFFFF, "Precondition: word >= 0x0000 && word <= 0xFFFF");
+    requireThat(word, "word").isGreaterThanOrEqualTo(0x0000).isLessThanOrEqualTo(0xFFFF);
 
     return (word >> 8) & 0xFF;
   }
@@ -57,7 +57,7 @@ public class ByteUtil {
    * @param word 16 bit word
    */
   public static int lo(int word) {
-    Assert.isTrue(word >= 0x0000 && word <= 0xFFFF, "Precondition: word >= 0x0000 && word <= 0xFFFF");
+    requireThat(word, "word").isGreaterThanOrEqualTo(0x0000).isLessThanOrEqualTo(0xFFFF);
 
     return word & 0xFF;
   }

@@ -5,7 +5,8 @@ import de.heiden.c64dt.disk.IDiskImage;
 import de.heiden.c64dt.disk.WrongDiskImageFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Reads a D64 image from a file.
@@ -23,7 +24,7 @@ public class D64Reader extends AbstractDiskImageReader {
 
   @Override
   public IDiskImage read(byte[] data) throws WrongDiskImageFormatException {
-    Assert.notNull(data, "Precondition: data != null");
+    requireThat(data, "data").isNotNull();
 
     int tracks;
     boolean hasErrors;

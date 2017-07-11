@@ -3,7 +3,6 @@ package de.heiden.c64dt.reassembler.command;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.reassembler.xml.HexByteAdapter;
 import de.heiden.c64dt.reassembler.xml.HexWordAdapter;
-import org.springframework.util.Assert;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
@@ -12,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedMap;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * XML-Mapper for {@link CommandBuffer}.
@@ -127,7 +128,7 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
     // start address / first base address
     AddressMapper firstAddress = addresses.get(0);
     int startIndex = firstAddress.index;
-    Assert.isTrue(startIndex == 0, "Check: startIndex == 0");
+    requireThat(startIndex, "startIndex").isEqualTo(0);
 
     // the start address is the first base address and automatically sets the end base address
     CommandBuffer commands = new CommandBuffer(xmlCommands.code, firstAddress.base);
@@ -140,8 +141,8 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
 
     // end base address
     AddressMapper lastAddress = addresses.get(addresses.size() - 1);
-    Assert.isTrue(lastAddress.index == xmlCommands.code.length, "Check: end index == code.length");
-    Assert.isTrue(lastAddress.base == firstAddress.base, "Check: end address == start address");
+    requireThat(lastAddress.index, "lastAddress.index").isEqualTo(xmlCommands.code.length, "xmlCommands.code.length");
+    requireThat(lastAddress.base, "lastAddress.base").isEqualTo(firstAddress.base, "firstAddress.base");
 
     // subroutines
     for (SubroutineMapper subroutineMapper : xmlCommands.subroutines) {

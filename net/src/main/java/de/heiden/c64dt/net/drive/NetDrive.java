@@ -2,11 +2,12 @@ package de.heiden.c64dt.net.drive;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Net drive server.
@@ -39,8 +40,9 @@ public class NetDrive {
    * @param port server port
    */
   public NetDrive(File root, int port) throws IOException {
-    Assert.notNull(root, "Precondition: root != null");
-    Assert.isTrue(root.isDirectory(), "Precondition: root.isDirectory()");
+    requireThat(root, "root").isNotNull();
+    requireThat(root.isDirectory(), "root.isDirectory()").isTrue();
+    requireThat(port, "port").isBetween(0, 65536);
 
     isRunning = false;
     thread = null;
@@ -59,7 +61,7 @@ public class NetDrive {
    * Start server.
    */
   public void start() throws IOException {
-    Assert.isTrue(!isRunning(), "Precondition: !isRunning()");
+    requireThat(isRunning(), "isRunning").isFalse();
 
     isRunning = true;
     thread = new Thread(new Server(), "Net drive server on " + connection.getSource());
@@ -70,7 +72,7 @@ public class NetDrive {
    * Stop server.
    */
   public void stop() {
-    Assert.isTrue(isRunning(), "Precondition: isRunning()");
+    requireThat(isRunning(), "isRunning").isTrue();
 
     isRunning = false;
     thread.interrupt();

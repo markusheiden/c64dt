@@ -2,9 +2,10 @@ package de.heiden.c64dt.reassembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.reassembler.label.ILabel;
-import org.springframework.util.Assert;
 
 import java.util.Iterator;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Command iterator.
@@ -27,7 +28,7 @@ public class CommandIterator implements Iterator<ICommand> {
    * @param commands Command buffer to iterate
    */
   public CommandIterator(CommandBuffer commands) {
-    Assert.notNull(commands, "Precondition: commands != null");
+    requireThat(commands, "commands").isNotNull();
 
     this.commands = commands;
   }
@@ -86,7 +87,8 @@ public class CommandIterator implements Iterator<ICommand> {
    * @param index relative address
    */
   public void setIndex(int index) {
-    Assert.notNull(commands.getCommand(index), "Precondition: There is a command at the given index");
+    // Check that there is a command at the given index.
+    requireThat(commands.getCommand(index), "commands.getCommand(index)").isNotNull();
 
     this.index = index;
   }
@@ -122,7 +124,7 @@ public class CommandIterator implements Iterator<ICommand> {
     index = getNextIndex();
     ICommand result = getCommand();
 
-    Assert.notNull(result, "Postcondition: result != null");
+    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -161,8 +163,9 @@ public class CommandIterator implements Iterator<ICommand> {
     }
     ICommand result = getCommand();
 
-    Assert.notNull(result, "Postcondition: result != null");
-    Assert.isTrue(getNextIndex() == endIndex, "Precondition: The previous commands ends at the start of the current command");
+    requireThat(result, "result").isNotNull();
+    // Check that the previous commands ends at the start of the current command.
+    requireThat(getNextIndex(), "getNextIndex()").isEqualTo(endIndex);
     return result;
   }
 

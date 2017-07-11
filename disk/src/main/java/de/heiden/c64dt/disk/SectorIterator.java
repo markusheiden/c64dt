@@ -1,11 +1,11 @@
 package de.heiden.c64dt.disk;
 
 import de.heiden.c64dt.bytes.ByteUtil;
-import org.springframework.util.Assert;
 
 import java.util.Iterator;
 
-import static de.heiden.c64dt.disk.SectorModelUtil.assertSector;
+import static de.heiden.c64dt.disk.SectorModelUtil.requireValidSector;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Reads a chain of sectors.
@@ -23,8 +23,8 @@ public class SectorIterator implements Iterator<byte[]> {
    * @param sector start sector
    */
   public SectorIterator(IDiskImage diskImage, int track, int sector) {
-    Assert.notNull(diskImage, "Precondition: diskImage != null");
-    assertSector(diskImage, track, sector);
+    requireThat(diskImage, "diskImage").isNotNull();
+    requireValidSector(diskImage, track, sector);
 
     this.diskImage = diskImage;
     this.track = track;
@@ -38,13 +38,13 @@ public class SectorIterator implements Iterator<byte[]> {
 
   @Override
   public byte[] next() {
-    Assert.isTrue(hasNext(), "Precondition: hasNext()");
+    requireThat(hasNext(), "hasNext()").isTrue();
 
     byte[] currentSector = diskImage.getSector(track, sector);
     track = ByteUtil.toByte(currentSector[0]);
     sector = ByteUtil.toByte(currentSector[1]);
 
-    Assert.notNull(currentSector, "Postcondition: result != null");
+    requireThat(currentSector, "result").isNotNull();
     return currentSector;
   }
 

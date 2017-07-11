@@ -6,11 +6,12 @@ import de.heiden.c64dt.net.drive.path.Path;
 import de.heiden.c64dt.net.drive.stream.AbstractStream;
 import de.heiden.c64dt.net.drive.stream.IStream;
 import de.heiden.c64dt.net.drive.stream.NullStream;
-import org.springframework.util.Assert;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Simulated device.
@@ -26,8 +27,8 @@ public class Device {
    * Constructor.
    */
   public Device(File root) throws FileNotFoundException {
-    Assert.notNull(root, "Precondition: root != null");
-    Assert.isTrue(root.isDirectory(), "Precondition: root.isDirectory()");
+    requireThat(root, "root").isNotNull();
+    requireThat(root.isDirectory(), "root.isDirectory()").isTrue();
 
     streams = new IStream[16];
     for (int i = 0; i < streams.length; i++) {
@@ -49,7 +50,7 @@ public class Device {
 
   public void open(int channel, byte[] file) throws DeviceException {
     assertValidChannel(channel);
-    Assert.notNull(file, "Precondition: file != null");
+    requireThat(file, "file").isNotNull();
 
     // create new channel from path
     if (channel != COMMAND_CHANNEL) {
@@ -101,7 +102,7 @@ public class Device {
   }
 
   protected final void assertValidChannel(int channel) {
-    Assert.isTrue(channel >= 0 && channel <= 15, "Precondition: channel >= 0 && channel <= 15");
+    requireThat(channel, "channel").isBetween(0, 15);
   }
 
   protected final void assertOpen(int channel) throws DeviceException {
@@ -142,7 +143,7 @@ public class Device {
       byte[] result = new byte[length];
       System.arraycopy(error, getPosition(), result, 0, length);
 
-      Assert.notNull(result, "Postcondition: result != null");
+      requireThat(result, "result").isNotNull();
       return result;
     }
 

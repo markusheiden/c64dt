@@ -4,14 +4,14 @@ import de.heiden.c64dt.charset.C64Charset;
 import de.heiden.c64dt.disk.IDirectory;
 import de.heiden.c64dt.disk.IFile;
 import de.heiden.c64dt.gui.swing.JC64TextArea;
-import org.springframework.util.Assert;
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
 import java.awt.*;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Directory.
@@ -29,77 +29,74 @@ public class JDirectory extends JList<Object> {
     Dimension size = new Dimension(16 * fontSize, 0);
     setPreferredSize(size);
     setMaximumSize(size);
-    setCellRenderer(new ListCellRenderer<Object>() {
-      @Override
-      public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        byte[] text;
-        if (index == 0) {
-          text = new byte[26];
-          Arrays.fill(text, (byte) 0xA0);
+    setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
+      byte[] text;
+      if (index == 0) {
+        text = new byte[26];
+        Arrays.fill(text, (byte) 0xA0);
 
-          IDirectory directory = (IDirectory) value;
-          byte[] name = directory.getName();
-          byte[] idAndType = directory.getIdAndType();
+        IDirectory directory = (IDirectory) value;
+        byte[] name = directory.getName();
+        byte[] idAndType = directory.getIdAndType();
 
-          int i = 0;
-          text[i++] = 0x30; // '0'
-          text[i++] = 0x20; // ' '
-          text[i++] = 0x22; // '"'
-          System.arraycopy(name, 0, text, i, Math.max(16, name.length));
-          text[i + name.length] = 0x22; // '"'
-          i += 16 + 1;
-          text[i++] = 0x20; // ' '
-          System.arraycopy(idAndType, 0, text, i, Math.max(5, idAndType.length));
-          i += 5;
-          Assert.isTrue(i == text.length, "Check: i == text.length");
+        int i = 0;
+        text[i++] = 0x30; // '0'
+        text[i++] = 0x20; // ' '
+        text[i++] = 0x22; // '"'
+        System.arraycopy(name, 0, text, i, Math.max(16, name.length));
+        text[i + name.length] = 0x22; // '"'
+        i += 16 + 1;
+        text[i++] = 0x20; // ' '
+        System.arraycopy(idAndType, 0, text, i, Math.max(5, idAndType.length));
+        i += 5;
+        requireThat(i, "i").isEqualTo(text.length, "text.length");
 
-          // show directory header inverted
-          for (i = 2; i < text.length; i++) {
-            text[i] |= 0x80;
-          }
-        } else {
-          text = new byte[columns];
-          Arrays.fill(text, (byte) 0x20);
-
-          IFile file = (IFile) value;
-          byte[] name = file.getName();
-
-          int i = 0;
-          writeInt(file.getSize(), text, i);
-          i += 4;
-          text[i++] = 0x20; // ' '
-          text[i++] = 0x22; // '"'
-          System.arraycopy(name, 0, text, i, Math.min(16, name.length));
-          text[i + name.length] = 0x22; // '"'
-          i += 16 + 1;
-          text[i++] = 0x20; // ' '
-          C64Charset.LOWER.toBytes(file.getMode().getType().toString(), text, i);
-          i += 3;
-          Assert.isTrue(i == text.length - 1, "Check: i == text.length - 1");
-          if (file.getMode().isLocked()) {
-            text[i++] = 0x3C; // '<'
-          }
+        // show directory header inverted
+        for (i = 2; i < text.length; i++) {
+          text[i] |= 0x80;
         }
+      } else {
+        text = new byte[columns];
+        Arrays.fill(text, (byte) 0x20);
 
-        JC64TextArea result = new JC64TextArea(text.length, 1, 2, false);
-        if (isSelected) {
-          result.setForeground(getSelectionForeground());
-          result.setBackground(getSelectionBackground());
-        } else {
-          result.setForeground(getForeground());
-          result.setBackground(getBackground());
+        IFile file = (IFile) value;
+        byte[] name = file.getName();
+
+        int i = 0;
+        writeInt(file.getSize(), text, i);
+        i += 4;
+        text[i++] = 0x20; // ' '
+        text[i++] = 0x22; // '"'
+        System.arraycopy(name, 0, text, i, Math.min(16, name.length));
+        text[i + name.length] = 0x22; // '"'
+        i += 16 + 1;
+        text[i++] = 0x20; // ' '
+        C64Charset.LOWER.toBytes(file.getMode().getType().toString(), text, i);
+        i += 3;
+        requireThat(i, "i").isEqualTo(text.length - 1, "text.length - 1");
+        if (file.getMode().isLocked()) {
+          text[i++] = 0x3C; // '<'
         }
-        result.setText(0, 0, text);
-
-        Assert.notNull(result, "Postcondition: result != null");
-        return result;
       }
+
+      JC64TextArea result = new JC64TextArea(text.length, 1, 2, false);
+      if (isSelected) {
+        result.setForeground(getSelectionForeground());
+        result.setBackground(getSelectionBackground());
+      } else {
+        result.setForeground(getForeground());
+        result.setBackground(getBackground());
+      }
+      result.setText(0, 0, text);
+
+      requireThat(result, "result").isNotNull();
+      return result;
     });
   }
 
   protected void writeInt(int size, byte[] text, int pos) {
-    Assert.isTrue(size >= 0, "Precondition: getSize >= 0");
-    Assert.notNull(text, "Precondition: text != null");
+    requireThat(size, "size").isGreaterThanOrEqualTo(0);
+    requireThat(text, "text").isNotNull();
 
     if (size == 0) {
       text[pos] = 0x30;
@@ -119,15 +116,10 @@ public class JDirectory extends JList<Object> {
    * @param directory directory
    */
   public void setDirectory(final IDirectory directory) {
-    Assert.notNull(directory, "Precondition: directory != null");
+    requireThat(directory, "directory").isNotNull();
 
     final List<IFile> files = directory.getFiles();
-    for (Iterator<IFile> iter = files.iterator(); iter.hasNext(); ) {
-      IFile file = iter.next();
-      if (!file.getMode().isVisible()) {
-        iter.remove();
-      }
-    }
+    files.removeIf(file -> !file.getMode().isVisible());
 
     setModel(new ListModel<Object>() {
       @Override
@@ -137,7 +129,7 @@ public class JDirectory extends JList<Object> {
 
       @Override
       public Object getElementAt(int index) {
-        Assert.isTrue(index <= directory.getFiles().size(), "Precondition: index <= directory.getFiles().fontSize()");
+        requireThat(index, "index").isLessThanOrEqualTo(directory.getFiles().size(), "directory.getFiles().size()");
         if (index == 0) {
           return directory;
         } else {

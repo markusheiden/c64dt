@@ -3,12 +3,12 @@ package de.heiden.c64dt.net.drive.stream;
 import de.heiden.c64dt.bytes.ByteUtil;
 import de.heiden.c64dt.disk.IDirectory;
 import de.heiden.c64dt.disk.IFile;
-import org.springframework.util.Assert;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Creates stream from a directory.
@@ -23,7 +23,7 @@ public class DirectoryStream extends AbstractStream {
   private byte[] content;
 
   public DirectoryStream(IDirectory directory) {
-    Assert.notNull(directory, "Precondition: directory != null");
+    requireThat(directory, "directory").isNotNull();
 
     baos = new ByteArrayOutputStream(4096);
     writeWord(0x0401);
@@ -97,12 +97,12 @@ public class DirectoryStream extends AbstractStream {
 
   @Override
   public byte[] doRead(int length) {
-    Assert.isTrue(length >= 0, "Precondition: length >= 0");
+    requireThat(length, "length").isGreaterThanOrEqualTo(0);
 
     byte[] result = new byte[limitLength(content.length, length)];
     System.arraycopy(content, getPosition(), result, 0, result.length);
 
-    Assert.notNull(result, "Postcondition: result != null");
+    requireThat(result, "result").isNotNull();
     return result;
   }
 

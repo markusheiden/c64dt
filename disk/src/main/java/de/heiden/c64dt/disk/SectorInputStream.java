@@ -1,12 +1,12 @@
 package de.heiden.c64dt.disk;
 
 import de.heiden.c64dt.bytes.ByteUtil;
-import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import static de.heiden.c64dt.disk.SectorModelUtil.assertSector;
+import static de.heiden.c64dt.disk.SectorModelUtil.requireValidSector;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Reads a file from a chain of sectors.
@@ -38,8 +38,8 @@ public class SectorInputStream extends InputStream {
    * @param sector start sector
    */
   public SectorInputStream(IDiskImage diskImage, int track, int sector) {
-    Assert.notNull(diskImage, "Precondition: diskImage != null");
-    assertSector(diskImage, track, sector);
+    requireThat(diskImage, "diskImage").isNotNull();
+    requireValidSector(diskImage, track, sector);
 
     this.diskImage = diskImage;
     this.track = track;

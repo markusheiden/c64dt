@@ -2,10 +2,11 @@ package de.heiden.c64dt.disk;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Value type for file type.
@@ -97,7 +98,7 @@ public enum FileType {
       result = UNKNOWN;
     }
 
-    Assert.notNull(result, "Postcondition: result != null");
+    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -108,7 +109,7 @@ public enum FileType {
    * @return matching file type or ANY for undefined extensions
    */
   public static FileType fileType(String extension) {
-    Assert.notNull(extension, "Precondition: extension != null");
+    requireThat(extension, "extension").isNotNull();
 
     FileType result = extensions.get(extension.toUpperCase());
     if (result == null || result.code < 0) {
@@ -116,7 +117,7 @@ public enum FileType {
       result = ANY;
     }
 
-    Assert.notNull(result, "Postcondition: result != null");
+    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -125,19 +126,21 @@ public enum FileType {
    *
    * @param code type code, -1 if none defined
    */
-  private FileType(int code, String extension) {
-    Assert.notNull(extension, "Precondition: extension != null");
-    Assert.isTrue(extension.length() == 3, "Precondition: extension.length() == 3");
+  FileType(int code, String extension) {
+    requireThat(extension, "extension").isNotNull();
+    requireThat(extension.length(), "extension.length()").isEqualTo(3);
 
     this.code = (byte) code;
     this.extension = extension;
 
     if (code >= 0) {
       FileType removed = types().put((byte) code, this);
-      Assert.isNull(removed, "Postcondition: no doubled codes");
+      // No doubled codes.
+      requireThat(removed, "removed").isNull();
     }
     FileType removed = extensions().put(extension.toUpperCase(), this);
-    Assert.isNull(removed, "Postcondition: no doubled extensions");
+    // No doubled extensions.
+    requireThat(removed, "removed").isNull();
   }
 
   /**

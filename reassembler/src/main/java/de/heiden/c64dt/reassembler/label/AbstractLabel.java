@@ -1,6 +1,6 @@
 package de.heiden.c64dt.reassembler.label;
 
-import static de.heiden.c64dt.bytes.AddressUtil.assertValidAddress;
+import static de.heiden.c64dt.bytes.AddressUtil.requireValidAddress;
 import static de.heiden.c64dt.bytes.HexUtil.hexPlain;
 
 /**
@@ -18,7 +18,7 @@ public abstract class AbstractLabel implements ILabel {
    * @param address address the label points to.
    */
   public AbstractLabel(int address) {
-    assertValidAddress(address);
+    requireValidAddress(address);
 
     this.address = address;
   }

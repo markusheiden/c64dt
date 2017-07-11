@@ -1,10 +1,11 @@
 package de.heiden.c64dt.net.drive;
 
 import de.heiden.c64dt.charset.C64Charset;
-import org.springframework.util.Assert;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Error constants.
@@ -31,8 +32,8 @@ public enum Error {
    *
    * @param code error code
    */
-  private Error(int code, String description, int result) {
-    Assert.notNull(description, "Precondition: description != null");
+  Error(int code, String description, int result) {
+    requireThat(description, "description").isNotNull();
 
     this.code = (byte) code;
     this.description = description;

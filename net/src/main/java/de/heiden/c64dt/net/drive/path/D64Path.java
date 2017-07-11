@@ -5,11 +5,12 @@ import de.heiden.c64dt.disk.IDiskImage;
 import de.heiden.c64dt.disk.WrongDiskImageFormatException;
 import de.heiden.c64dt.disk.d64.D64Reader;
 import de.heiden.c64dt.net.drive.stream.IStream;
-import org.springframework.util.Assert;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Path to a d64 image file.
@@ -20,7 +21,7 @@ public class D64Path extends AbstractPath {
   public D64Path(IPath parent, File d64) throws FileNotFoundException {
     super(parent);
 
-    Assert.notNull(d64, "Precondition: d64 != null");
+    requireThat(d64, "d64").isNotNull();
 
     try {
       this.d64 = new D64Reader().read(d64);

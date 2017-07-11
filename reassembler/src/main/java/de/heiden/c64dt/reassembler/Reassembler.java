@@ -7,7 +7,6 @@ import de.heiden.c64dt.reassembler.command.CommandCreator;
 import de.heiden.c64dt.reassembler.detector.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -17,6 +16,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Reassembler.
@@ -73,7 +74,7 @@ public class Reassembler {
    * @param detector code type detector
    */
   public void add(IDetector detector) {
-    Assert.notNull(detector, "Precondition: detector != null");
+    requireThat(detector, "detector").isNotNull();
 
     detectors.add(detector);
   }
@@ -92,7 +93,7 @@ public class Reassembler {
    * @param code Code buffer
    */
   public void reassemble(CodeBuffer code) throws IOException {
-    Assert.notNull(code, "Precondition: code != null");
+    requireThat(code, "code").isNotNull();
 
     if (code.getCurrentAddress() == 0x0801) {
       // TODO check for basic header

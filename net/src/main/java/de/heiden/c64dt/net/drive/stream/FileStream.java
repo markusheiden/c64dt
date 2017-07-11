@@ -1,11 +1,11 @@
 package de.heiden.c64dt.net.drive.stream;
 
-import org.springframework.util.Assert;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Stream for a java.io.File.
@@ -14,7 +14,7 @@ public class FileStream extends AbstractStream {
   private RandomAccessFile file;
 
   public FileStream(File file) throws FileNotFoundException {
-    Assert.notNull(file, "Precondition: file != null");
+    requireThat(file, "file").isNotNull();
 
     if (!file.isFile()) {
       throw new FileNotFoundException(file.getPath() + " is no file");
@@ -40,7 +40,7 @@ public class FileStream extends AbstractStream {
       result = trimmed;
     }
 
-    Assert.notNull(result, "Postcondition: result != null");
+    requireThat(result, "result").isNotNull();
     return result;
   }
 

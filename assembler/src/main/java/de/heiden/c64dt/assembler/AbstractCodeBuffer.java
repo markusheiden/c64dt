@@ -1,6 +1,6 @@
 package de.heiden.c64dt.assembler;
 
-import org.springframework.util.Assert;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Abstract implementation of input stream for code.
@@ -18,7 +18,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
    * @param length length of the code
    */
   protected AbstractCodeBuffer(int startAddress, int length) {
-    Assert.isTrue(length >= 0, "Precondition: length >= 0");
+    requireThat(length, "length").isGreaterThanOrEqualTo(0);
 
     this.startAddress = startAddress;
     this.length = length;
@@ -63,7 +63,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
 
   @Override
   public final boolean has(int number) {
-    Assert.isTrue(number >= 0, "Precondition: number >= 0");
+    requireThat(number, "number").isGreaterThanOrEqualTo(0);
 
     return position + number <= length;
   }
@@ -77,7 +77,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
 
   @Override
   public final int read(int number) {
-    Assert.isTrue(number >= 0 && number <= 2, "Precondition: number >= 0 && number <= 2");
+    requireThat(number, "number").isGreaterThanOrEqualTo(0).isLessThanOrEqualTo(2);
 
     if (number == 0) {
       return -1;

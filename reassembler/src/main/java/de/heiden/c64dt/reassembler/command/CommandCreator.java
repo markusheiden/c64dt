@@ -1,7 +1,8 @@
 package de.heiden.c64dt.reassembler.command;
 
 import de.heiden.c64dt.assembler.*;
-import org.springframework.util.Assert;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Creates the commands.
@@ -42,7 +43,7 @@ public class CommandCreator {
     while (code.hasMore()) {
       int codeIndex = code.getCurrentIndex();
 
-      Assert.isTrue(codeIndex == index, "Check: codeIndex == index");
+      requireThat(codeIndex, "codeIndex").isEqualTo(index, "index");
       CodeType type = commandBuffer.getType(index);
 
       if (type == CodeType.BIT) {
@@ -104,8 +105,8 @@ public class CommandCreator {
    * @param command command
    */
   public void addCommand(ICommand command) {
-    Assert.notNull(command, "Precondition: command != null");
-    Assert.isTrue(!command.hasAddress(), "Precondition: !command.hasAddress()");
+    requireThat(command, "command").isNotNull();
+    requireThat(command.hasAddress(), "command.hasAddress()").isFalse();
 
     commandBuffer.setCommand(index, command);
     index += command.getSize();

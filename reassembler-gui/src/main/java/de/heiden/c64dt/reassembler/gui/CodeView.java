@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -20,6 +19,8 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * View for reassembled code.
@@ -60,7 +61,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent> {
    * @param reassembler Reassembler
    */
   public void use(Reassembler reassembler) {
-    Assert.notNull(reassembler, "Precondition: reassembler != null");
+    requireThat(reassembler, "reassembler").isNotNull();
 
     model.use(reassembler);
   }

@@ -3,12 +3,12 @@ package de.heiden.c64dt.net.drive.path;
 import de.heiden.c64dt.disk.IDirectory;
 import de.heiden.c64dt.net.drive.stream.DirectoryStream;
 import de.heiden.c64dt.net.drive.stream.IStream;
-import org.springframework.util.Assert;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
 import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Directory path.
@@ -33,13 +33,13 @@ public abstract class AbstractPath implements IPath {
 
   @Override
   public IPath getParent() {
-    Assert.notNull(parent, "Postcondition: result != null");
+    requireThat(parent, "result").isNotNull();
     return parent;
   }
 
   @Override
   public IStream getFile(byte[] filename) throws FileNotFoundException {
-    Assert.notNull(filename, "Precondition: filename != null");
+    requireThat(filename, "filename").isNotNull();
 
     if (Arrays.equals(filename, DIRECTORY_NAME)) {
       return new DirectoryStream(doDirectory());
@@ -84,7 +84,7 @@ public abstract class AbstractPath implements IPath {
       }
     }
 
-    Assert.notNull(result, "Postcondition: result != null");
+    requireThat(result, "result").isNotNull();
     return result;
   }
 

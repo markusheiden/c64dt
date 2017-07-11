@@ -3,7 +3,6 @@ package de.heiden.c64dt.net.drive.path;
 import de.heiden.c64dt.disk.*;
 import de.heiden.c64dt.net.drive.stream.FileStream;
 import de.heiden.c64dt.net.drive.stream.IStream;
-import org.springframework.util.Assert;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,6 +12,7 @@ import java.util.List;
 
 import static de.heiden.c64dt.net.drive.DeviceEncoding.decode;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Path to a directory.
@@ -25,7 +25,7 @@ public class Path extends AbstractPath {
   public Path(IPath parent, File directory) throws FileNotFoundException {
     super(parent);
 
-    Assert.notNull(directory, "Precondition: directory != null");
+    requireThat(directory, "directory").isNotNull();
     if (!directory.isDirectory()) {
       throw new FileNotFoundException(directory.getPath() + " is no directory");
     }

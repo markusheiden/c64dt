@@ -2,10 +2,11 @@ package de.heiden.c64dt.disk;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * D64 error codes.
@@ -116,7 +117,7 @@ public enum Error {
       result = UNKNOWN;
     }
 
-    Assert.notNull(result, "Postcondition: result != null");
+    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -125,7 +126,7 @@ public enum Error {
    *
    * @param error error code
    */
-  private Error(int error) {
+  Error(int error) {
     this.error = (byte) error;
     errors().put((byte) error, this);
   }
