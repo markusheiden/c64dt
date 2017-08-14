@@ -15,7 +15,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.slf4j:jcl-over-slf4j:1.7.25" level="project" />
-    <orderEntry type="library" name="Maven: org.bitbucket.cowwoc:requirements-core:3.0.12" level="project" />
+    <orderEntry type="library" name="Maven: org.bitbucket.cowwoc:requirements-core:3.0.13" level="project" />
     <orderEntry type="library" name="Maven: org.bitbucket.cowwoc:diff-match-patch:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.bitbucket.cowwoc:pouch:1.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
