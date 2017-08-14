@@ -41,7 +41,7 @@ public class BitCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    requireThat(buffer, "buffer").isNotNull();
+    requireThat("buffer", buffer).isNotNull();
 
     return "!BYTE " + hexByte(opcode.getOpcode()) + "; " + opcode.toString(getAddress(), argument);
   }

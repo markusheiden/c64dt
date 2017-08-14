@@ -28,7 +28,7 @@ public abstract class AbstractCharset extends Charset {
    * @param bytes bytes
    */
   public String toString(byte... bytes) {
-    requireThat(bytes, "bytes").isNotNull();
+    requireThat("bytes", bytes).isNotNull();
 
     return toString(bytes, 0, bytes.length);
   }
@@ -41,10 +41,10 @@ public abstract class AbstractCharset extends Charset {
    * @param length number of bytes to convert
    */
   public String toString(byte[] bytes, int pos, int length) {
-    requireThat(bytes, "bytes").isNotNull();
-    requireThat(pos, "pos").isGreaterThanOrEqualTo(0);
-    requireThat(length, "length").isGreaterThanOrEqualTo(0);
-    requireThat(pos + length, "pos + length").isLessThanOrEqualTo(bytes.length, "bytes.length");
+    requireThat("bytes", bytes).isNotNull();
+    requireThat("pos", pos).isGreaterThanOrEqualTo(0);
+    requireThat("length", length).isGreaterThanOrEqualTo(0);
+    requireThat("pos + length", pos + length).isLessThanOrEqualTo("bytes.length", bytes.length);
 
     AbstractDecoder decoder = newDecoder();
     StringBuilder result = new StringBuilder(bytes.length);
@@ -97,7 +97,7 @@ public abstract class AbstractCharset extends Charset {
     byte[] result = new byte[string.length()];
     toBytes(string, result, 0);
 
-    requireThat(result, "result").isNotNull();
+    requireThat("result", result).isNotNull();
     return result;
   }
 
@@ -110,9 +110,9 @@ public abstract class AbstractCharset extends Charset {
    */
   public void toBytes(String string, byte[] bytes, int pos) {
     requireThat(string, "string").isNotNull();
-    requireThat(bytes, "bytes").isNotNull();
-    requireThat(pos, "pos").isGreaterThanOrEqualTo(0);
-    requireThat(pos + string.length(), "pos + string.length()").isLessThanOrEqualTo(bytes.length, "bytes.length");
+    requireThat("bytes", bytes).isNotNull();
+    requireThat("pos", pos).isGreaterThanOrEqualTo(0);
+    requireThat("pos + string.length()", pos + string.length()).isLessThanOrEqualTo("bytes.length", bytes.length);
 
     AbstractEncoder encoder = newEncoder();
     for (int i = 0; i < string.length(); i++, pos++) {

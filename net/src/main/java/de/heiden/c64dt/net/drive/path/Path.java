@@ -25,7 +25,7 @@ public class Path extends AbstractPath {
   public Path(IPath parent, File directory) throws FileNotFoundException {
     super(parent);
 
-    requireThat(directory, "directory").isNotNull();
+    requireThat("directory", directory).isNotNull();
     if (!directory.isDirectory()) {
       throw new FileNotFoundException(directory.getPath() + " is no directory");
     }

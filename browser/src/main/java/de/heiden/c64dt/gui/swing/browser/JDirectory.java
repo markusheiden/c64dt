@@ -49,7 +49,7 @@ public class JDirectory extends JList<Object> {
         text[i++] = 0x20; // ' '
         System.arraycopy(idAndType, 0, text, i, Math.max(5, idAndType.length));
         i += 5;
-        requireThat(i, "i").isEqualTo(text.length, "text.length");
+        requireThat("i", i).isEqualTo("text.length", text.length);
 
         // show directory header inverted
         for (i = 2; i < text.length; i++) {
@@ -73,7 +73,7 @@ public class JDirectory extends JList<Object> {
         text[i++] = 0x20; // ' '
         C64Charset.LOWER.toBytes(file.getMode().getType().toString(), text, i);
         i += 3;
-        requireThat(i, "i").isEqualTo(text.length - 1, "text.length - 1");
+        requireThat("i", i).isEqualTo("text.length - 1", text.length - 1);
         if (file.getMode().isLocked()) {
           text[i++] = 0x3C; // '<'
         }
@@ -89,14 +89,14 @@ public class JDirectory extends JList<Object> {
       }
       result.setText(0, 0, text);
 
-      requireThat(result, "result").isNotNull();
+      requireThat("result", result).isNotNull();
       return result;
     });
   }
 
   protected void writeInt(int size, byte[] text, int pos) {
-    requireThat(size, "size").isGreaterThanOrEqualTo(0);
-    requireThat(text, "text").isNotNull();
+    requireThat("size", size).isGreaterThanOrEqualTo(0);
+    requireThat("text", text).isNotNull();
 
     if (size == 0) {
       text[pos] = 0x30;
@@ -116,7 +116,7 @@ public class JDirectory extends JList<Object> {
    * @param directory directory
    */
   public void setDirectory(final IDirectory directory) {
-    requireThat(directory, "directory").isNotNull();
+    requireThat("directory", directory).isNotNull();
 
     final List<IFile> files = directory.getFiles();
     files.removeIf(file -> !file.getMode().isVisible());
@@ -129,7 +129,7 @@ public class JDirectory extends JList<Object> {
 
       @Override
       public Object getElementAt(int index) {
-        requireThat(index, "index").isLessThanOrEqualTo(directory.getFiles().size(), "directory.getFiles().size()");
+        requireThat("index", index).isLessThanOrEqualTo("directory.getFiles().size()", directory.getFiles().size());
         if (index == 0) {
           return directory;
         } else {

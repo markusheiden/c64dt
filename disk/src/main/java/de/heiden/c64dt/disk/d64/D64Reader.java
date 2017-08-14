@@ -24,7 +24,7 @@ public class D64Reader extends AbstractDiskImageReader {
 
   @Override
   public IDiskImage read(byte[] data) throws WrongDiskImageFormatException {
-    requireThat(data, "data").isNotNull();
+    requireThat("data", data).isNotNull();
 
     int tracks;
     boolean hasErrors;

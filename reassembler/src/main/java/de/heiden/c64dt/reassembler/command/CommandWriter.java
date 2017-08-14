@@ -30,7 +30,7 @@ public class CommandWriter {
    * @param output writer to write output to
    */
   public CommandWriter(Writer output) {
-    requireThat(output, "output").isNotNull();
+    requireThat("output", output).isNotNull();
 
     this.output = output;
   }
@@ -42,7 +42,7 @@ public class CommandWriter {
    * @param commands Command buffer
    */
   public void write(CommandBuffer commands) throws IOException {
-    requireThat(commands, "commands").isNotNull();
+    requireThat("commands", commands).isNotNull();
 
     // start address
     output.append("*=").append(hexWord(commands.getStartAddress())).append("\n");

@@ -13,7 +13,7 @@ public class BAM implements IBAM {
   private final int[] freeSectors;
 
   public BAM(ISectorModel sectorModel) {
-    requireThat(sectorModel, "sectorModel").isNotNull();
+    requireThat("sectorModel", sectorModel).isNotNull();
 
     this.sectorModel = sectorModel;
 

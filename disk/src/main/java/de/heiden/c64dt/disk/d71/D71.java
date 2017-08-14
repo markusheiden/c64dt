@@ -59,7 +59,7 @@ public class D71 extends AbstractDiskImage {
       // TODO implement extra free sector count informations from $DD-$FF?
     }
 
-    requireThat(result, "result").isNotNull();
+    requireThat("result", result).isNotNull();
     return result;
   }
 

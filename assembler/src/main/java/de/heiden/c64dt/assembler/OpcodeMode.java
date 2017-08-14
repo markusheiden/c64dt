@@ -127,7 +127,7 @@ public enum OpcodeMode {
    * Number of bytes this address mode uses.
    */
   public final int getSize() {
-    requireThat(size, "size").isGreaterThanOrEqualTo(0).isLessThanOrEqualTo(2);
+    requireThat("size", size).isGreaterThanOrEqualTo(0).isLessThanOrEqualTo(2);
     return size;
   }
 
@@ -151,7 +151,7 @@ public enum OpcodeMode {
    * @param pc Program counter
    */
   public int getAddress(int pc, int argument) {
-    requireThat(isAddress(), "isAddress()").isTrue();
+    requireThat("isAddress()", isAddress()).isTrue();
 
     return argument;
   }
@@ -182,7 +182,7 @@ public enum OpcodeMode {
    * @param isAddress is the argument a (non zero page) address?
    */
   OpcodeMode(int size, boolean isAddress) {
-    requireThat(size, "size").isGreaterThanOrEqualTo(0).isLessThanOrEqualTo(2);
+    requireThat("size", size).isGreaterThanOrEqualTo(0).isLessThanOrEqualTo(2);
 
     this.size = size;
     this.isAddress = isAddress;

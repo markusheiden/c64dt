@@ -42,7 +42,7 @@ public class JBam extends JComponent {
    * @param diskImage disk image
    */
   public void setDiskImage(IDiskImage diskImage) {
-    requireThat(diskImage, "diskImage").isNotNull();
+    requireThat("diskImage", diskImage).isNotNull();
 
     this.diskImage = diskImage;
 
@@ -70,7 +70,7 @@ public class JBam extends JComponent {
 
   @Override
   protected void paintComponent(Graphics g) {
-    requireThat(g, "g").isNotNull();
+    requireThat("g", g).isNotNull();
 
     IBAM bam = diskImage.getBAM();
 

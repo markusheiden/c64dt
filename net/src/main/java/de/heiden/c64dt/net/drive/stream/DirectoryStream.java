@@ -23,7 +23,7 @@ public class DirectoryStream extends AbstractStream {
   private byte[] content;
 
   public DirectoryStream(IDirectory directory) {
-    requireThat(directory, "directory").isNotNull();
+    requireThat("directory", directory).isNotNull();
 
     baos = new ByteArrayOutputStream(4096);
     writeWord(0x0401);
@@ -97,12 +97,12 @@ public class DirectoryStream extends AbstractStream {
 
   @Override
   public byte[] doRead(int length) {
-    requireThat(length, "length").isGreaterThanOrEqualTo(0);
+    requireThat("length", length).isGreaterThanOrEqualTo(0);
 
     byte[] result = new byte[limitLength(content.length, length)];
     System.arraycopy(content, getPosition(), result, 0, result.length);
 
-    requireThat(result, "result").isNotNull();
+    requireThat("result", result).isNotNull();
     return result;
   }
 

@@ -33,13 +33,13 @@ public abstract class AbstractCommand implements ICommand {
 
   @Override
   public int getAddress() {
-    requireThat(hasAddress(), "hasAddress()").isTrue();
+    requireThat("hasAddress()", hasAddress()).isTrue();
     return address;
   }
 
   @Override
   public void setAddress(int address) {
-    requireThat(hasAddress(), "hasAddress()").isFalse();
+    requireThat("hasAddress()", hasAddress()).isFalse();
 
     this.address = address;
   }

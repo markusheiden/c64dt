@@ -61,7 +61,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent> {
    * @param reassembler Reassembler
    */
   public void use(Reassembler reassembler) {
-    requireThat(reassembler, "reassembler").isNotNull();
+    requireThat("reassembler", reassembler).isNotNull();
 
     model.use(reassembler);
   }

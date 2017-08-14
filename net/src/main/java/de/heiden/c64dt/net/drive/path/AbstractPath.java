@@ -33,13 +33,13 @@ public abstract class AbstractPath implements IPath {
 
   @Override
   public IPath getParent() {
-    requireThat(parent, "result").isNotNull();
+    requireThat("result", parent).isNotNull();
     return parent;
   }
 
   @Override
   public IStream getFile(byte[] filename) throws FileNotFoundException {
-    requireThat(filename, "filename").isNotNull();
+    requireThat("filename", filename).isNotNull();
 
     if (Arrays.equals(filename, DIRECTORY_NAME)) {
       return new DirectoryStream(doDirectory());
@@ -84,7 +84,7 @@ public abstract class AbstractPath implements IPath {
       }
     }
 
-    requireThat(result, "result").isNotNull();
+    requireThat("result", result).isNotNull();
     return result;
   }
 

@@ -25,14 +25,14 @@ public class File implements IFile {
    * @param size file size in bytes
    */
   public File(FileMode mode, int track, int sector, byte[] name, int size) {
-    requireThat(mode, "mode").isNotNull();
+    requireThat("mode", mode).isNotNull();
     if (!mode.isDeleted()) {
-      requireThat(track, "track").isGreaterThanOrEqualTo(1);
-      requireThat(sector, "sector").isGreaterThanOrEqualTo(0);
+      requireThat("track", track).isGreaterThanOrEqualTo(1);
+      requireThat("sector", sector).isGreaterThanOrEqualTo(0);
     }
-    requireThat(name, "name").isNotNull();
-    requireThat(name.length, "name.length").isLessThanOrEqualTo(16);
-    requireThat(size, "size").isGreaterThanOrEqualTo(0);
+    requireThat("name", name).isNotNull();
+    requireThat("name.length", name.length).isLessThanOrEqualTo(16);
+    requireThat("size", size).isGreaterThanOrEqualTo(0);
 
     this.mode = mode;
     this.track = track;
@@ -43,32 +43,32 @@ public class File implements IFile {
 
   @Override
   public FileMode getMode() {
-    requireThat(mode, "result").isNotNull();
+    requireThat("result", mode).isNotNull();
     return mode;
   }
 
   @Override
   public int getTrack() {
-    requireThat(track, "result").isGreaterThanOrEqualTo(1);
+    requireThat("result", track).isGreaterThanOrEqualTo(1);
     return track;
   }
 
   @Override
   public int getSector() {
-    requireThat(sector, "result").isGreaterThanOrEqualTo(0);
+    requireThat("result", sector).isGreaterThanOrEqualTo(0);
     return sector;
   }
 
   @Override
   public byte[] getName() {
-    requireThat(name, "result").isNotNull();
-    requireThat(name.length, "result.length").isLessThanOrEqualTo(16);
+    requireThat("result", name).isNotNull();
+    requireThat("result.length", name.length).isLessThanOrEqualTo(16);
     return name;
   }
 
   @Override
   public int getSize() {
-    requireThat(size, "result").isGreaterThanOrEqualTo(0);
+    requireThat("result", size).isGreaterThanOrEqualTo(0);
     return size;
   }
 

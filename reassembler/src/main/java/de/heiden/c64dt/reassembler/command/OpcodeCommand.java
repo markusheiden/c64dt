@@ -39,7 +39,7 @@ public class OpcodeCommand extends AbstractCommand {
   public OpcodeCommand(Opcode opcode, int argument) {
     super(CodeType.OPCODE);
 
-    requireThat(opcode, "opcode").isNotNull();
+    requireThat("opcode", opcode).isNotNull();
 
     this.opcode = opcode;
     this.argument = argument;
@@ -59,7 +59,7 @@ public class OpcodeCommand extends AbstractCommand {
    * Argument for opcode, if any.
    */
   public int getArgument() {
-    requireThat(getSize() > 1, "Precondition: getSize() > 1");
+    requireThat("getSize()", getSize()).isGreaterThan(1);
 
     return argument;
   }
@@ -75,7 +75,7 @@ public class OpcodeCommand extends AbstractCommand {
    * Get the opcode argument as absolute address.
    */
   public int getArgumentAddress() {
-    requireThat(isArgumentAddress(), "Precondition: isArgumentAddress()");
+    requireThat("isArgumentAddress()", isArgumentAddress()).isTrue();
 
     return opcode.getMode().getAddress(getAddress(), getArgument());
   }
@@ -98,7 +98,7 @@ public class OpcodeCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    requireThat(buffer, "Precondition: buffer != null");
+    requireThat("buffer", buffer).isNotNull();
 
     StringBuilder result = new StringBuilder();
     result.append(opcode.getType().toString());
@@ -128,7 +128,7 @@ public class OpcodeCommand extends AbstractCommand {
     }
 
 
-    requireThat(result, "Postcondition: result != null");
+    requireThat("result", result).isNotNull();
     return result;
   }
 }

@@ -42,14 +42,14 @@ public class AddressCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    requireThat(buffer, "buffer").isNotNull();
+    requireThat("buffer", buffer).isNotNull();
 
     ILabel label = buffer.getLabel(address);
     if (label == null) {
       return "!WORD " + hexWord(address);
     }
 
-    requireThat(label.getAddress(), "label.getAddress()").isEqualTo(address);
+    requireThat("label.getAddress()", label.getAddress()).isEqualTo("address", address);
     return "!WORD " + label.toString(address);
   }
 

@@ -77,7 +77,7 @@ public class DriveConnection extends AbstractConnection {
    * @param data payload data
    */
   public void sendReply(byte[] data) throws IOException {
-    requireThat(data, "data").isNotNull();
+    requireThat("data", data).isNotNull();
 
     byte size = (byte) data.length;
 //    if (IDX_DATA + size >= MAX_PACKET) {

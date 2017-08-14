@@ -233,7 +233,7 @@ public class JsrDetector implements IDetector {
    * @return end index or -1, if no arguments have been found
    */
   private int search0(CommandBuffer commands, int startIndex, boolean check) {
-    requireThat(commands, "commands").isNotNull();
+    requireThat("commands", commands).isNotNull();
 
     byte[] code = commands.getCode();
     for (int index = startIndex, count = 0; commands.hasIndex(index) && count < maxLength; index++) {

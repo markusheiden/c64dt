@@ -81,7 +81,7 @@ public class DataCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    requireThat(buffer, "buffer").isNotNull();
+    requireThat("buffer", buffer).isNotNull();
 
     StringBuilder output = new StringBuilder(16 + data.size() * 8);
     if (data.size() > 8 && isSameByte()) {

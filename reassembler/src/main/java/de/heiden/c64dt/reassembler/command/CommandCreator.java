@@ -43,7 +43,7 @@ public class CommandCreator {
     while (code.hasMore()) {
       int codeIndex = code.getCurrentIndex();
 
-      requireThat(codeIndex, "codeIndex").isEqualTo(index, "index");
+      requireThat("codeIndex", codeIndex).isEqualTo("index", index);
       CodeType type = commandBuffer.getType(index);
 
       if (type == CodeType.BIT) {
@@ -105,8 +105,8 @@ public class CommandCreator {
    * @param command command
    */
   public void addCommand(ICommand command) {
-    requireThat(command, "command").isNotNull();
-    requireThat(command.hasAddress(), "command.hasAddress()").isFalse();
+    requireThat("command", command).isNotNull();
+    requireThat("command.hasAddress()", command.hasAddress()).isFalse();
 
     commandBuffer.setCommand(index, command);
     index += command.getSize();

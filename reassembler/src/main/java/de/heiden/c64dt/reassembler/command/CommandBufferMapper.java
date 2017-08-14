@@ -128,7 +128,7 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
     // start address / first base address
     AddressMapper firstAddress = addresses.get(0);
     int startIndex = firstAddress.index;
-    requireThat(startIndex, "startIndex").isEqualTo(0);
+    requireThat("startIndex", startIndex).isEqualTo(0);
 
     // the start address is the first base address and automatically sets the end base address
     CommandBuffer commands = new CommandBuffer(xmlCommands.code, firstAddress.base);
@@ -141,8 +141,8 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
 
     // end base address
     AddressMapper lastAddress = addresses.get(addresses.size() - 1);
-    requireThat(lastAddress.index, "lastAddress.index").isEqualTo(xmlCommands.code.length, "xmlCommands.code.length");
-    requireThat(lastAddress.base, "lastAddress.base").isEqualTo(firstAddress.base, "firstAddress.base");
+    requireThat("lastAddress.index", lastAddress.index).isEqualTo("xmlCommands.code.length", xmlCommands.code.length);
+    requireThat("lastAddress.base", lastAddress.base).isEqualTo("firstAddress.base", firstAddress.base);
 
     // subroutines
     for (SubroutineMapper subroutineMapper : xmlCommands.subroutines) {

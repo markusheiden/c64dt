@@ -347,11 +347,11 @@ public enum Opcode {
    * @param opcode byte representation of opcode
    */
   public static Opcode opcode(int opcode) {
-    requireThat(opcode, "opcode").isGreaterThanOrEqualTo(0x00).isLessThanOrEqualTo(0xFF);
+    requireThat("opcode", opcode).isBetween(0x00, 0xFF);
 
     Opcode result = values()[opcode];
 
-    requireThat(result.getOpcode(), "result.getOpcode()").isEqualTo(opcode, "opcode");
+    requireThat("result.getOpcode()", result.getOpcode()).isEqualTo("opcode", opcode);
     return result;
   }
 
@@ -388,13 +388,13 @@ public enum Opcode {
    * @param cycles number of cycles (without exceptional additional cycles)
    */
   private Opcode(int opcode, boolean legal, OpcodeType type, OpcodeMode mode, int cycles) {
-    requireThat(opcode, "opcode").isGreaterThanOrEqualTo(0x00).isLessThanOrEqualTo(0xFF);
-    requireThat(type, "type").isNotNull();
-    requireThat(mode, "mode").isNotNull();
+    requireThat("opcode", opcode).isGreaterThanOrEqualTo(0x00).isLessThanOrEqualTo(0xFF);
+    requireThat("type", type).isNotNull();
+    requireThat("mode", mode).isNotNull();
     if (type != KIL) {
-      requireThat(cycles, "cycles").isGreaterThan(0);
+      requireThat("cycles", cycles).isGreaterThan(0);
     }
-    requireThat(cycles, "cycles").isLessThanOrEqualTo(8);
+    requireThat("cycles", cycles).isLessThanOrEqualTo(8);
 
     this.opcode = opcode;
     this.legal = legal;

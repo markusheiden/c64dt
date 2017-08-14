@@ -102,7 +102,7 @@ public class DrivePacket {
     byte[] result = new byte[size];
     System.arraycopy(data, IDX_DATA, result, 0, result.length);
 
-    requireThat(result, "result").isNotNull();
+    requireThat("result", result).isNotNull();
     return result;
   }
 }

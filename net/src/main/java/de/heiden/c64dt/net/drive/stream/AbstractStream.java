@@ -38,14 +38,14 @@ public abstract class AbstractStream implements IStream {
 
   @Override
   public final byte[] read(int length) throws IOException {
-    requireThat(isOpen(), "isOpen()").isTrue();
-    requireThat(length, "length").isGreaterThanOrEqualTo(0);
+    requireThat("isOpen()", isOpen()).isTrue();
+    requireThat("length", length).isGreaterThanOrEqualTo(0);
 
     lastPosition = position;
     byte[] result = doRead(length);
     position += result.length;
 
-    requireThat(result, "result").isNotNull();
+    requireThat("result", result).isNotNull();
     return result;
   }
 
@@ -58,8 +58,8 @@ public abstract class AbstractStream implements IStream {
 
   @Override
   public final void write(byte[] data) throws IOException {
-    requireThat(isOpen(), "isOpen()").isTrue();
-    requireThat(data, "data").isNotNull();
+    requireThat("isOpen()", isOpen()).isTrue();
+    requireThat("data", data).isNotNull();
 
     doWrite(data);
   }

@@ -74,7 +74,7 @@ public class Reassembler {
    * @param detector code type detector
    */
   public void add(IDetector detector) {
-    requireThat(detector, "detector").isNotNull();
+    requireThat("detector", detector).isNotNull();
 
     detectors.add(detector);
   }
@@ -93,7 +93,7 @@ public class Reassembler {
    * @param code Code buffer
    */
   public void reassemble(CodeBuffer code) throws IOException {
-    requireThat(code, "code").isNotNull();
+    requireThat("code", code).isNotNull();
 
     if (code.getCurrentAddress() == 0x0801) {
       // TODO check for basic header

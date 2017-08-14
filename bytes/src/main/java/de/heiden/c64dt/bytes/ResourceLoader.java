@@ -32,7 +32,7 @@ public class ResourceLoader {
       result[i] = read[i] & 0xFF;
     }
 
-    requireThat(result, "result").isNotNull();
+    requireThat("result", result).isNotNull();
     return result;
   }
 
@@ -53,7 +53,7 @@ public class ResourceLoader {
       result[i] = read[i] & 0xFF;
     }
 
-    requireThat(result, "result").isNotNull();
+    requireThat("result", result).isNotNull();
     return result;
   }
 }

@@ -23,12 +23,12 @@ public class Directory implements IDirectory {
    * @param files files
    */
   public Directory(byte[] name, byte[] idAndType, List<IFile> files, int freeBlocks) {
-    requireThat(name, "name").isNotNull();
-    requireThat(name.length, "name.length").isEqualTo(16);
-    requireThat(idAndType, "idAndType").isNotNull();
-    requireThat(idAndType.length, "idAndType.length").isEqualTo(5);
-    requireThat(files, "files").isNotNull();
-    requireThat(freeBlocks, "freeBlocks").isGreaterThanOrEqualTo(0);
+    requireThat("name", name).isNotNull();
+    requireThat("name.length", name.length).isEqualTo(16);
+    requireThat("idAndType", idAndType).isNotNull();
+    requireThat("idAndType.length", idAndType.length).isEqualTo(5);
+    requireThat("files", files).isNotNull();
+    requireThat("freeBlocks", freeBlocks).isGreaterThanOrEqualTo(0);
 
     this.name = name;
     this.idAndType = idAndType;
@@ -42,29 +42,29 @@ public class Directory implements IDirectory {
 
   @Override
   public byte[] getName() {
-    requireThat(name, "name").isNotNull();
-    requireThat(name.length, "name.length").isEqualTo(16);
+    requireThat("name", name).isNotNull();
+    requireThat("name.length", name.length).isEqualTo(16);
     return name;
   }
 
   @Override
   public byte[] getIdAndType() {
-    requireThat(idAndType, "idAndType").isNotNull();
-    requireThat(idAndType.length, "idAndType.length").isEqualTo(5);
+    requireThat("idAndType", idAndType).isNotNull();
+    requireThat("idAndType.length", idAndType.length).isEqualTo(5);
     return idAndType;
   }
 
   @Override
   public byte[] getId() {
-    requireThat(id, "id").isNotNull();
-    requireThat(id.length, "id.length").isEqualTo(2);
+    requireThat("id", id).isNotNull();
+    requireThat("id.length", id.length).isEqualTo(2);
     return id;
   }
 
   @Override
   public byte[] getDosType() {
-    requireThat(dosType, "id").isNotNull();
-    requireThat(dosType.length, "dosType.length").isEqualTo(2);
+    requireThat("dosType", dosType).isNotNull();
+    requireThat("dosType.length", dosType.length).isEqualTo(2);
     return dosType;
   }
 

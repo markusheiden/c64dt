@@ -27,8 +27,8 @@ public class Device {
    * Constructor.
    */
   public Device(File root) throws FileNotFoundException {
-    requireThat(root, "root").isNotNull();
-    requireThat(root.isDirectory(), "root.isDirectory()").isTrue();
+    requireThat("root", root).isNotNull();
+    requireThat("root.isDirectory()", root.isDirectory()).isTrue();
 
     streams = new IStream[16];
     for (int i = 0; i < streams.length; i++) {
@@ -50,7 +50,7 @@ public class Device {
 
   public void open(int channel, byte[] file) throws DeviceException {
     assertValidChannel(channel);
-    requireThat(file, "file").isNotNull();
+    requireThat("file", file).isNotNull();
 
     // create new channel from path
     if (channel != COMMAND_CHANNEL) {
@@ -102,7 +102,7 @@ public class Device {
   }
 
   protected final void assertValidChannel(int channel) {
-    requireThat(channel, "channel").isBetween(0, 15);
+    requireThat("channel", channel).isBetween(0, 15);
   }
 
   protected final void assertOpen(int channel) throws DeviceException {
@@ -143,7 +143,7 @@ public class Device {
       byte[] result = new byte[length];
       System.arraycopy(error, getPosition(), result, 0, length);
 
-      requireThat(result, "result").isNotNull();
+      requireThat("result", result).isNotNull();
       return result;
     }
 

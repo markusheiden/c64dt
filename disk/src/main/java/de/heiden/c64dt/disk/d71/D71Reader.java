@@ -22,7 +22,7 @@ public class D71Reader extends AbstractDiskImageReader {
 
   @Override
   public IDiskImage read(byte[] data) throws WrongDiskImageFormatException {
-    requireThat(data, "data").isNotNull();
+    requireThat("data", data).isNotNull();
 
     int tracks = 70;
     boolean hasErrors;

@@ -42,8 +42,8 @@ public class Disassembler {
    * @param list List Basic header?.
    */
   public void listAndDisassemble(ICodeBuffer code, Writer output, boolean list) throws IOException {
-    requireThat(code, "code").isNotNull();
-    requireThat(output, "output").isNotNull();
+    requireThat("code", code).isNotNull();
+    requireThat("output", output).isNotNull();
 
     try (BufferedWriter out = new NonClosingBufferedWriter(output)) {
       if (list) {

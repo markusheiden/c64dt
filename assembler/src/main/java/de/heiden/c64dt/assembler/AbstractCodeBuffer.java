@@ -18,7 +18,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
    * @param length length of the code
    */
   protected AbstractCodeBuffer(int startAddress, int length) {
-    requireThat(length, "length").isGreaterThanOrEqualTo(0);
+    requireThat("length", length).isGreaterThanOrEqualTo(0);
 
     this.startAddress = startAddress;
     this.length = length;
@@ -63,7 +63,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
 
   @Override
   public final boolean has(int number) {
-    requireThat(number, "number").isGreaterThanOrEqualTo(0);
+    requireThat("number", number).isGreaterThanOrEqualTo(0);
 
     return position + number <= length;
   }
@@ -77,7 +77,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
 
   @Override
   public final int read(int number) {
-    requireThat(number, "number").isGreaterThanOrEqualTo(0).isLessThanOrEqualTo(2);
+    requireThat("number", number).isBetween(0, 2);
 
     if (number == 0) {
       return -1;

@@ -21,7 +21,7 @@ public class D64Path extends AbstractPath {
   public D64Path(IPath parent, File d64) throws FileNotFoundException {
     super(parent);
 
-    requireThat(d64, "d64").isNotNull();
+    requireThat("d64", d64).isNotNull();
 
     try {
       this.d64 = new D64Reader().read(d64);

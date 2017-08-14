@@ -98,7 +98,7 @@ public enum FileType {
       result = UNKNOWN;
     }
 
-    requireThat(result, "result").isNotNull();
+    requireThat("result", result).isNotNull();
     return result;
   }
 
@@ -117,7 +117,7 @@ public enum FileType {
       result = ANY;
     }
 
-    requireThat(result, "result").isNotNull();
+    requireThat("result", result).isNotNull();
     return result;
   }
 
@@ -127,8 +127,8 @@ public enum FileType {
    * @param code type code, -1 if none defined
    */
   FileType(int code, String extension) {
-    requireThat(extension, "extension").isNotNull();
-    requireThat(extension.length(), "extension.length()").isEqualTo(3);
+    requireThat("extension", extension).isNotNull();
+    requireThat("extension.length()", extension.length()).isEqualTo(3);
 
     this.code = (byte) code;
     this.extension = extension;
@@ -136,11 +136,11 @@ public enum FileType {
     if (code >= 0) {
       FileType removed = types().put((byte) code, this);
       // No doubled codes.
-      requireThat(removed, "removed").isNull();
+      requireThat("removed", removed).isNull();
     }
     FileType removed = extensions().put(extension.toUpperCase(), this);
     // No doubled extensions.
-    requireThat(removed, "removed").isNull();
+    requireThat("removed", removed).isNull();
   }
 
   /**

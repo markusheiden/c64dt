@@ -18,7 +18,7 @@ public class DeviceException extends Exception {
    * Error.
    */
   public Error getError() {
-    requireThat(error, "result").isNotNull();
+    requireThat("result", error).isNotNull();
     return error;
   }
 }

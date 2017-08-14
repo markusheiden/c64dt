@@ -119,7 +119,7 @@ public class ReassemblerView extends JFrame {
    * @param reassembler Reassembler
    */
   public void use(Reassembler reassembler) {
-    requireThat(reassembler, "reassembler").isNotNull();
+    requireThat("reassembler", reassembler).isNotNull();
 
     this.currentFile = null;
     this.reassembler = reassembler;

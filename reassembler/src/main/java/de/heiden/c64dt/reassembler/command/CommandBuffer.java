@@ -94,7 +94,7 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param startAddress address of the code
    */
   public CommandBuffer(byte[] code, int startAddress) {
-    requireThat(startAddress, "startAddress").isGreaterThanOrEqualTo(0);
+    requireThat("startAddress", startAddress).isGreaterThanOrEqualTo(0);
 
     this.codeReferences = new int[code.length];
     Arrays.fill(this.codeReferences, -1);
@@ -186,11 +186,11 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @return absolute address
    */
   public int addressForIndex(int index) {
-    requireThat(hasIndex(index), "hasIndex(index)").isTrue();
+    requireThat("hasIndex(index)", hasIndex(index)).isTrue();
 
     // Compute start index for address range index belongs to
     Integer startIndex = startAddresses.floorKey(index);
-    requireThat(startIndex, "startIndex").isNotNull();
+    requireThat("startIndex", startIndex).isNotNull();
 
     return startAddresses.get(startIndex) + index;
   }
@@ -211,7 +211,7 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @return relative address or -1, if not found
    */
   public int indexForAddress(int address) {
-    requireThat(hasAddress(address), "hasAddress(address)").isTrue();
+    requireThat("hasAddress(address)", hasAddress(address)).isTrue();
 
     return indexForAddressImpl(address);
   }
@@ -244,12 +244,12 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param baseAddress new absolute base address
    */
   public void rebase(int startIndex, int baseAddress) {
-    requireThat(hasIndex(startIndex), "hasIndex(startIndex)").isTrue();
+    requireThat("hasIndex(startIndex)", hasIndex(startIndex)).isTrue();
     requireValidAddress(baseAddress);
 
     Integer removed = startAddresses.put(startIndex, baseAddress);
     // Check that same index will not be rebased twice.
-    requireThat(removed, "removed").isNull();
+    requireThat("removed", removed).isNull();
   }
 
   /**
@@ -259,12 +259,12 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param address new absolute address
    */
   public void base(int startIndex, int address) {
-    requireThat(hasIndex(startIndex), "hasIndex(startIndex)").isTrue();
+    requireThat("hasIndex(startIndex)", hasIndex(startIndex)).isTrue();
     requireValidAddress(address);
 
     Integer removed = startAddresses.put(startIndex, address - startIndex);
     // Check that the same index is not based twice.
-    requireThat(removed, "removed").isNull();
+    requireThat("removed", removed).isNull();
   }
 
   //
@@ -277,11 +277,11 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param subroutine Subroutine
    */
   public void addSubroutine(Subroutine subroutine) {
-    requireThat(subroutine, "subroutine").isNotNull();
+    requireThat("subroutine", subroutine).isNotNull();
 
     Subroutine removed = subroutines.put(subroutine.getAddress(), subroutine);
     // Check that there are no doubled subroutines.
-    requireThat(removed, "removed").isNull();
+    requireThat("removed", removed).isNull();
   }
 
   /**
@@ -312,7 +312,7 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param index relative address
    */
   public CodeType getType(int index) {
-    requireThat(hasIndex(index), "hasIndex(startIndex)").isTrue();
+    requireThat("hasIndex(index)", hasIndex(index)).isTrue();
 
     return types[index];
   }
@@ -326,10 +326,10 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @return whether a change has taken place
    */
   public boolean setType(int startIndex, int endIndex, CodeType type) {
-    requireThat(hasIndex(startIndex), "hasIndex(startIndex)").isTrue();
-    requireThat(hasIndex(endIndex), "hasIndex(endIndex)").isTrue();
-    requireThat(startIndex, "startIndex").isLessThanOrEqualTo(endIndex, "endIndex");
-    requireThat(type, "type").isNotNull();
+    requireThat("hasIndex(startIndex)", hasIndex(startIndex)).isTrue();
+    requireThat("hasIndex(endIndex)", hasIndex(endIndex)).isTrue();
+    requireThat("startIndex", startIndex).isLessThanOrEqualTo("endIndex", endIndex);
+    requireThat("type", type).isNotNull();
 
     boolean change = false;
     for (int index = startIndex; index < endIndex; index++) {
@@ -347,8 +347,8 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @return whether a change has taken place
    */
   public boolean setType(int index, CodeType type) {
-    requireThat(hasIndex(index), "hasIndex(index)").isTrue();
-    requireThat(type, "type").isNotNull();
+    requireThat("hasIndex(index)", hasIndex(index)).isTrue();
+    requireThat("type", type).isNotNull();
 
     boolean change = !type.equals(types[index]);
     types[index] = type;
@@ -366,7 +366,7 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param address absolute address
    */
   public boolean hasLabel(int address) {
-    requireThat(hasAddress(address), "hasAddress(address)").isTrue();
+    requireThat("hasAddress(address)", hasAddress(address)).isTrue();
 
     return hasCodeLabel(address) || hasDataLabel(address);
   }
@@ -423,7 +423,7 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param to referenced absolute address
    */
   public void addReference(boolean code, int fromIndex, int to) {
-    requireThat(hasIndex(fromIndex), "hasIndex(fromIndex)").isTrue();
+    requireThat("hasIndex(fromIndex)", hasIndex(fromIndex)).isTrue();
 
     if (!hasAddress(to)) {
       addExternalReference(fromIndex, to);
@@ -442,8 +442,8 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param to referenced absolute address
    */
   public void addCodeReference(int fromIndex, int to) {
-    requireThat(hasIndex(fromIndex), "hasIndex(fromIndex)").isTrue();
-    requireThat(hasAddress(to), "hasAddress(to)").isTrue();
+    requireThat("hasIndex(fromIndex)", hasIndex(fromIndex)).isTrue();
+    requireThat("hasAddress(to)", hasAddress(to)).isTrue();
 
     // add label for address "to"
     codeLabels.put(to, new CodeLabel(to));
@@ -459,8 +459,8 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param to referenced absolute address
    */
   public void addDataReference(int fromIndex, int to) {
-    requireThat(hasIndex(fromIndex), "hasIndex(fromIndex)").isTrue();
-    requireThat(hasAddress(to), "hasAddress(to)").isTrue();
+    requireThat("hasIndex(fromIndex)", hasIndex(fromIndex)).isTrue();
+    requireThat("hasAddress(to)", hasAddress(to)).isTrue();
 
     // add label for address "to"
     dataLabels.put(to, new DataLabel(to));
@@ -476,8 +476,8 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param to referenced absolute address
    */
   public void addExternalReference(int fromIndex, int to) {
-    requireThat(hasIndex(fromIndex), "hasIndex(fromIndex)").isTrue();
-    requireThat(hasAddress(to), "hasAddress(to)").isFalse();
+    requireThat("hasIndex(fromIndex)", hasIndex(fromIndex)).isTrue();
+    requireThat("hasAddress(to)", hasAddress(to)).isFalse();
 
     // add label for address "to"
     externalLabels.put(to, new ExternalLabel(to));
@@ -547,7 +547,7 @@ public class CommandBuffer implements Iterable<ICommand> {
     // remove label, because the address is no more referenced
     Object removed = labels.remove(referenced);
     // There need to be a label, if there had been a reference.
-    requireThat(removed, "removed").isNotNull();
+    requireThat("removed", removed).isNotNull();
 
     // label has been removed
     return true;
@@ -576,7 +576,7 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param index relative address
    */
   public ICommand getCommand(int index) {
-    requireThat(hasIndex(index), "hasIndex(index)").isTrue();
+    requireThat("hasIndex(index)", hasIndex(index)).isTrue();
 
     return commands[index];
   }
@@ -588,12 +588,12 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param command command
    */
   public void setCommand(int index, ICommand command) {
-    requireThat(hasIndex(index), "hasIndex(index)").isTrue();
-    requireThat(command, "command").isNotNull();
-    requireThat(command.hasAddress(), "command.hasAddress()").isFalse();
+    requireThat("hasIndex(index)", hasIndex(index)).isTrue();
+    requireThat("command", command).isNotNull();
+    requireThat("command.hasAddress()", command.hasAddress()).isFalse();
 
     int address = addressForIndex(index);
-    requireThat(address, "address").isGreaterThanOrEqualTo(0);
+    requireThat("address", address).isGreaterThanOrEqualTo(0);
 
     command.setAddress(address);
     commands[index] = command;
@@ -606,7 +606,7 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param index relative address
    */
   void removeCommand(int index) {
-    requireThat(hasIndex(index), "hasIndex(index)").isTrue();
+    requireThat("hasIndex(index)", hasIndex(index)).isTrue();
 
     commands[index] = null;
   }

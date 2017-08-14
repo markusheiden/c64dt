@@ -38,7 +38,7 @@ public class SectorInputStream extends InputStream {
    * @param sector start sector
    */
   public SectorInputStream(IDiskImage diskImage, int track, int sector) {
-    requireThat(diskImage, "diskImage").isNotNull();
+    requireThat("diskImage", diskImage).isNotNull();
     requireValidSector(diskImage, track, sector);
 
     this.diskImage = diskImage;

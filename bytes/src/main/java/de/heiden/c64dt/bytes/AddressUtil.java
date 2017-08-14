@@ -10,6 +10,6 @@ public class AddressUtil {
    * Check validity of a given address.
    */
   public static void requireValidAddress(int address) {
-    requireThat(address, "address").isGreaterThanOrEqualTo(0x0000).isLessThanOrEqualTo(0xFFFF);
+    requireThat("address", address).isGreaterThanOrEqualTo(0x0000).isLessThanOrEqualTo(0xFFFF);
   }
 }

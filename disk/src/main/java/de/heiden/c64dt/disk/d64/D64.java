@@ -63,7 +63,7 @@ public class D64 extends AbstractDiskImage {
       readBAM(result, track, bam, pos);
     }
 
-    requireThat(result, "result").isNotNull();
+    requireThat("result", result).isNotNull();
     return result;
   }
 

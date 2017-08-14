@@ -117,7 +117,7 @@ public enum Error {
       result = UNKNOWN;
     }
 
-    requireThat(result, "result").isNotNull();
+    requireThat("result", result).isNotNull();
     return result;
   }
 
