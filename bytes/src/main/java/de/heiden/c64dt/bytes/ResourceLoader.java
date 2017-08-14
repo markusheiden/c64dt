@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+
 /**
  * Util class to load resources as byte arrays.
  */
@@ -30,7 +32,7 @@ public class ResourceLoader {
       result[i] = read[i] & 0xFF;
     }
 
-    assert result != null : "result != null";
+    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -51,7 +53,7 @@ public class ResourceLoader {
       result[i] = read[i] & 0xFF;
     }
 
-    assert result != null : "result != null";
+    requireThat(result, "result").isNotNull();
     return result;
   }
 }
