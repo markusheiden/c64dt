@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 
 import java.nio.IntBuffer;
 
+import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+
 /**
  * Base class for component displaying c64 indexed color content.
  */
@@ -79,7 +81,7 @@ public abstract class C64ScreenComponent extends C64Component {
    * @param imageData new backing image data
    */
   protected void updateImageData(byte[] imageData) {
-    assert imageData != null : "Precondition: imageData != null";
+    requireThat(imageData, "imageData").isNotNull();
 
     final int width = getImageWidth();
     final int height = getImageHeight();
