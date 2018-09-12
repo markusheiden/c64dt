@@ -1,12 +1,12 @@
 package de.heiden.c64dt.net.code;
 
 import de.heiden.c64dt.net.Packet;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.InetAddress;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test for {@link C64Connection}.
@@ -84,7 +84,7 @@ public class C64ConnectionTest {
   public void assertSentData(int... expected) {
     assertEquals(expected.length, outputData.length);
     for (int i = 0; i < expected.length; i++) {
-      assertEquals("Byte " + i, (byte) expected[i], outputData[i]);
+      assertEquals((byte) expected[i], outputData[i], "Byte " + i);
     }
   }
 
