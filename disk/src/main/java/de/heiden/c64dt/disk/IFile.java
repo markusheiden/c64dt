@@ -7,25 +7,25 @@ public interface IFile {
   /**
    * Get file mode.
    */
-  public FileMode getMode();
+  FileMode getMode();
 
   /**
    * Get starting track.
    */
-  public int getTrack();
+  int getTrack();
 
   /**
    * Get starting sector.
    */
-  public int getSector();
+  int getSector();
 
   /**
    * Get name in C64 encoding.
    */
-  public byte[] getName();
+  byte[] getName();
 
   /**
    * File size in sectors.
    */
-  public int getSize();
+  int getSize();
 }
