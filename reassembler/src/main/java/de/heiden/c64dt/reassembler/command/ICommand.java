@@ -11,46 +11,46 @@ public interface ICommand {
   /**
    * Get code type this command handles.
    */
-  public CodeType getType();
+  CodeType getType();
 
   /**
    * Size in bytes of this command.
    */
-  public int getSize();
+  int getSize();
 
   /**
    * Has the command an address set?.
    */
-  public boolean hasAddress();
+  boolean hasAddress();
 
   /**
    * The absolute address of the command.
    */
-  public int getAddress();
+  int getAddress();
 
   /**
    * Set the address.
    *
    * @param address absolute address
    */
-  public void setAddress(int address);
+  void setAddress(int address);
 
   /**
    * Is the command right after this command not reachable from this command?
    */
-  public boolean isEnd();
+  boolean isEnd();
 
   /**
    * Is this command reachable?
    */
-  public boolean isReachable();
+  boolean isReachable();
 
   /**
    * Set whether this command is reachable.
    *
    * @param reachable is this command reachable?
    */
-  public void setReachable(boolean reachable);
+  void setReachable(boolean reachable);
 
   /**
    * Combine this command with the given command.
@@ -58,17 +58,17 @@ public interface ICommand {
    * @param command command right after this command
    * @return returns if commands have been combined
    */
-  public boolean combineWith(ICommand command);
+  boolean combineWith(ICommand command);
 
   /**
    * Write string representation of this command.
    *
    * @param buffer command buffer
    */
-  public String toString(CommandBuffer buffer);
+  String toString(CommandBuffer buffer);
 
   /**
    * Byte representation of this command.
    */
-  public List<Integer> toBytes();
+  List<Integer> toBytes();
 }

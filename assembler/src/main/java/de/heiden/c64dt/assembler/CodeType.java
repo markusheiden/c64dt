@@ -47,7 +47,7 @@ public enum CodeType {
    *
    * @param id ID
    */
-  private CodeType(String id) {
+  CodeType(String id) {
     this.id = id;
   }
 

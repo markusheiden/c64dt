@@ -115,7 +115,7 @@ public enum OpcodeType {
    * @param jump is the address a jump/branch destination?
    * @param end is the opcode right after this opcode not reachable from this opcode?
    */
-  private OpcodeType(boolean jump, boolean end) {
+  OpcodeType(boolean jump, boolean end) {
     this.jump = jump;
     this.end = end;
   }

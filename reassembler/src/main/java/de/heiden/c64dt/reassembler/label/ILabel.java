@@ -7,12 +7,12 @@ public interface ILabel extends Comparable<ILabel> {
   /**
    * Address the label points to.
    */
-  public int getAddress();
+  int getAddress();
 
   /**
    * String representation of this label.
    */
-  public String toString();
+  String toString();
 
   /**
    * String representation of this label.
@@ -20,5 +20,5 @@ public interface ILabel extends Comparable<ILabel> {
    *
    * @param address absolute address this label is used for
    */
-  public String toString(int address);
+  String toString(int address);
 }
