@@ -49,31 +49,28 @@ public class JC64List extends JList<String> {
       (int) Math.ceil(columns * JC64TextArea.COLUMN_WIDTH * factor),
       (int) Math.ceil(rows * JC64TextArea.ROW_HEIGHT * factor)));
 
-    setCellRenderer(new ListCellRenderer<String>() {
-      @Override
-      public Component getListCellRendererComponent(JList<? extends String> list, String value, int index, boolean isSelected, boolean cellHasFocus) {
-        int columns = (int) Math.ceil(list.getWidth() / (JC64TextArea.COLUMN_WIDTH * factor));
-        int rows = 1;
+    setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
+      int columns1 = (int) Math.ceil(list.getWidth() / (JC64TextArea.COLUMN_WIDTH * factor));
+      int rows1 = 1;
 
-        JC64TextArea component = new JC64TextArea(columns, rows, factor, resizable);
-        component.setBackground(getBackground());
-        component.setForeground(getForeground());
-        component.setCharset(_upper);
+      JC64TextArea component = new JC64TextArea(columns1, rows1, factor, resizable);
+      component.setBackground(getBackground());
+      component.setForeground(getForeground());
+      component.setCharset(_upper);
 
-        StringBuilder v = new StringBuilder(component.getColumns());
-        v.append(value);
-        for (int i = v.length(), e = component.getColumns(); i < e; i++) {
-          v.append(" ");
-        }
-
-        if (isSelected) {
-          component.setTextInverted(0, 0, v.toString());
-        } else {
-          component.setText(0, 0, v.toString());
-        }
-
-        return component;
+      StringBuilder v = new StringBuilder(component.getColumns());
+      v.append(value);
+      for (int i = v.length(), e = component.getColumns(); i < e; i++) {
+        v.append(" ");
       }
+
+      if (isSelected) {
+        component.setTextInverted(0, 0, v.toString());
+      } else {
+        component.setText(0, 0, v.toString());
+      }
+
+      return component;
     });
 
     if (resizable) {
