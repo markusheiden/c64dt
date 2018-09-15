@@ -52,10 +52,10 @@ public class JBam extends JComponent {
 
     Rectangle bounds = fontMetrics.getStringBounds("88", getGraphics()).getBounds();
     left = (int) Math.ceil(bounds.getWidth());
-    leftSpace = (int) Math.ceil(left / 2);
+    leftSpace = (int) Math.ceil(left / 2D);
     height = (int) Math.ceil(bounds.getHeight());
-    topSpace = (int) Math.ceil(height / 2);
-    box = (int) Math.ceil(height / 2);
+    topSpace = (int) Math.ceil(height / 2D);
+    box = (int) Math.ceil(height / 2D);
     border = box / 10;
     if (border == 0) {
       border = 1;
