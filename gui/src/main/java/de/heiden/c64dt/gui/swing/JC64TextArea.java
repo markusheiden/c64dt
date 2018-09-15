@@ -71,8 +71,8 @@ public class JC64TextArea extends JC64CommonComponent {
    * Resizing.
    */
   private void onResize() {
-    _columns = (int) Math.ceil(getImageWidth() / COLUMN_WIDTH);
-    _rows = (int) Math.ceil(getImageHeight() / ROW_HEIGHT);
+    _columns = (int) Math.ceil(getImageWidth() / (double) COLUMN_WIDTH);
+    _rows = (int) Math.ceil(getImageHeight() / (double) ROW_HEIGHT);
 
     _chars = new byte[_rows][_columns];
     _foregrounds = new Color[_rows][_columns];
