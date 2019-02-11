@@ -26,5 +26,10 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>charset</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+    </dependency>
   </dependencies>
 </project>
