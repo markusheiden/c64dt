@@ -7,27 +7,27 @@ public interface ISectorModel {
   /**
    * Number of sides.
    */
-  public int getSides();
+  int getSides();
 
   /**
    * Number of tracks.
    */
-  public int getTracks();
+  int getTracks();
 
   /**
    * Number of tracks per side.
    */
-  public int getTracksPerSide();
+  int getTracksPerSide();
 
   /**
    * Maximum number of sectors.
    */
-  public int getSectors();
+  int getSectors();
 
   /**
    * Number of sectors of a given track.
    *
    * @param track Track
    */
-  public int getSectors(int track);
+  int getSectors(int track);
 }

@@ -4,13 +4,13 @@ import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.reassembler.Reassembler;
 import de.heiden.c64dt.reassembler.xml.XmlUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.SortedMap;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test for {@link CommandBufferMapper}.
@@ -55,26 +55,26 @@ public class CommandBufferMapperTest {
     // code
     byte[] readCode = readCommands.getCode();
     for (int i = 0; i < code.length; i++) {
-      assertEquals("Byte " + i + ":", code[i], readCode[i]);
+      assertEquals(code[i], readCode[i], "Byte " + i + ":");
     }
 
     // code types
     for (int index = 0; index < commands.getLength(); index++) {
-      assertEquals("Index " + index + ":", commands.getType(index), readCommands.getType(index));
+      assertEquals(commands.getType(index), readCommands.getType(index), "Index " + index + ":");
     }
 
     // addresses
     SortedMap<Integer, Integer> commandsStart = commands.getStartAddresses();
     SortedMap<Integer, Integer> readStart = readCommands.getStartAddresses();
     for (Integer index : commandsStart.keySet()) {
-      assertEquals("Index " + index + ":", commandsStart.get(index), readStart.get(index));
+      assertEquals(commandsStart.get(index), readStart.get(index), "Index " + index + ":");
     }
 
     // subroutines
     SortedMap<Integer, Integer> commandsSubroutines = commands.getStartAddresses();
     SortedMap<Integer, Integer> readSubroutines = readCommands.getStartAddresses();
     for (Integer address : commandsSubroutines.keySet()) {
-      assertEquals("Address " + address + ":", commandsSubroutines.get(address), readSubroutines.get(address));
+      assertEquals(commandsSubroutines.get(address), readSubroutines.get(address), "Address " + address + ":");
     }
 
     // write read xml again
@@ -84,7 +84,7 @@ public class CommandBufferMapperTest {
 
     assertEquals(xml.length, readXml.length);
     for (int i = 0; i < xml.length; i++) {
-      assertEquals("Byte " + i, xml[i], readXml[i]);
+      assertEquals(xml[i], readXml[i], "Byte " + i);
     }
   }
 }

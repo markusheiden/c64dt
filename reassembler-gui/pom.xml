@@ -9,7 +9,6 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>de.heiden.c64dt</groupId>
   <artifactId>reassembler-gui</artifactId>
   <version>1.0-SNAPSHOT</version>
 

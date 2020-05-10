@@ -387,7 +387,7 @@ public enum Opcode {
    * @param mode address mode
    * @param cycles number of cycles (without exceptional additional cycles)
    */
-  private Opcode(int opcode, boolean legal, OpcodeType type, OpcodeMode mode, int cycles) {
+  Opcode(int opcode, boolean legal, OpcodeType type, OpcodeMode mode, int cycles) {
     requireThat("opcode", opcode).isGreaterThanOrEqualTo(0x00).isLessThanOrEqualTo(0xFF);
     requireThat("type", type).isNotNull();
     requireThat("mode", mode).isNotNull();

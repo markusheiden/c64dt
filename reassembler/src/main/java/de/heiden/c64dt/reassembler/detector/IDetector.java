@@ -12,5 +12,5 @@ public interface IDetector {
    * @param commands command buffer
    * @return whether a change of code types has taken place
    */
-  public boolean detect(CommandBuffer commands);
+  boolean detect(CommandBuffer commands);
 }

@@ -116,12 +116,9 @@ public class JsrDetector implements IDetector {
       Opcode opcode = opcodeCommand.getOpcode();
       if (command.isReachable() && opcode.getType().equals(OpcodeType.JSR) && opcode.getMode().equals(OpcodeMode.ABS) && iter.hasNext()) {
         int address = opcodeCommand.getArgument();
-        List<Integer> references = result.get(address);
-        if (references == null) {
-          references = new ArrayList<>();
-          result.put(address, references);
-        }
-        references.add(iter.getIndex());
+        result
+          .computeIfAbsent(address, k -> new ArrayList<>())
+          .add(iter.getIndex());
       }
     }
 

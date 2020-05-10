@@ -121,7 +121,7 @@ public class JDirectory extends JList<Object> {
     final List<IFile> files = directory.getFiles();
     files.removeIf(file -> !file.getMode().isVisible());
 
-    setModel(new ListModel<Object>() {
+    setModel(new ListModel<>() {
       @Override
       public int getSize() {
         return files.size() + 1;

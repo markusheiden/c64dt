@@ -10,7 +10,7 @@ public interface IDiskImage extends ISectorModel {
    * @param track track (1-based)
    * @param sector sector (0-based)
    */
-  public byte[] getSector(int track, int sector);
+  byte[] getSector(int track, int sector);
 
   /**
    * Set sector content.
@@ -19,12 +19,12 @@ public interface IDiskImage extends ISectorModel {
    * @param sector sector (0-based)
    * @param content sector content
    */
-  public void setSector(int track, int sector, byte[] content);
+  void setSector(int track, int sector, byte[] content);
 
   /**
    * Does this image have error informations?
    */
-  public boolean hasErrors();
+  boolean hasErrors();
 
   /**
    * Get if sector has an error.
@@ -32,7 +32,7 @@ public interface IDiskImage extends ISectorModel {
    * @param track track (1-based)
    * @param sector sector (0-based)
    */
-  public boolean hasError(int track, int sector);
+  boolean hasError(int track, int sector);
 
   /**
    * Get error for a sector.
@@ -40,7 +40,7 @@ public interface IDiskImage extends ISectorModel {
    * @param track track (1-based)
    * @param sector sector (0-based)
    */
-  public Error getError(int track, int sector);
+  Error getError(int track, int sector);
 
   /**
    * Set error for a sector.
@@ -49,15 +49,15 @@ public interface IDiskImage extends ISectorModel {
    * @param sector sector (0-based)
    * @param error error
    */
-  public void setError(int track, int sector, Error error);
+  void setError(int track, int sector, Error error);
 
   /**
    * Read the bam.
    */
-  public IBAM getBAM();
+  IBAM getBAM();
 
   /**
    * Read the directory.
    */
-  public IDirectory getDirectory();
+  IDirectory getDirectory();
 }

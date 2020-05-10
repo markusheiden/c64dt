@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 
 import javax.xml.bind.JAXB;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * XML utils.
@@ -36,7 +37,7 @@ public class XmlUtil {
    * @param xml XML
    */
   public static void println(byte[] xml) throws Exception {
-    IOUtils.copy(new InputStreamReader(new ByteArrayInputStream(xml), "utf8"), new PrintWriter(System.out));
+    IOUtils.copy(new InputStreamReader(new ByteArrayInputStream(xml), StandardCharsets.UTF_8), new PrintWriter(System.out));
     System.out.println();
     System.out.flush();
   }
