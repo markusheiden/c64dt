@@ -1,60 +1,59 @@
-plugins {
-  id 'java-library'
-  id 'maven-publish'
-}
-
 wrapper {
-  gradleVersion = "${gradleVersion}"
+    gradleVersion = "${gradleVersion}"
 }
-
-group = 'de.heiden'
-archivesBaseName = 'c64dt'
-version = '1.0-SNAPSHOT'
 
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
 
-dependencies {
-  implementation "org.slf4j:slf4j-api:${slf4jVersion}"
-  runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
-  runtimeOnly "org.apache.logging.log4j:log4j-core:${log4jVersion}"
-
-  implementation ("org.springframework:spring-core:${springVersion}") {
-    exclude group: 'commons-logging'
-  }
-  implementation "org.springframework:spring-beans:${springVersion}"
-  implementation "org.springframework:spring-context:${springVersion}"
-
-  testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
-  testImplementation "org.assertj:assertj-core:${assertjVersion}"
+allprojects {
+    group = 'de.heiden.c64dt'
+    version = '1.0-SNAPSHOT'
 }
 
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
 
-jar {
-  manifest {
-    attributes(
-      "Implementation-Title": "C64DT",
-      "Implementation-Version": version)
-  }
-}
-
-publishing {
-  publications {
-    maven(MavenPublication) {
-      from components.java
+    repositories {
+        mavenCentral()
     }
-  }
-}
-build.dependsOn publishToMavenLocal
 
-test {
-  // ignore failing tests
-  ignoreFailures = true
+    archivesBaseName = "${rootProject.name}-${project.name}"
+    sourceCompatibility = JavaVersion.VERSION_14
 
-  // workaround for gradle (included asm) not supporting jdk8
-  scanForTestClasses = false
-  // probably have to tweak the include and exclude patterns, depending on the naming scheme you use
-  include '**/*Test.*'
-  exclude '**/*Abstract*.*'
+    dependencies {
+        implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+        runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
+        runtimeOnly "org.apache.logging.log4j:log4j-core:${log4jVersion}"
+
+        implementation "org.bitbucket.cowwoc:requirements-core:${requirementsVersion}"
+
+        testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+        testImplementation "org.assertj:assertj-core:${assertjVersion}"
+    }
+
+//    dependencyManagement {
+//        dependencies {
+//            implementation("org.springframework:spring-core:${springVersion}") {
+//                exclude group: 'commons-logging'
+//            }
+//            implementation "org.springframework:spring-beans:${springVersion}"
+//            implementation "org.springframework:spring-context:${springVersion}"
+//        }
+//    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from components.java
+            }
+        }
+    }
+    build.dependsOn publishToMavenLocal
+
+    test {
+        // ignore failing tests
+        ignoreFailures = true
+    }
 }

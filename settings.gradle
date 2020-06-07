@@ -7,3 +7,19 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
     }
 }
+
+rootProject.name = 'c64dt'
+
+// Include all subfolder which contains a Gradle build file with the name of the folder
+rootProject.projectDir.eachDir {dir ->
+    dir.eachFileMatch(groovy.io.FileType.FILES, ~/${dir.name}.gradle/, {
+        def dirName = dir.name
+        println("[${rootProject.name}] Adding subproject '${dirName}'")
+
+        include dirName
+        project(":${dirName}").with {
+            projectDir = dir
+            buildFileName = "${dirName}.gradle"
+        }
+    })
+}
