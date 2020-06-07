@@ -1,3 +1,7 @@
+plugins {
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE' apply false
+}
+
 wrapper {
     gradleVersion = "${gradleVersion}"
 }
@@ -13,6 +17,7 @@ allprojects {
 
 subprojects {
     apply plugin: 'java-library'
+    apply plugin: 'io.spring.dependency-management'
     apply plugin: 'maven-publish'
 
     repositories {
@@ -33,15 +38,17 @@ subprojects {
         testImplementation "org.assertj:assertj-core:${assertjVersion}"
     }
 
-//    dependencyManagement {
-//        dependencies {
-//            implementation("org.springframework:spring-core:${springVersion}") {
-//                exclude group: 'commons-logging'
-//            }
-//            implementation "org.springframework:spring-beans:${springVersion}"
-//            implementation "org.springframework:spring-context:${springVersion}"
-//        }
-//    }
+    dependencyManagement {
+        dependencies {
+            dependency("org.springframework:spring-core:${springVersion}") {
+                exclude 'commons-logging:commons-logging'
+            }
+            dependency "org.springframework:spring-beans:${springVersion}"
+            dependency "org.springframework:spring-context:${springVersion}"
+
+            dependency "commons-io:commons-io:${commonsIoVersion}"
+        }
+    }
 
     publishing {
         publications {
