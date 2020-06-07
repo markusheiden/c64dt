@@ -1,5 +1,11 @@
-apply plugin: 'java'
-apply plugin: 'maven'
+plugins {
+  id 'java'
+  id 'maven'
+}
+
+wrapper {
+  gradleVersion = '6.4.1'
+}
 
 group = 'de.heiden'
 archivesBaseName = 'c64dt'
