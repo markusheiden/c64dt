@@ -1,34 +1,33 @@
 plugins {
-  id 'java'
-  id 'maven'
+  id 'java-library'
+  id 'maven-publish'
 }
 
 wrapper {
-  gradleVersion = '6.4.1'
+  gradleVersion = "${gradleVersion}"
 }
 
 group = 'de.heiden'
 archivesBaseName = 'c64dt'
 version = '1.0-SNAPSHOT'
 
-def spring_version = '4.0.1.RELEASE'
-
 repositories {
   mavenCentral()
-  maven {
-    url = 'http://repo.springsource.org/snapshot'
-  }
 }
 
 dependencies {
-  compile(group: 'ch.qos.logback', name: 'logback-classic', version: '1.+')
-  runtime(group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.+')
-  compile(group: 'org.springframework', name: 'spring-core', version: spring_version) {
+  implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+  runtimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
+  runtimeOnly "org.apache.logging.log4j:log4j-core:${log4jVersion}"
+
+  implementation ("org.springframework:spring-core:${springVersion}") {
     exclude group: 'commons-logging'
   }
-  compile(group: 'org.springframework', name: 'spring-beans', version: spring_version)
-  compile(group: 'org.springframework', name: 'spring-context', version: spring_version)
-  testCompile(group: 'junit', name: 'junit', version: '4.+')
+  implementation "org.springframework:spring-beans:${springVersion}"
+  implementation "org.springframework:spring-context:${springVersion}"
+
+  testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+  testImplementation "org.assertj:assertj-core:${assertjVersion}"
 }
 
 
@@ -39,6 +38,15 @@ jar {
       "Implementation-Version": version)
   }
 }
+
+publishing {
+  publications {
+    maven(MavenPublication) {
+      from components.java
+    }
+  }
+}
+build.dependsOn publishToMavenLocal
 
 test {
   // ignore failing tests
