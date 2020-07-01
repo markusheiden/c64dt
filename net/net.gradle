@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(':bytes')
+    implementation project(':charset')
+    implementation project(':disk')
+}

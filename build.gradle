@@ -6,6 +6,8 @@ wrapper {
     gradleVersion = "${gradleVersion}"
 }
 
+apply from: 'gradle/javafx.gradle'
+
 repositories {
     mavenCentral()
 }
@@ -47,6 +49,14 @@ subprojects {
             dependency "org.springframework:spring-context:${springVersion}"
 
             dependency "commons-io:commons-io:${commonsIoVersion}"
+
+            dependency "javax.annotation:javax.annotation-api:${annotationVersion}"
+            dependency "javax.xml.bind:jaxb-api:${jaxbVersion}"
+            dependency "org.glassfish.jaxb:jaxb-runtime:${glassfishJaxbVersion}"
+
+            //dependency "org.openjfx:javafx-base:${openjfxVersion}:${openjfxPlatform}"
+            //dependency "org.openjfx:javafx-controls:${openjfxVersion}:${openjfxPlatform}"
+            //dependency "org.openjfx:javafx-graphics:${openjfxVersion}:${openjfxPlatform}"
         }
     }
 

@@ -1,0 +1,6 @@
+dependencies {
+    implementation project(':charset')
+    implementation project(':disk')
+    implementation project(':gui')
+    implementation 'commons-io:commons-io'
+}

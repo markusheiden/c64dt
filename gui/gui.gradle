@@ -1,0 +1,7 @@
+dependencies {
+    implementation project(':bytes')
+    implementation project(':charset')
+    implementation "org.openjfx:javafx-base:${openjfxVersion}:${openjfxPlatform}"
+    implementation "org.openjfx:javafx-controls:${openjfxVersion}:${openjfxPlatform}"
+    implementation "org.openjfx:javafx-graphics:${openjfxVersion}:${openjfxPlatform}"
+}

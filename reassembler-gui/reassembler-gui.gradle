@@ -1,0 +1,8 @@
+dependencies {
+    implementation project(':bytes')
+    implementation project(':assembler')
+    implementation project(':reassembler')
+    implementation 'org.springframework:spring-beans'
+    implementation 'org.springframework:spring-context'
+    implementation 'javax.annotation:javax.annotation-api'
+}

@@ -1,0 +1,11 @@
+ext {
+    // Determine platform for openjfx dependencies.
+    def currentOS = org.gradle.internal.os.OperatingSystem.current()
+    if (currentOS.isWindows()) {
+        openjfxPlatform = 'win'
+    } else if (currentOS.isLinux()) {
+        openjfxPlatform = 'linux'
+    } else if (currentOS.isMacOsX()) {
+        openjfxPlatform = 'mac'
+    }
+}

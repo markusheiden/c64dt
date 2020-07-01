@@ -1,0 +1,6 @@
+dependencies {
+    implementation project(':bytes')
+    implementation project(':charset')
+    implementation 'commons-io:commons-io'
+    implementation 'javax.xml.bind:jaxb-api'
+}
