@@ -13,6 +13,12 @@ repositories {
     mavenCentral()
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(15))
+    }
+}
+
 allprojects {
     group = 'de.heiden.c64dt'
     version = '1.0-SNAPSHOT'
@@ -28,7 +34,6 @@ subprojects {
     }
 
     archivesBaseName = "${rootProject.name}-${project.name}"
-    sourceCompatibility = JavaVersion.VERSION_15
 
     dependencies {
         implementation "org.slf4j:slf4j-api:${slf4jVersion}"
