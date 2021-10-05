@@ -1,12 +1,12 @@
 package de.heiden.c64dt.disk;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static de.heiden.c64dt.disk.Requirements.R;
 
 /**
  * D64 error codes.
@@ -117,7 +117,7 @@ public enum Error {
       result = UNKNOWN;
     }
 
-    requireThat("result", result).isNotNull();
+    R.requireThat(result, "result").isNotNull();
     return result;
   }
 

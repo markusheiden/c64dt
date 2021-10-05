@@ -1,12 +1,12 @@
 package de.heiden.c64dt.disk;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static de.heiden.c64dt.disk.Requirements.R;
 
 /**
  * Value type for file type.
@@ -98,7 +98,7 @@ public enum FileType {
       result = UNKNOWN;
     }
 
-    requireThat("result", result).isNotNull();
+    R.requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -109,7 +109,7 @@ public enum FileType {
    * @return matching file type or ANY for undefined extensions
    */
   public static FileType fileType(String extension) {
-    requireThat(extension, "extension").isNotNull();
+    R.requireThat(extension, "extension").isNotNull();
 
     FileType result = extensions.get(extension.toUpperCase());
     if (result == null || result.code < 0) {
@@ -117,7 +117,7 @@ public enum FileType {
       result = ANY;
     }
 
-    requireThat("result", result).isNotNull();
+    R.requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -127,8 +127,8 @@ public enum FileType {
    * @param code type code, -1 if none defined
    */
   FileType(int code, String extension) {
-    requireThat("extension", extension).isNotNull();
-    requireThat("extension.length()", extension.length()).isEqualTo(3);
+    R.requireThat("extension", extension).isNotNull();
+    R.requireThat(extension.length(), "extension.length()").isEqualTo(3);
 
     this.code = (byte) code;
     this.extension = extension;
@@ -136,11 +136,11 @@ public enum FileType {
     if (code >= 0) {
       FileType removed = types().put((byte) code, this);
       // No doubled codes.
-      requireThat("removed", removed).isNull();
+      R.requireThat(removed, "removed").isNull();
     }
     FileType removed = extensions().put(extension.toUpperCase(), this);
     // No doubled extensions.
-    requireThat("removed", removed).isNull();
+    R.requireThat(removed, "removed").isNull();
   }
 
   /**

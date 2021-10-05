@@ -1,13 +1,14 @@
 package de.heiden.c64dt.gui.swing.browser;
 
-import de.heiden.c64dt.disk.IBAM;
-import de.heiden.c64dt.disk.IDiskImage;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import javax.swing.*;
+
+import de.heiden.c64dt.disk.IBAM;
+import de.heiden.c64dt.disk.IDiskImage;
+
+import static de.heiden.c64dt.gui.Requirements.R;
 
 /**
  * Component for displaying a bam.
@@ -42,7 +43,7 @@ public class JBam extends JComponent {
    * @param diskImage disk image
    */
   public void setDiskImage(IDiskImage diskImage) {
-    requireThat("diskImage", diskImage).isNotNull();
+    R.requireThat(diskImage, "diskImage").isNotNull();
 
     this.diskImage = diskImage;
 
@@ -70,7 +71,7 @@ public class JBam extends JComponent {
 
   @Override
   protected void paintComponent(Graphics g) {
-    requireThat("g", g).isNotNull();
+    R.requireThat(g, "g").isNotNull();
 
     IBAM bam = diskImage.getBAM();
 

@@ -1,10 +1,10 @@
 package de.heiden.c64dt.net.drive;
 
-import de.heiden.c64dt.bytes.ByteUtil;
-
 import java.io.IOException;
 
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import de.heiden.c64dt.bytes.ByteUtil;
+
+import static de.heiden.c64dt.net.Requirements.R;
 
 /**
  * Packet for drive.
@@ -102,7 +102,7 @@ public class DrivePacket {
     byte[] result = new byte[size];
     System.arraycopy(data, IDX_DATA, result, 0, result.length);
 
-    requireThat("result", result).isNotNull();
+    R.requireThat(result, "result").isNotNull();
     return result;
   }
 }

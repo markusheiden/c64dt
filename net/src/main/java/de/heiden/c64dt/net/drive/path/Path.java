@@ -1,18 +1,22 @@
 package de.heiden.c64dt.net.drive.path;
 
-import de.heiden.c64dt.disk.*;
-import de.heiden.c64dt.net.drive.stream.FileStream;
-import de.heiden.c64dt.net.drive.stream.IStream;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.heiden.c64dt.disk.Directory;
+import de.heiden.c64dt.disk.FileMode;
+import de.heiden.c64dt.disk.FileType;
+import de.heiden.c64dt.disk.IDirectory;
+import de.heiden.c64dt.disk.IFile;
+import de.heiden.c64dt.net.drive.stream.FileStream;
+import de.heiden.c64dt.net.drive.stream.IStream;
+
+import static de.heiden.c64dt.net.Requirements.R;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.decode;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Path to a directory.
@@ -25,7 +29,7 @@ public class Path extends AbstractPath {
   public Path(IPath parent, File directory) throws FileNotFoundException {
     super(parent);
 
-    requireThat("directory", directory).isNotNull();
+    R.requireThat(directory, "directory").isNotNull();
     if (!directory.isDirectory()) {
       throw new FileNotFoundException(directory.getPath() + " is no directory");
     }

@@ -1,13 +1,13 @@
 package de.heiden.c64dt.assembler;
 
-import de.heiden.c64dt.bytes.ByteUtil;
-import org.apache.commons.io.IOUtils;
-
 import java.io.IOException;
 import java.io.InputStream;
 
+import de.heiden.c64dt.bytes.ByteUtil;
+import org.apache.commons.io.IOUtils;
+
+import static de.heiden.c64dt.assembler.Requirements.R;
 import static de.heiden.c64dt.bytes.ByteUtil.toWord;
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Input stream for code.
@@ -54,8 +54,8 @@ public class CodeBuffer extends AbstractCodeBuffer {
    * @param code Code
    */
   public static CodeBuffer fromCode(int startAddr, InputStream code) throws IOException {
-    requireThat("startAddr", startAddr).isGreaterThanOrEqualTo(0);
-    requireThat("code", code).isNotNull();
+    R.requireThat(startAddr, "startAddr").isGreaterThanOrEqualTo(0);
+    R.requireThat(code, "code").isNotNull();
 
     return new CodeBuffer(startAddr, IOUtils.toByteArray(code));
   }
@@ -67,7 +67,7 @@ public class CodeBuffer extends AbstractCodeBuffer {
    * @param program program with start address
    */
   public static CodeBuffer fromProgram(InputStream program) throws IOException {
-    requireThat("program", program).isNotNull();
+    R.requireThat(program, "program").isNotNull();
 
     return fromProgram(IOUtils.toByteArray(program));
   }
@@ -79,8 +79,8 @@ public class CodeBuffer extends AbstractCodeBuffer {
    * @param program program with start address
    */
   public static CodeBuffer fromProgram(byte[] program) throws IOException {
-    requireThat("program", program).isNotNull();
-    requireThat("program.length", program.length).isGreaterThanOrEqualTo(2);
+    R.requireThat(program, "program").isNotNull();
+    R.requireThat(program.length, "program.length").isGreaterThanOrEqualTo(2);
 
     int address = toWord(program, 0);
     byte[] code = new byte[program.length - 2];

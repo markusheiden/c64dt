@@ -1,19 +1,19 @@
 package de.heiden.c64dt.reassembler.command;
 
-import de.heiden.c64dt.reassembler.label.ExternalLabel;
-import de.heiden.c64dt.reassembler.label.ILabel;
-
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
 
+import de.heiden.c64dt.reassembler.label.ExternalLabel;
+import de.heiden.c64dt.reassembler.label.ILabel;
+
+import static de.heiden.c64dt.assembler.Requirements.R;
 import static de.heiden.c64dt.bytes.HexUtil.hex;
 import static de.heiden.c64dt.bytes.HexUtil.hexBytePlain;
 import static de.heiden.c64dt.bytes.HexUtil.hexWord;
 import static de.heiden.c64dt.bytes.HexUtil.hexWordPlain;
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Write assembler source from {@link CommandBuffer}.
@@ -30,7 +30,7 @@ public class CommandWriter {
    * @param output writer to write output to
    */
   public CommandWriter(Writer output) {
-    requireThat("output", output).isNotNull();
+    R.requireThat(output, "output").isNotNull();
 
     this.output = output;
   }
@@ -42,7 +42,7 @@ public class CommandWriter {
    * @param commands Command buffer
    */
   public void write(CommandBuffer commands) throws IOException {
-    requireThat("commands", commands).isNotNull();
+    R.requireThat(commands, "commands").isNotNull();
 
     // start address
     output.append("*=").append(hexWord(commands.getStartAddress())).append("\n");

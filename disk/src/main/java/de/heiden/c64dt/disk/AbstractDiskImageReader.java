@@ -1,15 +1,15 @@
 package de.heiden.c64dt.disk;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import static de.heiden.c64dt.disk.Requirements.R;
 
 /**
  * Abstract base class for disk image readers.
@@ -26,7 +26,7 @@ public abstract class AbstractDiskImageReader {
    * @param file file
    */
   public IDiskImage read(File file) throws IOException, WrongDiskImageFormatException {
-    requireThat("file", file).isNotNull();
+    R.requireThat(file, "file").isNotNull();
 
     return read(FileUtils.readFileToByteArray(file));
   }
@@ -38,7 +38,7 @@ public abstract class AbstractDiskImageReader {
    * @param stream stream
    */
   public IDiskImage read(InputStream stream) throws IOException, WrongDiskImageFormatException {
-    requireThat("stream", stream).isNotNull();
+    R.requireThat(stream, "stream").isNotNull();
 
     return read(IOUtils.toByteArray(stream));
   }
@@ -58,8 +58,8 @@ public abstract class AbstractDiskImageReader {
    * @return diskImage for method chaining
    */
   protected IDiskImage read(byte[] data, IDiskImage diskImage) {
-    requireThat("data", data).isNotNull();
-    requireThat("diskImage", diskImage).isNotNull();
+    R.requireThat(data, "data").isNotNull();
+    R.requireThat(diskImage, "diskImage").isNotNull();
 
     int i = 0;
 
@@ -86,9 +86,9 @@ public abstract class AbstractDiskImageReader {
       }
     }
 
-    requireThat("i", i).isEqualTo("data.length", data.length);
+    R.requireThat(i, "i").isEqualTo(data.length, "data.length");
 
-    requireThat("diskImage", diskImage).isNotNull();
+    R.requireThat(diskImage, "diskImage").isNotNull();
     return diskImage;
   }
 }

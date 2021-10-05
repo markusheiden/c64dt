@@ -1,8 +1,12 @@
 package de.heiden.c64dt.reassembler.command;
 
-import de.heiden.c64dt.assembler.*;
+import de.heiden.c64dt.assembler.CodeBuffer;
+import de.heiden.c64dt.assembler.CodeType;
+import de.heiden.c64dt.assembler.Opcode;
+import de.heiden.c64dt.assembler.OpcodeMode;
+import de.heiden.c64dt.assembler.OpcodeType;
 
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import static de.heiden.c64dt.assembler.Requirements.R;
 
 /**
  * Creates the commands.
@@ -43,7 +47,7 @@ public class CommandCreator {
     while (code.hasMore()) {
       int codeIndex = code.getCurrentIndex();
 
-      requireThat("codeIndex", codeIndex).isEqualTo("index", index);
+      R.requireThat(codeIndex, "codeIndex").isEqualTo(index, "index");
       CodeType type = commandBuffer.getType(index);
 
       if (type == CodeType.BIT) {
@@ -105,8 +109,8 @@ public class CommandCreator {
    * @param command command
    */
   public void addCommand(ICommand command) {
-    requireThat("command", command).isNotNull();
-    requireThat("command.hasAddress()", command.hasAddress()).isFalse();
+    R.requireThat(command, "command").isNotNull();
+    R.requireThat(command.hasAddress(), "command.hasAddress()").isFalse();
 
     commandBuffer.setCommand(index, command);
     index += command.getSize();

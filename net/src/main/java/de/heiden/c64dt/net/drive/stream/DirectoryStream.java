@@ -1,14 +1,14 @@
 package de.heiden.c64dt.net.drive.stream;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 import de.heiden.c64dt.bytes.ByteUtil;
 import de.heiden.c64dt.disk.IDirectory;
 import de.heiden.c64dt.disk.IFile;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import static de.heiden.c64dt.net.Requirements.R;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Creates stream from a directory.
@@ -23,7 +23,7 @@ public class DirectoryStream extends AbstractStream {
   private byte[] content;
 
   public DirectoryStream(IDirectory directory) {
-    requireThat("directory", directory).isNotNull();
+    R.requireThat(directory, "directory").isNotNull();
 
     baos = new ByteArrayOutputStream(4096);
     writeWord(0x0401);
@@ -97,12 +97,12 @@ public class DirectoryStream extends AbstractStream {
 
   @Override
   public byte[] doRead(int length) {
-    requireThat("length", length).isGreaterThanOrEqualTo(0);
+    R.requireThat(length, "length").isGreaterThanOrEqualTo(0);
 
     byte[] result = new byte[limitLength(content.length, length)];
     System.arraycopy(content, getPosition(), result, 0, result.length);
 
-    requireThat("result", result).isNotNull();
+    R.requireThat(result, "result").isNotNull();
     return result;
   }
 

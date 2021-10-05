@@ -1,8 +1,94 @@
 package de.heiden.c64dt.assembler;
 
-import static de.heiden.c64dt.assembler.OpcodeMode.*;
-import static de.heiden.c64dt.assembler.OpcodeType.*;
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import static de.heiden.c64dt.assembler.OpcodeMode.ABS;
+import static de.heiden.c64dt.assembler.OpcodeMode.ABX;
+import static de.heiden.c64dt.assembler.OpcodeMode.ABY;
+import static de.heiden.c64dt.assembler.OpcodeMode.DIR;
+import static de.heiden.c64dt.assembler.OpcodeMode.IMM;
+import static de.heiden.c64dt.assembler.OpcodeMode.IND;
+import static de.heiden.c64dt.assembler.OpcodeMode.IZX;
+import static de.heiden.c64dt.assembler.OpcodeMode.IZY;
+import static de.heiden.c64dt.assembler.OpcodeMode.REL;
+import static de.heiden.c64dt.assembler.OpcodeMode.ZPD;
+import static de.heiden.c64dt.assembler.OpcodeMode.ZPX;
+import static de.heiden.c64dt.assembler.OpcodeMode.ZPY;
+import static de.heiden.c64dt.assembler.OpcodeType.ADC;
+import static de.heiden.c64dt.assembler.OpcodeType.AHX;
+import static de.heiden.c64dt.assembler.OpcodeType.ALR;
+import static de.heiden.c64dt.assembler.OpcodeType.ANC;
+import static de.heiden.c64dt.assembler.OpcodeType.AND;
+import static de.heiden.c64dt.assembler.OpcodeType.ARR;
+import static de.heiden.c64dt.assembler.OpcodeType.ASL;
+import static de.heiden.c64dt.assembler.OpcodeType.AXS;
+import static de.heiden.c64dt.assembler.OpcodeType.BCC;
+import static de.heiden.c64dt.assembler.OpcodeType.BCS;
+import static de.heiden.c64dt.assembler.OpcodeType.BEQ;
+import static de.heiden.c64dt.assembler.OpcodeType.BIT;
+import static de.heiden.c64dt.assembler.OpcodeType.BMI;
+import static de.heiden.c64dt.assembler.OpcodeType.BNE;
+import static de.heiden.c64dt.assembler.OpcodeType.BPL;
+import static de.heiden.c64dt.assembler.OpcodeType.BRK;
+import static de.heiden.c64dt.assembler.OpcodeType.BVC;
+import static de.heiden.c64dt.assembler.OpcodeType.CLC;
+import static de.heiden.c64dt.assembler.OpcodeType.CLD;
+import static de.heiden.c64dt.assembler.OpcodeType.CLI;
+import static de.heiden.c64dt.assembler.OpcodeType.CLV;
+import static de.heiden.c64dt.assembler.OpcodeType.CMP;
+import static de.heiden.c64dt.assembler.OpcodeType.CPX;
+import static de.heiden.c64dt.assembler.OpcodeType.CPY;
+import static de.heiden.c64dt.assembler.OpcodeType.DCP;
+import static de.heiden.c64dt.assembler.OpcodeType.DEC;
+import static de.heiden.c64dt.assembler.OpcodeType.DEX;
+import static de.heiden.c64dt.assembler.OpcodeType.DEY;
+import static de.heiden.c64dt.assembler.OpcodeType.EOR;
+import static de.heiden.c64dt.assembler.OpcodeType.ILL;
+import static de.heiden.c64dt.assembler.OpcodeType.INC;
+import static de.heiden.c64dt.assembler.OpcodeType.INX;
+import static de.heiden.c64dt.assembler.OpcodeType.INY;
+import static de.heiden.c64dt.assembler.OpcodeType.ISC;
+import static de.heiden.c64dt.assembler.OpcodeType.JMP;
+import static de.heiden.c64dt.assembler.OpcodeType.JSR;
+import static de.heiden.c64dt.assembler.OpcodeType.KIL;
+import static de.heiden.c64dt.assembler.OpcodeType.LAS;
+import static de.heiden.c64dt.assembler.OpcodeType.LAX;
+import static de.heiden.c64dt.assembler.OpcodeType.LDA;
+import static de.heiden.c64dt.assembler.OpcodeType.LDX;
+import static de.heiden.c64dt.assembler.OpcodeType.LDY;
+import static de.heiden.c64dt.assembler.OpcodeType.LSR;
+import static de.heiden.c64dt.assembler.OpcodeType.NOP;
+import static de.heiden.c64dt.assembler.OpcodeType.ORA;
+import static de.heiden.c64dt.assembler.OpcodeType.PHA;
+import static de.heiden.c64dt.assembler.OpcodeType.PHP;
+import static de.heiden.c64dt.assembler.OpcodeType.PLA;
+import static de.heiden.c64dt.assembler.OpcodeType.PLP;
+import static de.heiden.c64dt.assembler.OpcodeType.REG;
+import static de.heiden.c64dt.assembler.OpcodeType.RLA;
+import static de.heiden.c64dt.assembler.OpcodeType.ROL;
+import static de.heiden.c64dt.assembler.OpcodeType.ROR;
+import static de.heiden.c64dt.assembler.OpcodeType.RRA;
+import static de.heiden.c64dt.assembler.OpcodeType.RTI;
+import static de.heiden.c64dt.assembler.OpcodeType.RTS;
+import static de.heiden.c64dt.assembler.OpcodeType.SAX;
+import static de.heiden.c64dt.assembler.OpcodeType.SBC;
+import static de.heiden.c64dt.assembler.OpcodeType.SEC;
+import static de.heiden.c64dt.assembler.OpcodeType.SED;
+import static de.heiden.c64dt.assembler.OpcodeType.SEI;
+import static de.heiden.c64dt.assembler.OpcodeType.SHX;
+import static de.heiden.c64dt.assembler.OpcodeType.SHY;
+import static de.heiden.c64dt.assembler.OpcodeType.SLO;
+import static de.heiden.c64dt.assembler.OpcodeType.SRE;
+import static de.heiden.c64dt.assembler.OpcodeType.STA;
+import static de.heiden.c64dt.assembler.OpcodeType.STX;
+import static de.heiden.c64dt.assembler.OpcodeType.STY;
+import static de.heiden.c64dt.assembler.OpcodeType.TAS;
+import static de.heiden.c64dt.assembler.OpcodeType.TAX;
+import static de.heiden.c64dt.assembler.OpcodeType.TAY;
+import static de.heiden.c64dt.assembler.OpcodeType.TSX;
+import static de.heiden.c64dt.assembler.OpcodeType.TXA;
+import static de.heiden.c64dt.assembler.OpcodeType.TXS;
+import static de.heiden.c64dt.assembler.OpcodeType.TYA;
+import static de.heiden.c64dt.assembler.OpcodeType.XAA;
+import static de.heiden.c64dt.assembler.Requirements.R;
 
 /**
  * 6502 series opcodes.
@@ -347,11 +433,11 @@ public enum Opcode {
    * @param opcode byte representation of opcode
    */
   public static Opcode opcode(int opcode) {
-    requireThat("opcode", opcode).isBetween(0x00, 0xFF);
+    R.requireThat(opcode, "opcode").isBetween(0x00, 0xFF);
 
     Opcode result = values()[opcode];
 
-    requireThat("result.getOpcode()", result.getOpcode()).isEqualTo("opcode", opcode);
+    R.requireThat(result.getOpcode(), "result.getOpcode()").isEqualTo(opcode, "opcode");
     return result;
   }
 
@@ -388,13 +474,13 @@ public enum Opcode {
    * @param cycles number of cycles (without exceptional additional cycles)
    */
   Opcode(int opcode, boolean legal, OpcodeType type, OpcodeMode mode, int cycles) {
-    requireThat("opcode", opcode).isGreaterThanOrEqualTo(0x00).isLessThanOrEqualTo(0xFF);
-    requireThat("type", type).isNotNull();
-    requireThat("mode", mode).isNotNull();
+    R.requireThat(opcode, "opcode").isGreaterThanOrEqualTo(0x00).isLessThanOrEqualTo(0xFF);
+    R.requireThat(type, "type").isNotNull();
+    R.requireThat(mode, "mode").isNotNull();
     if (type != KIL) {
-      requireThat("cycles", cycles).isGreaterThan(0);
+      R.requireThat(cycles, "cycles").isGreaterThan(0);
     }
-    requireThat("cycles", cycles).isLessThanOrEqualTo(8);
+    R.requireThat(cycles, "cycles").isLessThanOrEqualTo(8);
 
     this.opcode = opcode;
     this.legal = legal;

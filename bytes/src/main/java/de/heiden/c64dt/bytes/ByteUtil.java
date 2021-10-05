@@ -1,6 +1,6 @@
 package de.heiden.c64dt.bytes;
 
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import static de.heiden.c64dt.bytes.Requirements.R;
 
 /**
  * Util class for handling bytes.
@@ -17,8 +17,8 @@ public class ByteUtil {
    * Read byte from byte array.
    */
   public static int toByte(byte[] data, int pos) {
-    requireThat("data", data).isNotNull();
-    requireThat("pos", pos).isLessThanOrEqualTo("data.length", data.length);
+    R.requireThat(data, "data").isNotNull();
+    R.requireThat(pos, "pos").isLessThanOrEqualTo(data.length, "data.length");
 
     return toByte(data[pos]);
   }
@@ -34,8 +34,8 @@ public class ByteUtil {
    * Read word from byte array.
    */
   public static int toWord(byte[] data, int pos) {
-    requireThat("data", data).isNotNull();
-    requireThat("pos + 1", pos + 1).isLessThan("data.length", data.length);
+    R.requireThat(data, "data").isNotNull();
+    R.requireThat(pos + 1, "pos + 1").isLessThan(data.length, "data.length");
 
     return toWord(data[pos], data[pos + 1]);
   }
@@ -46,7 +46,7 @@ public class ByteUtil {
    * @param word 16 bit word
    */
   public static int hi(int word) {
-    requireThat("word", word).isGreaterThanOrEqualTo(0x0000).isLessThanOrEqualTo(0xFFFF);
+    R.requireThat(word, "word").isGreaterThanOrEqualTo(0x0000).isLessThanOrEqualTo(0xFFFF);
 
     return (word >> 8) & 0xFF;
   }
@@ -57,7 +57,7 @@ public class ByteUtil {
    * @param word 16 bit word
    */
   public static int lo(int word) {
-    requireThat("word", word).isGreaterThanOrEqualTo(0x0000).isLessThanOrEqualTo(0xFFFF);
+    R.requireThat(word, "word").isGreaterThanOrEqualTo(0x0000).isLessThanOrEqualTo(0xFFFF);
 
     return word & 0xFF;
   }

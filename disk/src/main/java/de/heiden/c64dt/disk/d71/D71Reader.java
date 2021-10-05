@@ -6,7 +6,7 @@ import de.heiden.c64dt.disk.WrongDiskImageFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import static de.heiden.c64dt.disk.Requirements.R;
 
 /**
  * Reads a D71 image from a file.
@@ -22,7 +22,7 @@ public class D71Reader extends AbstractDiskImageReader {
 
   @Override
   public IDiskImage read(byte[] data) throws WrongDiskImageFormatException {
-    requireThat("data", data).isNotNull();
+    R.requireThat(data, "data").isNotNull();
 
     int tracks = 70;
     boolean hasErrors;

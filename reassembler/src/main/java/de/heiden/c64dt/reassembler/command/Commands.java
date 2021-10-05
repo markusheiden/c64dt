@@ -1,16 +1,25 @@
 package de.heiden.c64dt.reassembler.command;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.NavigableMap;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.reassembler.label.CodeLabel;
 import de.heiden.c64dt.reassembler.label.DataLabel;
 import de.heiden.c64dt.reassembler.label.ExternalLabel;
 import de.heiden.c64dt.reassembler.label.ILabel;
 
-import java.util.*;
-import java.util.Map.Entry;
-
+import static de.heiden.c64dt.assembler.Requirements.R;
 import static de.heiden.c64dt.bytes.AddressUtil.requireValidAddress;
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Input stream for code.
@@ -94,7 +103,7 @@ public class Commands {
    * @param startAddress address of the code
    */
   public Commands(byte[] code, int startAddress) {
-    requireThat("startAddress", startAddress).isGreaterThanOrEqualTo(0);
+    R.requireThat(startAddress, "startAddress").isGreaterThanOrEqualTo(0);
 
     this.codeReferences = new int[code.length];
     Arrays.fill(this.codeReferences, -1);
@@ -186,11 +195,11 @@ public class Commands {
    * @return absolute address
    */
   public int addressForIndex(int index) {
-    requireThat("hasIndex(index)", hasIndex(index)).isTrue();
+    R.requireThat(hasIndex(index), "hasIndex(index)").isTrue();
 
     // Compute start index for address range index belongs to
     Integer startIndex = startAddresses.floorKey(index);
-    requireThat("startIndex", startIndex).isNotNull();
+    R.requireThat(startIndex, "startIndex").isNotNull();
 
     return startAddresses.get(startIndex) + index;
   }
@@ -211,7 +220,7 @@ public class Commands {
    * @return relative address or -1, if not found
    */
   public int indexForAddress(int address) {
-    requireThat("hasAddress(address)", hasAddress(address)).isTrue();
+    R.requireThat(hasAddress(address), "hasAddress(address)").isTrue();
 
     return indexForAddressImpl(address);
   }
@@ -244,12 +253,12 @@ public class Commands {
    * @param baseAddress new absolute base address
    */
   public void rebase(int startIndex, int baseAddress) {
-    requireThat("hasIndex(startIndex)", hasIndex(startIndex)).isTrue();
+    R.requireThat(hasIndex(startIndex), "hasIndex(startIndex)").isTrue();
     requireValidAddress(baseAddress);
 
     Integer removed = startAddresses.put(startIndex, baseAddress);
     // Check that the same index is not rebased twice.
-    requireThat("removed", removed).isNull();
+    R.requireThat(removed, "removed").isNull();
   }
 
   /**
@@ -259,12 +268,12 @@ public class Commands {
    * @param address new absolute address
    */
   public void base(int startIndex, int address) {
-    requireThat("hasIndex(startIndex)", hasIndex(startIndex)).isTrue();
+    R.requireThat(hasIndex(startIndex), "hasIndex(startIndex)").isTrue();
     requireValidAddress(address);
 
     Integer removed = startAddresses.put(startIndex, address - startIndex);
     // Check that the same index is not based twice.
-    requireThat("removed", removed).isNull();
+    R.requireThat(removed, "removed").isNull();
   }
 
   //
@@ -277,11 +286,11 @@ public class Commands {
    * @param subroutine Subroutine
    */
   public void addSubroutine(Subroutine subroutine) {
-    requireThat("subroutine", subroutine).isNotNull();
+    R.requireThat(subroutine, "subroutine").isNotNull();
 
     Subroutine removed = subroutines.put(subroutine.getAddress(), subroutine);
     // Check that there are no doubled subroutines.
-    requireThat("removed", removed).isNull();
+    R.requireThat(removed, "removed").isNull();
   }
 
   /**
@@ -312,7 +321,7 @@ public class Commands {
    * @param index relative address
    */
   public CodeType getType(int index) {
-    requireThat("hasIndex(index)", hasIndex(index)).isTrue();
+    R.requireThat(hasIndex(index), "hasIndex(index)").isTrue();
 
     return types[index];
   }
@@ -326,10 +335,10 @@ public class Commands {
    * @return whether a change has taken place
    */
   public boolean setType(int startIndex, int endIndex, CodeType type) {
-    requireThat("hasIndex(startIndex)", hasIndex(startIndex)).isTrue();
-    requireThat("hasEndIndex(endIndex)", hasEndIndex(endIndex)).isTrue();
-    requireThat("startIndex", startIndex).isLessThanOrEqualTo("endIndex", endIndex);
-    requireThat("type", type).isNotNull();
+    R.requireThat(hasIndex(startIndex), "hasIndex(startIndex)").isTrue();
+    R.requireThat(hasEndIndex(endIndex), "hasEndIndex(endIndex)").isTrue();
+    R.requireThat(startIndex, "startIndex").isLessThanOrEqualTo(endIndex, "endIndex");
+    R.requireThat(type, "type").isNotNull();
 
     boolean change = false;
     for (int index = startIndex; index < endIndex; index++) {
@@ -347,8 +356,8 @@ public class Commands {
    * @return whether a change has taken place
    */
   public boolean setType(int index, CodeType type) {
-    requireThat("hasIndex(index)", hasIndex(index)).isTrue();
-    requireThat("type", type).isNotNull();
+    R.requireThat(hasIndex(index), "hasIndex(index)").isTrue();
+    R.requireThat(type, "type").isNotNull();
 
     boolean change = !type.equals(types[index]);
     types[index] = type;
@@ -366,7 +375,7 @@ public class Commands {
    * @param address absolute address
    */
   public boolean hasLabel(int address) {
-    requireThat("hasAddress(address)", hasAddress(address)).isTrue();
+    R.requireThat(hasAddress(address), "hasAddress(address)").isTrue();
 
     return hasCodeLabel(address) || hasDataLabel(address);
   }
@@ -423,7 +432,7 @@ public class Commands {
    * @param to referenced absolute address
    */
   public void addReference(boolean code, int fromIndex, int to) {
-    requireThat("hasIndex(fromIndex)", hasIndex(fromIndex)).isTrue();
+    R.requireThat(hasIndex(fromIndex), "hasIndex(fromIndex)").isTrue();
 
     if (!hasAddress(to)) {
       addExternalReference(fromIndex, to);
@@ -442,8 +451,8 @@ public class Commands {
    * @param to referenced absolute address
    */
   public void addCodeReference(int fromIndex, int to) {
-    requireThat("hasIndex(fromIndex)", hasIndex(fromIndex)).isTrue();
-    requireThat("hasAddress(to)", hasAddress(to)).isTrue();
+    R.requireThat(hasIndex(fromIndex), "hasIndex(fromIndex)").isTrue();
+    R.requireThat(hasAddress(to), "hasAddress(to)").isTrue();
 
     // add label for address "to"
     codeLabels.put(to, new CodeLabel(to));
@@ -459,8 +468,8 @@ public class Commands {
    * @param to referenced absolute address
    */
   public void addDataReference(int fromIndex, int to) {
-    requireThat("hasIndex(fromIndex)", hasIndex(fromIndex)).isTrue();
-    requireThat("hasAddress(to)", hasAddress(to)).isTrue();
+    R.requireThat(hasIndex(fromIndex), "hasIndex(fromIndex)").isTrue();
+    R.requireThat(hasAddress(to), "hasAddress(to)").isTrue();
 
     // add label for address "to"
     dataLabels.put(to, new DataLabel(to));
@@ -476,8 +485,8 @@ public class Commands {
    * @param to referenced absolute address
    */
   public void addExternalReference(int fromIndex, int to) {
-    requireThat("hasIndex(fromIndex)", hasIndex(fromIndex)).isTrue();
-    requireThat("hasAddress(to)", hasAddress(to)).isFalse();
+    R.requireThat(hasIndex(fromIndex), "hasIndex(fromIndex)").isTrue();
+    R.requireThat(hasAddress(to), "hasAddress(to)").isFalse();
 
     // add label for address "to"
     externalLabels.put(to, new ExternalLabel(to));
@@ -547,7 +556,7 @@ public class Commands {
     // remove label, because the address is no more referenced
     Object removed = labels.remove(referenced);
     // There need to be a label if there had been a reference.
-    requireThat("removed", removed).isNotNull();
+    R.requireThat(removed, "removed").isNotNull();
 
     // label has been removed
     return true;
@@ -576,7 +585,7 @@ public class Commands {
    * @param index relative address
    */
   public ICommand getCommand(int index) {
-    requireThat("hasIndex(index)", hasIndex(index)).isTrue();
+    R.requireThat(hasIndex(index), "hasIndex(index)").isTrue();
 
     return commands[index];
   }
@@ -588,12 +597,12 @@ public class Commands {
    * @param command command
    */
   public void setCommand(int index, ICommand command) {
-    requireThat("hasIndex(index)", hasIndex(index)).isTrue();
-    requireThat("command", command).isNotNull();
-    requireThat("command.hasAddress()", command.hasAddress()).isFalse();
+    R.requireThat(hasIndex(index), "hasIndex(index)").isTrue();
+    R.requireThat(command, "command").isNotNull();
+    R.requireThat(command.hasAddress(), "command.hasAddress()").isFalse();
 
     int address = addressForIndex(index);
-    requireThat("address", address).isGreaterThanOrEqualTo(0);
+    R.requireThat(address, "address").isGreaterThanOrEqualTo(0);
 
     command.setAddress(address);
     commands[index] = command;
@@ -606,7 +615,7 @@ public class Commands {
    * @param index relative address
    */
   void removeCommand(int index) {
-    requireThat("hasIndex(index)", hasIndex(index)).isTrue();
+    R.requireThat(hasIndex(index), "hasIndex(index)").isTrue();
 
     commands[index] = null;
   }

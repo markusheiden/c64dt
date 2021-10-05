@@ -1,6 +1,6 @@
 package de.heiden.c64dt.assembler;
 
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import static de.heiden.c64dt.assembler.Requirements.R;
 
 /**
  * Abstract implementation of input stream for code.
@@ -18,7 +18,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
    * @param length length of the code
    */
   protected AbstractCodeBuffer(int startAddress, int length) {
-    requireThat("length", length).isGreaterThanOrEqualTo(0);
+    R.requireThat(length, "length").isGreaterThanOrEqualTo(0);
 
     this.startAddress = startAddress;
     this.length = length;
@@ -63,7 +63,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
 
   @Override
   public final boolean has(int number) {
-    requireThat("number", number).isGreaterThanOrEqualTo(0);
+    R.requireThat(number, "number").isGreaterThanOrEqualTo(0);
 
     return position + number <= length;
   }
@@ -77,7 +77,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
 
   @Override
   public final int read(int number) {
-    requireThat("number", number).isBetween(0, 2);
+    R.requireThat(number, "number").isBetween(0, 2);
 
     if (number == 0) {
       return -1;

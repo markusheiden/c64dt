@@ -1,8 +1,8 @@
 package de.heiden.c64dt.disk;
 
+import static de.heiden.c64dt.disk.Requirements.R;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidSector;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidTrack;
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Block allocation map implementation.
@@ -13,7 +13,7 @@ public class BAM implements IBAM {
   private final int[] freeSectors;
 
   public BAM(ISectorModel sectorModel) {
-    requireThat("sectorModel", sectorModel).isNotNull();
+    R.requireThat(sectorModel, "sectorModel").isNotNull();
 
     this.sectorModel = sectorModel;
 

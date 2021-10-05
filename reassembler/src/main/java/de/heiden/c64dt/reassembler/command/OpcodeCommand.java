@@ -1,15 +1,15 @@
 package de.heiden.c64dt.reassembler.command;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Opcode;
 import de.heiden.c64dt.assembler.OpcodeMode;
 import de.heiden.c64dt.bytes.ByteUtil;
 import de.heiden.c64dt.reassembler.label.ILabel;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import static de.heiden.c64dt.assembler.Requirements.R;
 
 /**
  * Command for an opcode.
@@ -39,7 +39,7 @@ public class OpcodeCommand extends AbstractCommand {
   public OpcodeCommand(Opcode opcode, int argument) {
     super(CodeType.OPCODE);
 
-    requireThat("opcode", opcode).isNotNull();
+    R.requireThat(opcode, "opcode").isNotNull();
 
     this.opcode = opcode;
     this.argument = argument;
@@ -59,7 +59,7 @@ public class OpcodeCommand extends AbstractCommand {
    * Argument for opcode, if any.
    */
   public int getArgument() {
-    requireThat("getSize()", getSize()).isGreaterThan(1);
+    R.requireThat(getSize(), "getSize()").isGreaterThan(1);
 
     return argument;
   }
@@ -75,7 +75,7 @@ public class OpcodeCommand extends AbstractCommand {
    * Get the opcode argument as absolute address.
    */
   public int getArgumentAddress() {
-    requireThat("isArgumentAddress()", isArgumentAddress()).isTrue();
+    R.requireThat(isArgumentAddress(), "isArgumentAddress()").isTrue();
 
     return opcode.getMode().getAddress(getAddress(), getArgument());
   }
@@ -98,7 +98,7 @@ public class OpcodeCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    requireThat("buffer", buffer).isNotNull();
+    R.requireThat(buffer, "buffer").isNotNull();
 
     StringBuilder result = new StringBuilder();
     result.append(opcode.getType().toString());
@@ -127,8 +127,7 @@ public class OpcodeCommand extends AbstractCommand {
       result.add(ByteUtil.hi(argument));
     }
 
-
-    requireThat("result", result).isNotNull();
+    R.requireThat(result, "result").isNotNull();
     return result;
   }
 }

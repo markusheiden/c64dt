@@ -1,12 +1,12 @@
 package de.heiden.c64dt.disk;
 
-import de.heiden.c64dt.bytes.ByteUtil;
-
 import java.io.IOException;
 import java.io.InputStream;
 
+import de.heiden.c64dt.bytes.ByteUtil;
+
+import static de.heiden.c64dt.disk.Requirements.R;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidSector;
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Reads a file from a chain of sectors.
@@ -38,7 +38,7 @@ public class SectorInputStream extends InputStream {
    * @param sector start sector
    */
   public SectorInputStream(IDiskImage diskImage, int track, int sector) {
-    requireThat("diskImage", diskImage).isNotNull();
+    R.requireThat(diskImage, "diskImage").isNotNull();
     requireValidSector(diskImage, track, sector);
 
     this.diskImage = diskImage;

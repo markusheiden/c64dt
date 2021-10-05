@@ -1,5 +1,7 @@
 package de.heiden.c64dt.gui.javafx;
 
+import java.nio.IntBuffer;
+
 import de.heiden.c64dt.gui.C64Color;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -7,8 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.stage.Stage;
-
-import java.nio.IntBuffer;
 
 /**
  * Base class for component displaying c64 indexed color content.
@@ -79,7 +79,7 @@ public abstract class C64ScreenComponent extends C64Component {
    * @param imageData new backing image data
    */
   protected void updateImageData(byte[] imageData) {
-//    requireThat("imageData", imageData).isNotNull();
+//    R.requireThat("imageData", imageData).isNotNull();
 
     final int width = getImageWidth();
     final int height = getImageHeight();

@@ -1,5 +1,9 @@
 package de.heiden.c64dt.net.drive;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import de.heiden.c64dt.charset.C64Charset;
 import de.heiden.c64dt.net.drive.path.IPath;
 import de.heiden.c64dt.net.drive.path.Path;
@@ -7,11 +11,7 @@ import de.heiden.c64dt.net.drive.stream.AbstractStream;
 import de.heiden.c64dt.net.drive.stream.IStream;
 import de.heiden.c64dt.net.drive.stream.NullStream;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import static de.heiden.c64dt.net.Requirements.R;
 
 /**
  * Simulated device.
@@ -27,8 +27,8 @@ public class Device {
    * Constructor.
    */
   public Device(File root) throws FileNotFoundException {
-    requireThat("root", root).isNotNull();
-    requireThat("root.isDirectory()", root.isDirectory()).isTrue();
+    R.requireThat(root, "root").isNotNull();
+    R.requireThat(root.isDirectory(), "root.isDirectory()").isTrue();
 
     streams = new IStream[16];
     for (int i = 0; i < streams.length; i++) {
@@ -50,7 +50,7 @@ public class Device {
 
   public void open(int channel, byte[] file) throws DeviceException {
     assertValidChannel(channel);
-    requireThat("file", file).isNotNull();
+    R.requireThat(file, "file").isNotNull();
 
     // create new channel from path
     if (channel != COMMAND_CHANNEL) {
@@ -102,7 +102,7 @@ public class Device {
   }
 
   protected final void assertValidChannel(int channel) {
-    requireThat("channel", channel).isBetween(0, 15);
+    R.requireThat(channel, "channel").isBetween(0, 15);
   }
 
   protected final void assertOpen(int channel) throws DeviceException {
@@ -143,7 +143,7 @@ public class Device {
       byte[] result = new byte[length];
       System.arraycopy(error, getPosition(), result, 0, length);
 
-      requireThat("result", result).isNotNull();
+      R.requireThat(result, "result").isNotNull();
       return result;
     }
 

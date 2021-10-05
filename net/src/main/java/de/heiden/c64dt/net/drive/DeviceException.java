@@ -1,6 +1,6 @@
 package de.heiden.c64dt.net.drive;
 
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import static de.heiden.c64dt.net.Requirements.R;
 
 /**
  * Exception for device operations.
@@ -18,7 +18,7 @@ public class DeviceException extends Exception {
    * Error.
    */
   public Error getError() {
-    requireThat("result", error).isNotNull();
+    R.requireThat(error, "result").isNotNull();
     return error;
   }
 }

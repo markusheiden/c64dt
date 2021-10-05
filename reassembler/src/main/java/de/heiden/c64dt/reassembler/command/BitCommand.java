@@ -1,13 +1,13 @@
 package de.heiden.c64dt.reassembler.command;
 
-import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.assembler.Opcode;
-
 import java.util.Collections;
 import java.util.List;
 
+import de.heiden.c64dt.assembler.CodeType;
+import de.heiden.c64dt.assembler.Opcode;
+
+import static de.heiden.c64dt.assembler.Requirements.R;
 import static de.heiden.c64dt.bytes.HexUtil.hexByte;
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Command for using bit to skip the next opcode.
@@ -41,7 +41,7 @@ public class BitCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    requireThat("buffer", buffer).isNotNull();
+    R.requireThat(buffer, "buffer").isNotNull();
 
     return "!BYTE " + hexByte(opcode.getOpcode()) + "; " + opcode.toString(getAddress(), argument);
   }

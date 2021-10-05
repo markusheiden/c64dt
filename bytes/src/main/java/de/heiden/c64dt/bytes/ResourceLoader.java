@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import static de.heiden.c64dt.bytes.Requirements.R;
 
 /**
  * Util class to load resources as byte arrays.
@@ -32,7 +32,7 @@ public class ResourceLoader {
       result[i] = read[i] & 0xFF;
     }
 
-    requireThat("result", result).isNotNull();
+    R.requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -53,7 +53,7 @@ public class ResourceLoader {
       result[i] = read[i] & 0xFF;
     }
 
-    requireThat("result", result).isNotNull();
+    R.requireThat(result, "result").isNotNull();
     return result;
   }
 }

@@ -1,14 +1,14 @@
 package de.heiden.c64dt.reassembler.command;
 
+import java.util.Arrays;
+import java.util.List;
+
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.bytes.ByteUtil;
 import de.heiden.c64dt.reassembler.label.ILabel;
 
-import java.util.Arrays;
-import java.util.List;
-
+import static de.heiden.c64dt.assembler.Requirements.R;
 import static de.heiden.c64dt.bytes.HexUtil.hexWord;
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Command for an absolute address referencing code.
@@ -42,14 +42,14 @@ public class AddressCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    requireThat("buffer", buffer).isNotNull();
+    R.requireThat(buffer, "buffer").isNotNull();
 
     ILabel label = buffer.getLabel(address);
     if (label == null) {
       return "!WORD " + hexWord(address);
     }
 
-    requireThat("label.getAddress()", label.getAddress()).isEqualTo("address", address);
+    R.requireThat(label.getAddress(), "label.getAddress()").isEqualTo(address, "address");
     return "!WORD " + label.toString(address);
   }
 

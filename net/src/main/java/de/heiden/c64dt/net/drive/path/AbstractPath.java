@@ -1,14 +1,14 @@
 package de.heiden.c64dt.net.drive.path;
 
+import java.io.FileNotFoundException;
+import java.util.Arrays;
+
 import de.heiden.c64dt.disk.IDirectory;
 import de.heiden.c64dt.net.drive.stream.DirectoryStream;
 import de.heiden.c64dt.net.drive.stream.IStream;
 
-import java.io.FileNotFoundException;
-import java.util.Arrays;
-
+import static de.heiden.c64dt.net.Requirements.R;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Directory path.
@@ -33,13 +33,13 @@ public abstract class AbstractPath implements IPath {
 
   @Override
   public IPath getParent() {
-    requireThat("result", parent).isNotNull();
+    R.requireThat(parent, "result").isNotNull();
     return parent;
   }
 
   @Override
   public IStream getFile(byte[] filename) throws FileNotFoundException {
-    requireThat("filename", filename).isNotNull();
+    R.requireThat(filename, "filename").isNotNull();
 
     if (Arrays.equals(filename, DIRECTORY_NAME)) {
       return new DirectoryStream(doDirectory());
@@ -84,7 +84,7 @@ public abstract class AbstractPath implements IPath {
       }
     }
 
-    requireThat("result", result).isNotNull();
+    R.requireThat(result, "result").isNotNull();
     return result;
   }
 

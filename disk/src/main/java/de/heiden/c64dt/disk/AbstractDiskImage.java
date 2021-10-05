@@ -1,18 +1,18 @@
 package de.heiden.c64dt.disk;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import de.heiden.c64dt.bytes.ByteUtil;
 import de.heiden.c64dt.charset.TextUtil;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
+import static de.heiden.c64dt.disk.Requirements.R;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidSector;
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Abstract disk image implementation.
@@ -38,9 +38,9 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param hasErrors support error informations?
    */
   protected AbstractDiskImage(int sides, int tracks, boolean hasErrors) {
-    requireThat("sides", sides).isGreaterThanOrEqualTo(1).isLessThanOrEqualTo(2);
-    requireThat("tracks", tracks).isGreaterThanOrEqualTo(0);
-    requireThat("tracks % sides", tracks % sides).isEqualTo(0);
+    R.requireThat(sides, "sides").isGreaterThanOrEqualTo(1).isLessThanOrEqualTo(2);
+    R.requireThat(tracks, "tracks").isGreaterThanOrEqualTo(0);
+    R.requireThat(tracks % sides, "tracks % sides").isEqualTo(0);
 
     this.sides = sides;
     this.tracks = tracks;
@@ -130,7 +130,7 @@ public abstract class AbstractDiskImage implements IDiskImage {
 
   @Override
   public Error getError(int track, int sector) {
-    requireThat("hasErrors()", hasErrors()).isTrue();
+    R.requireThat(hasErrors(), "hasErrors()").isTrue();
     requireValidSector(this, track, sector);
 
     return errors[track - 1][sector];
@@ -138,9 +138,9 @@ public abstract class AbstractDiskImage implements IDiskImage {
 
   @Override
   public void setError(int track, int sector, Error error) {
-    requireThat("hasErrors()", hasErrors()).isTrue();
+    R.requireThat(hasErrors(), "hasErrors()").isTrue();
     requireValidSector(this, track, sector);
-    requireThat("error", error).isNotNull();
+    R.requireThat(error, "error").isNotNull();
 
     errors[track - 1][sector] = error;
   }
@@ -163,8 +163,8 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param pos position in sector buffer
    */
   protected void readBAM(IBAM bam, int track, byte[] content, int pos) {
-    requireThat("bam", bam).isNotNull();
-    requireThat("content", content).isNotNull();
+    R.requireThat(bam, "bam").isNotNull();
+    R.requireThat(content, "content").isNotNull();
 
     int free = ByteUtil.toByte(content[pos + 0x00]);
     bam.setFreeSectors(track, free);
@@ -182,7 +182,7 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param b byte to read
    */
   protected void readBAM(IBAM bam, int track, int sector, byte b) {
-    requireThat("bam", bam).isNotNull();
+    R.requireThat(bam, "bam").isNotNull();
 
     int map = ByteUtil.toByte(b);
     for (int i = 0; i < 8 && sector < getSectors(track); i++, sector++) {

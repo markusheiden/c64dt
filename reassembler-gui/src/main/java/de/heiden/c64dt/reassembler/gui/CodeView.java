@@ -20,7 +20,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import static de.heiden.c64dt.assembler.Requirements.R;
 
 /**
  * View for reassembled code.
@@ -61,7 +61,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent> {
    * @param reassembler Reassembler
    */
   public void use(Reassembler reassembler) {
-    requireThat("reassembler", reassembler).isNotNull();
+    R.requireThat("reassembler", reassembler).isNotNull();
 
     model.use(reassembler);
   }

@@ -1,11 +1,11 @@
 package de.heiden.c64dt.net.drive;
 
-import de.heiden.c64dt.charset.C64Charset;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import de.heiden.c64dt.charset.C64Charset;
+
+import static de.heiden.c64dt.net.Requirements.R;
 
 /**
  * Error constants.
@@ -33,7 +33,7 @@ public enum Error {
    * @param code error code
    */
   Error(int code, String description, int result) {
-    requireThat(description, "description").isNotNull();
+    R.requireThat(description, "description").isNotNull();
 
     this.code = (byte) code;
     this.description = description;

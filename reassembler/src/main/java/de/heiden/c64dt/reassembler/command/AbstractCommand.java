@@ -2,7 +2,7 @@ package de.heiden.c64dt.reassembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
 
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import static de.heiden.c64dt.assembler.Requirements.R;
 
 /**
  * Base implementation for commands.
@@ -33,13 +33,13 @@ public abstract class AbstractCommand implements ICommand {
 
   @Override
   public int getAddress() {
-    requireThat("hasAddress()", hasAddress()).isTrue();
+    R.requireThat(hasAddress(), "hasAddress()").isTrue();
     return address;
   }
 
   @Override
   public void setAddress(int address) {
-    requireThat("hasAddress()", hasAddress()).isFalse();
+    R.requireThat(hasAddress(), "hasAddress()").isFalse();
 
     this.address = address;
   }

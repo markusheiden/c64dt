@@ -1,15 +1,15 @@
 package de.heiden.c64dt.reassembler.command;
 
-import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.charset.C64Charset;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import de.heiden.c64dt.assembler.CodeType;
+import de.heiden.c64dt.charset.C64Charset;
+
+import static de.heiden.c64dt.assembler.Requirements.R;
 import static de.heiden.c64dt.bytes.HexUtil.hex;
 import static de.heiden.c64dt.bytes.HexUtil.hexByte;
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Command for data.
@@ -81,7 +81,7 @@ public class DataCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    requireThat("buffer", buffer).isNotNull();
+    R.requireThat(buffer, "buffer").isNotNull();
 
     StringBuilder output = new StringBuilder(16 + data.size() * 8);
     if (data.size() > 8 && isSameByte()) {

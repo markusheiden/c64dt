@@ -4,11 +4,11 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 
+import static de.heiden.c64dt.assembler.Requirements.R;
 import static de.heiden.c64dt.bytes.ByteUtil.hi;
 import static de.heiden.c64dt.bytes.ByteUtil.lo;
 import static de.heiden.c64dt.bytes.HexUtil.hexBytePlain;
 import static de.heiden.c64dt.bytes.HexUtil.hexWordPlain;
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Reassembler.
@@ -42,8 +42,8 @@ public class Disassembler {
    * @param list List Basic header?.
    */
   public void listAndDisassemble(ICodeBuffer code, Writer output, boolean list) throws IOException {
-    requireThat("code", code).isNotNull();
-    requireThat("output", output).isNotNull();
+    R.requireThat(code, "code").isNotNull();
+    R.requireThat(output, "output").isNotNull();
 
     try (BufferedWriter out = new NonClosingBufferedWriter(output)) {
       if (list) {

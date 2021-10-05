@@ -4,8 +4,8 @@ import de.heiden.c64dt.disk.AbstractDiskImage;
 import de.heiden.c64dt.disk.BAM;
 import de.heiden.c64dt.disk.IBAM;
 
+import static de.heiden.c64dt.disk.Requirements.R;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidTrack;
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * D64 (1541) disk image implementation.
@@ -63,7 +63,7 @@ public class D64 extends AbstractDiskImage {
       readBAM(result, track, bam, pos);
     }
 
-    requireThat("result", result).isNotNull();
+    R.requireThat(result, "result").isNotNull();
     return result;
   }
 

@@ -1,13 +1,13 @@
 package de.heiden.c64dt.net.drive;
 
-import de.heiden.c64dt.net.AbstractConnection;
-import de.heiden.c64dt.net.Packet;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import de.heiden.c64dt.net.AbstractConnection;
+import de.heiden.c64dt.net.Packet;
+
+import static de.heiden.c64dt.net.Requirements.R;
 
 /**
  * Connection of net drive server.
@@ -77,7 +77,7 @@ public class DriveConnection extends AbstractConnection {
    * @param data payload data
    */
   public void sendReply(byte[] data) throws IOException {
-    requireThat("data", data).isNotNull();
+    R.requireThat(data, "data").isNotNull();
 
     byte size = (byte) data.length;
 //    if (IDX_DATA + size >= MAX_PACKET) {

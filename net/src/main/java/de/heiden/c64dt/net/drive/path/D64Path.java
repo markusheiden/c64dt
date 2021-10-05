@@ -1,16 +1,16 @@
 package de.heiden.c64dt.net.drive.path;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import de.heiden.c64dt.disk.IDirectory;
 import de.heiden.c64dt.disk.IDiskImage;
 import de.heiden.c64dt.disk.WrongDiskImageFormatException;
 import de.heiden.c64dt.disk.d64.D64Reader;
 import de.heiden.c64dt.net.drive.stream.IStream;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import static de.heiden.c64dt.net.Requirements.R;
 
 /**
  * Path to a d64 image file.
@@ -21,7 +21,7 @@ public class D64Path extends AbstractPath {
   public D64Path(IPath parent, File d64) throws FileNotFoundException {
     super(parent);
 
-    requireThat("d64", d64).isNotNull();
+    R.requireThat(d64, "d64").isNotNull();
 
     try {
       this.d64 = new D64Reader().read(d64);

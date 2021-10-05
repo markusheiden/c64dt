@@ -1,18 +1,23 @@
 package de.heiden.c64dt.reassembler.command;
 
-import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.reassembler.xml.HexByteAdapter;
-import de.heiden.c64dt.reassembler.xml.HexWordAdapter;
-
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlValue;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import de.heiden.c64dt.assembler.CodeType;
+import de.heiden.c64dt.reassembler.xml.HexByteAdapter;
+import de.heiden.c64dt.reassembler.xml.HexWordAdapter;
+
+import static de.heiden.c64dt.assembler.Requirements.R;
 
 /**
  * XML-Mapper for {@link CommandBuffer}.
@@ -128,7 +133,7 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
     // start address / first base address
     AddressMapper firstAddress = addresses.get(0);
     int startIndex = firstAddress.index;
-    requireThat("startIndex", startIndex).isEqualTo(0);
+    R.requireThat(startIndex, "startIndex").isEqualTo(0);
 
     // the start address is the first base address and automatically sets the end base address
     CommandBuffer commands = new CommandBuffer(xmlCommands.code, firstAddress.base);
@@ -141,8 +146,8 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
 
     // end base address
     AddressMapper lastAddress = addresses.get(addresses.size() - 1);
-    requireThat("lastAddress.index", lastAddress.index).isEqualTo("xmlCommands.code.length", xmlCommands.code.length);
-    requireThat("lastAddress.base", lastAddress.base).isEqualTo("firstAddress.base", firstAddress.base);
+    R.requireThat(lastAddress.index, "lastAddress.index").isEqualTo(xmlCommands.code.length, "xmlCommands.code.length");
+    R.requireThat(lastAddress.base, "lastAddress.base").isEqualTo(firstAddress.base, "firstAddress.base");
 
     // subroutines
     for (SubroutineMapper subroutineMapper : xmlCommands.subroutines) {

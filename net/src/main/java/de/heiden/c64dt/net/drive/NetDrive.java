@@ -1,13 +1,13 @@
 package de.heiden.c64dt.net.drive;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
 
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static de.heiden.c64dt.net.Requirements.R;
 
 /**
  * Net drive server.
@@ -40,9 +40,9 @@ public class NetDrive {
    * @param port server port
    */
   public NetDrive(File root, int port) throws IOException {
-    requireThat("root", root).isNotNull();
-    requireThat("root.isDirectory()", root.isDirectory()).isTrue();
-    requireThat("port", port).isBetween(0, 65536);
+    R.requireThat(root, "root").isNotNull();
+    R.requireThat(root.isDirectory(), "root.isDirectory()").isTrue();
+    R.requireThat(port, "port").isBetween(0, 65536);
 
     isRunning = false;
     thread = null;
@@ -61,7 +61,7 @@ public class NetDrive {
    * Start server.
    */
   public void start() throws IOException {
-    requireThat("isRunning()", isRunning()).isFalse();
+    R.requireThat(isRunning(), "isRunning()").isFalse();
 
     isRunning = true;
     thread = new Thread(new Server(), "Net drive server on " + connection.getSource());
@@ -72,7 +72,7 @@ public class NetDrive {
    * Stop server.
    */
   public void stop() {
-    requireThat("isRunning()", isRunning()).isTrue();
+    R.requireThat(isRunning(), "isRunning()").isTrue();
 
     isRunning = false;
     thread.interrupt();

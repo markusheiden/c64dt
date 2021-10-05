@@ -1,11 +1,11 @@
 package de.heiden.c64dt.disk;
 
-import de.heiden.c64dt.bytes.ByteUtil;
-
 import java.util.Iterator;
 
+import de.heiden.c64dt.bytes.ByteUtil;
+
+import static de.heiden.c64dt.disk.Requirements.R;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidSector;
-import static org.bitbucket.cowwoc.requirements.core.Requirements.requireThat;
 
 /**
  * Reads a chain of sectors.
@@ -23,7 +23,7 @@ public class SectorIterator implements Iterator<byte[]> {
    * @param sector start sector
    */
   public SectorIterator(IDiskImage diskImage, int track, int sector) {
-    requireThat("diskImage", diskImage).isNotNull();
+    R.requireThat(diskImage, "diskImage").isNotNull();
     requireValidSector(diskImage, track, sector);
 
     this.diskImage = diskImage;
@@ -38,13 +38,13 @@ public class SectorIterator implements Iterator<byte[]> {
 
   @Override
   public byte[] next() {
-    requireThat("hasNext()", hasNext()).isTrue();
+    R.requireThat(hasNext(), "hasNext()").isTrue();
 
     byte[] currentSector = diskImage.getSector(track, sector);
     track = ByteUtil.toByte(currentSector[0]);
     sector = ByteUtil.toByte(currentSector[1]);
 
-    requireThat("result", currentSector).isNotNull();
+    R.requireThat(currentSector, "result").isNotNull();
     return currentSector;
   }
 
