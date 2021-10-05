@@ -7,7 +7,7 @@ import java.net.SocketException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static de.heiden.c64dt.net.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Net drive server.

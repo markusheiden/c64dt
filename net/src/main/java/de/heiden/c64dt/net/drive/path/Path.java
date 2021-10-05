@@ -14,7 +14,7 @@ import de.heiden.c64dt.disk.IFile;
 import de.heiden.c64dt.net.drive.stream.FileStream;
 import de.heiden.c64dt.net.drive.stream.IStream;
 
-import static de.heiden.c64dt.net.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.decode;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
 

@@ -2,7 +2,7 @@ package de.heiden.c64dt.disk;
 
 import java.util.List;
 
-import static de.heiden.c64dt.disk.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Directory implementation.

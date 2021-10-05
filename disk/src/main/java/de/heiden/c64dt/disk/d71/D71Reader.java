@@ -6,7 +6,7 @@ import de.heiden.c64dt.disk.WrongDiskImageFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static de.heiden.c64dt.disk.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Reads a D71 image from a file.

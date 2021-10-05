@@ -16,7 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static de.heiden.c64dt.assembler.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * GUI for {@link Reassembler}.

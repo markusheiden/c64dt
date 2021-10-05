@@ -9,11 +9,11 @@ import java.util.TreeSet;
 import de.heiden.c64dt.reassembler.label.ExternalLabel;
 import de.heiden.c64dt.reassembler.label.ILabel;
 
-import static de.heiden.c64dt.assembler.Requirements.R;
 import static de.heiden.c64dt.bytes.HexUtil.hex;
 import static de.heiden.c64dt.bytes.HexUtil.hexBytePlain;
 import static de.heiden.c64dt.bytes.HexUtil.hexWord;
 import static de.heiden.c64dt.bytes.HexUtil.hexWordPlain;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Write assembler source from {@link CommandBuffer}.

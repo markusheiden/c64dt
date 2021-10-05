@@ -9,7 +9,7 @@ import de.heiden.c64dt.assembler.OpcodeMode;
 import de.heiden.c64dt.bytes.ByteUtil;
 import de.heiden.c64dt.reassembler.label.ILabel;
 
-import static de.heiden.c64dt.assembler.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Command for an opcode.

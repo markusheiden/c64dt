@@ -6,7 +6,7 @@ import javax.swing.*;
 
 import de.heiden.c64dt.disk.IDiskImage;
 
-import static de.heiden.c64dt.gui.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * GUI of the browser.

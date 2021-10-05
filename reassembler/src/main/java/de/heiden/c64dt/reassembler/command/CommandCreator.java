@@ -6,7 +6,7 @@ import de.heiden.c64dt.assembler.Opcode;
 import de.heiden.c64dt.assembler.OpcodeMode;
 import de.heiden.c64dt.assembler.OpcodeType;
 
-import static de.heiden.c64dt.assembler.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Creates the commands.

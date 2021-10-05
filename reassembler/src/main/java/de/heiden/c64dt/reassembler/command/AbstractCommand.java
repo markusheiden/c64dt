@@ -2,7 +2,7 @@ package de.heiden.c64dt.reassembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
 
-import static de.heiden.c64dt.assembler.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Base implementation for commands.

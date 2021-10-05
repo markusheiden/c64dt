@@ -1,6 +1,6 @@
 package de.heiden.c64dt.bytes;
 
-import static de.heiden.c64dt.bytes.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Helper class for handling hexadecimal values.

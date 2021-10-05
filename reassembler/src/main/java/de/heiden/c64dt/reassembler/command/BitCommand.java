@@ -6,8 +6,8 @@ import java.util.List;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Opcode;
 
-import static de.heiden.c64dt.assembler.Requirements.R;
 import static de.heiden.c64dt.bytes.HexUtil.hexByte;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Command for using bit to skip the next opcode.

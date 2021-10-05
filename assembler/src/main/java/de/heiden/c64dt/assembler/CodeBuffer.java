@@ -6,8 +6,8 @@ import java.io.InputStream;
 import de.heiden.c64dt.bytes.ByteUtil;
 import org.apache.commons.io.IOUtils;
 
-import static de.heiden.c64dt.assembler.Requirements.R;
 import static de.heiden.c64dt.bytes.ByteUtil.toWord;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Input stream for code.

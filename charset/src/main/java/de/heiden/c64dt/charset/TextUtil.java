@@ -1,6 +1,6 @@
 package de.heiden.c64dt.charset;
 
-import static de.heiden.c64dt.charset.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Util class for handling C64 encoded text.

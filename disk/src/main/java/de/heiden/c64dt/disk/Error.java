@@ -6,7 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static de.heiden.c64dt.disk.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * D64 error codes.

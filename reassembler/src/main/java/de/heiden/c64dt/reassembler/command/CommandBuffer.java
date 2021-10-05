@@ -18,8 +18,8 @@ import de.heiden.c64dt.reassembler.label.DataLabel;
 import de.heiden.c64dt.reassembler.label.ExternalLabel;
 import de.heiden.c64dt.reassembler.label.ILabel;
 
-import static de.heiden.c64dt.assembler.Requirements.R;
 import static de.heiden.c64dt.bytes.AddressUtil.requireValidAddress;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Input stream for code.

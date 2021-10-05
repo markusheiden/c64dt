@@ -88,7 +88,7 @@ import static de.heiden.c64dt.assembler.OpcodeType.TXA;
 import static de.heiden.c64dt.assembler.OpcodeType.TXS;
 import static de.heiden.c64dt.assembler.OpcodeType.TYA;
 import static de.heiden.c64dt.assembler.OpcodeType.XAA;
-import static de.heiden.c64dt.assembler.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * 6502 series opcodes.

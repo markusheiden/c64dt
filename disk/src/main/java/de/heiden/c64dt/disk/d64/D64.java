@@ -4,7 +4,7 @@ import de.heiden.c64dt.disk.AbstractDiskImage;
 import de.heiden.c64dt.disk.BAM;
 import de.heiden.c64dt.disk.IBAM;
 
-import static de.heiden.c64dt.disk.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidTrack;
 
 /**

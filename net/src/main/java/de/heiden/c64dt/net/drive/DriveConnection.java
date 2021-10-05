@@ -7,7 +7,7 @@ import java.net.InetSocketAddress;
 import de.heiden.c64dt.net.AbstractConnection;
 import de.heiden.c64dt.net.Packet;
 
-import static de.heiden.c64dt.net.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Connection of net drive server.

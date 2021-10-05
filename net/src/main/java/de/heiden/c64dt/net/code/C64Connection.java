@@ -11,7 +11,7 @@ import de.heiden.c64dt.net.Packet;
 import static de.heiden.c64dt.bytes.AddressUtil.requireValidAddress;
 import static de.heiden.c64dt.bytes.ByteUtil.hi;
 import static de.heiden.c64dt.bytes.ByteUtil.lo;
-import static de.heiden.c64dt.net.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * IP connection to a c64.

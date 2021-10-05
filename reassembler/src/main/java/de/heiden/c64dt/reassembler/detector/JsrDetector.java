@@ -21,8 +21,8 @@ import de.heiden.c64dt.reassembler.command.Subroutine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static de.heiden.c64dt.assembler.Requirements.R;
 import static de.heiden.c64dt.bytes.HexUtil.hexWord;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Detects JSR commands to predefined address which are followed by fixed length or zero-terminated arguments.

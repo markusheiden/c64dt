@@ -10,7 +10,7 @@ import de.heiden.c64dt.disk.WrongDiskImageFormatException;
 import de.heiden.c64dt.disk.d64.D64Reader;
 import de.heiden.c64dt.net.drive.stream.IStream;
 
-import static de.heiden.c64dt.net.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Path to a d64 image file.

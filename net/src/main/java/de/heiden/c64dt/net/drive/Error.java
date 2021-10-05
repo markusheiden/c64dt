@@ -5,7 +5,7 @@ import java.text.NumberFormat;
 
 import de.heiden.c64dt.charset.C64Charset;
 
-import static de.heiden.c64dt.net.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Error constants.

@@ -4,11 +4,11 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-import static de.heiden.c64dt.assembler.Requirements.R;
 import static de.heiden.c64dt.bytes.ByteUtil.hi;
 import static de.heiden.c64dt.bytes.ByteUtil.lo;
 import static de.heiden.c64dt.bytes.HexUtil.hexBytePlain;
 import static de.heiden.c64dt.bytes.HexUtil.hexWordPlain;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Reassembler.

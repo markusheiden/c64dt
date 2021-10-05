@@ -1,8 +1,8 @@
 package de.heiden.c64dt.assembler;
 
-import static de.heiden.c64dt.assembler.Requirements.R;
 import static de.heiden.c64dt.bytes.HexUtil.hexByte;
 import static de.heiden.c64dt.bytes.HexUtil.hexWord;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Opcode address mode.

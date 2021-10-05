@@ -3,7 +3,7 @@ package de.heiden.c64dt.disk;
 import de.heiden.c64dt.charset.C64Charset;
 import de.heiden.c64dt.charset.TextUtil;
 
-import static de.heiden.c64dt.disk.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * File implementation.

@@ -1,7 +1,9 @@
 dependencies {
+    implementation project(':assembler')
     implementation project(':bytes')
     implementation project(':charset')
-    implementation project(':assembler')
+    implementation project(':common')
+
     implementation 'commons-io:commons-io'
     implementation 'javax.xml.bind:jaxb-api'
 }

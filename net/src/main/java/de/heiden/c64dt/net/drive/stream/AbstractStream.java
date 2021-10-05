@@ -2,7 +2,7 @@ package de.heiden.c64dt.net.drive.stream;
 
 import java.io.IOException;
 
-import static de.heiden.c64dt.net.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Base implementation of a stream.

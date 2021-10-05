@@ -7,9 +7,9 @@ import java.util.List;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.charset.C64Charset;
 
-import static de.heiden.c64dt.assembler.Requirements.R;
 import static de.heiden.c64dt.bytes.HexUtil.hex;
 import static de.heiden.c64dt.bytes.HexUtil.hexByte;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Command for data.

@@ -1,6 +1,6 @@
 package de.heiden.c64dt.assembler;
 
-import static de.heiden.c64dt.assembler.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Abstract implementation of input stream for code.

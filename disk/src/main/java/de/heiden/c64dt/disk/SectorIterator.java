@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import de.heiden.c64dt.bytes.ByteUtil;
 
-import static de.heiden.c64dt.disk.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidSector;
 
 /**

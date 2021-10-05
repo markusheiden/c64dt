@@ -17,7 +17,7 @@ import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.reassembler.xml.HexByteAdapter;
 import de.heiden.c64dt.reassembler.xml.HexWordAdapter;
 
-import static de.heiden.c64dt.assembler.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * XML-Mapper for {@link CommandBuffer}.

@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static de.heiden.c64dt.bytes.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Util class to load resources as byte arrays.

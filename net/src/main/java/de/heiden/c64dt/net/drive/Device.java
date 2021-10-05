@@ -11,7 +11,7 @@ import de.heiden.c64dt.net.drive.stream.AbstractStream;
 import de.heiden.c64dt.net.drive.stream.IStream;
 import de.heiden.c64dt.net.drive.stream.NullStream;
 
-import static de.heiden.c64dt.net.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Simulated device.

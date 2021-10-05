@@ -7,7 +7,7 @@ import de.heiden.c64dt.bytes.ByteUtil;
 import de.heiden.c64dt.disk.IDirectory;
 import de.heiden.c64dt.disk.IFile;
 
-import static de.heiden.c64dt.net.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
 
 /**

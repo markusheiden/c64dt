@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import de.heiden.c64dt.bytes.ByteUtil;
 
-import static de.heiden.c64dt.net.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Packet for drive.

@@ -12,7 +12,7 @@ import de.heiden.c64dt.disk.IDirectory;
 import de.heiden.c64dt.disk.IFile;
 import de.heiden.c64dt.gui.swing.JC64TextArea;
 
-import static de.heiden.c64dt.gui.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Directory.

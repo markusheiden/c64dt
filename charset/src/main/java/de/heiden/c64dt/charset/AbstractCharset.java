@@ -3,7 +3,7 @@ package de.heiden.c64dt.charset;
 import java.nio.charset.Charset;
 import java.nio.charset.UnmappableCharacterException;
 
-import static de.heiden.c64dt.charset.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Charset with some convenience methods.

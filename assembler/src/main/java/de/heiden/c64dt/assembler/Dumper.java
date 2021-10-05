@@ -7,7 +7,7 @@ import java.io.Writer;
 import de.heiden.c64dt.bytes.HexUtil;
 import de.heiden.c64dt.charset.C64Charset;
 
-import static de.heiden.c64dt.assembler.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Dumps memory.

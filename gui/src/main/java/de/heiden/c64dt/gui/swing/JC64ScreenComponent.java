@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.image.ColorModel;
 import java.awt.image.MemoryImageSource;
 
-import static de.heiden.c64dt.gui.Requirements.R;
+import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Base class for component displaying c64 indexed color content.
