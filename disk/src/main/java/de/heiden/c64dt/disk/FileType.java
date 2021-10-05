@@ -127,7 +127,7 @@ public enum FileType {
    * @param code type code, -1 if none defined
    */
   FileType(int code, String extension) {
-    R.requireThat("extension", extension).isNotNull();
+    R.requireThat(extension, "extension").isNotNull();
     R.requireThat(extension.length(), "extension.length()").isEqualTo(3);
 
     this.code = (byte) code;
