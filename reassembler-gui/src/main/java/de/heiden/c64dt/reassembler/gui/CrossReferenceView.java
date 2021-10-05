@@ -1,19 +1,21 @@
 package de.heiden.c64dt.reassembler.gui;
 
-import de.heiden.c64dt.reassembler.Reassembler;
-import de.heiden.c64dt.reassembler.gui.event.AddressChangedEvent;
-import de.heiden.c64dt.reassembler.gui.event.GotoAddressEvent;
-import de.heiden.c64dt.reassembler.gui.event.ReassemblerEvent;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.*;
+import javax.swing.table.TableColumnModel;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import javax.swing.*;
-import javax.swing.table.TableColumnModel;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import de.heiden.c64dt.reassembler.Reassembler;
+import de.heiden.c64dt.reassembler.gui.event.AddressChangedEvent;
+import de.heiden.c64dt.reassembler.gui.event.GotoAddressEvent;
+import de.heiden.c64dt.reassembler.gui.event.ReassemblerEvent;
 
 import static de.heiden.c64dt.common.Requirements.R;
 
@@ -46,7 +48,7 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
    * @param reassembler Reassembler
    */
   public void use(Reassembler reassembler) {
-    R.requireThat("reassembler", reassembler).isNotNull();
+    R.requireThat(reassembler, "reassembler").isNotNull();
 
     model.use(reassembler);
   }
