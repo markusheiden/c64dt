@@ -15,6 +15,7 @@ repositories {
 }
 
 java {
+    // https://docs.gradle.org/current/userguide/toolchains.html
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(19))
     }
