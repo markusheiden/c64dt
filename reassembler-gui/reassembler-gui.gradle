@@ -6,5 +6,5 @@ dependencies {
 
     implementation 'org.springframework:spring-beans'
     implementation 'org.springframework:spring-context'
-    implementation 'javax.annotation:javax.annotation-api'
+    implementation 'jakarta.annotation:jakarta.annotation-api'
 }
