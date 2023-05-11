@@ -53,7 +53,7 @@ subprojects {
 
     dependencyManagement {
         dependencies {
-            dependencySet("org.springframework:$springVersion") {
+            dependencySet("org.springframework:${springVersion}") {
                 entry 'spring-beans'
                 entry 'spring-context'
                 entry 'spring-core'
@@ -67,9 +67,11 @@ subprojects {
             dependency "javax.xml.bind:jaxb-api:${jaxbVersion}"
             dependency "org.glassfish.jaxb:jaxb-runtime:${glassfishJaxbVersion}"
 
-            //dependency "org.openjfx:javafx-base:${openjfxVersion}:${openjfxPlatform}"
-            //dependency "org.openjfx:javafx-controls:${openjfxVersion}:${openjfxPlatform}"
-            //dependency "org.openjfx:javafx-graphics:${openjfxVersion}:${openjfxPlatform}"
+            // dependencySet("org.openjfx:${openjfxVersion}:${openjfxPlatform}") {
+            //     entry "javafx-base"
+            //     entry "javafx-controls"
+            //     entry "javafx-graphics"
+            // }
         }
     }
 
