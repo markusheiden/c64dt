@@ -64,7 +64,7 @@ subprojects {
             dependency "commons-io:commons-io:${commonsIoVersion}"
 
             dependency "javax.annotation:javax.annotation-api:${annotationVersion}"
-            dependency "javax.xml.bind:jaxb-api:${jaxbVersion}"
+            dependency "jakarta.xml.bind:jakarta.xml.bind-api:${jaxbVersion}"
             dependency "org.glassfish.jaxb:jaxb-runtime:${glassfishJaxbVersion}"
 
             // dependencySet("org.openjfx:${openjfxVersion}:${openjfxPlatform}") {

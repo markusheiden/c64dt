@@ -2,7 +2,7 @@ package de.heiden.c64dt.reassembler.xml;
 
 import de.heiden.c64dt.bytes.HexUtil;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * JAXB-Adapter for Hex-Words.

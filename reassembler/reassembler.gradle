@@ -5,5 +5,5 @@ dependencies {
     implementation project(':common')
 
     implementation 'commons-io:commons-io'
-    implementation 'javax.xml.bind:jaxb-api'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api'
 }

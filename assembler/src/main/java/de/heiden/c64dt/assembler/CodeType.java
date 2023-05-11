@@ -1,6 +1,6 @@
 package de.heiden.c64dt.assembler;
 
-import javax.xml.bind.annotation.XmlEnum;
+import jakarta.xml.bind.annotation.XmlEnum;
 
 /**
  * Types for code classification.

@@ -2,7 +2,7 @@ package de.heiden.c64dt.reassembler.xml;
 
 import org.apache.commons.io.IOUtils;
 
-import javax.xml.bind.JAXB;
+import jakarta.xml.bind.JAXB;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
