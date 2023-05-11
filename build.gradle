@@ -53,8 +53,10 @@ subprojects {
 
     dependencyManagement {
         dependencies {
-            dependency("org.springframework:spring-core:${springVersion}") {
-                exclude 'commons-logging:commons-logging'
+            dependencySet("org.springframework:$springVersion") {
+                entry 'spring-beans'
+                entry 'spring-context'
+                entry 'spring-core'
             }
             dependency "org.springframework:spring-beans:${springVersion}"
             dependency "org.springframework:spring-context:${springVersion}"
@@ -69,6 +71,11 @@ subprojects {
             //dependency "org.openjfx:javafx-controls:${openjfxVersion}:${openjfxPlatform}"
             //dependency "org.openjfx:javafx-graphics:${openjfxVersion}:${openjfxPlatform}"
         }
+    }
+
+    configurations.all {
+        // Exclude logback provided via spring.
+        exclude group: 'ch.qos.logback', module: 'logback-classic'
     }
 
     publishing {
