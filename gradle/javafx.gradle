@@ -1,11 +1,20 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 ext {
     // Determine platform for openjfx dependencies.
-    def currentOS = org.gradle.internal.os.OperatingSystem.current()
-    if (currentOS.isWindows()) {
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
         openjfxPlatform = 'win'
-    } else if (currentOS.isLinux()) {
-        openjfxPlatform = 'linux'
-    } else if (currentOS.isMacOsX()) {
-        openjfxPlatform = 'mac-aarch64'
+    } else if (Os.isFamily(Os.FAMILY_MAC)) {
+        if (Os.isArch('aarch64')) {
+            openjfxPlatform = 'mac-aarch64'
+        } else {
+            openjfxPlatform = 'mac'
+        }
+    } else if (Os.isFamily(Os.FAMILY_UNIX)) {
+        if (Os.isArch('aarch64')) {
+            openjfxPlatform = 'linux-aarch64'
+        } else {
+            openjfxPlatform = 'linux'
+        }
     }
 }
