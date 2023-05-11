@@ -6,6 +6,6 @@ ext {
     } else if (currentOS.isLinux()) {
         openjfxPlatform = 'linux'
     } else if (currentOS.isMacOsX()) {
-        openjfxPlatform = 'mac'
+        openjfxPlatform = 'mac-aarch64'
     }
 }
