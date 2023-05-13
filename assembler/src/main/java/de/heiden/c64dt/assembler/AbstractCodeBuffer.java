@@ -77,7 +77,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
 
   @Override
   public final int read(int number) {
-    R.requireThat(number, "number").isBetween(0, 2);
+    R.requireThat(number, "number").isBetweenClosed(0, 2);
 
     if (number == 0) {
       return -1;
