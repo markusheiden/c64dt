@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 /**
  * GCR codec.
- * <p/>
+ * <p>
  * GCR 5 to 4 scheme:
  * 11111222 22333334 44445555 56666677 77788888
  */

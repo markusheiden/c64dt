@@ -2,7 +2,7 @@ package de.heiden.c64dt.gui;
 
 /**
  * Color constants in correct order.
- * <p/>
+ * <p>
  * From: Philip "Pepto" Timmermann, pepto@pepto.de
  */
 public enum C64Color {

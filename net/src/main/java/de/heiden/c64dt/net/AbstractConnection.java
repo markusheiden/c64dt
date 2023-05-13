@@ -142,7 +142,7 @@ public abstract class AbstractConnection {
 
   /**
    * {@inheritDoc}
-   * <p/>
+   * <p>
    * Ensure that socket gets closed.
    */
   @Override

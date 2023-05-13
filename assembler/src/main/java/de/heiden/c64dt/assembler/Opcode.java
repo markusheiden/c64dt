@@ -405,7 +405,7 @@ public enum Opcode {
 
   /**
    * Is the argument of the opcode a reference to a code location?.
-   * <p/>
+   * <p>
    * TODO rework detect all kinds of references, not just single location code references
    */
   public boolean isCodeReference() {
