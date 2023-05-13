@@ -126,8 +126,8 @@ public class CodeView implements ApplicationListener<ReassemblerEvent> {
 
   @Override
   public void onApplicationEvent(ReassemblerEvent event) {
-    if (event instanceof GotoAddressEvent) {
-      gotoIndex(((GotoAddressEvent) event).getIndex());
+    if (event instanceof GotoAddressEvent gotoAddressEvent) {
+      gotoIndex(gotoAddressEvent.getIndex());
     }
   }
 

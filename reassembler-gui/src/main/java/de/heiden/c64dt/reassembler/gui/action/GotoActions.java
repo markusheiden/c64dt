@@ -86,12 +86,11 @@ public class GotoActions {
 
     // just works for opcodes
     ICommand command = commands.getCommand(index);
-    if (!(command instanceof OpcodeCommand)) {
+    if (!(command instanceof OpcodeCommand opcodeCommand)) {
       return;
     }
 
     // just works for opcodes with an address
-    OpcodeCommand opcodeCommand = (OpcodeCommand) command;
     if (!opcodeCommand.isArgumentAddress()) {
       return;
     }

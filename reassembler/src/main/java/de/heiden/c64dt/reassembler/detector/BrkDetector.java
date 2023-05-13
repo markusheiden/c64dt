@@ -7,6 +7,8 @@ import de.heiden.c64dt.reassembler.command.CommandIterator;
 import de.heiden.c64dt.reassembler.command.ICommand;
 import de.heiden.c64dt.reassembler.command.OpcodeCommand;
 
+import static de.heiden.c64dt.assembler.OpcodeType.BRK;
+
 /**
  * Detects unreachable brk commands as data.
  */
@@ -18,10 +20,8 @@ public class BrkDetector implements IDetector {
     for (CommandIterator iter = commands.iterator(); iter.hasNext(); ) {
       ICommand command = iter.next();
       int index = iter.getIndex();
-      if (command instanceof OpcodeCommand) {
-        OpcodeCommand opcodeCommand = (OpcodeCommand) command;
-
-        if (opcodeCommand.getOpcode().getType().equals(OpcodeType.BRK) && !opcodeCommand.isReachable()) {
+      if (command instanceof OpcodeCommand opcodeCommand) {
+        if (opcodeCommand.getOpcode().getType() == BRK && !opcodeCommand.isReachable()) {
           change |= commands.setType(index, CodeType.DATA);
         }
       }

@@ -84,8 +84,8 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
 
   @Override
   public void onApplicationEvent(ReassemblerEvent event) {
-    if (event instanceof AddressChangedEvent) {
-      select(((AddressChangedEvent) event).getIndex());
+    if (event instanceof AddressChangedEvent addressChangedEvent) {
+      select(addressChangedEvent.getIndex());
     }
   }
 

@@ -64,11 +64,9 @@ public class DataCommand extends AbstractCommand {
   @Override
   public boolean combineWith(ICommand command) {
     // Only other data commands may be merged
-    if (!(command instanceof DataCommand)) {
+    if (!(command instanceof DataCommand dataCommand)) {
       return false;
     }
-
-    DataCommand dataCommand = (DataCommand) command;
 
     // Only merge more than MAX_BYTES if result is a !FILL
     if (data.size() >= MAX_BYTES && (!isSameByte() || !dataCommand.isSameByte() || !data.get(0).equals(dataCommand.data.get(0)))) {

@@ -20,8 +20,7 @@ public class BitDetector implements IDetector {
 
     for (CommandIterator iter = commands.iterator(); iter.hasNext(); ) {
       ICommand command = iter.next();
-      if (command instanceof OpcodeCommand) {
-        OpcodeCommand opcodeCommand = (OpcodeCommand) command;
+      if (command instanceof OpcodeCommand opcodeCommand) {
         Opcode opcode = opcodeCommand.getOpcode();
         int size = opcodeCommand.getSize();
 

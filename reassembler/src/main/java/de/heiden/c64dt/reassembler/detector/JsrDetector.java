@@ -21,6 +21,8 @@ import de.heiden.c64dt.reassembler.command.Subroutine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static de.heiden.c64dt.assembler.OpcodeMode.ABS;
+import static de.heiden.c64dt.assembler.OpcodeType.JSR;
 import static de.heiden.c64dt.bytes.HexUtil.hexWord;
 import static de.heiden.c64dt.common.Requirements.R;
 
@@ -117,13 +119,12 @@ public class JsrDetector implements IDetector {
 
     for (CommandIterator iter = commands.iterator(); iter.hasNext(); ) {
       ICommand command = iter.next();
-      if (!(command instanceof OpcodeCommand)) {
+      if (!(command instanceof OpcodeCommand opcodeCommand)) {
         continue;
       }
-      OpcodeCommand opcodeCommand = (OpcodeCommand) command;
 
       Opcode opcode = opcodeCommand.getOpcode();
-      if (command.isReachable() && opcode.getType().equals(OpcodeType.JSR) && opcode.getMode().equals(OpcodeMode.ABS) && iter.hasNext()) {
+      if (command.isReachable() && opcode.getType() == JSR && opcode.getMode() == ABS && iter.hasNext()) {
         int address = opcodeCommand.getArgument();
         result
           .computeIfAbsent(address, k -> new ArrayList<>())

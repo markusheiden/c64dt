@@ -6,6 +6,7 @@ import de.heiden.c64dt.assembler.Opcode;
 import de.heiden.c64dt.assembler.OpcodeMode;
 import de.heiden.c64dt.assembler.OpcodeType;
 
+import static de.heiden.c64dt.assembler.OpcodeType.JSR;
 import static de.heiden.c64dt.common.Requirements.R;
 
 /**
@@ -168,6 +169,6 @@ public class CommandCreator {
    * @param command Command
    */
   private boolean isJsr(ICommand command) {
-    return command instanceof OpcodeCommand && ((OpcodeCommand) command).getOpcode().getType().equals(OpcodeType.JSR);
+    return command instanceof OpcodeCommand opcodeCommand && opcodeCommand.getOpcode().getType() == JSR;
   }
 }
