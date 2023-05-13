@@ -12,8 +12,6 @@ apply from: 'gradle/javafx.gradle'
 
 repositories {
     mavenCentral()
-    // TODO markus 2023-05-12: Remove after JUnit 5.10 releases made it into Maven Central.
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
 java {
@@ -37,6 +35,8 @@ subprojects {
 
     repositories {
         mavenCentral()
+        // TODO markus 2023-05-12: Remove after JUnit 5.10 releases made it into Maven Central.
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 
     archivesBaseName = "${rootProject.name}-${project.name}"
