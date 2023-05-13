@@ -102,7 +102,7 @@ public class Device {
   }
 
   protected final void assertValidChannel(int channel) {
-    R.requireThat(channel, "channel").isBetween(0, 15);
+    R.requireThat(channel, "channel").isBetweenClosed(0, 15);
   }
 
   protected final void assertOpen(int channel) throws DeviceException {

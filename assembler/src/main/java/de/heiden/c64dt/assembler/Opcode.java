@@ -433,7 +433,7 @@ public enum Opcode {
    * @param opcode byte representation of opcode
    */
   public static Opcode opcode(int opcode) {
-    R.requireThat(opcode, "opcode").isBetween(0x00, 0xFF);
+    R.requireThat(opcode, "opcode").isBetweenClosed(0x00, 0xFF);
 
     Opcode result = values()[opcode];
 

@@ -42,7 +42,7 @@ public class NetDrive {
   public NetDrive(File root, int port) throws IOException {
     R.requireThat(root, "root").isNotNull();
     R.requireThat(root.isDirectory(), "root.isDirectory()").isTrue();
-    R.requireThat(port, "port").isBetween(0, 65536);
+    R.requireThat(port, "port").isBetweenClosed(0, 65536);
 
     isRunning = false;
     thread = null;
