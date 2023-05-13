@@ -6,4 +6,5 @@ dependencies {
 
     implementation 'commons-io:commons-io'
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api'
+    runtimeOnly 'org.glassfish.jaxb:jaxb-runtime'
 }
