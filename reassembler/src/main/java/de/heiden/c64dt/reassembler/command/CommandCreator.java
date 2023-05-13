@@ -2,9 +2,8 @@ package de.heiden.c64dt.reassembler.command;
 
 import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.assembler.CodeType;
+import de.heiden.c64dt.assembler.OpcodeType;
 
-import static de.heiden.c64dt.assembler.OpcodeType.BIT;
-import static de.heiden.c64dt.assembler.OpcodeType.JSR;
 import static de.heiden.c64dt.common.Requirements.R;
 
 /**
@@ -54,7 +53,7 @@ public class CommandCreator {
         var opcode = code.readOpcode();
         int modeSize = opcode.getMode().getSize();
 
-        if (opcode.getType() == BIT && modeSize > 0 && code.has(modeSize)) {
+        if (opcode.getType() == OpcodeType.BIT && modeSize > 0 && code.has(modeSize)) {
           int argumentIndex = code.getCurrentIndex();
           // Reset code buffer to the argument, because this should be the skipped opcode
           code.setCurrentIndex(argumentIndex);
@@ -167,6 +166,6 @@ public class CommandCreator {
    * @param command Command
    */
   private boolean isJsr(ICommand command) {
-    return command instanceof OpcodeCommand opcodeCommand && opcodeCommand.getOpcode().getType() == JSR;
+    return command instanceof OpcodeCommand opcodeCommand && opcodeCommand.getOpcode().getType() == OpcodeType.JSR;
   }
 }
