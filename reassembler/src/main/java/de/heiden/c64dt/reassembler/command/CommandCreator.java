@@ -2,10 +2,8 @@ package de.heiden.c64dt.reassembler.command;
 
 import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.assembler.Opcode;
-import de.heiden.c64dt.assembler.OpcodeMode;
-import de.heiden.c64dt.assembler.OpcodeType;
 
+import static de.heiden.c64dt.assembler.OpcodeType.BIT;
 import static de.heiden.c64dt.assembler.OpcodeType.JSR;
 import static de.heiden.c64dt.common.Requirements.R;
 
@@ -42,21 +40,21 @@ public class CommandCreator {
    * Tokenize command buffer.
    */
   private void create() {
-    CodeBuffer code = new CodeBuffer(commandBuffer.getStartAddress(), commandBuffer.getCode());
+    var code = new CodeBuffer(commandBuffer.getStartAddress(), commandBuffer.getCode());
 
     commandBuffer.clear();
     while (code.hasMore()) {
       int codeIndex = code.getCurrentIndex();
 
       R.requireThat(codeIndex, "codeIndex").isEqualTo(index, "index");
-      CodeType type = commandBuffer.getType(index);
+      var type = commandBuffer.getType(index);
 
       if (type == CodeType.BIT) {
         // BIT opcode used just to skip the next opcode
-        Opcode opcode = code.readOpcode();
+        var opcode = code.readOpcode();
         int modeSize = opcode.getMode().getSize();
 
-        if (opcode.getType().equals(OpcodeType.BIT) && modeSize > 0 && code.has(modeSize)) {
+        if (opcode.getType() == BIT && modeSize > 0 && code.has(modeSize)) {
           int argumentIndex = code.getCurrentIndex();
           // Reset code buffer to the argument, because this should be the skipped opcode
           code.setCurrentIndex(argumentIndex);
@@ -81,8 +79,8 @@ public class CommandCreator {
         addCommand(new DataCommand(code.readByte()));
       } else {
         // unknown or code -> try to disassemble an opcode
-        Opcode opcode = code.readOpcode();
-        OpcodeMode mode = opcode.getMode();
+        var opcode = code.readOpcode();
+        var mode = opcode.getMode();
         int modeSize = mode.getSize();
 
         if (code.has(modeSize) && (opcode.isLegal() || type == CodeType.OPCODE)) {
@@ -122,8 +120,8 @@ public class CommandCreator {
    */
   private void combine() {
     ICommand lastCommand = null;
-    for (CommandIterator iter = commandBuffer.iterator(); iter.hasNext(); ) {
-      ICommand command = iter.next();
+    for (var iter = commandBuffer.iterator(); iter.hasNext(); ) {
+      var command = iter.next();
       if (!iter.hasLabel() && lastCommand != null && lastCommand.combineWith(command)) {
         // TODO let command buffer handle this functionality?
         iter.remove();
@@ -139,14 +137,14 @@ public class CommandCreator {
    */
   private void unreachability() {
     // initially mark all opcodes as reachable
-    for (ICommand command : commandBuffer) {
+    for (var command : commandBuffer) {
       command.setReachable(command instanceof OpcodeCommand || command instanceof BitCommand);
     }
 
     // trace backward from unreachable command to the previous
     ICommand lastCommand = new DummyCommand();
-    for (CommandIterator iter = commandBuffer.iterator().reverse(); iter.hasPrevious(); ) {
-      ICommand command = iter.previous();
+    for (var iter = commandBuffer.iterator().reverse(); iter.hasPrevious(); ) {
+      var command = iter.previous();
       /*
        * A code command is not reachable, if it leads to unreachable code.
        * Exception is JSR, because its argument may follow directly after the instruction.
