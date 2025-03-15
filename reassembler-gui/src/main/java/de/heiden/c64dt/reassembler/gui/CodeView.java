@@ -22,6 +22,8 @@ import de.heiden.c64dt.reassembler.gui.event.GotoAddressEvent;
 import de.heiden.c64dt.reassembler.gui.event.ReassemblerEvent;
 import de.heiden.c64dt.reassembler.gui.util.TableUtil;
 
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
+
 /**
  * View for reassembled code.
  */

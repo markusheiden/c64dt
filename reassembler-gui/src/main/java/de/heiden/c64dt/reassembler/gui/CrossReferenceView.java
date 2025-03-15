@@ -17,6 +17,8 @@ import de.heiden.c64dt.reassembler.gui.event.AddressChangedEvent;
 import de.heiden.c64dt.reassembler.gui.event.GotoAddressEvent;
 import de.heiden.c64dt.reassembler.gui.event.ReassemblerEvent;
 
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
+
 /**
  * View for cross reference of current opcode.
  */

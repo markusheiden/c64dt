@@ -18,6 +18,8 @@ import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
+
 /**
  * GUI for {@link Reassembler}.
  */
