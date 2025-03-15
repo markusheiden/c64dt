@@ -7,7 +7,7 @@ import java.net.InetSocketAddress;
 import de.heiden.c64dt.net.AbstractConnection;
 import de.heiden.c64dt.net.Packet;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Connection of net drive server.
@@ -77,7 +77,7 @@ public class DriveConnection extends AbstractConnection {
    * @param data payload data
    */
   public void sendReply(byte[] data) throws IOException {
-    R.requireThat(data, "data").isNotNull();
+    requireThat(data, "data").isNotNull();
 
     byte size = (byte) data.length;
 //    if (IDX_DATA + size >= MAX_PACKET) {

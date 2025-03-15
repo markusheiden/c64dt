@@ -8,10 +8,10 @@ import java.net.SocketTimeoutException;
 import de.heiden.c64dt.net.AbstractConnection;
 import de.heiden.c64dt.net.Packet;
 
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.bytes.AddressUtil.requireValidAddress;
 import static de.heiden.c64dt.bytes.ByteUtil.hi;
 import static de.heiden.c64dt.bytes.ByteUtil.lo;
-import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * IP connection to a c64.
@@ -45,7 +45,7 @@ public class C64Connection extends AbstractConnection {
    */
   public C64Connection(int sourcePort, InetAddress address, int destinationPort) throws IOException {
     super(new InetSocketAddress(InetAddress.getLocalHost(), sourcePort), new InetSocketAddress(address, destinationPort), MAX_PACKET, MAGIC1, MAGIC2);
-    R.requireThat(address, "address").isNotNull();
+    requireThat(address, "address").isNotNull();
   }
 
   /**
@@ -69,9 +69,9 @@ public class C64Connection extends AbstractConnection {
    */
   public synchronized void write(int address, byte... data) throws IOException {
     requireValidAddress(address);
-    R.requireThat(data, "data").isNotNull();
-    R.requireThat(4 + data.length, "4 + data.length").isLessThanOrEqualTo(getPacketSize());
-    R.requireThat(isOpen(), "isOpen()").isTrue();
+    requireThat(data, "data").isNotNull();
+    requireThat(4 + data.length, "4 + data.length").isLessThanOrEqualTo(getPacketSize());
+    requireThat(isOpen(), "isOpen()").isTrue();
 
     for (int ptr = 0, remain = data.length; remain > 0; ptr += 128, remain -= 128) {
       int length = remain > 128 ? 128 : remain;
@@ -90,7 +90,7 @@ public class C64Connection extends AbstractConnection {
    */
   public synchronized void fill(int address, int length, int fill) throws IOException {
     requireValidAddress(address);
-    R.requireThat(isOpen(), "isOpen()").isTrue();
+    requireThat(isOpen(), "isOpen()").isTrue();
 
     Packet packet = createPacket(5, hi(address), lo(address), hi(length), lo(length), fill, (byte) 0x00);
     sendPacketGetReply(packet);
@@ -103,7 +103,7 @@ public class C64Connection extends AbstractConnection {
    */
   public synchronized void jump(int address) throws IOException {
     requireValidAddress(address);
-    R.requireThat(isOpen(), "isOpen()").isTrue();
+    requireThat(isOpen(), "isOpen()").isTrue();
 
     Packet packet = createPacket(6, hi(address), lo(address));
     sendPacketGetReply(packet);
@@ -113,7 +113,7 @@ public class C64Connection extends AbstractConnection {
    * Execute basic program by "RUN".
    */
   public synchronized void run() throws IOException {
-    R.requireThat(isOpen(), "isOpen()").isTrue();
+    requireThat(isOpen(), "isOpen()").isTrue();
 
     Packet packet = createPacket(7);
     sendPacketGetReply(packet);
@@ -131,7 +131,7 @@ public class C64Connection extends AbstractConnection {
    */
   public synchronized byte[] read(int address, int length) throws IOException {
     requireValidAddress(address);
-    R.requireThat(isOpen(), "isOpen()").isTrue();
+    requireThat(isOpen(), "isOpen()").isTrue();
 
     Packet packet = createPacket(8, hi(address), lo(address), hi(length), lo(length));
     Packet answer = sendPacketGetReply(packet);

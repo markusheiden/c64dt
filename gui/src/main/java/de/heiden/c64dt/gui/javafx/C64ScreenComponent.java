@@ -79,7 +79,7 @@ public abstract class C64ScreenComponent extends C64Component {
    * @param imageData new backing image data
    */
   protected void updateImageData(byte[] imageData) {
-//    R.requireThat("imageData", imageData).isNotNull();
+//    requireThat("imageData", imageData).isNotNull();
 
     final int width = getImageWidth();
     final int height = getImageHeight();

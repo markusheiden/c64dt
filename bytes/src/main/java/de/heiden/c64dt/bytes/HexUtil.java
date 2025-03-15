@@ -1,6 +1,6 @@
 package de.heiden.c64dt.bytes;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Helper class for handling hexadecimal values.
@@ -12,7 +12,7 @@ public class HexUtil {
    * @require value < 0x100
    */
   public static String hexBytePlain(int value) {
-    R.requireThat(value, "value").isBetweenClosed(0, 0xFF);
+    requireThat(value, "value").isBetween(0, 0xFF + 1);
 
     return Long.toHexString(value + 0x100).toUpperCase().substring(1);
   }
@@ -32,7 +32,7 @@ public class HexUtil {
    * @require value < 0x10000
    */
   public static String hexWordPlain(int value) {
-    R.requireThat(value, "value").isBetweenClosed(0, 0xFFFF);
+    requireThat(value, "value").isBetween(0, 0xFFFF + 1);
 
     return Long.toHexString(value + 0x10000).toUpperCase().substring(1);
   }
@@ -52,7 +52,7 @@ public class HexUtil {
    * @require value < 0x10000
    */
   public static String hexPlain(int value) {
-    R.requireThat(value, "value").isBetweenClosed(0, 0xFFFF);
+    requireThat(value, "value").isBetween(0, 0xFFFF + 1);
 
     return value < 0x100 ? hexBytePlain(value) : hexWordPlain(value);
   }
@@ -74,7 +74,7 @@ public class HexUtil {
   public static int parseHexBytePlain(String value) {
     int result = Integer.parseInt(value, 16);
 
-    R.requireThat(result, "result").isBetweenClosed(0, 0xFF);
+    requireThat(result, "result").isBetween(0, 0xFF + 1);
     return result;
   }
 
@@ -86,7 +86,7 @@ public class HexUtil {
   public static int parseHexWordPlain(String value) {
     int result = Integer.parseInt(value, 16);
 
-    R.requireThat(result, "result").isBetweenClosed(0, 0xFFFF);
+    requireThat(result, "result").isBetween(0, 0xFFFF + 1);
     return result;
   }
 }

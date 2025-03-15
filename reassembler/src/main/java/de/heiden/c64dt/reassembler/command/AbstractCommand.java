@@ -2,7 +2,7 @@ package de.heiden.c64dt.reassembler.command;
 
 import de.heiden.c64dt.assembler.CodeType;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Base implementation for commands.
@@ -33,13 +33,13 @@ public abstract class AbstractCommand implements ICommand {
 
   @Override
   public int getAddress() {
-    R.requireThat(hasAddress(), "hasAddress()").isTrue();
+    requireThat(hasAddress(), "hasAddress()").isTrue();
     return address;
   }
 
   @Override
   public void setAddress(int address) {
-    R.requireThat(hasAddress(), "hasAddress()").isFalse();
+    requireThat(hasAddress(), "hasAddress()").isFalse();
 
     this.address = address;
   }

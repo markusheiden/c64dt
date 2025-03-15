@@ -3,7 +3,7 @@ package de.heiden.c64dt.disk;
 import de.heiden.c64dt.charset.C64Charset;
 import de.heiden.c64dt.charset.TextUtil;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * File implementation.
@@ -25,14 +25,14 @@ public class File implements IFile {
    * @param size file size in bytes
    */
   public File(FileMode mode, int track, int sector, byte[] name, int size) {
-    R.requireThat(mode, "mode").isNotNull();
+    requireThat(mode, "mode").isNotNull();
     if (!mode.isDeleted()) {
-      R.requireThat(track, "track").isGreaterThanOrEqualTo(1);
-      R.requireThat(sector, "sector").isGreaterThanOrEqualTo(0);
+      requireThat(track, "track").isGreaterThanOrEqualTo(1);
+      requireThat(sector, "sector").isGreaterThanOrEqualTo(0);
     }
-    R.requireThat(name, "name").isNotNull();
-    R.requireThat(name.length, "name.length").isLessThanOrEqualTo(16);
-    R.requireThat(size, "size").isGreaterThanOrEqualTo(0);
+    requireThat(name, "name").isNotNull();
+    requireThat(name.length, "name.length").isLessThanOrEqualTo(16);
+    requireThat(size, "size").isGreaterThanOrEqualTo(0);
 
     this.mode = mode;
     this.track = track;
@@ -43,32 +43,32 @@ public class File implements IFile {
 
   @Override
   public FileMode getMode() {
-    R.requireThat(mode, "result").isNotNull();
+    requireThat(mode, "result").isNotNull();
     return mode;
   }
 
   @Override
   public int getTrack() {
-    R.requireThat(track, "result").isGreaterThanOrEqualTo(1);
+    requireThat(track, "result").isGreaterThanOrEqualTo(1);
     return track;
   }
 
   @Override
   public int getSector() {
-    R.requireThat(sector, "result").isGreaterThanOrEqualTo(0);
+    requireThat(sector, "result").isGreaterThanOrEqualTo(0);
     return sector;
   }
 
   @Override
   public byte[] getName() {
-    R.requireThat(name, "result").isNotNull();
-    R.requireThat(name.length, "result.length").isLessThanOrEqualTo(16);
+    requireThat(name, "result").isNotNull();
+    requireThat(name.length, "result.length").isLessThanOrEqualTo(16);
     return name;
   }
 
   @Override
   public int getSize() {
-    R.requireThat(size, "result").isGreaterThanOrEqualTo(0);
+    requireThat(size, "result").isGreaterThanOrEqualTo(0);
     return size;
   }
 

@@ -5,7 +5,7 @@ import java.text.NumberFormat;
 
 import de.heiden.c64dt.charset.C64Charset;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Error constants.
@@ -33,7 +33,7 @@ public enum Error {
    * @param code error code
    */
   Error(int code, String description, int result) {
-    R.requireThat(description, "description").isNotNull();
+    requireThat(description, "description").isNotNull();
 
     this.code = (byte) code;
     this.description = description;

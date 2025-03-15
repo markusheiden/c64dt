@@ -2,7 +2,7 @@ package de.heiden.c64dt.net.drive.stream;
 
 import java.io.IOException;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Base implementation of a stream.
@@ -38,14 +38,14 @@ public abstract class AbstractStream implements IStream {
 
   @Override
   public final byte[] read(int length) throws IOException {
-    R.requireThat(isOpen(), "isOpen()").isTrue();
-    R.requireThat(length, "length").isGreaterThanOrEqualTo(0);
+    requireThat(isOpen(), "isOpen()").isTrue();
+    requireThat(length, "length").isGreaterThanOrEqualTo(0);
 
     lastPosition = position;
     byte[] result = doRead(length);
     position += result.length;
 
-    R.requireThat(result, "result").isNotNull();
+    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -58,8 +58,8 @@ public abstract class AbstractStream implements IStream {
 
   @Override
   public final void write(byte[] data) throws IOException {
-    R.requireThat(isOpen(), "isOpen()").isTrue();
-    R.requireThat(data, "data").isNotNull();
+    requireThat(isOpen(), "isOpen()").isTrue();
+    requireThat(data, "data").isNotNull();
 
     doWrite(data);
   }

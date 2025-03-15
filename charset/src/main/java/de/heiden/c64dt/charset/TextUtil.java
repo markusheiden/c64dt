@@ -1,6 +1,6 @@
 package de.heiden.c64dt.charset;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Util class for handling C64 encoded text.
@@ -23,10 +23,10 @@ public class TextUtil {
    * @param length Length of text
    */
   public static byte[] strip(byte[] text, int pos, int length) {
-    R.requireThat(text, "text").isNotNull();
-    R.requireThat(pos, "pos").isGreaterThanOrEqualTo(0);
-    R.requireThat(length, "length").isGreaterThanOrEqualTo(0);
-    R.requireThat(pos + length, "pos + length").isLessThanOrEqualTo(text.length, "text.length");
+    requireThat(text, "text").isNotNull();
+    requireThat(pos, "pos").isGreaterThanOrEqualTo(0);
+    requireThat(length, "length").isGreaterThanOrEqualTo(0);
+    requireThat(pos + length, "pos + length").isLessThanOrEqualTo(text.length, "text.length");
 
     for (int i = pos + length - 1; i >= pos && text[i] == (byte) 0xA0; --i) {
       --length;
@@ -34,7 +34,7 @@ public class TextUtil {
     byte[] result = new byte[length];
     System.arraycopy(text, pos, result, 0, length);
 
-    R.requireThat(result, "result").isNotNull();
+    requireThat(result, "result").isNotNull();
     return result;
   }
 }

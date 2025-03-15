@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.image.ColorModel;
 import java.awt.image.MemoryImageSource;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Base class for component displaying c64 indexed color content.
@@ -85,8 +85,8 @@ public abstract class JC64ScreenComponent extends JC64Component {
    * @param imageData new backing image data
    */
   protected void updateImageData(byte[] imageData) {
-    R.requireThat(imageData, "imageData").isNotNull();
-    R.requireThat(imageData.length, "imageData.length").isEqualTo(getImageData().length, "getImageData().length");
+    requireThat(imageData, "imageData").isNotNull();
+    requireThat(imageData.length, "imageData.length").isEqualTo(getImageData().length, "getImageData().length");
 
     _imageData = imageData;
     _imageSource.newPixels(imageData, _colorModel, _offset, _lineLength);

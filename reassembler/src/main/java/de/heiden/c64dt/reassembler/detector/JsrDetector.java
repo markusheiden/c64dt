@@ -6,25 +6,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import jakarta.xml.bind.annotation.XmlAttribute;
-
 import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Opcode;
-import de.heiden.c64dt.assembler.OpcodeMode;
-import de.heiden.c64dt.assembler.OpcodeType;
 import de.heiden.c64dt.reassembler.command.CommandBuffer;
 import de.heiden.c64dt.reassembler.command.CommandIterator;
 import de.heiden.c64dt.reassembler.command.ICommand;
 import de.heiden.c64dt.reassembler.command.OpcodeCommand;
 import de.heiden.c64dt.reassembler.command.Subroutine;
+import jakarta.xml.bind.annotation.XmlAttribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.assembler.OpcodeMode.ABS;
 import static de.heiden.c64dt.assembler.OpcodeType.JSR;
 import static de.heiden.c64dt.bytes.HexUtil.hexWord;
-import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Detects JSR commands to predefined address which are followed by fixed length or zero-terminated arguments.
@@ -240,7 +237,7 @@ public class JsrDetector implements IDetector {
    * @return end index or -1, if no arguments have been found
    */
   private int search0(CommandBuffer commands, int startIndex, boolean check) {
-    R.requireThat(commands, "commands").isNotNull();
+    requireThat(commands, "commands").isNotNull();
 
     byte[] code = commands.getCode();
     for (int index = startIndex, count = 0; commands.hasIndex(index) && count < maxLength; index++) {

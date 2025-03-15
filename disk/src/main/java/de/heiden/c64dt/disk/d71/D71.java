@@ -4,7 +4,7 @@ import de.heiden.c64dt.disk.AbstractDiskImage;
 import de.heiden.c64dt.disk.BAM;
 import de.heiden.c64dt.disk.IBAM;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidTrack;
 
 /**
@@ -59,7 +59,7 @@ public class D71 extends AbstractDiskImage {
       // TODO implement extra free sector count informations from $DD-$FF?
     }
 
-    R.requireThat(result, "result").isNotNull();
+    requireThat(result, "result").isNotNull();
     return result;
   }
 

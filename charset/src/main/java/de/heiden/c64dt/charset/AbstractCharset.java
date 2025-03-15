@@ -3,7 +3,7 @@ package de.heiden.c64dt.charset;
 import java.nio.charset.Charset;
 import java.nio.charset.UnmappableCharacterException;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Charset with some convenience methods.
@@ -28,7 +28,7 @@ public abstract class AbstractCharset extends Charset {
    * @param bytes bytes
    */
   public String toString(byte... bytes) {
-    R.requireThat(bytes, "bytes").isNotNull();
+    requireThat(bytes, "bytes").isNotNull();
 
     return toString(bytes, 0, bytes.length);
   }
@@ -41,10 +41,10 @@ public abstract class AbstractCharset extends Charset {
    * @param length number of bytes to convert
    */
   public String toString(byte[] bytes, int pos, int length) {
-    R.requireThat(bytes, "bytes").isNotNull();
-    R.requireThat(pos, "pos").isGreaterThanOrEqualTo(0);
-    R.requireThat(length, "length").isGreaterThanOrEqualTo(0);
-    R.requireThat(pos + length, "pos + length").isLessThanOrEqualTo(bytes.length, "bytes.length");
+    requireThat(bytes, "bytes").isNotNull();
+    requireThat(pos, "pos").isGreaterThanOrEqualTo(0);
+    requireThat(length, "length").isGreaterThanOrEqualTo(0);
+    requireThat(pos + length, "pos + length").isLessThanOrEqualTo(bytes.length, "bytes.length");
 
     AbstractDecoder decoder = newDecoder();
     StringBuilder result = new StringBuilder(bytes.length);
@@ -92,12 +92,12 @@ public abstract class AbstractCharset extends Charset {
    * @param string string
    */
   public byte[] toBytes(String string) {
-    R.requireThat(string, "string").isNotNull();
+    requireThat(string, "string").isNotNull();
 
     byte[] result = new byte[string.length()];
     toBytes(string, result, 0);
 
-    R.requireThat(result, "result").isNotNull();
+    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -109,10 +109,10 @@ public abstract class AbstractCharset extends Charset {
    * @param pos position in bytes to write result to
    */
   public void toBytes(String string, byte[] bytes, int pos) {
-    R.requireThat(string, "string").isNotNull();
-    R.requireThat(bytes, "bytes").isNotNull();
-    R.requireThat(pos, "pos").isGreaterThanOrEqualTo(0);
-    R.requireThat(pos + string.length(), "pos + string.length()").isLessThanOrEqualTo(bytes.length, "bytes.length");
+    requireThat(string, "string").isNotNull();
+    requireThat(bytes, "bytes").isNotNull();
+    requireThat(pos, "pos").isGreaterThanOrEqualTo(0);
+    requireThat(pos + string.length(), "pos + string.length()").isLessThanOrEqualTo(bytes.length, "bytes.length");
 
     AbstractEncoder encoder = newEncoder();
     for (int i = 0; i < string.length(); i++, pos++) {

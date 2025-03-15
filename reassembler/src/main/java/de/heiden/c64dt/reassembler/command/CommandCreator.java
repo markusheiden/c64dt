@@ -4,7 +4,7 @@ import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.OpcodeType;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Creates the commands.
@@ -45,7 +45,7 @@ public class CommandCreator {
     while (code.hasMore()) {
       int codeIndex = code.getCurrentIndex();
 
-      R.requireThat(codeIndex, "codeIndex").isEqualTo(index, "index");
+      requireThat(codeIndex, "codeIndex").isEqualTo(index, "index");
       var type = commandBuffer.getType(index);
 
       if (type == CodeType.BIT) {
@@ -107,8 +107,8 @@ public class CommandCreator {
    * @param command command
    */
   public void addCommand(ICommand command) {
-    R.requireThat(command, "command").isNotNull();
-    R.requireThat(command.hasAddress(), "command.hasAddress()").isFalse();
+    requireThat(command, "command").isNotNull();
+    requireThat(command.hasAddress(), "command.hasAddress()").isFalse();
 
     commandBuffer.setCommand(index, command);
     index += command.getSize();

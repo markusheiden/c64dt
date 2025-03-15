@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import de.heiden.c64dt.bytes.ByteUtil;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Packet for drive.
@@ -102,7 +102,7 @@ public class DrivePacket {
     byte[] result = new byte[size];
     System.arraycopy(data, IDX_DATA, result, 0, result.length);
 
-    R.requireThat(result, "result").isNotNull();
+    requireThat(result, "result").isNotNull();
     return result;
   }
 }

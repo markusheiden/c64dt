@@ -7,7 +7,7 @@ import java.io.Writer;
 import de.heiden.c64dt.bytes.HexUtil;
 import de.heiden.c64dt.charset.C64Charset;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Dumps memory.
@@ -25,8 +25,8 @@ public class Dumper {
    * @param output output for reassembled code
    */
   public void dump(ICodeBuffer code, Writer output) throws IOException {
-    R.requireThat(code, "code").isNotNull();
-    R.requireThat(output, "output").isNotNull();
+    requireThat(code, "code").isNotNull();
+    requireThat(output, "output").isNotNull();
 
     try (BufferedWriter out = new NonClosingBufferedWriter(output)) {
       dump(code, out);
@@ -41,8 +41,8 @@ public class Dumper {
    * @param output output for reassembled code
    */
   private void dump(ICodeBuffer code, BufferedWriter output) throws IOException {
-    R.requireThat(code, "code").isNotNull();
-    R.requireThat(output, "output").isNotNull();
+    requireThat(code, "code").isNotNull();
+    requireThat(output, "output").isNotNull();
 
     StringBuilder chars = new StringBuilder(16);
     while (code.hasMore()) {

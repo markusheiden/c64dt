@@ -8,7 +8,7 @@ import javax.swing.*;
 import de.heiden.c64dt.disk.IBAM;
 import de.heiden.c64dt.disk.IDiskImage;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Component for displaying a bam.
@@ -43,7 +43,7 @@ public class JBam extends JComponent {
    * @param diskImage disk image
    */
   public void setDiskImage(IDiskImage diskImage) {
-    R.requireThat(diskImage, "diskImage").isNotNull();
+    requireThat(diskImage, "diskImage").isNotNull();
 
     this.diskImage = diskImage;
 
@@ -71,7 +71,7 @@ public class JBam extends JComponent {
 
   @Override
   protected void paintComponent(Graphics g) {
-    R.requireThat(g, "g").isNotNull();
+    requireThat(g, "g").isNotNull();
 
     IBAM bam = diskImage.getBAM();
 

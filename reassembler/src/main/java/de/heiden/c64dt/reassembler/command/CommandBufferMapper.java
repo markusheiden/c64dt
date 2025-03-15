@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 
+import de.heiden.c64dt.assembler.CodeType;
+import de.heiden.c64dt.reassembler.xml.HexByteAdapter;
+import de.heiden.c64dt.reassembler.xml.HexWordAdapter;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
@@ -13,11 +16,7 @@ import jakarta.xml.bind.annotation.XmlValue;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import de.heiden.c64dt.assembler.CodeType;
-import de.heiden.c64dt.reassembler.xml.HexByteAdapter;
-import de.heiden.c64dt.reassembler.xml.HexWordAdapter;
-
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * XML-Mapper for {@link CommandBuffer}.
@@ -133,7 +132,7 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
     // start address / first base address
     AddressMapper firstAddress = addresses.get(0);
     int startIndex = firstAddress.index;
-    R.requireThat(startIndex, "startIndex").isEqualTo(0);
+    requireThat(startIndex, "startIndex").isEqualTo(0);
 
     // the start address is the first base address and automatically sets the end base address
     CommandBuffer commands = new CommandBuffer(xmlCommands.code, firstAddress.base);
@@ -146,8 +145,8 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
 
     // end base address
     AddressMapper lastAddress = addresses.get(addresses.size() - 1);
-    R.requireThat(lastAddress.index, "lastAddress.index").isEqualTo(xmlCommands.code.length, "xmlCommands.code.length");
-    R.requireThat(lastAddress.base, "lastAddress.base").isEqualTo(firstAddress.base, "firstAddress.base");
+    requireThat(lastAddress.index, "lastAddress.index").isEqualTo(xmlCommands.code.length, "xmlCommands.code.length");
+    requireThat(lastAddress.base, "lastAddress.base").isEqualTo(firstAddress.base, "firstAddress.base");
 
     // subroutines
     for (SubroutineMapper subroutineMapper : xmlCommands.subroutines) {

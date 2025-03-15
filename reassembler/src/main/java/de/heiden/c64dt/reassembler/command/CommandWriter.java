@@ -9,11 +9,11 @@ import java.util.TreeSet;
 import de.heiden.c64dt.reassembler.label.ExternalLabel;
 import de.heiden.c64dt.reassembler.label.ILabel;
 
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.bytes.HexUtil.hex;
 import static de.heiden.c64dt.bytes.HexUtil.hexBytePlain;
 import static de.heiden.c64dt.bytes.HexUtil.hexWord;
 import static de.heiden.c64dt.bytes.HexUtil.hexWordPlain;
-import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Write assembler source from {@link CommandBuffer}.
@@ -30,7 +30,7 @@ public class CommandWriter {
    * @param output writer to write output to
    */
   public CommandWriter(Writer output) {
-    R.requireThat(output, "output").isNotNull();
+    requireThat(output, "output").isNotNull();
 
     this.output = output;
   }
@@ -42,7 +42,7 @@ public class CommandWriter {
    * @param commands Command buffer
    */
   public void write(CommandBuffer commands) throws IOException {
-    R.requireThat(commands, "commands").isNotNull();
+    requireThat(commands, "commands").isNotNull();
 
     // start address
     output.append("*=").append(hexWord(commands.getStartAddress())).append("\n");

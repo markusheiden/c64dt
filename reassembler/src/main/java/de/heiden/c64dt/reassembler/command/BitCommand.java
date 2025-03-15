@@ -6,8 +6,8 @@ import java.util.List;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.assembler.Opcode;
 
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.bytes.HexUtil.hexByte;
-import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Command for using bit to skip the next opcode.
@@ -41,7 +41,7 @@ public class BitCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    R.requireThat(buffer, "buffer").isNotNull();
+    requireThat(buffer, "buffer").isNotNull();
 
     return "!BYTE " + hexByte(opcode.getOpcode()) + "; " + opcode.toString(getAddress(), argument);
   }

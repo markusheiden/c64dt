@@ -11,7 +11,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidSector;
 
 /**
@@ -38,9 +38,9 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param hasErrors support error informations?
    */
   protected AbstractDiskImage(int sides, int tracks, boolean hasErrors) {
-    R.requireThat(sides, "sides").isGreaterThanOrEqualTo(1).isLessThanOrEqualTo(2);
-    R.requireThat(tracks, "tracks").isGreaterThanOrEqualTo(0);
-    R.requireThat(tracks % sides, "tracks % sides").isEqualTo(0);
+    requireThat(sides, "sides").isGreaterThanOrEqualTo(1).isLessThanOrEqualTo(2);
+    requireThat(tracks, "tracks").isGreaterThanOrEqualTo(0);
+    requireThat(tracks % sides, "tracks % sides").isEqualTo(0);
 
     this.sides = sides;
     this.tracks = tracks;
@@ -130,7 +130,7 @@ public abstract class AbstractDiskImage implements IDiskImage {
 
   @Override
   public Error getError(int track, int sector) {
-    R.requireThat(hasErrors(), "hasErrors()").isTrue();
+    requireThat(hasErrors(), "hasErrors()").isTrue();
     requireValidSector(this, track, sector);
 
     return errors[track - 1][sector];
@@ -138,9 +138,9 @@ public abstract class AbstractDiskImage implements IDiskImage {
 
   @Override
   public void setError(int track, int sector, Error error) {
-    R.requireThat(hasErrors(), "hasErrors()").isTrue();
+    requireThat(hasErrors(), "hasErrors()").isTrue();
     requireValidSector(this, track, sector);
-    R.requireThat(error, "error").isNotNull();
+    requireThat(error, "error").isNotNull();
 
     errors[track - 1][sector] = error;
   }
@@ -163,8 +163,8 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param pos position in sector buffer
    */
   protected void readBAM(IBAM bam, int track, byte[] content, int pos) {
-    R.requireThat(bam, "bam").isNotNull();
-    R.requireThat(content, "content").isNotNull();
+    requireThat(bam, "bam").isNotNull();
+    requireThat(content, "content").isNotNull();
 
     int free = ByteUtil.toByte(content[pos + 0x00]);
     bam.setFreeSectors(track, free);
@@ -182,7 +182,7 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param b byte to read
    */
   protected void readBAM(IBAM bam, int track, int sector, byte b) {
-    R.requireThat(bam, "bam").isNotNull();
+    requireThat(bam, "bam").isNotNull();
 
     int map = ByteUtil.toByte(b);
     for (int i = 0; i < 8 && sector < getSectors(track); i++, sector++) {

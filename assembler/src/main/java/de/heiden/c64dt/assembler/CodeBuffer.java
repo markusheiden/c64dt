@@ -6,8 +6,8 @@ import java.io.InputStream;
 import de.heiden.c64dt.bytes.ByteUtil;
 import org.apache.commons.io.IOUtils;
 
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.bytes.ByteUtil.toWord;
-import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Input stream for code.
@@ -54,8 +54,8 @@ public class CodeBuffer extends AbstractCodeBuffer {
    * @param code Code
    */
   public static CodeBuffer fromCode(int startAddr, InputStream code) throws IOException {
-    R.requireThat(startAddr, "startAddr").isGreaterThanOrEqualTo(0);
-    R.requireThat(code, "code").isNotNull();
+    requireThat(startAddr, "startAddr").isGreaterThanOrEqualTo(0);
+    requireThat(code, "code").isNotNull();
 
     return new CodeBuffer(startAddr, IOUtils.toByteArray(code));
   }
@@ -67,7 +67,7 @@ public class CodeBuffer extends AbstractCodeBuffer {
    * @param program program with start address
    */
   public static CodeBuffer fromProgram(InputStream program) throws IOException {
-    R.requireThat(program, "program").isNotNull();
+    requireThat(program, "program").isNotNull();
 
     return fromProgram(IOUtils.toByteArray(program));
   }
@@ -79,8 +79,8 @@ public class CodeBuffer extends AbstractCodeBuffer {
    * @param program program with start address
    */
   public static CodeBuffer fromProgram(byte[] program) throws IOException {
-    R.requireThat(program, "program").isNotNull();
-    R.requireThat(program.length, "program.length").isGreaterThanOrEqualTo(2);
+    requireThat(program, "program").isNotNull();
+    requireThat(program.length, "program.length").isGreaterThanOrEqualTo(2);
 
     int address = toWord(program, 0);
     byte[] code = new byte[program.length - 2];

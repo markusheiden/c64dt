@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import de.heiden.c64dt.bytes.ByteUtil;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidSector;
 
 /**
@@ -23,7 +23,7 @@ public class SectorIterator implements Iterator<byte[]> {
    * @param sector start sector
    */
   public SectorIterator(IDiskImage diskImage, int track, int sector) {
-    R.requireThat(diskImage, "diskImage").isNotNull();
+    requireThat(diskImage, "diskImage").isNotNull();
     requireValidSector(diskImage, track, sector);
 
     this.diskImage = diskImage;
@@ -38,13 +38,13 @@ public class SectorIterator implements Iterator<byte[]> {
 
   @Override
   public byte[] next() {
-    R.requireThat(hasNext(), "hasNext()").isTrue();
+    requireThat(hasNext(), "hasNext()").isTrue();
 
     byte[] currentSector = diskImage.getSector(track, sector);
     track = ByteUtil.toByte(currentSector[0]);
     sector = ByteUtil.toByte(currentSector[1]);
 
-    R.requireThat(currentSector, "result").isNotNull();
+    requireThat(currentSector, "result").isNotNull();
     return currentSector;
   }
 

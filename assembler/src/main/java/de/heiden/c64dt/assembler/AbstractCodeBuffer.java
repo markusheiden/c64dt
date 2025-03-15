@@ -1,6 +1,6 @@
 package de.heiden.c64dt.assembler;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Abstract implementation of input stream for code.
@@ -18,7 +18,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
    * @param length length of the code
    */
   protected AbstractCodeBuffer(int startAddress, int length) {
-    R.requireThat(length, "length").isGreaterThanOrEqualTo(0);
+    requireThat(length, "length").isGreaterThanOrEqualTo(0);
 
     this.startAddress = startAddress;
     this.length = length;
@@ -63,7 +63,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
 
   @Override
   public final boolean has(int number) {
-    R.requireThat(number, "number").isGreaterThanOrEqualTo(0);
+    requireThat(number, "number").isGreaterThanOrEqualTo(0);
 
     return position + number <= length;
   }
@@ -77,7 +77,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
 
   @Override
   public final int read(int number) {
-    R.requireThat(number, "number").isBetweenClosed(0, 2);
+    requireThat(number, "number").isBetween(0, 2 + 1);
 
     if (number == 0) {
       return -1;

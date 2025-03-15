@@ -7,7 +7,7 @@ import de.heiden.c64dt.disk.IDirectory;
 import de.heiden.c64dt.net.drive.stream.DirectoryStream;
 import de.heiden.c64dt.net.drive.stream.IStream;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
 
 /**
@@ -33,13 +33,13 @@ public abstract class AbstractPath implements IPath {
 
   @Override
   public IPath getParent() {
-    R.requireThat(parent, "result").isNotNull();
+    requireThat(parent, "result").isNotNull();
     return parent;
   }
 
   @Override
   public IStream getFile(byte[] filename) throws FileNotFoundException {
-    R.requireThat(filename, "filename").isNotNull();
+    requireThat(filename, "filename").isNotNull();
 
     if (Arrays.equals(filename, DIRECTORY_NAME)) {
       return new DirectoryStream(doDirectory());
@@ -84,7 +84,7 @@ public abstract class AbstractPath implements IPath {
       }
     }
 
-    R.requireThat(result, "result").isNotNull();
+    requireThat(result, "result").isNotNull();
     return result;
   }
 

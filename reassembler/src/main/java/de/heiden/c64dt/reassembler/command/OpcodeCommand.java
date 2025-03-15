@@ -9,7 +9,7 @@ import de.heiden.c64dt.assembler.OpcodeMode;
 import de.heiden.c64dt.bytes.ByteUtil;
 import de.heiden.c64dt.reassembler.label.ILabel;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Command for an opcode.
@@ -39,7 +39,7 @@ public class OpcodeCommand extends AbstractCommand {
   public OpcodeCommand(Opcode opcode, int argument) {
     super(CodeType.OPCODE);
 
-    R.requireThat(opcode, "opcode").isNotNull();
+    requireThat(opcode, "opcode").isNotNull();
 
     this.opcode = opcode;
     this.argument = argument;
@@ -59,7 +59,7 @@ public class OpcodeCommand extends AbstractCommand {
    * Argument for opcode, if any.
    */
   public int getArgument() {
-    R.requireThat(getSize(), "getSize()").isGreaterThan(1);
+    requireThat(getSize(), "getSize()").isGreaterThan(1);
 
     return argument;
   }
@@ -75,7 +75,7 @@ public class OpcodeCommand extends AbstractCommand {
    * Get the opcode argument as absolute address.
    */
   public int getArgumentAddress() {
-    R.requireThat(isArgumentAddress(), "isArgumentAddress()").isTrue();
+    requireThat(isArgumentAddress(), "isArgumentAddress()").isTrue();
 
     return opcode.getMode().getAddress(getAddress(), getArgument());
   }
@@ -98,7 +98,7 @@ public class OpcodeCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    R.requireThat(buffer, "buffer").isNotNull();
+    requireThat(buffer, "buffer").isNotNull();
 
     StringBuilder result = new StringBuilder();
     result.append(opcode.getType().toString());
@@ -127,7 +127,7 @@ public class OpcodeCommand extends AbstractCommand {
       result.add(ByteUtil.hi(argument));
     }
 
-    R.requireThat(result, "result").isNotNull();
+    requireThat(result, "result").isNotNull();
     return result;
   }
 }

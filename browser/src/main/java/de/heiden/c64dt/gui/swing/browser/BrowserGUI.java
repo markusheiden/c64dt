@@ -6,7 +6,7 @@ import javax.swing.*;
 
 import de.heiden.c64dt.disk.IDiskImage;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * GUI of the browser.
@@ -31,7 +31,7 @@ public class BrowserGUI extends JPanel {
     JList<String> list = new JList<>(new String[]{"1", "2", "3"});
     result.add(list, BorderLayout.CENTER);
 
-    R.requireThat(result, "result").isNotNull();
+    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -42,7 +42,7 @@ public class BrowserGUI extends JPanel {
     directory = new JDirectory();
     result.add(directory, BorderLayout.CENTER);
 
-    R.requireThat(result, "result").isNotNull();
+    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -53,12 +53,12 @@ public class BrowserGUI extends JPanel {
     bam = new JBam();
     result.add(bam, BorderLayout.CENTER);
 
-    R.requireThat(result, "result").isNotNull();
+    requireThat(result, "result").isNotNull();
     return result;
   }
 
   public void setDiskImage(IDiskImage diskImage) {
-    R.requireThat(diskImage, "diskImage").isNotNull();
+    requireThat(diskImage, "diskImage").isNotNull();
 
     bam.setDiskImage(diskImage);
     directory.setDirectory(diskImage.getDirectory());

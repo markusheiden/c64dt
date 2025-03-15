@@ -5,7 +5,7 @@ import java.util.Iterator;
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.reassembler.label.ILabel;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Command iterator.
@@ -28,7 +28,7 @@ public class CommandIterator implements Iterator<ICommand> {
    * @param commands Command buffer to iterate
    */
   public CommandIterator(CommandBuffer commands) {
-    R.requireThat(commands, "commands").isNotNull();
+    requireThat(commands, "commands").isNotNull();
 
     this.commands = commands;
   }
@@ -88,7 +88,7 @@ public class CommandIterator implements Iterator<ICommand> {
    */
   public void setIndex(int index) {
     // Check that there is a command at the given index.
-    R.requireThat(commands.getCommand(index), "commands.getCommand(index)").isNotNull();
+    requireThat(commands.getCommand(index), "commands.getCommand(index)").isNotNull();
 
     this.index = index;
   }
@@ -124,7 +124,7 @@ public class CommandIterator implements Iterator<ICommand> {
     index = getNextIndex();
     ICommand result = getCommand();
 
-    R.requireThat(result, "result").isNotNull();
+    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -163,9 +163,9 @@ public class CommandIterator implements Iterator<ICommand> {
     }
     ICommand result = getCommand();
 
-    R.requireThat(result, "result").isNotNull();
+    requireThat(result, "result").isNotNull();
     // Check that the previous commands ends at the start of the current command.
-    R.requireThat(getNextIndex(), "getNextIndex()").isEqualTo(endIndex);
+    requireThat(getNextIndex(), "getNextIndex()").isEqualTo(endIndex);
     return result;
   }
 

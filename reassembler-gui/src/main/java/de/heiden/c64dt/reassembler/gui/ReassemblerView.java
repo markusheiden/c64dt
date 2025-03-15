@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import jakarta.annotation.PostConstruct;
 import javax.swing.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +14,9 @@ import org.springframework.stereotype.Component;
 import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.reassembler.Reassembler;
 import de.heiden.c64dt.reassembler.xml.XmlUtil;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * GUI for {@link Reassembler}.
@@ -121,7 +119,7 @@ public class ReassemblerView extends JFrame {
    * @param reassembler Reassembler
    */
   public void use(Reassembler reassembler) {
-    R.requireThat(reassembler, "reassembler").isNotNull();
+    requireThat(reassembler, "reassembler").isNotNull();
 
     this.currentFile = null;
     this.reassembler = reassembler;

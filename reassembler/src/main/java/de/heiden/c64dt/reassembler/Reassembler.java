@@ -4,12 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
-import jakarta.xml.bind.annotation.XmlElements;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.reassembler.command.CommandBuffer;
 import de.heiden.c64dt.reassembler.command.CommandBufferMapper;
@@ -19,10 +13,15 @@ import de.heiden.c64dt.reassembler.detector.BrkDetector;
 import de.heiden.c64dt.reassembler.detector.IDetector;
 import de.heiden.c64dt.reassembler.detector.JsrDetector;
 import de.heiden.c64dt.reassembler.detector.LabelDetector;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
+import jakarta.xml.bind.annotation.XmlElements;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Reassembler.
@@ -79,7 +78,7 @@ public class Reassembler {
    * @param detector code type detector
    */
   public void add(IDetector detector) {
-    R.requireThat(detector, "detector").isNotNull();
+    requireThat(detector, "detector").isNotNull();
 
     detectors.add(detector);
   }
@@ -98,7 +97,7 @@ public class Reassembler {
    * @param code Code buffer
    */
   public void reassemble(CodeBuffer code) throws IOException {
-    R.requireThat(code, "code").isNotNull();
+    requireThat(code, "code").isNotNull();
 
     if (code.getCurrentAddress() == 0x0801) {
       // TODO check for basic header

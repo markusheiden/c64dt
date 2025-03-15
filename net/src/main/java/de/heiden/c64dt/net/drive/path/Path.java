@@ -14,7 +14,7 @@ import de.heiden.c64dt.disk.IFile;
 import de.heiden.c64dt.net.drive.stream.FileStream;
 import de.heiden.c64dt.net.drive.stream.IStream;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.decode;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
 
@@ -29,7 +29,7 @@ public class Path extends AbstractPath {
   public Path(IPath parent, File directory) throws FileNotFoundException {
     super(parent);
 
-    R.requireThat(directory, "directory").isNotNull();
+    requireThat(directory, "directory").isNotNull();
     if (!directory.isDirectory()) {
       throw new FileNotFoundException(directory.getPath() + " is no directory");
     }

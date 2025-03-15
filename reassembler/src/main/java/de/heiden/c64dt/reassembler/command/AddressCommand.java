@@ -7,8 +7,8 @@ import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.bytes.ByteUtil;
 import de.heiden.c64dt.reassembler.label.ILabel;
 
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.bytes.HexUtil.hexWord;
-import static de.heiden.c64dt.common.Requirements.R;
 
 /**
  * Command for an absolute address referencing code.
@@ -42,14 +42,14 @@ public class AddressCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    R.requireThat(buffer, "buffer").isNotNull();
+    requireThat(buffer, "buffer").isNotNull();
 
     ILabel label = buffer.getLabel(address);
     if (label == null) {
       return "!WORD " + hexWord(address);
     }
 
-    R.requireThat(label.getAddress(), "label.getAddress()").isEqualTo(address, "address");
+    requireThat(label.getAddress(), "label.getAddress()").isEqualTo(address, "address");
     return "!WORD " + label.toString(address);
   }
 

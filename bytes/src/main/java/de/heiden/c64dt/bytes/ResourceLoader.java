@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Util class to load resources as byte arrays.
@@ -32,7 +32,7 @@ public class ResourceLoader {
       result[i] = read[i] & 0xFF;
     }
 
-    R.requireThat(result, "result").isNotNull();
+    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -53,7 +53,7 @@ public class ResourceLoader {
       result[i] = read[i] & 0xFF;
     }
 
-    R.requireThat(result, "result").isNotNull();
+    requireThat(result, "result").isNotNull();
     return result;
   }
 }

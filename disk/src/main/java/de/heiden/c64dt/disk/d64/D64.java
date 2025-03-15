@@ -4,7 +4,7 @@ import de.heiden.c64dt.disk.AbstractDiskImage;
 import de.heiden.c64dt.disk.BAM;
 import de.heiden.c64dt.disk.IBAM;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidTrack;
 
 /**
@@ -63,7 +63,7 @@ public class D64 extends AbstractDiskImage {
       readBAM(result, track, bam, pos);
     }
 
-    R.requireThat(result, "result").isNotNull();
+    requireThat(result, "result").isNotNull();
     return result;
   }
 

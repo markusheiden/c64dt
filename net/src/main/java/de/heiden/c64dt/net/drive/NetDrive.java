@@ -7,7 +7,7 @@ import java.net.SocketException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
  * Net drive server.
@@ -40,9 +40,9 @@ public class NetDrive {
    * @param port server port
    */
   public NetDrive(File root, int port) throws IOException {
-    R.requireThat(root, "root").isNotNull();
-    R.requireThat(root.isDirectory(), "root.isDirectory()").isTrue();
-    R.requireThat(port, "port").isBetweenClosed(0, 65536);
+    requireThat(root, "root").isNotNull();
+    requireThat(root.isDirectory(), "root.isDirectory()").isTrue();
+    requireThat(port, "port").isBetween(0, 65535 + 1);
 
     isRunning = false;
     thread = null;
@@ -61,7 +61,7 @@ public class NetDrive {
    * Start server.
    */
   public void start() throws IOException {
-    R.requireThat(isRunning(), "isRunning()").isFalse();
+    requireThat(isRunning(), "isRunning()").isFalse();
 
     isRunning = true;
     thread = new Thread(new Server(), "Net drive server on " + connection.getSource());
@@ -72,7 +72,7 @@ public class NetDrive {
    * Stop server.
    */
   public void stop() {
-    R.requireThat(isRunning(), "isRunning()").isTrue();
+    requireThat(isRunning(), "isRunning()").isTrue();
 
     isRunning = false;
     thread.interrupt();

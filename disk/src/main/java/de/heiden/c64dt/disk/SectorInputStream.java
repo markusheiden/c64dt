@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 import de.heiden.c64dt.bytes.ByteUtil;
 
-import static de.heiden.c64dt.common.Requirements.R;
+import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidSector;
 
 /**
@@ -38,7 +38,7 @@ public class SectorInputStream extends InputStream {
    * @param sector start sector
    */
   public SectorInputStream(IDiskImage diskImage, int track, int sector) {
-    R.requireThat(diskImage, "diskImage").isNotNull();
+    requireThat(diskImage, "diskImage").isNotNull();
     requireValidSector(diskImage, track, sector);
 
     this.diskImage = diskImage;
