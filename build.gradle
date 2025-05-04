@@ -33,11 +33,13 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'maven-publish'
 
+    base {
+        archivesName = "${rootProject.name}-${project.name}"
+    }
+
     repositories {
         mavenCentral()
     }
-
-    archivesBaseName = "${rootProject.name}-${project.name}"
 
     dependencies {
         implementation "org.slf4j:slf4j-api:${slf4jVersion}"
