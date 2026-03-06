@@ -27,6 +27,10 @@ subprojects {
     }
 
     afterEvaluate {
+        configurations.all {
+            resolutionStrategy.failOnDynamicVersions()
+        }
+
         dependencies {
             implementation(platform(libs.spring.boot.bom))
 
