@@ -3,7 +3,7 @@ springBoot = "4.0.3"
 
 # Not in Spring Boot BOM
 commonsIo = "2.20.0"
-openjfx = "23.0.2"
+openjfx = "25.0.2"
 requirements = "11.0"
 
 # Gradle plugins
