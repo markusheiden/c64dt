@@ -1,0 +1,8 @@
+dependencies {
+    implementation(project(":bytes"))
+    implementation(project(":charset"))
+    implementation(project(":common"))
+
+    implementation("commons-io:commons-io")
+    implementation("jakarta.xml.bind:jakarta.xml.bind-api")
+}
