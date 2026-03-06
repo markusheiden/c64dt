@@ -14,7 +14,6 @@ java {
 
 allprojects {
     group = "de.heiden.c64dt"
-    version = "1.0-SNAPSHOT"
 
     repositories {
         mavenCentral()
