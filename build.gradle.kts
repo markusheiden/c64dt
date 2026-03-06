@@ -13,8 +13,6 @@ java {
 }
 
 allprojects {
-    group = "de.heiden.c64dt"
-
     repositories {
         mavenCentral()
     }
