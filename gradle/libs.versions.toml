@@ -1,5 +1,4 @@
 [versions]
-gradle = "9.4.0"
 springBoot = "4.0.3"
 
 # Not in Spring Boot BOM

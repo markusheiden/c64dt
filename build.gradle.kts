@@ -72,7 +72,3 @@ subprojects {
         ignoreFailures = true
     }
 }
-
-tasks.wrapper {
-    gradleVersion = libs.versions.gradle.get()
-}
