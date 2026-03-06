@@ -26,16 +26,16 @@ subprojects {
     }
 
     dependencies {
-        "implementation"(platform(libs.spring.boot.bom))
+        implementation(platform(libs.spring.boot.bom))
 
-        "implementation"(libs.slf4j.api)
-        "runtimeOnly"(libs.logback.classic)
+        implementation(libs.slf4j.api)
+        runtimeOnly(libs.logback.classic)
 
-        "implementation"(libs.requirements)
+        implementation(libs.requirements)
 
-        "testRuntimeOnly"(libs.junit.platform.launcher)
-        "testImplementation"(libs.junit.jupiter)
-        "testImplementation"(libs.assertj.core)
+        testRuntimeOnly(libs.junit.platform.launcher)
+        testImplementation(libs.junit.jupiter)
+        testImplementation(libs.assertj.core)
     }
 
     configurations.all {
