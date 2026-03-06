@@ -3,8 +3,6 @@ plugins {
     alias(libs.plugins.versions)
 }
 
-apply(from = "gradle/javafx.gradle.kts")
-
 java {
     // https://docs.gradle.org/current/userguide/toolchains.html
     toolchain {

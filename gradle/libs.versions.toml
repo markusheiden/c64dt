@@ -3,7 +3,7 @@ gradle      = "9.4.0"
 springBoot  = "3.5.0"
 
 # Not in Spring Boot BOM
-openjfx     = "23.0.2"
+openjfx      = "23.0.2"
 requirements = "11.0"
 
 # Override Spring Boot BOM (newer than what 3.5.0 provides)
@@ -12,7 +12,8 @@ assertj    = "3.27.4"
 commonsIo  = "2.20.0"
 
 # Gradle plugins
-versionsPlugin = "0.52.0"
+versionsPlugin  = "0.52.0"
+javafxPlugin    = "0.1.0"
 
 [libraries]
 # Spring Boot BOM — imported as platform() in each subproject
@@ -36,11 +37,6 @@ commons-io              = { module = "commons-io:commons-io",                   
 # Not in Spring Boot BOM
 requirements = { module = "com.github.cowwoc.requirements:java", version.ref = "requirements" }
 
-# JavaFX: the OS-specific classifier cannot be expressed in the catalog,
-# so gui.gradle.kts uses libs.versions.openjfx.get() in string notation.
-openjfx-base     = { module = "org.openjfx:javafx-base",     version.ref = "openjfx" }
-openjfx-controls = { module = "org.openjfx:javafx-controls", version.ref = "openjfx" }
-openjfx-graphics = { module = "org.openjfx:javafx-graphics", version.ref = "openjfx" }
-
 [plugins]
-versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin" }
+versions = { id = "com.github.ben-manes.versions",   version.ref = "versionsPlugin" }
+javafx   = { id = "org.openjfx.javafxplugin",        version.ref = "javafxPlugin" }
