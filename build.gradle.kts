@@ -70,5 +70,5 @@ subprojects {
 }
 
 tasks.wrapper {
-    gradleVersion = project.property("gradleVersion") as String
+    gradleVersion = libs.versions.gradle.get()
 }

@@ -1,5 +1,6 @@
 [versions]
-springBoot = "3.5.0"
+gradle      = "9.4.0"
+springBoot  = "3.5.0"
 
 # Not in Spring Boot BOM
 openjfx     = "23.0.2"
