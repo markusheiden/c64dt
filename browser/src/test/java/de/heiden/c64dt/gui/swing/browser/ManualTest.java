@@ -6,14 +6,19 @@ import de.heiden.c64dt.disk.SectorInputStream;
 import de.heiden.c64dt.disk.d64.D64Reader;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * Test.
  */
-public class Test {
+public class ManualTest {
   public static void main(String[] args) throws Exception {
     BufferedReader r = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(new byte[]{0x01, 0x70, 0x02, 0x03}), C64Charset.UPPER));
     System.out.println(r.readLine());
@@ -34,5 +39,10 @@ public class Test {
     frame.pack();
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     frame.setVisible(true);
+  }
+
+  // Make the Gradle build work.
+  @Test
+  void dummy() {
   }
 }
