@@ -1,0 +1,45 @@
+[versions]
+springBoot = "3.5.0"
+
+# Not in Spring Boot BOM
+openjfx     = "23.0.2"
+requirements = "11.0"
+
+# Override Spring Boot BOM (newer than what 3.5.0 provides)
+junit      = "5.13.4"
+assertj    = "3.27.4"
+commonsIo  = "2.20.0"
+
+# Gradle plugins
+versionsPlugin = "0.52.0"
+
+[libraries]
+# Spring Boot BOM — imported as platform() in each subproject
+spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springBoot" }
+
+# Managed by Spring Boot BOM (version comes from the platform)
+slf4j-api              = { module = "org.slf4j:slf4j-api" }
+logback-classic        = { module = "ch.qos.logback:logback-classic" }
+spring-beans           = { module = "org.springframework:spring-beans" }
+spring-context         = { module = "org.springframework:spring-context" }
+jakarta-annotation-api = { module = "jakarta.annotation:jakarta.annotation-api" }
+jakarta-xml-bind-api   = { module = "jakarta.xml.bind:jakarta.xml.bind-api" }
+jaxb-runtime           = { module = "org.glassfish.jaxb:jaxb-runtime" }
+
+# Override Spring Boot BOM (newer versions than the BOM provides)
+junit-jupiter           = { module = "org.junit.jupiter:junit-jupiter",                    version.ref = "junit" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher",         version.ref = "junit" }
+assertj-core            = { module = "org.assertj:assertj-core",                           version.ref = "assertj" }
+commons-io              = { module = "commons-io:commons-io",                              version.ref = "commonsIo" }
+
+# Not in Spring Boot BOM
+requirements = { module = "com.github.cowwoc.requirements:java", version.ref = "requirements" }
+
+# JavaFX: the OS-specific classifier cannot be expressed in the catalog,
+# so gui.gradle.kts uses libs.versions.openjfx.get() in string notation.
+openjfx-base     = { module = "org.openjfx:javafx-base",     version.ref = "openjfx" }
+openjfx-controls = { module = "org.openjfx:javafx-controls", version.ref = "openjfx" }
+openjfx-graphics = { module = "org.openjfx:javafx-graphics", version.ref = "openjfx" }
+
+[plugins]
+versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin" }

@@ -4,5 +4,5 @@ dependencies {
     implementation(project(":disk"))
     implementation(project(":gui"))
 
-    implementation("commons-io:commons-io")
+    implementation(libs.commons.io)
 }

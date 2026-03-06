@@ -3,6 +3,6 @@ dependencies {
     implementation(project(":charset"))
     implementation(project(":common"))
 
-    implementation("commons-io:commons-io")
-    implementation("jakarta.xml.bind:jakarta.xml.bind-api")
+    implementation(libs.commons.io)
+    implementation(libs.jakarta.xml.bind.api)
 }

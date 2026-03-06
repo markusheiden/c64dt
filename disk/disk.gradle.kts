@@ -3,5 +3,5 @@ dependencies {
     implementation(project(":charset"))
     implementation(project(":common"))
 
-    implementation("commons-io:commons-io")
+    implementation(libs.commons.io)
 }

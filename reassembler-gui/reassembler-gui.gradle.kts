@@ -4,7 +4,7 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":reassembler"))
 
-    implementation("org.springframework:spring-beans")
-    implementation("org.springframework:spring-context")
-    implementation("jakarta.annotation:jakarta.annotation-api")
+    implementation(libs.spring.beans)
+    implementation(libs.spring.context)
+    implementation(libs.jakarta.annotation.api)
 }
