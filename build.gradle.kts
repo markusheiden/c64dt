@@ -15,6 +15,10 @@ java {
 allprojects {
     group = "de.heiden.c64dt"
     version = "1.0-SNAPSHOT"
+
+    repositories {
+        mavenCentral()
+    }
 }
 
 subprojects {
@@ -25,17 +29,19 @@ subprojects {
         archivesName = "${rootProject.name}-${project.name}"
     }
 
-    dependencies {
-        implementation(platform(libs.spring.boot.bom))
+    afterEvaluate {
+        dependencies {
+            implementation(platform(libs.spring.boot.bom))
 
-        implementation(libs.slf4j.api)
-        runtimeOnly(libs.logback.classic)
+            implementation(libs.slf4j.api)
+            runtimeOnly(libs.logback.classic)
 
-        implementation(libs.requirements)
+            implementation(libs.requirements)
 
-        testRuntimeOnly(libs.junit.platform.launcher)
-        testImplementation(libs.junit.jupiter)
-        testImplementation(libs.assertj.core)
+            testRuntimeOnly(libs.junit.platform.launcher)
+            testImplementation(libs.junit.jupiter)
+            testImplementation(libs.assertj.core)
+        }
     }
 
     configurations.all {
