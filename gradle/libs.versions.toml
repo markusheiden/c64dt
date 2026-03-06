@@ -3,6 +3,7 @@ gradle = "9.4.0"
 springBoot = "4.0.3"
 
 # Not in Spring Boot BOM
+commonsIo = "2.20.0"
 openjfx = "23.0.2"
 requirements = "11.0"
 
@@ -22,14 +23,12 @@ spring-context = { module = "org.springframework:spring-context" }
 jakarta-annotation-api = { module = "jakarta.annotation:jakarta.annotation-api" }
 jakarta-xml-bind-api = { module = "jakarta.xml.bind:jakarta.xml.bind-api" }
 jaxb-runtime = { module = "org.glassfish.jaxb:jaxb-runtime" }
-
-# Override Spring Boot BOM (newer versions than the BOM provides)
-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }
-assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
-commons-io = { module = "commons-io:commons-io", version.ref = "commonsIo" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+assertj-core = { module = "org.assertj:assertj-core" }
 
 # Not in Spring Boot BOM
+commons-io = { module = "commons-io:commons-io", version.ref = "commonsIo" }
 requirements = { module = "com.github.cowwoc.requirements:java", version.ref = "requirements" }
 
 [plugins]
