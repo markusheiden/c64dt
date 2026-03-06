@@ -7,7 +7,7 @@ openjfx = "23.0.2"
 requirements = "11.0"
 
 # Gradle plugins
-versionsPlugin = "0.52.0"
+versionsPlugin = "0.53.0"
 javafxPlugin = "0.1.0"
 
 [libraries]
