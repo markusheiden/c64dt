@@ -1,6 +1,6 @@
 [versions]
-gradle = "9.4.0"
 commonsIo = "2.20.0"
+gradle = "9.4.0"
 openjfx = "25.0.2"
 requirements = "11.0"
 springBoot = "4.0.3"
@@ -14,21 +14,21 @@ versionsPlugin = "0.53.0"
 spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springBoot" }
 
 # Managed by Spring Boot BOM (version comes from the platform)
-slf4j-api = { module = "org.slf4j:slf4j-api" }
-logback-classic = { module = "ch.qos.logback:logback-classic" }
-spring-beans = { module = "org.springframework:spring-beans" }
-spring-context = { module = "org.springframework:spring-context" }
+assertj-core = { module = "org.assertj:assertj-core" }
 jakarta-annotation-api = { module = "jakarta.annotation:jakarta.annotation-api" }
 jakarta-xml-bind-api = { module = "jakarta.xml.bind:jakarta.xml.bind-api" }
 jaxb-runtime = { module = "org.glassfish.jaxb:jaxb-runtime" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
-assertj-core = { module = "org.assertj:assertj-core" }
+logback-classic = { module = "ch.qos.logback:logback-classic" }
+spring-beans = { module = "org.springframework:spring-beans" }
+spring-context = { module = "org.springframework:spring-context" }
+slf4j-api = { module = "org.slf4j:slf4j-api" }
 
 # Not in Spring Boot BOM
 commons-io = { module = "commons-io:commons-io", version.ref = "commonsIo" }
 requirements = { module = "com.github.cowwoc.requirements:java", version.ref = "requirements" }
 
 [plugins]
-versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin" }
 javafx = { id = "org.openjfx.javafxplugin", version.ref = "javafxPlugin" }
+versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin" }
