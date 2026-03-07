@@ -1,5 +1,5 @@
 plugins {
-    id("java-library")
+    `java-library`
     alias(libs.plugins.versions)
 }
 
@@ -20,6 +20,7 @@ allprojects {
 
 subprojects {
     apply(plugin = "java-library")
+    apply(plugin = "jacoco")
     apply(plugin = "maven-publish")
 
     base {
@@ -64,12 +65,23 @@ subprojects {
             }
         }
     }
+
     tasks.named("build") { dependsOn("publishToMavenLocal") }
 
-    tasks.withType<Test> {
+    tasks.test {
         useJUnitPlatform()
 
         // ignore failing tests
         ignoreFailures = true
+
+        finalizedBy(tasks.named("jacocoTestReport"))
+    }
+
+    tasks.named<JacocoReport>("jacocoTestReport") {
+        dependsOn(tasks.test)
+        reports {
+            xml.required = true
+            html.required = true
+        }
     }
 }
