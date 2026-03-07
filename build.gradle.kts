@@ -34,11 +34,11 @@ subprojects {
         archivesName = "${rootProject.name}-${project.name}"
     }
 
-    afterEvaluate {
-        configurations.all {
-            resolutionStrategy.failOnDynamicVersions()
-        }
+    configurations.all {
+        resolutionStrategy.failOnDynamicVersions()
+    }
 
+    afterEvaluate {
         dependencies {
             implementation(platform(libs.spring.boot.bom))
 
