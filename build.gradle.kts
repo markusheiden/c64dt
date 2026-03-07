@@ -10,6 +10,9 @@ java {
         // Use Eclipse Temurin (provided by Adoptium).
         vendor.set(JvmVendorSpec.ADOPTIUM)
     }
+
+    withSourcesJar()
+    withJavadocJar()
 }
 
 allprojects {
