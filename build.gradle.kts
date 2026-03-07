@@ -7,24 +7,6 @@ tasks.wrapper {
     gradleVersion = libs.versions.gradle.get()
 }
 
-java {
-    // https://docs.gradle.org/current/userguide/toolchains.html
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(25))
-        // Use Eclipse Temurin (provided by Adoptium).
-        vendor.set(JvmVendorSpec.ADOPTIUM)
-    }
-
-    withSourcesJar()
-    withJavadocJar()
-}
-
-allprojects {
-    repositories {
-        mavenCentral()
-    }
-}
-
 subprojects {
     apply(plugin = "java-library")
     apply(plugin = "jacoco")
@@ -34,8 +16,28 @@ subprojects {
         archivesName = "${rootProject.name}-${project.name}"
     }
 
+    repositories {
+        mavenCentral()
+    }
+
+    configure<JavaPluginExtension> {
+        // https://docs.gradle.org/current/userguide/toolchains.html
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(25))
+            // Use Eclipse Temurin (provided by Adoptium).
+            vendor.set(JvmVendorSpec.ADOPTIUM)
+        }
+
+        withSourcesJar()
+        withJavadocJar()
+    }
+
     configurations.all {
         resolutionStrategy.failOnDynamicVersions()
+
+        // Exclude logback provided via spring.
+        exclude(group = "ch.qos.logback", module = "logback-classic")
+
     }
 
     afterEvaluate {
@@ -53,9 +55,12 @@ subprojects {
         }
     }
 
-    configurations.all {
-        // Exclude logback provided via spring.
-        exclude(group = "ch.qos.logback", module = "logback-classic")
+    tasks.withType<Javadoc> {
+        (options as StandardJavadocDocletOptions).apply {
+            // Declare custom tags so Javadoc doesn't warn about them.
+            // Format: "tagname:locations:title" — locations 'a' means anywhere
+            tags("require:a:Preconditions and Postconditions")
+        }
     }
 
     configure<PublishingExtension> {
