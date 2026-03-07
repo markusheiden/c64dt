@@ -35,7 +35,7 @@ public class ByteUtil {
    */
   public static int toWord(byte[] data, int pos) {
     requireThat(data, "data").isNotNull();
-    requireThat(pos + 1, "pos + 1").isLessThan(data.length, "data.length");
+    requireThat(pos + 1, "pos+1").isLessThan(data.length, "data.length");
 
     return toWord(data[pos], data[pos + 1]);
   }

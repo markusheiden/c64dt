@@ -26,7 +26,7 @@ public class TextUtil {
     requireThat(text, "text").isNotNull();
     requireThat(pos, "pos").isGreaterThanOrEqualTo(0);
     requireThat(length, "length").isGreaterThanOrEqualTo(0);
-    requireThat(pos + length, "pos + length").isLessThanOrEqualTo(text.length, "text.length");
+    requireThat(pos + length, "pos+length").isLessThanOrEqualTo(text.length, "text.length");
 
     for (int i = pos + length - 1; i >= pos && text[i] == (byte) 0xA0; --i) {
       --length;

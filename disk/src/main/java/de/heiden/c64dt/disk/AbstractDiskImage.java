@@ -40,7 +40,7 @@ public abstract class AbstractDiskImage implements IDiskImage {
   protected AbstractDiskImage(int sides, int tracks, boolean hasErrors) {
     requireThat(sides, "sides").isGreaterThanOrEqualTo(1).isLessThanOrEqualTo(2);
     requireThat(tracks, "tracks").isGreaterThanOrEqualTo(0);
-    requireThat(tracks % sides, "tracks % sides").isEqualTo(0);
+    requireThat(tracks % sides, "tracks%sides").isEqualTo(0);
 
     this.sides = sides;
     this.tracks = tracks;

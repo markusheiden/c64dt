@@ -1,12 +1,12 @@
 package de.heiden.c64dt.net.code;
 
+import de.heiden.c64dt.net.AbstractConnection;
+import de.heiden.c64dt.net.Packet;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
-
-import de.heiden.c64dt.net.AbstractConnection;
-import de.heiden.c64dt.net.Packet;
 
 import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.bytes.AddressUtil.requireValidAddress;
@@ -70,7 +70,7 @@ public class C64Connection extends AbstractConnection {
   public synchronized void write(int address, byte... data) throws IOException {
     requireValidAddress(address);
     requireThat(data, "data").isNotNull();
-    requireThat(4 + data.length, "4 + data.length").isLessThanOrEqualTo(getPacketSize());
+    requireThat(4 + data.length, "4+data.length").isLessThanOrEqualTo(getPacketSize());
     requireThat(isOpen(), "isOpen()").isTrue();
 
     for (int ptr = 0, remain = data.length; remain > 0; ptr += 128, remain -= 128) {
