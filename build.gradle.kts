@@ -3,6 +3,10 @@ plugins {
     alias(libs.plugins.versions)
 }
 
+tasks.wrapper {
+    gradleVersion = libs.versions.gradle.get()
+}
+
 java {
     // https://docs.gradle.org/current/userguide/toolchains.html
     toolchain {
@@ -69,7 +73,7 @@ subprojects {
         }
     }
 
-    tasks.named("build") { dependsOn("publishToMavenLocal") }
+    // tasks.named("build") { dependsOn("publishToMavenLocal") }
 
     tasks.test {
         useJUnitPlatform()

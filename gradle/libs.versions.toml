@@ -1,14 +1,13 @@
 [versions]
-springBoot = "4.0.3"
-
-# Not in Spring Boot BOM
+gradle = "9.4.0"
 commonsIo = "2.20.0"
 openjfx = "25.0.2"
 requirements = "11.0"
+springBoot = "4.0.3"
 
 # Gradle plugins
-versionsPlugin = "0.53.0"
 javafxPlugin = "0.1.0"
+versionsPlugin = "0.53.0"
 
 [libraries]
 # Spring Boot BOM — imported as platform() in each subproject
