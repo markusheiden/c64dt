@@ -25,7 +25,7 @@ public class FileMode {
 
   /**
    * Is file locked?.
-   * (< is displayed, when locked).
+   * (&lt; is displayed, when locked).
    */
   public boolean isLocked() {
     return locked;

@@ -9,7 +9,7 @@ public class HexUtil {
   /**
    * String representation of a byte.
    *
-   * @require value < 0x100
+   * @require value &lt; 0x100
    */
   public static String hexBytePlain(int value) {
     requireThat(value, "value").isBetween(0, 0xFF + 1);
@@ -20,7 +20,7 @@ public class HexUtil {
   /**
    * String representation of a byte with leading '$'.
    *
-   * @require value < 0x100
+   * @require value &lt; 0x100
    */
   public static String hexByte(int value) {
     return "$" + hexBytePlain(value);
@@ -29,7 +29,7 @@ public class HexUtil {
   /**
    * String representation of a word.
    *
-   * @require value < 0x10000
+   * @require value &lt; 0x10000
    */
   public static String hexWordPlain(int value) {
     requireThat(value, "value").isBetween(0, 0xFFFF + 1);
@@ -40,7 +40,7 @@ public class HexUtil {
   /**
    * String representation of a word with leading '$'.
    *
-   * @require value < 0x10000
+   * @require value &lt; 0x10000
    */
   public static String hexWord(int value) {
     return "$" + hexWordPlain(value);
@@ -49,7 +49,7 @@ public class HexUtil {
   /**
    * String representation of a byte or a word with leading '$'.
    *
-   * @require value < 0x10000
+   * @require value &lt; 0x10000
    */
   public static String hexPlain(int value) {
     requireThat(value, "value").isBetween(0, 0xFFFF + 1);
@@ -60,7 +60,7 @@ public class HexUtil {
   /**
    * String representation of a byte or a word with leading '$'.
    *
-   * @require value < 0x10000
+   * @require value &lt; 0x10000
    */
   public static String hex(int value) {
     return "$" + hexPlain(value);
