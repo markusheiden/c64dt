@@ -58,8 +58,8 @@ subprojects {
     tasks.withType<Javadoc> {
         (options as StandardJavadocDocletOptions).apply {
             // Declare custom tags so Javadoc doesn't warn about them.
-            // Format: "tagname:locations:title" — locations 'a' means anywhere
-            tags("require:a:Preconditions and Postconditions")
+            // Format: "tagname:locations:title". Location c: constructor, m: method.
+            tags("require:cm:Preconditions")
         }
     }
 
