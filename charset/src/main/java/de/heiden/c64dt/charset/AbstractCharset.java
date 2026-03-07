@@ -12,8 +12,8 @@ public abstract class AbstractCharset extends Charset {
   /**
    * Constructor.
    *
-   * @param canonicalName
-   * @param aliases
+   * @param canonicalName name.
+   * @param aliases aliases
    */
   protected AbstractCharset(String canonicalName, String... aliases) {
     super(canonicalName, aliases);
