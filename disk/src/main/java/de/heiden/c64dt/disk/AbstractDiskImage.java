@@ -1,15 +1,15 @@
 package de.heiden.c64dt.disk;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
 import de.heiden.c64dt.bytes.ByteUtil;
 import de.heiden.c64dt.charset.TextUtil;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidSector;
@@ -21,7 +21,7 @@ public abstract class AbstractDiskImage implements IDiskImage {
   /**
    * Logger.
    */
-  private final Logger log = LoggerFactory.getLogger(getClass());
+  private final Logger logger = LoggerFactory.getLogger(getClass());
 
   private final int sides;
   private final int tracks;
@@ -67,7 +67,7 @@ public abstract class AbstractDiskImage implements IDiskImage {
     byte[] bytes = IOUtils.toByteArray(stream);
     for (int pos = 0, track = 1; track <= getTracks(); track++) {
       for (int sector = 0; sector < getSectors(track) && pos < bytes.length; sector++, pos += 256) {
-        log.info("Reading track {} sector {}.", track, sector);
+        logger.info("Reading track {} sector {}.", track, sector);
         System.arraycopy(bytes, pos, sectors[track - 1][sector], 0, 256);
       }
     }
