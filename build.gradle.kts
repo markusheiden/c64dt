@@ -83,9 +83,6 @@ subprojects {
     tasks.test {
         useJUnitPlatform()
 
-        // ignore failing tests
-        ignoreFailures = true
-
         finalizedBy(tasks.named("jacocoTestReport"))
     }
 
