@@ -5,6 +5,6 @@ dependencies {
     implementation(project(":common"))
 
     implementation(libs.commons.io)
-    implementation(libs.jakarta.xml.bind.api)
-    runtimeOnly(libs.jaxb.runtime)
+    implementation("jakarta.xml.bind:jakarta.xml.bind-api")
+    runtimeOnly("org.glassfish.jaxb:jaxb-runtime")
 }

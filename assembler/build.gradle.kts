@@ -4,5 +4,5 @@ dependencies {
     implementation(project(":common"))
 
     implementation(libs.commons.io)
-    implementation(libs.jakarta.xml.bind.api)
+    implementation("jakarta.xml.bind:jakarta.xml.bind-api")
 }

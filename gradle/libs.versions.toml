@@ -13,18 +13,6 @@ versionsPlugin = "0.53.0"
 # Spring Boot BOM — imported as platform() in each subproject
 spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springBoot" }
 
-# Managed by Spring Boot BOM (version comes from the platform)
-assertj-core = { module = "org.assertj:assertj-core" }
-jakarta-annotation-api = { module = "jakarta.annotation:jakarta.annotation-api" }
-jakarta-xml-bind-api = { module = "jakarta.xml.bind:jakarta.xml.bind-api" }
-jaxb-runtime = { module = "org.glassfish.jaxb:jaxb-runtime" }
-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
-logback-classic = { module = "ch.qos.logback:logback-classic" }
-spring-beans = { module = "org.springframework:spring-beans" }
-spring-context = { module = "org.springframework:spring-context" }
-slf4j-api = { module = "org.slf4j:slf4j-api" }
-
 # Not in Spring Boot BOM
 commons-io = { module = "commons-io:commons-io", version.ref = "commonsIo" }
 requirements = { module = "com.github.cowwoc.requirements:java", version.ref = "requirements" }

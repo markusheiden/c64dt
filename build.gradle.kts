@@ -44,14 +44,14 @@ subprojects {
         dependencies {
             implementation(platform(libs.spring.boot.bom))
 
-            implementation(libs.slf4j.api)
-            runtimeOnly(libs.logback.classic)
+            implementation("org.slf4j:slf4j-api")
+            runtimeOnly("ch.qos.logback:logback-classic")
 
             implementation(libs.requirements)
 
-            testRuntimeOnly(libs.junit.platform.launcher)
-            testImplementation(libs.junit.jupiter)
-            testImplementation(libs.assertj.core)
+            testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+            testImplementation("org.junit.jupiter:junit-jupiter")
+            testImplementation("org.assertj:assertj-core")
         }
     }
 
