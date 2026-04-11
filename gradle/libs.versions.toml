@@ -1,9 +1,9 @@
 [versions]
-commonsIo = "2.20.0"
-gradle = "9.4.0"
+commonsIo = "2.21.0"
+gradle = "9.4.1"
 openjfx = "25.0.2"
 requirements = "11.0"
-springBoot = "4.0.3"
+springBoot = "4.0.5"
 
 # Gradle plugins
 javafxPlugin = "0.1.0"
