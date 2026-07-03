@@ -1,22 +1,22 @@
 [versions]
-commonsIo = "2.21.0"
-gradle = "9.4.1"
+commons-io = "2.22.0"
+gradle = "9.6.1"
 openjfx = "26"
 requirements = "11.0"
-springBoot = "4.0.5"
+spring-boot = "4.1.0"
 
 # Gradle plugins
-javafxPlugin = "0.1.0"
-versionsPlugin = "0.53.0"
+javafx-plugin = "0.1.0"
+versions-plugin = "0.54.0"
 
 [libraries]
 # Spring Boot BOM — imported as platform() in each subproject
-spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springBoot" }
+spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
 
 # Not in Spring Boot BOM
-commons-io = { module = "commons-io:commons-io", version.ref = "commonsIo" }
+commons-io = { module = "commons-io:commons-io", version.ref = "commons-io" }
 requirements = { module = "com.github.cowwoc.requirements:java", version.ref = "requirements" }
 
 [plugins]
-javafx = { id = "org.openjfx.javafxplugin", version.ref = "javafxPlugin" }
-versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin" }
+javafx = { id = "org.openjfx.javafxplugin", version.ref = "javafx-plugin" }
+versions = { id = "com.github.ben-manes.versions", version.ref = "versions-plugin" }
