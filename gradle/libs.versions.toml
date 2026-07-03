@@ -9,6 +9,10 @@ spring-boot = "4.1.0"
 javafx-plugin = "0.1.0"
 versions-plugin = "0.54.0"
 
+[plugins]
+javafx = { id = "org.openjfx.javafxplugin", version.ref = "javafx-plugin" }
+versions = { id = "com.github.ben-manes.versions", version.ref = "versions-plugin" }
+
 [libraries]
 # Spring Boot BOM — imported as platform() in each subproject
 spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
@@ -16,7 +20,3 @@ spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies"
 # Not in Spring Boot BOM
 commons-io = { module = "commons-io:commons-io", version.ref = "commons-io" }
 requirements = { module = "com.github.cowwoc.requirements:java", version.ref = "requirements" }
-
-[plugins]
-javafx = { id = "org.openjfx.javafxplugin", version.ref = "javafx-plugin" }
-versions = { id = "com.github.ben-manes.versions", version.ref = "versions-plugin" }
