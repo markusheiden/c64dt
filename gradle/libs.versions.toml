@@ -1,13 +1,13 @@
 [versions]
 commons-io = "2.22.0"
-gradle = "9.7.1"
-openjfx = "26"
+gradle = "9.8.1"
+openjfx = "27"
 requirements = "11.0"
 spring-boot = "4.1.1"
 
 # Gradle plugins
 javafx-plugin = "0.1.0"
-versions-plugin = "0.61.0"
+versions-plugin = "0.66.0"
 
 [plugins]
 javafx = { id = "org.openjfx.javafxplugin", version.ref = "javafx-plugin" }

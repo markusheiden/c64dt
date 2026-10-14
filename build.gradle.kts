@@ -23,7 +23,7 @@ subprojects {
     configure<JavaPluginExtension> {
         // https://docs.gradle.org/current/userguide/toolchains.html
         toolchain {
-            languageVersion = JavaLanguageVersion.of(26)
+            languageVersion = JavaLanguageVersion.of(27)
             // Use Eclipse Temurin (provided by Adoptium).
             vendor = JvmVendorSpec.ADOPTIUM
         }
