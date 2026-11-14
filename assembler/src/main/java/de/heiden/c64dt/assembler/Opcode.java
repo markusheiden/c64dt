@@ -373,6 +373,7 @@ public enum Opcode {
   private final boolean legal;
   private final OpcodeType type;
   private final OpcodeMode mode;
+  private final int size;
   private final int cycles;
 
   /**
@@ -424,7 +425,7 @@ public enum Opcode {
    * Size of the whole command.
    */
   public int getSize() {
-    return 1 + mode.getSize();
+    return size;
   }
 
   /**
@@ -486,6 +487,7 @@ public enum Opcode {
     this.legal = legal;
     this.type = type;
     this.mode = mode;
+    this.size = 1 + mode.getSize();
     this.cycles = cycles;
   }
 }
