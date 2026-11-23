@@ -116,7 +116,7 @@ public class C64TextArea extends C64Component {
   }
 
   /**
-   * Height of rows.
+   * Width of columns.
    */
   public int getColumnWidth() {
     return (int) Math.round(COLUMN_WIDTH * _factor);

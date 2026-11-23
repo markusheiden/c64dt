@@ -24,7 +24,7 @@ import static de.heiden.c64dt.assembler.OpcodeType.JSR;
 import static de.heiden.c64dt.bytes.HexUtil.hexWord;
 
 /**
- * Detects JSR commands to predefined address which are followed by fixed length or zero-terminated arguments.
+ * Detects JSR commands to a predefined address, which are followed by fixed length or zero-terminated arguments.
  * Additionally it automatically detects JSR commands which are followed by their zero-terminated arguments.
  */
 public class JsrDetector implements IDetector {
@@ -198,7 +198,7 @@ public class JsrDetector implements IDetector {
    * @param kind Textual description of argument type.
    * @param address Absolute address of subroutine.
    * @param arguments Number of argument bytes of subroutine.
-   * @param type Code Type of argument bytes.
+   * @param type Code type of argument bytes.
    * @param matches Number of matches.
    * @param unreachable Number of unreachable code after JSR.
    * @param count Total number of JSRs.
@@ -229,7 +229,7 @@ public class JsrDetector implements IDetector {
 
   /**
    * Search end of zero-terminated argument.
-   * Stops after 256 Bytes.
+   * Stops after 256 bytes.
    *
    * @param commands Command buffer.
    * @param startIndex Index to start at.

@@ -99,7 +99,7 @@ public enum Error {
   }
 
   /**
-   * Represents this error an error.
+   * Does this error represent an error?.
    */
   public boolean isError() {
     return !this.equals(OK) && !this.equals(NO_ERROR);

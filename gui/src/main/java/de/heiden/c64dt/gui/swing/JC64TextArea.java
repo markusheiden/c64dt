@@ -117,7 +117,7 @@ public class JC64TextArea extends JC64CommonComponent {
   }
 
   /**
-   * Height of rows.
+   * Width of columns.
    */
   public int getColumnWidth() {
     return (int) Math.round(COLUMN_WIDTH * _factor);

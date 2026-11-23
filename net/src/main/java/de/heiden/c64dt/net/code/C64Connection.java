@@ -120,7 +120,7 @@ public class C64Connection extends AbstractConnection {
   }
 
   /**
-   * Read data from memory location ???.
+   * Read data from memory.
    * Command defined but not implemented in CodeNet client.
    * This method is currently broken!
    * TODO 2011-01-09 mh: Fix this.
@@ -136,7 +136,7 @@ public class C64Connection extends AbstractConnection {
     Packet packet = createPacket(8, hi(address), lo(address), hi(length), lo(length));
     Packet answer = sendPacketGetReply(packet);
     byte[] result = new byte[length];
-    // TODO 2011-01-09 mh: C64 currently just gets returns an ack.
+    // TODO 2011-01-09 mh: C64 currently just returns an ACK.
     System.arraycopy(answer.getData(), IDX_DATA, result, 0, length);
 
     return result;

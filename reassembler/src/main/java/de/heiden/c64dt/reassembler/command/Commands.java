@@ -226,7 +226,7 @@ public class Commands {
   }
 
   /**
-   * Is the given absolute address within the code?.
+   * Compute relative address from absolute address.
    *
    * @param address Absolute address.
    * @return Relative address or -1, if not found.

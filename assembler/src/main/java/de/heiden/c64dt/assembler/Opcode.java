@@ -407,7 +407,7 @@ public enum Opcode {
   /**
    * Is the argument of the opcode a reference to a code location?.
    * <p>
-   * TODO Rework detect all kinds of references, not just single location code references.
+   * TODO Rework: Detect all kinds of references, not just single location code references.
    */
   public boolean isCodeReference() {
     return type.isJump() && (mode == OpcodeMode.REL || mode == OpcodeMode.ABS);

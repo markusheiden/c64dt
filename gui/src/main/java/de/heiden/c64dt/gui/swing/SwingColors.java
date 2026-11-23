@@ -5,11 +5,11 @@ import de.heiden.c64dt.gui.C64Color;
 import java.awt.*;
 
 /**
- * C64 colors in swing representation.
+ * C64 colors in Swing representation.
  */
 class SwingColors {
   /**
-   * C64 colors in swing representation.
+   * C64 colors in Swing representation.
    */
   public static final Color[] COLOR = new Color[C64Color.values().length];
 

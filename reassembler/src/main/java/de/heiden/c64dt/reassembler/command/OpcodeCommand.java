@@ -89,7 +89,7 @@ public class OpcodeCommand extends AbstractCommand {
   }
 
   /**
-   * Does the control flow may not reach the opcode directly after this opcode?
+   * Does the control flow never reach the opcode directly after this opcode?.
    */
   @Override
   public final boolean isEnd() {
