@@ -8,8 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test for {@link JsrDetector}
@@ -34,17 +33,17 @@ public class JsrDetectorTest {
 
     List<Integer> references1000 = crossReference.get(0x1000);
     // JSR at relative address 0 references $1000
-    assertTrue(references1000.contains(0));
+    assertThat(references1000).contains(0);
     // JSR at relative address 6 references $1000
-    assertTrue(references1000.contains(6));
+    assertThat(references1000).contains(6);
 
-    assertEquals(2, references1000.size());
+    assertThat(references1000).hasSize(2);
 
     List<Integer> references1003 = crossReference.get(0x1003);
     // JSR at relative address 3 references $1003
-    assertTrue(references1003.contains(3));
+    assertThat(references1003).contains(3);
 
-    assertEquals(1, references1003.size());
-    assertEquals(2, crossReference.size());
+    assertThat(references1003).hasSize(1);
+    assertThat(crossReference).hasSize(2);
   }
 }

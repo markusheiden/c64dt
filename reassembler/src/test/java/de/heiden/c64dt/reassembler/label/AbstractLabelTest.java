@@ -2,8 +2,7 @@ package de.heiden.c64dt.reassembler.label;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test for {@link AbstractLabel}.
@@ -13,7 +12,7 @@ public class AbstractLabelTest {
   public void testGetAddress() throws Exception {
     AbstractLabel label = new DataLabel(0x1234);
 
-    assertEquals(0x1234, label.getAddress());
+    assertThat(label.getAddress()).isEqualTo(0x1234);
   }
 
   @Test
@@ -22,18 +21,18 @@ public class AbstractLabelTest {
     AbstractLabel label1d = new DataLabel(1);
     AbstractLabel label2d = new DataLabel(2);
 
-    assertTrue(label1c.compareTo(label2d) < 0);
-    assertTrue(label2d.compareTo(label1c) > 0);
-    assertTrue(label1c.compareTo(label1d) == 0);
-    assertTrue(label1c.compareTo(label1c) == 0);
+    assertThat(label1c.compareTo(label2d)).isNegative();
+    assertThat(label2d.compareTo(label1c)).isPositive();
+    assertThat(label1c.compareTo(label1d)).isZero();
+    assertThat(label1c.compareTo(label1c)).isZero();
   }
 
   @Test
   public void testToString() throws Exception {
     AbstractLabel label = new DataLabel(0x1234);
 
-    assertEquals("l_1234", label.toString(0x1234));
-    assertEquals("l_1234 + 1", label.toString(0x1234 + 1));
-    assertEquals("l_1234 - 1", label.toString(0x1234 - 1));
+    assertThat(label.toString(0x1234)).isEqualTo("l_1234");
+    assertThat(label.toString(0x1234 + 1)).isEqualTo("l_1234 + 1");
+    assertThat(label.toString(0x1234 - 1)).isEqualTo("l_1234 - 1");
   }
 }

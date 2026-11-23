@@ -2,9 +2,7 @@ package de.heiden.c64dt.assembler;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test for {@link CodeBuffer}.
@@ -13,25 +11,25 @@ public class CodeBufferTest {
   @Test
   public void testHasMore() {
     CodeBuffer buffer = new CodeBuffer(0, new byte[1]);
-    assertTrue(buffer.hasMore());
+    assertThat(buffer.hasMore()).isTrue();
     buffer.readByte();
-    assertFalse(buffer.hasMore());
+    assertThat(buffer.hasMore()).isFalse();
   }
 
   @Test
   public void testHas() {
     CodeBuffer buffer = new CodeBuffer(0, new byte[2]);
-    assertTrue(buffer.has(0));
-    assertTrue(buffer.has(1));
-    assertTrue(buffer.has(2));
-    assertFalse(buffer.has(3));
+    assertThat(buffer.has(0)).isTrue();
+    assertThat(buffer.has(1)).isTrue();
+    assertThat(buffer.has(2)).isTrue();
+    assertThat(buffer.has(3)).isFalse();
   }
 
   @Test
   public void testReadByte() {
     CodeBuffer buffer = new CodeBuffer(0, new byte[]{0x12});
-    assertEquals(0x12, buffer.readByte());
-    assertFalse(buffer.has(1));
+    assertThat(buffer.readByte()).isEqualTo(0x12);
+    assertThat(buffer.has(1)).isFalse();
 
   }
 
@@ -39,9 +37,9 @@ public class CodeBufferTest {
   public void testRead() {
     CodeBuffer buffer = new CodeBuffer(0, new byte[]{0x12, 0x34, 0x56});
     // Read byte
-    assertEquals(0x12, buffer.read(1));
+    assertThat(buffer.read(1)).isEqualTo(0x12);
     // Read word
-    assertEquals(0x5634, buffer.read(2));
-    assertFalse(buffer.has(1));
+    assertThat(buffer.read(2)).isEqualTo(0x5634);
+    assertThat(buffer.has(1)).isFalse();
   }
 }

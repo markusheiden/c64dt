@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.net.InetAddress;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test for {@link C64Connection}.
@@ -82,9 +82,9 @@ public class C64ConnectionTest {
   }
 
   public void assertSentData(int... expected) {
-    assertEquals(expected.length, outputData.length);
+    assertThat(outputData.length).isEqualTo(expected.length);
     for (int i = 0; i < expected.length; i++) {
-      assertEquals((byte) expected[i], outputData[i], "Byte " + i);
+      assertThat(outputData[i]).as("Byte " + i).isEqualTo((byte) expected[i]);
     }
   }
 

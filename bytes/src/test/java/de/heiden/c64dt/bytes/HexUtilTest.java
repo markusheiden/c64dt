@@ -2,7 +2,7 @@ package de.heiden.c64dt.bytes;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test for {@link HexUtil}.
@@ -10,49 +10,49 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class HexUtilTest {
   @Test
   public void testHexBytePlain() throws Exception {
-    assertEquals("00", HexUtil.hexBytePlain(0x00));
-    assertEquals("12", HexUtil.hexBytePlain(0x12));
-    assertEquals("FF", HexUtil.hexBytePlain(0xFF));
+    assertThat(HexUtil.hexBytePlain(0x00)).isEqualTo("00");
+    assertThat(HexUtil.hexBytePlain(0x12)).isEqualTo("12");
+    assertThat(HexUtil.hexBytePlain(0xFF)).isEqualTo("FF");
   }
 
   @Test
   public void testHexByte() throws Exception {
-    assertEquals("$00", HexUtil.hexByte(0x00));
-    assertEquals("$12", HexUtil.hexByte(0x12));
-    assertEquals("$FF", HexUtil.hexByte(0xFF));
+    assertThat(HexUtil.hexByte(0x00)).isEqualTo("$00");
+    assertThat(HexUtil.hexByte(0x12)).isEqualTo("$12");
+    assertThat(HexUtil.hexByte(0xFF)).isEqualTo("$FF");
   }
 
   @Test
   public void testHexWordPlain() throws Exception {
-    assertEquals("0000", HexUtil.hexWordPlain(0x0000));
-    assertEquals("1234", HexUtil.hexWordPlain(0x1234));
-    assertEquals("FFFF", HexUtil.hexWordPlain(0xFFFF));
+    assertThat(HexUtil.hexWordPlain(0x0000)).isEqualTo("0000");
+    assertThat(HexUtil.hexWordPlain(0x1234)).isEqualTo("1234");
+    assertThat(HexUtil.hexWordPlain(0xFFFF)).isEqualTo("FFFF");
   }
 
   @Test
   public void testHexWord() throws Exception {
-    assertEquals("$0000", HexUtil.hexWord(0x0000));
-    assertEquals("$1234", HexUtil.hexWord(0x1234));
-    assertEquals("$FFFF", HexUtil.hexWord(0xFFFF));
+    assertThat(HexUtil.hexWord(0x0000)).isEqualTo("$0000");
+    assertThat(HexUtil.hexWord(0x1234)).isEqualTo("$1234");
+    assertThat(HexUtil.hexWord(0xFFFF)).isEqualTo("$FFFF");
   }
 
   @Test
   public void testHexPlain() throws Exception {
-    assertEquals("FFFF", HexUtil.hexPlain(0xFFFF));
-    assertEquals("1234", HexUtil.hexPlain(0x1234));
-    assertEquals("0100", HexUtil.hexPlain(0x0100));
-    assertEquals("FF", HexUtil.hexPlain(0xFF));
-    assertEquals("12", HexUtil.hexPlain(0x12));
-    assertEquals("00", HexUtil.hexPlain(0x00));
+    assertThat(HexUtil.hexPlain(0xFFFF)).isEqualTo("FFFF");
+    assertThat(HexUtil.hexPlain(0x1234)).isEqualTo("1234");
+    assertThat(HexUtil.hexPlain(0x0100)).isEqualTo("0100");
+    assertThat(HexUtil.hexPlain(0xFF)).isEqualTo("FF");
+    assertThat(HexUtil.hexPlain(0x12)).isEqualTo("12");
+    assertThat(HexUtil.hexPlain(0x00)).isEqualTo("00");
   }
 
   @Test
   public void testHex() throws Exception {
-    assertEquals("$FFFF", HexUtil.hex(0xFFFF));
-    assertEquals("$1234", HexUtil.hex(0x1234));
-    assertEquals("$0100", HexUtil.hex(0x0100));
-    assertEquals("$FF", HexUtil.hex(0xFF));
-    assertEquals("$12", HexUtil.hex(0x12));
-    assertEquals("$00", HexUtil.hex(0x00));
+    assertThat(HexUtil.hex(0xFFFF)).isEqualTo("$FFFF");
+    assertThat(HexUtil.hex(0x1234)).isEqualTo("$1234");
+    assertThat(HexUtil.hex(0x0100)).isEqualTo("$0100");
+    assertThat(HexUtil.hex(0xFF)).isEqualTo("$FF");
+    assertThat(HexUtil.hex(0x12)).isEqualTo("$12");
+    assertThat(HexUtil.hex(0x00)).isEqualTo("$00");
   }
 }

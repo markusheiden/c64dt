@@ -2,7 +2,7 @@ package de.heiden.c64dt.charset;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test for {@link PetSCIICharset}
@@ -12,20 +12,20 @@ public class PetSCIICharsetTest {
   public void decode() throws Exception {
     PetSCIICharset charset = new PetSCIICharset(true);
 
-    assertEquals('A', charset.toChar((byte) 0x41));
-    assertEquals('Z', charset.toChar((byte) 0x5A));
+    assertThat(charset.toChar((byte) 0x41)).isEqualTo('A');
+    assertThat(charset.toChar((byte) 0x5A)).isEqualTo('Z');
 
     // -> lower case
-    assertEquals(0, charset.toChar((byte) 0x0E));
+    assertThat(charset.toChar((byte) 0x0E)).isEqualTo((char) 0);
 
-    assertEquals('a', charset.toChar((byte) 0x41));
-    assertEquals('z', charset.toChar((byte) 0x5A));
-    assertEquals('A', charset.toChar((byte) 0x61));
-    assertEquals('Z', charset.toChar((byte) 0x7A));
+    assertThat(charset.toChar((byte) 0x41)).isEqualTo('a');
+    assertThat(charset.toChar((byte) 0x5A)).isEqualTo('z');
+    assertThat(charset.toChar((byte) 0x61)).isEqualTo('A');
+    assertThat(charset.toChar((byte) 0x7A)).isEqualTo('Z');
 
     // -> upper case
-    assertEquals(0, charset.toChar((byte) 0x8E));
+    assertThat(charset.toChar((byte) 0x8E)).isEqualTo((char) 0);
 
-    assertEquals('A', charset.toChar((byte) 0x41));
+    assertThat(charset.toChar((byte) 0x41)).isEqualTo('A');
   }
 }

@@ -3,9 +3,7 @@ package de.heiden.c64dt.reassembler.command;
 import de.heiden.c64dt.assembler.Opcode;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test for {@link CommandIterator}.
@@ -28,24 +26,24 @@ public class CommandIteratorTest {
 
     CommandIterator iter = new CommandIterator(commands);
 
-    assertTrue(iter.hasNext());
+    assertThat(iter.hasNext()).isTrue();
 
     // $1000 LDA $1234
-    assertEquals(Opcode.OPCODE_AD, ((OpcodeCommand) iter.next()).getOpcode());
-    assertEquals(0x0000, iter.getIndex());
-    assertEquals(0x1000, iter.getAddress());
+    assertThat(((OpcodeCommand) iter.next()).getOpcode()).isEqualTo(Opcode.OPCODE_AD);
+    assertThat(iter.getIndex()).isEqualTo(0x0000);
+    assertThat(iter.getAddress()).isEqualTo(0x1000);
 
     // Look ahead at next command does not change iterator
-    assertEquals(Opcode.OPCODE_8D, ((OpcodeCommand) iter.peek()).getOpcode());
-    assertEquals(0x0000, iter.getIndex());
-    assertEquals(0x1000, iter.getAddress());
+    assertThat(((OpcodeCommand) iter.peek()).getOpcode()).isEqualTo(Opcode.OPCODE_8D);
+    assertThat(iter.getIndex()).isEqualTo(0x0000);
+    assertThat(iter.getAddress()).isEqualTo(0x1000);
 
     // $1003 STA $1234
-    assertEquals(Opcode.OPCODE_8D, ((OpcodeCommand) iter.next()).getOpcode());
-    assertEquals(0x0003, iter.getIndex());
-    assertEquals(0x1003, iter.getAddress());
+    assertThat(((OpcodeCommand) iter.next()).getOpcode()).isEqualTo(Opcode.OPCODE_8D);
+    assertThat(iter.getIndex()).isEqualTo(0x0003);
+    assertThat(iter.getAddress()).isEqualTo(0x1003);
 
-    assertFalse(iter.hasNext());
+    assertThat(iter.hasNext()).isFalse();
   }
 
   /**
@@ -63,18 +61,18 @@ public class CommandIteratorTest {
 
     CommandIterator iter = new CommandIterator(commands).reverse();
 
-    assertTrue(iter.hasPrevious());
+    assertThat(iter.hasPrevious()).isTrue();
 
     // $1003 STA $1234
-    assertEquals(Opcode.OPCODE_8D, ((OpcodeCommand) iter.previous()).getOpcode());
-    assertEquals(0x0003, iter.getIndex());
-    assertEquals(0x1003, iter.getAddress());
+    assertThat(((OpcodeCommand) iter.previous()).getOpcode()).isEqualTo(Opcode.OPCODE_8D);
+    assertThat(iter.getIndex()).isEqualTo(0x0003);
+    assertThat(iter.getAddress()).isEqualTo(0x1003);
 
     // $1000 LDA $1234
-    assertEquals(Opcode.OPCODE_AD, ((OpcodeCommand) iter.previous()).getOpcode());
-    assertEquals(0x0000, iter.getIndex());
-    assertEquals(0x1000, iter.getAddress());
+    assertThat(((OpcodeCommand) iter.previous()).getOpcode()).isEqualTo(Opcode.OPCODE_AD);
+    assertThat(iter.getIndex()).isEqualTo(0x0000);
+    assertThat(iter.getAddress()).isEqualTo(0x1000);
 
-    assertFalse(iter.hasPrevious());
+    assertThat(iter.hasPrevious()).isFalse();
   }
 }

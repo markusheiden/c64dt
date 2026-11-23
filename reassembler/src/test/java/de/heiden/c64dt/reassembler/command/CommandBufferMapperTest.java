@@ -10,7 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.SortedMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test for {@link CommandBufferMapper}.
@@ -55,26 +55,26 @@ public class CommandBufferMapperTest {
     // code
     byte[] readCode = readCommands.getCode();
     for (int i = 0; i < code.length; i++) {
-      assertEquals(code[i], readCode[i], "Byte " + i + ":");
+      assertThat(readCode[i]).as("Byte " + i + ":").isEqualTo(code[i]);
     }
 
     // code types
     for (int index = 0; index < commands.getLength(); index++) {
-      assertEquals(commands.getType(index), readCommands.getType(index), "Index " + index + ":");
+      assertThat(readCommands.getType(index)).as("Index " + index + ":").isEqualTo(commands.getType(index));
     }
 
     // addresses
     SortedMap<Integer, Integer> commandsStart = commands.getStartAddresses();
     SortedMap<Integer, Integer> readStart = readCommands.getStartAddresses();
     for (Integer index : commandsStart.keySet()) {
-      assertEquals(commandsStart.get(index), readStart.get(index), "Index " + index + ":");
+      assertThat(readStart.get(index)).as("Index " + index + ":").isEqualTo(commandsStart.get(index));
     }
 
     // subroutines
     SortedMap<Integer, Integer> commandsSubroutines = commands.getStartAddresses();
     SortedMap<Integer, Integer> readSubroutines = readCommands.getStartAddresses();
     for (Integer address : commandsSubroutines.keySet()) {
-      assertEquals(commandsSubroutines.get(address), readSubroutines.get(address), "Address " + address + ":");
+      assertThat(readSubroutines.get(address)).as("Address " + address + ":").isEqualTo(commandsSubroutines.get(address));
     }
 
     // write read xml again
@@ -82,9 +82,9 @@ public class CommandBufferMapperTest {
     XmlUtil.marshal(readReassembler, os);
     byte[] readXml = os.toByteArray();
 
-    assertEquals(xml.length, readXml.length);
+    assertThat(readXml.length).isEqualTo(xml.length);
     for (int i = 0; i < xml.length; i++) {
-      assertEquals(xml[i], readXml[i], "Byte " + i);
+      assertThat(readXml[i]).as("Byte " + i).isEqualTo(xml[i]);
     }
   }
 }
