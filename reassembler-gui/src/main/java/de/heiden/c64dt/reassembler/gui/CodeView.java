@@ -60,7 +60,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent> {
   /**
    * Use another reassembler.
    *
-   * @param reassembler Reassembler
+   * @param reassembler Reassembler.
    */
   public void use(Reassembler reassembler) {
     requireThat(reassembler, "reassembler").isNotNull();
@@ -95,17 +95,17 @@ public class CodeView implements ApplicationListener<ReassemblerEvent> {
       @Override
       public void mouseReleased(MouseEvent e) {
         if ((e.getButton() & MouseEvent.BUTTON2) == 0) {
-          // not right mouse button -> ignore
+          // Not right mouse button -> ignore.
           return;
         }
 
-        // select row on click of the right mouse button too
+        // Select row on click of the right mouse button too.
         int row = table.rowAtPoint(e.getPoint());
         if (row >= 0 && !table.getSelectionModel().isSelectedIndex(row)) {
           table.getSelectionModel().setSelectionInterval(row, row);
         }
 
-        // show (dynamic) context menu
+        // Show (dynamic) context menu.
         contextMenu.show(table, e.getX(), e.getY());
       }
     });
@@ -134,7 +134,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent> {
   /**
    * Jump to the given relative address.
    *
-   * @param index Relative address
+   * @param index Relative address.
    */
   public void gotoIndex(int index) {
     if (!model.getReassembler().getCommands().hasIndex(index)) {

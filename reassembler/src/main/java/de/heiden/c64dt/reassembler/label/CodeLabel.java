@@ -7,7 +7,7 @@ public class CodeLabel extends AbstractLabel {
   /**
    * Constructor.
    *
-   * @param address address the label points to.
+   * @param address Address the label points to.
    */
   public CodeLabel(int address) {
     super(address);

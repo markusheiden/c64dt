@@ -51,7 +51,7 @@ public class CodeTableModel extends DefaultTableModel {
   /**
    * Use another reassembler.
    *
-   * @param reassembler Underlying representation
+   * @param reassembler Underlying representation.
    */
   public void use(Reassembler reassembler) {
     this.reassembler = reassembler;
@@ -62,12 +62,12 @@ public class CodeTableModel extends DefaultTableModel {
    * Update table model from commands.
    */
   public void update() {
-    // Clear old model
+    // Clear old model.
     setRowCount(0);
     rowToIndex.clear();
     indexToRow.clear();
 
-    // no model -> no representation
+    // No model -> no representation.
     if (reassembler == null) {
       return;
     }
@@ -109,7 +109,7 @@ public class CodeTableModel extends DefaultTableModel {
       builder.setLength(0);
       ILabel label = iter.getLabel();
       if (label != null) {
-        // TODO mh: check length of label?
+        // TODO mh: Check length of label?
         builder.append(label.toString(addr)).append(":");
       }
       String labelString = builder.toString();
@@ -118,7 +118,7 @@ public class CodeTableModel extends DefaultTableModel {
       if (command != null) {
         builder.append(command.toString(commands));
       } else {
-        // TODO mh: log error?
+        // TODO mh: Log error?
         builder.append("???");
       }
       String code = builder.toString();
@@ -130,12 +130,12 @@ public class CodeTableModel extends DefaultTableModel {
   /**
    * Add a row to the model.
    *
-   * @param index Relative address
-   * @param flags Flags
-   * @param address Absolute address
-   * @param bytes Bytes
-   * @param label Label
-   * @param code Code
+   * @param index Relative address.
+   * @param flags Flags.
+   * @param address Absolute address.
+   * @param bytes Bytes.
+   * @param label Label.
+   * @param code Code.
    */
   private void addRow(int index, String flags, int address, String bytes, String label, String code) {
     rowToIndex.put(getRowCount(), index);
@@ -146,7 +146,7 @@ public class CodeTableModel extends DefaultTableModel {
   /**
    * The relative address of the code shown in a given row.
    *
-   * @param row Row
+   * @param row Row.
    */
   public Integer getIndex(int row) {
     return rowToIndex.get(row);
@@ -155,7 +155,7 @@ public class CodeTableModel extends DefaultTableModel {
   /**
    * The row in which the relative address is shown.
    *
-   * @param index Index
+   * @param index Index.
    */
   public Integer getRow(int index) {
     return indexToRow.get(index);

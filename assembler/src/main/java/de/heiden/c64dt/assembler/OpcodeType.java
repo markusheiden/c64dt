@@ -4,7 +4,7 @@ package de.heiden.c64dt.assembler;
  * Opcode types.
  */
 public enum OpcodeType {
-  // logical/arithmetic commands
+  // Logical/arithmetic commands.
   ORA(false, false),
   AND(false, false),
   EOR(false, false),
@@ -24,7 +24,7 @@ public enum OpcodeType {
   LSR(false, false),
   ROR(false, false),
 
-  // move commands
+  // Move commands.
   LDA(false, false),
   STA(false, false),
   LDX(false, false),
@@ -42,7 +42,7 @@ public enum OpcodeType {
   PLP(false, false),
   PHP(false, false),
 
-  // jump/flag commands
+  // Jump/flag commands.
   BPL(true, false),
   BMI(true, false),
   BVC(true, false),
@@ -66,7 +66,7 @@ public enum OpcodeType {
   CLV(false, false),
   NOP(false, false),
 
-  // illegal opcodes
+  // Illegal opcodes.
   SLO(false, false),
   RLA(false, false),
   SRE(false, false),
@@ -86,7 +86,7 @@ public enum OpcodeType {
   TAS(false, false),
   LAS(false, false),
 
-  // non-functional opcodes
+  // Non-functional opcodes.
   KIL(false, false);
 
   public static final boolean REG = true;
@@ -112,8 +112,8 @@ public enum OpcodeType {
   /**
    * Constructor.
    *
-   * @param jump is the address a jump/branch destination?
-   * @param end is the opcode right after this opcode not reachable from this opcode?
+   * @param jump Is the address a jump/branch destination?
+   * @param end Is the opcode right after this opcode not reachable from this opcode?
    */
   OpcodeType(boolean jump, boolean end) {
     this.jump = jump;

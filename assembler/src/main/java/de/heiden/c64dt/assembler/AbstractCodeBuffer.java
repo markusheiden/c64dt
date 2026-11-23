@@ -14,8 +14,8 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
   /**
    * Constructor.
    *
-   * @param startAddress start address of the code
-   * @param length length of the code
+   * @param startAddress Start address of the code.
+   * @param length Length of the code.
    */
   protected AbstractCodeBuffer(int startAddress, int length) {
     requireThat(length, "length").isGreaterThanOrEqualTo(0);
@@ -70,7 +70,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
 
   @Override
   public final Opcode readOpcode() {
-    // remember position of last read opcode
+    // Remember position of last read opcode.
     opcode = position;
     return Opcode.opcode(readByte());
   }
@@ -99,7 +99,7 @@ public abstract class AbstractCodeBuffer implements ICodeBuffer {
   /**
    * Read a byte from the source.
    *
-   * @param index index of byte to read
+   * @param index Index of byte to read.
    */
   protected abstract int readByteAt(int index);
 }

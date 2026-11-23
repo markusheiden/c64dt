@@ -36,9 +36,9 @@ public class CodeBufferTest {
   @Test
   public void testRead() {
     CodeBuffer buffer = new CodeBuffer(0, new byte[]{0x12, 0x34, 0x56});
-    // Read byte
+    // Read byte.
     assertThat(buffer.read(1)).isEqualTo(0x12);
-    // Read word
+    // Read word.
     assertThat(buffer.read(2)).isEqualTo(0x5634);
     assertThat(buffer.has(1)).isFalse();
   }

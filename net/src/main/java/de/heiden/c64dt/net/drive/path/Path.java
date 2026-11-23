@@ -59,7 +59,7 @@ public class Path extends AbstractPath {
   /**
    * Trim filename length to max. 16 characters.
    *
-   * @param filename File name
+   * @param filename File name.
    */
   protected String trimTo16(String filename) {
     if (filename.length() <= 16) {
@@ -72,7 +72,7 @@ public class Path extends AbstractPath {
   @Override
   protected IPath doChangePath(byte[] path) throws FileNotFoundException {
     String decodedPath = decode(path);
-    // TODO implement wildcard search
+    // TODO Implement wildcard search.
     File newPath = new File(directory, decodedPath);
 
     if (!newPath.exists()) {
@@ -90,7 +90,7 @@ public class Path extends AbstractPath {
   @Override
   protected IStream doFile(byte[] filename) throws FileNotFoundException {
     String decodedFilename = decode(filename);
-    // TODO implement wildcard search
+    // TODO Implement wildcard search.
     File file = new File(directory, decodedFilename);
     return new FileStream(file);
   }

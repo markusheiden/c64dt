@@ -15,7 +15,7 @@ import static de.heiden.c64dt.bytes.HexUtil.hexWordPlain;
  */
 public class Disassembler {
   /**
-   * List basic header and disassemble.
+   * List BASIC header and disassemble.
    *
    * @param code Code buffer.
    * @param output Output for reassembled code.
@@ -25,7 +25,7 @@ public class Disassembler {
   }
 
   /**
-   * List basic header if program starts at $0801 and disassemble.
+   * List BASIC header if program starts at $0801 and disassemble.
    *
    * @param code Code buffer.
    * @param output Output for reassembled code.
@@ -35,11 +35,11 @@ public class Disassembler {
   }
 
   /**
-   * List basic header and disassemble.
+   * List BASIC header and disassemble.
    *
    * @param code Code buffer.
    * @param output Output for reassembled code.
-   * @param list List Basic header?.
+   * @param list List BASIC header?.
    */
   public void listAndDisassemble(ICodeBuffer code, Writer output, boolean list) throws IOException {
     requireThat(code, "code").isNotNull();
@@ -60,8 +60,8 @@ public class Disassembler {
   /**
    * Disassemble one opcode.
    *
-   * @param code Code buffer
-   * @param output output for reassembled code
+   * @param code Code buffer.
+   * @param output Output for reassembled code.
    */
   private void disassembleOpcode(ICodeBuffer code, BufferedWriter output) throws IOException {
     Opcode opcode = code.readOpcode();

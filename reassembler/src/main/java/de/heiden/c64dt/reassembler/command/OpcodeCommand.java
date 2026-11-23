@@ -23,7 +23,7 @@ public class OpcodeCommand extends AbstractCommand {
   /**
    * Constructor for opcodes with no argument.
    *
-   * @param opcode opcode
+   * @param opcode Opcode.
    */
   public OpcodeCommand(Opcode opcode) {
     this(opcode, -1);
@@ -31,10 +31,10 @@ public class OpcodeCommand extends AbstractCommand {
 
   /**
    * Constructor for opcodes with an argument.
-   * All opcodes are reachable for first.
+   * All opcodes are reachable at first.
    *
-   * @param opcode opcode
-   * @param argument argument
+   * @param opcode Opcode.
+   * @param argument Argument.
    */
   public OpcodeCommand(Opcode opcode, int argument) {
     super(CodeType.OPCODE);

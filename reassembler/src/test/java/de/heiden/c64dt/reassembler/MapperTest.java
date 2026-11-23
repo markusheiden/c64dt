@@ -15,14 +15,14 @@ public class MapperTest {
     reassembler.getCommands().setType(1, 3, CodeType.CODE);
     reassembler.getCommands().addSubroutine(new Subroutine(4, 2));
 
-    // TODO mh: Write to System.out
+    // TODO mh: Write to System.out.
     XmlUtil.marshal(reassembler, null);
 
     ByteArrayOutputStream os = new ByteArrayOutputStream();
     XmlUtil.marshal(reassembler, os);
     Reassembler read = XmlUtil.unmarshal(new ByteArrayInputStream(os.toByteArray()), Reassembler.class);
 
-    // TODO mh: Write to System.out
+    // TODO mh: Write to System.out.
     XmlUtil.marshal(read, System.out);
   }
 }

@@ -98,13 +98,13 @@ public class C64ConnectionTest {
     @Override
     public void sendPacket(Packet packet) throws IOException {
       super.sendPacket(packet);
-      // Capture after sending, because packet may have been padded now
+      // Capture after sending, because packet may have been padded now.
       outputData = packet.getData();
     }
 
     @Override
     public Packet receivePacket() throws IOException {
-      // Always acknowledge OK
+      // Always acknowledge OK.
       Packet ack = new Packet(4);
       ack.addByte(0xCA, 0x1F, 1, 1); // ACK OK
 

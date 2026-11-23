@@ -7,7 +7,7 @@ public class ExternalLabel extends AbstractLabel {
   /**
    * Constructor.
    *
-   * @param address address the label points to.
+   * @param address Address the label points to.
    */
   public ExternalLabel(int address) {
     super(address);

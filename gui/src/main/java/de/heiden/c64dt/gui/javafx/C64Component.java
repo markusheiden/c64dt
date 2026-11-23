@@ -8,11 +8,11 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 
 /**
- * Base class for component displaying c64 content.
+ * Base class for component displaying C64 content.
  */
 public abstract class C64Component extends Region {
   /**
-   * Width,
+   * Width.
    */
   private int _width;
 
@@ -49,9 +49,9 @@ public abstract class C64Component extends Region {
   /**
    * Constructor.
    *
-   * @param width width in pixel
-   * @param height height in pixel
-   * @param factor zoom factor
+   * @param width Width in pixel.
+   * @param height Height in pixel.
+   * @param factor Zoom factor.
    * @param resizable Is the backing image resizable?
    */
   protected C64Component(int width, int height, double factor, boolean resizable) {
@@ -70,13 +70,13 @@ public abstract class C64Component extends Region {
     }
 
     _view = new ImageView(new WritableImage(_width, _height));
-    // Translate image to start at 0, 0 after scaling
+    // Translate image to start at 0, 0 after scaling.
     _view.setTranslateX(_width * (_factor - 1) / 2);
     _view.setTranslateY(_height * (_factor - 1) / 2);
-    // Scale
+    // Scale.
     _view.setScaleX(_factor);
     _view.setScaleY(_factor);
-    // Avoid interpolation of scaled pixels
+    // Avoid interpolation of scaled pixels.
     _view.setSmooth(false);
     getChildren().add(_view);
   }
@@ -85,7 +85,7 @@ public abstract class C64Component extends Region {
    * Init fields.
    */
   private void onResize() {
-    // compute image size from new component size
+    // Compute image size from new component size.
     _width = Math.max(0, (int) (Math.floor(getWidth() / _factor)));
     _height = Math.max(0, (int) (Math.floor(getHeight() / _factor)));
 
@@ -130,7 +130,7 @@ public abstract class C64Component extends Region {
   /**
    * Set foreground color.
    *
-   * @param foreground foreground color index
+   * @param foreground Foreground color index.
    */
   public void setForegroundColor(int foreground) {
     _foreground = JavaFXColors.COLOR[foreground];
@@ -139,7 +139,7 @@ public abstract class C64Component extends Region {
   /**
    * Set foreground color.
    *
-   * @param foreground foreground color
+   * @param foreground Foreground color.
    */
   public void setForegroundColor(C64Color foreground) {
     setForegroundColor(foreground.ordinal());
@@ -155,7 +155,7 @@ public abstract class C64Component extends Region {
   /**
    * Set background color.
    *
-   * @param background background color index
+   * @param background Background color index.
    */
   public void setBackgroundColor(int background) {
     _background = JavaFXColors.COLOR[background];
@@ -164,7 +164,7 @@ public abstract class C64Component extends Region {
   /**
    * Set background color.
    *
-   * @param background background color
+   * @param background Background color.
    */
   public void setBackgroundColor(C64Color background) {
     setBackgroundColor(background.ordinal());

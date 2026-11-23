@@ -18,7 +18,7 @@ public interface ILabel extends Comparable<ILabel> {
    * String representation of this label.
    * +/- X will be added, if needed.
    *
-   * @param address absolute address this label is used for
+   * @param address Absolute address this label is used for.
    */
   String toString(int address);
 }

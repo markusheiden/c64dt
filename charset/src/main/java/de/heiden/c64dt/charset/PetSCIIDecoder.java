@@ -38,7 +38,7 @@ public class PetSCIIDecoder extends AbstractDecoder {
   /**
    * Decode a single char.
    *
-   * @param b Encode char
+   * @param b Encoded char.
    */
   protected char toChar(byte b) throws UnmappableCharacterException {
     int c = b & 0xFF;
@@ -65,7 +65,7 @@ public class PetSCIIDecoder extends AbstractDecoder {
           charset.upper = false;
           throw new UnmappableCharacterException(1);
         case 0x20:
-          return ' '; // blank
+          return ' '; // Blank.
         case 0x21:
           return '!';
         case 0x22:

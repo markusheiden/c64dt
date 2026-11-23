@@ -43,7 +43,7 @@ public class ByteUtil {
   /**
    * Highbyte of 16 bit word.
    *
-   * @param word 16 bit word
+   * @param word 16 bit word.
    */
   public static int hi(int word) {
     requireThat(word, "word").isGreaterThanOrEqualTo(0x0000).isLessThanOrEqualTo(0xFFFF);
@@ -54,7 +54,7 @@ public class ByteUtil {
   /**
    * Lowbyte of 16 bit word.
    *
-   * @param word 16 bit word
+   * @param word 16 bit word.
    */
   public static int lo(int word) {
     requireThat(word, "word").isGreaterThanOrEqualTo(0x0000).isLessThanOrEqualTo(0xFFFF);

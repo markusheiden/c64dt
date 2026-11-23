@@ -11,7 +11,7 @@ import de.heiden.c64dt.disk.IDiskImage;
 import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
- * Component for displaying a bam.
+ * Component for displaying a BAM.
  */
 public class JBam extends JComponent {
   private Color free;
@@ -40,7 +40,7 @@ public class JBam extends JComponent {
   /**
    * Set disk image (model).
    *
-   * @param diskImage disk image
+   * @param diskImage Disk image.
    */
   public void setDiskImage(IDiskImage diskImage) {
     requireThat(diskImage, "diskImage").isNotNull();
@@ -85,30 +85,30 @@ public class JBam extends JComponent {
     FontMetrics fontMetrics = g.getFontMetrics();
     int descent = fontMetrics.getDescent();
 
-    // track numbers
+    // Track numbers.
     g.setColor(getForeground());
-    int x = leftSpace + left + border + box / 2; // center of first horizontal box
-    int y = topSpace / 2 + height - descent; // base line of top space
+    int x = leftSpace + left + border + box / 2; // Center of first horizontal box.
+    int y = topSpace / 2 + height - descent; // Base line of top space.
     for (int track = 1; track < diskImage.getTracks(); track += 10) {
       String description = Integer.toString(track);
-      // draw centered regarding to box
+      // Draw centered regarding to box.
       Rectangle2D bounds = fontMetrics.getStringBounds(description, g);
       g.drawString(description, (int) Math.round(x - bounds.getWidth() / 2), y);
       x += 10 * (box + border);
     }
 
-    // sector numbers
+    // Sector numbers.
     g.setColor(getForeground());
-    y = topSpace + height + border + box / 2; // center of first vertical box
+    y = topSpace + height + border + box / 2; // Center of first vertical box.
     for (int sector = 0; sector < diskImage.getSectors(); sector += 10) {
       String description = Integer.toString(sector);
-      // draw centered regarding to box
+      // Draw centered regarding to box.
       Rectangle2D bounds = fontMetrics.getStringBounds(description, g);
       g.drawString(description, (int) Math.ceil(left - bounds.getWidth()) + (left - leftSpace) / 2, (int) Math.round(y + bounds.getHeight() / 2) - descent);
       y += 10 * (box + border);
     }
 
-    // bam map
+    // BAM map.
     x = leftSpace + left;
     for (int track = 1; track <= diskImage.getTracks(); track++) {
       y = topSpace + height;

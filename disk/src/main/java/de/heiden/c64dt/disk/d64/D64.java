@@ -14,8 +14,8 @@ public class D64 extends AbstractDiskImage {
   /**
    * Constructor.
    *
-   * @param tracks number of tracks
-   * @param hasErrors support error informations?
+   * @param tracks Number of tracks.
+   * @param hasErrors Support error information?
    */
   public D64(int tracks, boolean hasErrors) {
     super(1, tracks, hasErrors);
@@ -46,7 +46,7 @@ public class D64 extends AbstractDiskImage {
   }
 
   //
-  // BAM, directory
+  // BAM, directory.
   //
 
   @Override
@@ -57,7 +57,7 @@ public class D64 extends AbstractDiskImage {
     int tracks = getTracks();
     for (int track = 1, pos = 0x04; track <= tracks; track++, pos += 4) {
       if (track == 37) {
-        // TODO currently only Dolphin DOS support implemented
+        // TODO Currently only Dolphin DOS support implemented.
         pos = 0xAC;
       }
       readBAM(result, track, bam, pos);

@@ -41,7 +41,7 @@ public class CodeTypeActions {
   /**
    * Constructor.
    *
-   * @param table The table this action works on
+   * @param table The table this action works on.
    */
   public CodeTypeActions(final JTable table) {
     this.table = table;
@@ -63,7 +63,7 @@ public class CodeTypeActions {
   /**
    * Add the actions to a menu.
    *
-   * @param menu Menu
+   * @param menu Menu.
    */
   public void addToMenu(JPopupMenu menu) {
     menu.add(markAsUnknownAction);
@@ -123,7 +123,7 @@ public class CodeTypeActions {
   /**
    * Marks the code with the given code type.
    *
-   * @param type Code type
+   * @param type Code type.
    */
   private void mark(CodeType type) {
     CodeTableModel model = (CodeTableModel) table.getModel();
@@ -132,7 +132,7 @@ public class CodeTypeActions {
     for (int row : table.getSelectedRows()) {
       int index = model.getIndex(row);
       ICommand command = commands.getCommand(index);
-      // TODO mh: do not overwrite OPCODE etc.?
+      // TODO mh: Do not overwrite OPCODE etc.?
       commands.setType(index, index + command.getSize(), type);
     }
 

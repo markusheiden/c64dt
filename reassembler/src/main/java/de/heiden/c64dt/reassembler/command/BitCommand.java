@@ -19,8 +19,8 @@ public class BitCommand extends AbstractCommand {
   /**
    * Constructor.
    *
-   * @param opcode Opcode
-   * @param argument argument for opcode
+   * @param opcode Opcode.
+   * @param argument Argument for opcode.
    */
   public BitCommand(Opcode opcode, int argument) {
     super(CodeType.BIT);

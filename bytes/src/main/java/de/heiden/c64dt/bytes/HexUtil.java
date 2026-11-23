@@ -69,7 +69,7 @@ public class HexUtil {
   /**
    * Parse string representation of a hex number.
    *
-   * @param value String representation
+   * @param value String representation.
    */
   public static int parseHexBytePlain(String value) {
     int result = Integer.parseInt(value, 16);
@@ -81,7 +81,7 @@ public class HexUtil {
   /**
    * Parse string representation of a hex number.
    *
-   * @param value String representation
+   * @param value String representation.
    */
   public static int parseHexWordPlain(String value) {
     int result = Integer.parseInt(value, 16);

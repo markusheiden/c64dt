@@ -105,7 +105,7 @@ public enum OpcodeMode {
   REL(1, true) {
     @Override
     public int getAddress(int pc, int argument) {
-      // argument is a signed byte
+      // Argument is a signed byte.
       return (pc + 2 + (byte) argument) & 0xFFFF;
     }
 
@@ -148,7 +148,7 @@ public enum OpcodeMode {
   /**
    * Compute absolute address.
    *
-   * @param pc Program counter
+   * @param pc Program counter.
    */
   public int getAddress(int pc, int argument) {
     requireThat(isAddress(), "isAddress()").isTrue();
@@ -159,27 +159,27 @@ public enum OpcodeMode {
   /**
    * String representation for this address mode with a given argument.
    *
-   * @param pc address of opcode
-   * @param argument argument of opcode
+   * @param pc Address of opcode.
+   * @param argument Argument of opcode.
    */
   public String toString(int pc, int argument) {
-    // Default implementation, will be overridden by some modes
+    // Default implementation, will be overridden by some modes.
     return toString(getSize() == 1 ? hexByte(argument) : hexWord(argument));
   }
 
   /**
    * String representation for this address mode with a given (generic) argument.
-   * This method is used for reassembling, if the argument is label.
+   * This method is used for reassembling, if the argument is a label.
    *
-   * @param argument argument
+   * @param argument Argument.
    */
   public abstract String toString(String argument);
 
   /**
    * Constructor.
    *
-   * @param size number of bytes the argument takes
-   * @param isAddress is the argument a (non zero page) address?
+   * @param size Number of bytes the argument takes.
+   * @param isAddress Is the argument a (non zero page) address?
    */
   OpcodeMode(int size, boolean isAddress) {
     requireThat(size, "size").isGreaterThanOrEqualTo(0).isLessThanOrEqualTo(2);

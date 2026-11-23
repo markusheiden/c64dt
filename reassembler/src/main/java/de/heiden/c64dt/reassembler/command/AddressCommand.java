@@ -22,7 +22,7 @@ public class AddressCommand extends AbstractCommand {
   /**
    * Command for absolute address.
    *
-   * @param address address
+   * @param address Address.
    */
   public AddressCommand(int address) {
     super(CodeType.ADDRESS);

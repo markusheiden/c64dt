@@ -18,9 +18,9 @@ public class SectorIterator implements Iterator<byte[]> {
   /**
    * Constructor.
    *
-   * @param diskImage disk image
-   * @param track start track
-   * @param sector start sector
+   * @param diskImage Disk image.
+   * @param track Start track.
+   * @param sector Start sector.
    */
   public SectorIterator(IDiskImage diskImage, int track, int sector) {
     requireThat(diskImage, "diskImage").isNotNull();

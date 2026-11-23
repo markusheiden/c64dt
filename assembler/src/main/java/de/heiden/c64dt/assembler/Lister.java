@@ -35,8 +35,8 @@ public class Lister {
   /**
    * List BASIC program.
    *
-   * @param code Code buffer
-   * @param output output for BASIC listing
+   * @param code Code buffer.
+   * @param output Output for BASIC listing.
    */
   public void list(ICodeBuffer code, Writer output) throws IOException {
     try (BufferedWriter out = new NonClosingBufferedWriter(output)) {
@@ -48,12 +48,12 @@ public class Lister {
   /**
    * List BASIC program.
    *
-   * @param code Code buffer
-   * @param output output for BASIC listing
+   * @param code Code buffer.
+   * @param output Output for BASIC listing.
    */
   void list(ICodeBuffer code, BufferedWriter output) throws IOException {
     while (listLine(code, output)) {
-      // continue listing
+      // Continue listing.
     }
     output.newLine();
   }
@@ -61,13 +61,13 @@ public class Lister {
   /**
    * List one BASIC line.
    *
-   * @param code Code buffer
-   * @param output output for BASIC listing
+   * @param code Code buffer.
+   * @param output Output for BASIC listing.
    * @return Are there more commands?
    */
   boolean listLine(ICodeBuffer code, BufferedWriter output) throws IOException {
     int pc = code.getCurrentAddress();
-    // next address is not used for searching for the next command, because the linking may be broken
+    // Next address is not used for searching for the next command, because the linking may be broken.
     final int nextAddress = code.readWord();
     if (nextAddress == 0) {
       return false;
@@ -75,7 +75,7 @@ public class Lister {
 
     output.append(HexUtil.hexWordPlain(pc));
     output.append("  ");
-    // line number
+    // Line number.
     output.append(Integer.toString(code.readWord()));
     output.append(" ");
 
@@ -95,25 +95,25 @@ public class Lister {
   /**
    * List one BASIC byte.
    *
-   * @param b BASIC byte
-   * @param output output for BASIC listing
+   * @param b BASIC byte.
+   * @param output Output for BASIC listing.
    * @param escaped Escape mode active?
-   * @return New escape mode
+   * @return New escape mode.
    */
   boolean listByte(int b, BufferedWriter output, boolean escaped) throws IOException {
     if (b == 0x22) {
-      // " toggles escape mode
+      // " toggles escape mode.
       escaped = !escaped;
     }
 
     if (b == 0xFF) {
-      // Pi
+      // Pi.
       output.append("<PI>");
     } else if (b < 0x80 || escaped) {
-      // output char unmodified
+      // Output char unmodified.
       output.append(charset.toString((byte) b));
     } else {
-      // command
+      // Command.
       output.append(BASIC[b - 0x80]);
     }
 

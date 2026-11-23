@@ -33,7 +33,7 @@ public class CommandIteratorTest {
     assertThat(iter.getIndex()).isEqualTo(0x0000);
     assertThat(iter.getAddress()).isEqualTo(0x1000);
 
-    // Look ahead at next command does not change iterator
+    // Look ahead at next command does not change iterator.
     assertThat(((OpcodeCommand) iter.peek()).getOpcode()).isEqualTo(Opcode.OPCODE_8D);
     assertThat(iter.getIndex()).isEqualTo(0x0000);
     assertThat(iter.getAddress()).isEqualTo(0x1000);

@@ -11,9 +11,9 @@ public class TableUtil {
   /**
    * Get bounds for row +/- height rows.
    *
-   * @param table Table
-   * @param row Row
-   * @param height Height
+   * @param table Table.
+   * @param row Row.
+   * @param height Height.
    */
   public static Rectangle getRowBounds(JTable table, int row, int height) {
     int first = Math.max(0, row - height);

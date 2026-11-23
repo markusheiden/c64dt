@@ -68,7 +68,7 @@ public enum Error {
   WRITE_ERROR(0x0A),
 
   /**
-   * Disc sector id mismatch.
+   * Disc sector ID mismatch.
    */
   DISK_SECTOR_ID_MISMATCH(0x0B),
 
@@ -108,7 +108,7 @@ public enum Error {
   /**
    * Get error for error code.
    *
-   * @param error error code
+   * @param error Error code.
    */
   public static Error error(int error) {
     Error result = errors.get((byte) error);
@@ -124,7 +124,7 @@ public enum Error {
   /**
    * Constructor.
    *
-   * @param error error code
+   * @param error Error code.
    */
   Error(int error) {
     this.error = (byte) error;

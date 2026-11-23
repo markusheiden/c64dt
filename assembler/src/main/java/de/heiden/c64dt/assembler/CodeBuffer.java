@@ -21,8 +21,8 @@ public class CodeBuffer extends AbstractCodeBuffer {
   /**
    * Constructor.
    *
-   * @param address start address of the code
-   * @param code code
+   * @param address Start address of the code.
+   * @param code Code.
    */
   public CodeBuffer(int address, byte[] code) {
     super(address, code.length);
@@ -43,15 +43,15 @@ public class CodeBuffer extends AbstractCodeBuffer {
   }
 
   //
-  // Factories
+  // Factories.
   //
 
   /**
    * Create code buffer from program.
    * The first two bytes are used as start address.
    *
-   * @param startAddr Start address of code
-   * @param code Code
+   * @param startAddr Start address of code.
+   * @param code Code.
    */
   public static CodeBuffer fromCode(int startAddr, InputStream code) throws IOException {
     requireThat(startAddr, "startAddr").isGreaterThanOrEqualTo(0);
@@ -64,7 +64,7 @@ public class CodeBuffer extends AbstractCodeBuffer {
    * Create code buffer from program.
    * The first two bytes are used as start address.
    *
-   * @param program program with start address
+   * @param program Program with start address.
    */
   public static CodeBuffer fromProgram(InputStream program) throws IOException {
     requireThat(program, "program").isNotNull();
@@ -76,7 +76,7 @@ public class CodeBuffer extends AbstractCodeBuffer {
    * Create code buffer from program.
    * The first two bytes are used as start address.
    *
-   * @param program program with start address
+   * @param program Program with start address.
    */
   public static CodeBuffer fromProgram(byte[] program) throws IOException {
     requireThat(program, "program").isNotNull();

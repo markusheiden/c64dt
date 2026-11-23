@@ -45,7 +45,7 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
   /**
    * Use another reassembler.
    *
-   * @param reassembler Reassembler
+   * @param reassembler Reassembler.
    */
   public void use(Reassembler reassembler) {
     requireThat(reassembler, "reassembler").isNotNull();
@@ -92,7 +92,7 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
   /**
    * Select a relative address to show the cross reference for.
    *
-   * @param index Relative address
+   * @param index Relative address.
    */
   public void select(int index) {
     model.select(index);

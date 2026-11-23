@@ -52,7 +52,7 @@ public class Device {
     assertValidChannel(channel);
     requireThat(file, "file").isNotNull();
 
-    // create new channel from path
+    // Create new channel from path.
     if (channel != COMMAND_CHANNEL) {
       if (streams[channel].isOpen()) {
         close(channel);
@@ -117,7 +117,7 @@ public class Device {
   private class CommandStream extends AbstractStream {
     @Override
     public boolean isOpen() {
-      // the command channel is always open
+      // The command channel is always open.
       return true;
     }
 
@@ -126,19 +126,19 @@ public class Device {
       String command = C64Charset.LOWER.toString(data);
       if (command.toLowerCase().startsWith("cd:")) {
         String path = command.substring(3);
-        // TODO change path
+        // TODO Change path.
       }
     }
 
     @Override
     public byte[] doRead(int length) {
-      // reset error to OK when last error has been completely read
+      // Reset error to OK when last error has been completely read.
       if (getPosition() >= error.length) {
         error = Error.OK.toBytes(0, 0);
         return new byte[0];
       }
 
-      // read current error
+      // Read current error.
       length = Math.min(length, error.length - getPosition());
       byte[] result = new byte[length];
       System.arraycopy(error, getPosition(), result, 0, length);
@@ -149,7 +149,7 @@ public class Device {
 
     @Override
     public void doWrite(byte[] data) {
-      // nothing to do
+      // Nothing to do.
     }
   }
 }

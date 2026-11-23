@@ -78,7 +78,7 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
 
     result.code = commands.getCode();
 
-    // start addresses
+    // Start addresses.
     SortedMap<Integer, Integer> startAddresses = commands.getStartAddresses();
     for (Entry<Integer, Integer> entry : startAddresses.entrySet()) {
       AddressMapper address = new AddressMapper();
@@ -87,7 +87,7 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
       result.addresses.add(address);
     }
 
-    // subroutines
+    // Subroutines.
     for (Entry<Integer, Subroutine> entry : commands.getSubroutines().entrySet()) {
       SubroutineMapper subroutine = new SubroutineMapper();
       subroutine.address = entry.getKey();
@@ -96,7 +96,7 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
       result.subroutines.add(subroutine);
     }
 
-    // detected code types
+    // Detected code types.
     for (int index = 0; index < commands.getLength(); ) {
       int startIndex = index;
       CodeType type = commands.getType(index++);
@@ -104,7 +104,7 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
         continue;
       }
 
-      // count indexes with the same type
+      // Count indexes with the same type.
       int count = 1;
       for (; index < commands.getLength(); index++, count++) {
         if (!commands.getType(index).equals(type)) {
@@ -129,31 +129,31 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
   public CommandBuffer unmarshal(CommandBufferMapper xmlCommands) throws Exception {
     List<AddressMapper> addresses = xmlCommands.addresses;
 
-    // start address / first base address
+    // Start address / first base address.
     AddressMapper firstAddress = addresses.get(0);
     int startIndex = firstAddress.index;
     requireThat(startIndex, "startIndex").isEqualTo(0);
 
-    // the start address is the first base address and automatically sets the end base address
+    // The start address is the first base address and automatically sets the end base address.
     CommandBuffer commands = new CommandBuffer(xmlCommands.code, firstAddress.base);
 
-    // remaining base addresses
+    // Remaining base addresses.
     for (int i = 1; i < addresses.size() - 1; i++) {
       AddressMapper address = addresses.get(i);
       commands.rebase(address.index, address.base);
     }
 
-    // end base address
+    // End base address.
     AddressMapper lastAddress = addresses.get(addresses.size() - 1);
     requireThat(lastAddress.index, "lastAddress.index").isEqualTo(xmlCommands.code.length, "xmlCommands.code.length");
     requireThat(lastAddress.base, "lastAddress.base").isEqualTo(firstAddress.base, "firstAddress.base");
 
-    // subroutines
+    // Subroutines.
     for (SubroutineMapper subroutineMapper : xmlCommands.subroutines) {
       commands.addSubroutine(new Subroutine(subroutineMapper.address, subroutineMapper.arguments, subroutineMapper.type));
     }
 
-    // detected code types
+    // Detected code types.
     for (TypeMapper typeMapper : xmlCommands.types) {
       if (typeMapper.end != null) {
         commands.setType(typeMapper.index, typeMapper.end, typeMapper.type);

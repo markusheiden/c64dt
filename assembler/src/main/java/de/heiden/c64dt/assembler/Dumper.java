@@ -21,8 +21,8 @@ public class Dumper {
   /**
    * Dump memory.
    *
-   * @param code Code buffer
-   * @param output output for reassembled code
+   * @param code Code buffer.
+   * @param output Output for reassembled code.
    */
   public void dump(ICodeBuffer code, Writer output) throws IOException {
     requireThat(code, "code").isNotNull();
@@ -37,8 +37,8 @@ public class Dumper {
   /**
    * Dump memory.
    *
-   * @param code Code buffer
-   * @param output output for reassembled code
+   * @param code Code buffer.
+   * @param output Output for reassembled code.
    */
   private void dump(ICodeBuffer code, BufferedWriter output) throws IOException {
     requireThat(code, "code").isNotNull();

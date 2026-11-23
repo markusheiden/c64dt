@@ -24,10 +24,10 @@ public abstract class AbstractPath implements IPath {
   /**
    * Constructor.
    *
-   * @param parent parent path, null means there is no parent
+   * @param parent Parent path, null means there is no parent.
    */
   protected AbstractPath(IPath parent) {
-    // set this as parent, when no parent is specified to not leave root dir
+    // Set this as parent, when no parent is specified to not leave root dir.
     this.parent = parent == null ? this : parent;
   }
 
@@ -56,7 +56,7 @@ public abstract class AbstractPath implements IPath {
   /**
    * Get directory of path.
    *
-   * @param filename c64 encoded filename
+   * @param filename C64 encoded filename.
    */
   protected abstract IStream doFile(byte[] filename) throws FileNotFoundException;
 
@@ -66,10 +66,10 @@ public abstract class AbstractPath implements IPath {
 
     IPath result;
     if (separatorPos < 0) {
-      // plain path
+      // Plain path.
       result = doChangePath(path);
     } else {
-      // separate path into head and tail
+      // Separate path into head and tail.
       byte[] head = new byte[separatorPos];
       System.arraycopy(path, 0, head, 0, head.length);
       byte[] tail = new byte[path.length - separatorPos - 1];
@@ -91,19 +91,19 @@ public abstract class AbstractPath implements IPath {
   /**
    * Change plain path.
    *
-   * @param path c64 encoded path without any path separators
+   * @param path C64 encoded path without any path separators.
    */
   protected abstract IPath doChangePath(byte[] path) throws FileNotFoundException;
 
   //
-  // helper
+  // Helper.
   //
 
   /**
-   * Index of first path separator char
+   * Index of first path separator char.
    *
-   * @param path c64 encoded path
-   * @return index of first separator char or -1 if none
+   * @param path C64 encoded path.
+   * @return Index of first separator char or -1 if none.
    */
   protected int indexOfSeparator(byte[] path) {
     for (int i = 0; i < path.length; i++) {

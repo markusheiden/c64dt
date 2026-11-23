@@ -20,7 +20,7 @@ public class DummyCommand extends AbstractCommand {
   /**
    * Constructor.
    *
-   * @param address address
+   * @param address Address.
    */
   public DummyCommand(int address) {
     super(CodeType.UNKNOWN);

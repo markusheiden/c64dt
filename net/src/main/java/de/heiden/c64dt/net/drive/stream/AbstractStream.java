@@ -52,7 +52,7 @@ public abstract class AbstractStream implements IStream {
   /**
    * Execute read.
    *
-   * @param length number of bytes to read
+   * @param length Number of bytes to read.
    */
   protected abstract byte[] doRead(int length) throws IOException;
 
@@ -67,8 +67,8 @@ public abstract class AbstractStream implements IStream {
   /**
    * Limit length to available bytes.
    *
-   * @param total total number of bytes
-   * @param length requested length
+   * @param total Total number of bytes.
+   * @param length Requested length.
    */
   protected int limitLength(int total, int length) {
     return Math.min(length, total - position);
@@ -77,7 +77,7 @@ public abstract class AbstractStream implements IStream {
   /**
    * Execute write.
    *
-   * @param data bytes to write
+   * @param data Bytes to write.
    */
   protected abstract void doWrite(byte[] data) throws IOException;
 

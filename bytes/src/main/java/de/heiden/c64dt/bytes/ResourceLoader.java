@@ -11,10 +11,10 @@ import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requir
  */
 public class ResourceLoader {
   /**
-   * Load content from a file
+   * Load content from a file.
    *
-   * @param length of expected content
-   * @param filename filename of content
+   * @param length of expected content.
+   * @param filename Filename of content.
    * @throws IOException
    */
   public static int[] load(int length, String filename) throws IOException {
@@ -37,9 +37,9 @@ public class ResourceLoader {
   }
 
   /**
-   * Load content from a file
+   * Load content from a file.
    *
-   * @param filename filename of content
+   * @param filename Filename of content.
    * @throws IOException
    */
   public static int[] load(String filename) throws IOException {

@@ -12,7 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * All types of "go to" actions
+ * All types of "go to" actions.
  */
 public class GotoActions {
   /**
@@ -28,7 +28,7 @@ public class GotoActions {
   /**
    * Constructor.
    *
-   * @param table The table this action works on
+   * @param table The table this action works on.
    */
   public GotoActions(final JTable table) {
     this.table = table;
@@ -50,7 +50,7 @@ public class GotoActions {
   /**
    * Add the actions to a menu.
    *
-   * @param menu Menu
+   * @param menu Menu.
    */
   public void addToMenu(JPopupMenu menu) {
     menu.add(gotoAction);
@@ -71,11 +71,11 @@ public class GotoActions {
   /**
    * Goto destination (address) of an opcode.
    *
-   * @param row Row in which the event has been triggered or -1
+   * @param row Row in which the event has been triggered or -1.
    */
   private void gotoDestination(int row) {
     if (row < 0) {
-      // now row -> no jump
+      // No row -> no jump.
       return;
     }
 
@@ -84,24 +84,24 @@ public class GotoActions {
 
     int index = model.getIndex(row);
 
-    // just works for opcodes
+    // Just works for opcodes.
     ICommand command = commands.getCommand(index);
     if (!(command instanceof OpcodeCommand opcodeCommand)) {
       return;
     }
 
-    // just works for opcodes with an address
+    // Just works for opcodes with an address.
     if (!opcodeCommand.isArgumentAddress()) {
       return;
     }
 
-    // check if address is known
+    // Check if address is known.
     int address = opcodeCommand.getArgumentAddress();
     if (!commands.hasAddress(address)) {
       return;
     }
 
-    // do the jump
+    // Do the jump.
     int jumpIndex = commands.indexForAddress(address);
     if (jumpIndex < 0) {
       return;
@@ -113,7 +113,7 @@ public class GotoActions {
   /**
    * Jump to the given relative address.
    *
-   * @param index Relative address
+   * @param index Relative address.
    */
   public void gotoIndex(int index) {
     CodeTableModel model = (CodeTableModel) table.getModel();

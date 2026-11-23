@@ -23,7 +23,7 @@ public class DrivePacket {
   /**
    * Constructor.
    *
-   * @param data Data
+   * @param data Data.
    */
   public DrivePacket(byte[] data) {
     this.data = data;
@@ -59,7 +59,7 @@ public class DrivePacket {
 
   /**
    * Channel number.
-   * 0-15
+   * 0-15.
    */
   public int getChannel() {
     return ByteUtil.toByte(data[IDX_CHANNEL] & 0x0F);

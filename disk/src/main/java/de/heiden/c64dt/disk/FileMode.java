@@ -56,7 +56,7 @@ public class FileMode {
   /**
    * Get mode for mode code.
    *
-   * @param mode mode code
+   * @param mode Mode code.
    */
   public static FileMode fileMode(int mode) {
     FileType type = FileType.fileType(mode & 0x0F);
@@ -70,7 +70,7 @@ public class FileMode {
   /**
    * Convenience constructor with default values.
    *
-   * @param type type
+   * @param type Type.
    */
   public FileMode(FileType type) {
     this(type, false, false, true);
@@ -79,10 +79,10 @@ public class FileMode {
   /**
    * Constructor.
    *
-   * @param type file type
-   * @param replaced has the file been replaced?
-   * @param locked is the file locked?
-   * @param closed has the file correctly been closed?
+   * @param type File type.
+   * @param replaced Has the file been replaced?
+   * @param locked Is the file locked?
+   * @param closed Has the file correctly been closed?
    */
   public FileMode(FileType type, boolean replaced, boolean locked, boolean closed) {
     this.type = type;

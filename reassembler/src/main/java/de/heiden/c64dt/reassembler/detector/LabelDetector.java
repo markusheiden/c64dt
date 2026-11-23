@@ -16,22 +16,22 @@ public class LabelDetector implements IDetector {
     for (CommandIterator iter = commands.iterator(); iter.hasNext(); ) {
       ICommand command = iter.next();
       if (iter.hasCodeLabel()) {
-        // Mark all code label positions as a start of an opcode
+        // Mark all code label positions as a start of an opcode.
         change |= iter.setType(CodeType.OPCODE);
       } else if (hasConflictingCodeLabel(commands, iter)) {
-        // Mark current command as data, because it may not be an opcode
-        // TODO mh: Currently disabled, because it sets too much code to data
+        // Mark current command as data, because it may not be an opcode.
+        // TODO mh: Currently disabled, because it sets too much code to data.
         // change |= iter.setType(CodeType.DATA);
 
-        // Search for code label and mark the relative address as an opcode
+        // Search for code label and mark the relative address as an opcode.
         boolean notFound = true;
         for (int index = iter.getIndex() + 1, count = 1; count < command.getSize(); index++, count++) {
-          // TODO mh: move functionality to CommandBuffer: hasCodeLabel(int index)
+          // TODO mh: Move functionality to CommandBuffer: hasCodeLabel(int index).
           if (commands.hasCodeLabel(commands.addressForIndex(index))) {
             change |= commands.setType(index, CodeType.OPCODE);
             notFound = false;
           } else if (notFound) {
-            // mark as data until first code label
+            // Mark as data until first code label.
             change |= commands.setType(index, CodeType.DATA);
           }
         }
@@ -52,8 +52,8 @@ public class LabelDetector implements IDetector {
   /**
    * Is there at least one code label pointing to the argument of the current opcode / command?
    *
-   * @param commands command buffer
-   * @param iter command iterator
+   * @param commands Command buffer.
+   * @param iter Command iterator.
    */
   public boolean hasConflictingCodeLabel(CommandBuffer commands, CommandIterator iter) {
     for (int address = iter.getAddress() + 1, count = 1; count < iter.getCommand().getSize(); address++, count++) {
@@ -68,8 +68,8 @@ public class LabelDetector implements IDetector {
   /**
    * Is there at least one code label pointing to the argument of the current opcode / command?
    *
-   * @param commands command buffer
-   * @param iter command iterator
+   * @param commands Command buffer.
+   * @param iter Command iterator.
    */
   public boolean hasConflictingDataLabel(CommandBuffer commands, CommandIterator iter) {
     for (int address = iter.getAddress() + 1, count = 1; count < iter.getCommand().getSize(); address++, count++) {

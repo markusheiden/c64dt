@@ -39,7 +39,7 @@ public class CommandBuffer implements Iterable<ICommand> {
 
   /**
    * Index to referenced absolute address.
-   * This references point to outside of the code.
+   * These references point to outside of the code.
    */
   private final int[] externalReferences;
 
@@ -67,7 +67,7 @@ public class CommandBuffer implements Iterable<ICommand> {
   private final ICommand[] commands;
 
   //
-  // persistent attributes
+  // Persistent attributes.
   //
 
   /**
@@ -99,8 +99,8 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Constructor.
    *
-   * @param code code
-   * @param startAddress address of the code
+   * @param code Code.
+   * @param startAddress Address of the code.
    */
   public CommandBuffer(byte[] code, int startAddress) {
     requireThat(startAddress, "startAddress").isGreaterThanOrEqualTo(0);
@@ -129,12 +129,12 @@ public class CommandBuffer implements Iterable<ICommand> {
    * Hidden constructor for JAXB.
    */
   private CommandBuffer() {
-    // TODO mh: init final fields with null instead
+    // TODO mh: Init final fields with null instead.
     this(new byte[0], 0);
   }
 
   //
-  // code
+  // Code.
   //
 
   /**
@@ -147,7 +147,7 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Is the given relative address valid?.
    *
-   * @param index relative address
+   * @param index Relative address.
    */
   public boolean hasIndex(int index) {
     return index >= 0 && index < code.length;
@@ -156,7 +156,7 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Is the given relative end address valid?.
    *
-   * @param index relative end address
+   * @param index Relative end address.
    */
   public boolean hasEndIndex(int index) {
     return index >= 0 && index <= code.length;
@@ -170,7 +170,7 @@ public class CommandBuffer implements Iterable<ICommand> {
   }
 
   //
-  // base addresses
+  // Base addresses.
   //
 
   /**
@@ -191,13 +191,13 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Compute absolute address from relative address.
    *
-   * @param index relative address
-   * @return absolute address
+   * @param index Relative address.
+   * @return Absolute address.
    */
   public int addressForIndex(int index) {
     requireThat(hasIndex(index), "hasIndex(index)").isTrue();
 
-    // Compute start index for address range index belongs to
+    // Compute start index for address range index belongs to.
     Integer startIndex = startAddresses.floorKey(index);
     requireThat(startIndex, "startIndex").isNotNull();
 
@@ -207,7 +207,7 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Is the given absolute address within the code?.
    *
-   * @param address absolute address
+   * @param address Absolute address.
    */
   public boolean hasAddress(int address) {
     return indexForAddressImpl(address) >= 0;
@@ -216,8 +216,8 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Compute relative address from absolute address.
    *
-   * @param address absolute address
-   * @return relative address or -1, if not found
+   * @param address Absolute address.
+   * @return Relative address or -1, if not found.
    */
   public int indexForAddress(int address) {
     requireThat(hasAddress(address), "hasAddress(address)").isTrue();
@@ -228,8 +228,8 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Is the given absolute address within the code?.
    *
-   * @param address absolute address
-   * @return relative address or -1, if not found
+   * @param address Absolute address.
+   * @return Relative address or -1, if not found.
    */
   private int indexForAddressImpl(int address) {
     Iterator<Entry<Integer, Integer>> iter = startAddresses.entrySet().iterator();
@@ -249,8 +249,8 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Change the absolute base address of the code starting at the given index.
    *
-   * @param startIndex relative address from which the new absolute base address should be used
-   * @param baseAddress new absolute base address
+   * @param startIndex Relative address from which the new absolute base address should be used.
+   * @param baseAddress New absolute base address.
    */
   public void rebase(int startIndex, int baseAddress) {
     requireThat(hasIndex(startIndex), "hasIndex(startIndex)").isTrue();
@@ -264,8 +264,8 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Change the absolute address of the code starting at the given index.
    *
-   * @param startIndex relative address from which the new absolute address should be used
-   * @param address new absolute address
+   * @param startIndex Relative address from which the new absolute address should be used.
+   * @param address New absolute address.
    */
   public void base(int startIndex, int address) {
     requireThat(hasIndex(startIndex), "hasIndex(startIndex)").isTrue();
@@ -277,13 +277,13 @@ public class CommandBuffer implements Iterable<ICommand> {
   }
 
   //
-  // Subroutines
+  // Subroutines.
   //
 
   /**
    * Add a subroutine.
    *
-   * @param subroutine Subroutine
+   * @param subroutine Subroutine.
    */
   public void addSubroutine(Subroutine subroutine) {
     requireThat(subroutine, "subroutine").isNotNull();
@@ -296,8 +296,8 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Get subroutine at a given absolute address.
    *
-   * @param address absolute address
-   * @return subroutine or null, if there is no subroutine at this address
+   * @param address Absolute address.
+   * @return Subroutine or null, if there is no subroutine at this address.
    */
   public Subroutine getSubroutine(int address) {
     return subroutines.get(address);
@@ -312,13 +312,13 @@ public class CommandBuffer implements Iterable<ICommand> {
   }
 
   //
-  // code type specific stuff ("model")
+  // Code type specific stuff ("model").
   //
 
   /**
    * Get code type of the command at the given relative address.
    *
-   * @param index relative address
+   * @param index Relative address.
    */
   public CodeType getType(int index) {
     requireThat(hasIndex(index), "hasIndex(index)").isTrue();
@@ -329,10 +329,10 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Set code type for a given relative address range.
    *
-   * @param startIndex first relative address (incl.)
-   * @param endIndex last relative address (excl.)
-   * @param type code type
-   * @return whether a change has taken place
+   * @param startIndex First relative address (incl.).
+   * @param endIndex Last relative address (excl.).
+   * @param type Code type.
+   * @return Whether a change has taken place.
    */
   public boolean setType(int startIndex, int endIndex, CodeType type) {
     requireThat(hasIndex(startIndex), "hasIndex(startIndex)").isTrue();
@@ -351,9 +351,9 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Set code type for a given relative address.
    *
-   * @param index relative address
-   * @param type code type
-   * @return whether a change has taken place
+   * @param index Relative address.
+   * @param type Code type.
+   * @return Whether a change has taken place.
    */
   public boolean setType(int index, CodeType type) {
     requireThat(hasIndex(index), "hasIndex(index)").isTrue();
@@ -366,13 +366,13 @@ public class CommandBuffer implements Iterable<ICommand> {
   }
 
   //
-  // label/reference specific interface
+  // Label/reference specific interface.
   //
 
   /**
    * Is a label at the given absolute address?
    *
-   * @param address absolute address
+   * @param address Absolute address.
    */
   public boolean hasLabel(int address) {
     requireThat(hasAddress(address), "hasAddress(address)").isTrue();
@@ -383,8 +383,8 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Label representation for an absolute address.
    *
-   * @param address absolute address
-   * @return label or null if no label exists for this address
+   * @param address Absolute address.
+   * @return Label or null if no label exists for this address.
    */
   public ILabel getLabel(int address) {
     ILabel result = codeLabels.get(address);
@@ -401,7 +401,7 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Is a code label at the given absolute address?
    *
-   * @param address absolute address
+   * @param address Absolute address.
    */
   public boolean hasCodeLabel(int address) {
     return codeLabels.containsKey(address);
@@ -410,7 +410,7 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Is a data label at the given absolute address?
    *
-   * @param address absolute address
+   * @param address Absolute address.
    */
   public boolean hasDataLabel(int address) {
     return dataLabels.containsKey(address);
@@ -427,9 +427,9 @@ public class CommandBuffer implements Iterable<ICommand> {
    * Add a reference from the given relative address to a given address.
    * This will add a label if no label exists for the given address.
    *
-   * @param code is it a code reference?
-   * @param fromIndex relative address of the command referencing
-   * @param to referenced absolute address
+   * @param code Is it a code reference?
+   * @param fromIndex Relative address of the command referencing.
+   * @param to Referenced absolute address.
    */
   public void addReference(boolean code, int fromIndex, int to) {
     requireThat(hasIndex(fromIndex), "hasIndex(fromIndex)").isTrue();
@@ -447,16 +447,16 @@ public class CommandBuffer implements Iterable<ICommand> {
    * Add a code reference from the current address to a given address.
    * This will add a label if no label exists for the given address.
    *
-   * @param fromIndex relative address of the command referencing
-   * @param to referenced absolute address
+   * @param fromIndex Relative address of the command referencing.
+   * @param to Referenced absolute address.
    */
   public void addCodeReference(int fromIndex, int to) {
     requireThat(hasIndex(fromIndex), "hasIndex(fromIndex)").isTrue();
     requireThat(hasAddress(to), "hasAddress(to)").isTrue();
 
-    // add label for address "to"
+    // Add label for address "to".
     codeLabels.put(to, new CodeLabel(to));
-    // add reference
+    // Add reference.
     codeReferences[fromIndex] = to;
   }
 
@@ -464,16 +464,16 @@ public class CommandBuffer implements Iterable<ICommand> {
    * Add a data reference from the current address to a given address.
    * This will add a label if no label exists for the given address.
    *
-   * @param fromIndex relative address of the command referencing
-   * @param to referenced absolute address
+   * @param fromIndex Relative address of the command referencing.
+   * @param to Referenced absolute address.
    */
   public void addDataReference(int fromIndex, int to) {
     requireThat(hasIndex(fromIndex), "hasIndex(fromIndex)").isTrue();
     requireThat(hasAddress(to), "hasAddress(to)").isTrue();
 
-    // add label for address "to"
+    // Add label for address "to".
     dataLabels.put(to, new DataLabel(to));
-    // add reference
+    // Add reference.
     dataReferences[fromIndex] = to;
   }
 
@@ -481,23 +481,23 @@ public class CommandBuffer implements Iterable<ICommand> {
    * Add an external code or data reference from the current address to a given address.
    * This will add a label if no label exists for the given address.
    *
-   * @param fromIndex relative address of the command referencing
-   * @param to referenced absolute address
+   * @param fromIndex Relative address of the command referencing.
+   * @param to Referenced absolute address.
    */
   public void addExternalReference(int fromIndex, int to) {
     requireThat(hasIndex(fromIndex), "hasIndex(fromIndex)").isTrue();
     requireThat(hasAddress(to), "hasAddress(to)").isFalse();
 
-    // add label for address "to"
+    // Add label for address "to".
     externalLabels.put(to, new ExternalLabel(to));
-    // add reference
+    // Add reference.
     externalReferences[fromIndex] = to;
   }
 
   /**
    * Get all references to an address.
    *
-   * @param address Absolute address
+   * @param address Absolute address.
    */
   public SortedSet<Integer> getReferences(int address) {
     SortedSet<Integer> result = new TreeSet<>();
@@ -507,7 +507,7 @@ public class CommandBuffer implements Iterable<ICommand> {
       } else if (dataReferences[i] == address) {
         result.add(i);
       }
-      // external references are not needed, because they do never point into the reassembled code
+      // External references are not needed, because they do never point into the reassembled code.
     }
 
     return result;
@@ -516,8 +516,8 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Remove a reference from the given relative address.
    *
-   * @param index relative address
-   * @return whether a label has been removed
+   * @param index Relative address.
+   * @return Whether a label has been removed.
    */
   public boolean removeReference(int index) {
     return
@@ -527,43 +527,43 @@ public class CommandBuffer implements Iterable<ICommand> {
   }
 
   /**
-   * Remove a reference from the given relative address
+   * Remove a reference from the given relative address.
    *
-   * @param index relative address
-   * @param references all references
-   * @param labels all labels
-   * @return whether a label has been removed
+   * @param index Relative address.
+   * @param references All references.
+   * @param labels All labels.
+   * @return Whether a label has been removed.
    */
   private boolean removeReference(int index, int[] references, Map<Integer, ?> labels) {
-    // get referenced absolute address
+    // Get referenced absolute address.
     int referenced = references[index];
-    // delete reference
+    // Delete reference.
     references[index] = -1;
 
     if (referenced < 0) {
-      // if nothing has been referenced, no label needs to be removed
+      // If nothing has been referenced, no label needs to be removed.
       return false;
     }
 
-    // check if referenced address is referenced from elsewhere too
+    // Check if referenced address is referenced from elsewhere too.
     for (int reference : references) {
       if (reference == referenced) {
-        // referenced address is still referenced, no label needs to be removed
+        // Referenced address is still referenced, no label needs to be removed.
         return false;
       }
     }
 
-    // remove label, because the address is no more referenced
+    // Remove label, because the address is no more referenced.
     Object removed = labels.remove(referenced);
-    // There need to be a label, if there had been a reference.
+    // There needs to be a label, if there had been a reference.
     requireThat(removed, "removed").isNotNull();
 
-    // label has been removed
+    // Label has been removed.
     return true;
   }
 
   //
-  // command specific interface
+  // Command specific interface.
   //
 
   /**
@@ -582,7 +582,7 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Get command at relative address.
    *
-   * @param index relative address
+   * @param index Relative address.
    */
   public ICommand getCommand(int index) {
     requireThat(hasIndex(index), "hasIndex(index)").isTrue();
@@ -593,8 +593,8 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Add a command at index.
    *
-   * @param index relative address
-   * @param command command
+   * @param index Relative address.
+   * @param command Command.
    */
   public void setCommand(int index, ICommand command) {
     requireThat(hasIndex(index), "hasIndex(index)").isTrue();
@@ -612,7 +612,7 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Remove the command from the given relative address.
    *
-   * @param index relative address
+   * @param index Relative address.
    */
   void removeCommand(int index) {
     requireThat(hasIndex(index), "hasIndex(index)").isTrue();

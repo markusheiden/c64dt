@@ -14,7 +14,7 @@ public class D71 extends AbstractDiskImage {
   /**
    * Constructor.
    *
-   * @param hasErrors support error informations?
+   * @param hasErrors Support error information?
    */
   public D71(int tracks, boolean hasErrors) {
     super(2, tracks, hasErrors);
@@ -29,7 +29,7 @@ public class D71 extends AbstractDiskImage {
   public int getSectors(int track) {
     requireValidTrack(this, track);
 
-    // Both sides always share the same sector model
+    // Both sides always share the same sector model.
     int tps = getTracksPerSide();
     if (track > tps) {
       track -= tps;
@@ -56,7 +56,7 @@ public class D71 extends AbstractDiskImage {
     for (int track = 1, pos = 0x04; track <= tps; track++, pos += 4) {
       readBAM(result, track, bam, pos);
       readBAM(result, track + tps, bam2, pos);
-      // TODO implement extra free sector count informations from $DD-$FF?
+      // TODO Implement extra free sector count information from $DD-$FF?
     }
 
     requireThat(result, "result").isNotNull();

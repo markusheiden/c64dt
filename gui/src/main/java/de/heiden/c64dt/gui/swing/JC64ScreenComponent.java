@@ -7,11 +7,11 @@ import java.awt.image.MemoryImageSource;
 import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
- * Base class for component displaying c64 indexed color content.
+ * Base class for component displaying C64 indexed color content.
  */
 public abstract class JC64ScreenComponent extends JC64Component {
   //
-  // attributes
+  // Attributes.
   //
 
   protected int _foreground;
@@ -29,9 +29,9 @@ public abstract class JC64ScreenComponent extends JC64Component {
   /**
    * Constructor.
    *
-   * @param width width in pixel
-   * @param height height in pixel
-   * @param factor zoom factor
+   * @param width Width in pixel.
+   * @param height Height in pixel.
+   * @param factor Zoom factor.
    */
   protected JC64ScreenComponent(int offset, int width, int lineLength, int height, double factor) {
     super(width, height, factor, false);
@@ -41,10 +41,10 @@ public abstract class JC64ScreenComponent extends JC64Component {
 
     _colorModel = new C64IndexColorModel();
 
-    // create image data
+    // Create image data.
     _imageData = new byte[offset + lineLength * height];
 
-    // create image source
+    // Create image source.
     _imageSource = new MemoryImageSource(width, height, _colorModel, _imageData, offset, lineLength);
     _imageSource.setAnimated(true);
     _imageSource.setFullBufferUpdates(true);
@@ -82,7 +82,7 @@ public abstract class JC64ScreenComponent extends JC64Component {
   /**
    * Update backing image data at image source.
    *
-   * @param imageData new backing image data
+   * @param imageData New backing image data.
    */
   protected void updateImageData(byte[] imageData) {
     requireThat(imageData, "imageData").isNotNull();

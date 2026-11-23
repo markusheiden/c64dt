@@ -9,11 +9,11 @@ import java.awt.event.ComponentEvent;
 import java.awt.image.MemoryImageSource;
 
 /**
- * Base class for component displaying c64 content.
+ * Base class for component displaying C64 content.
  */
 public abstract class JC64Component extends JComponent {
   /**
-   * Width,
+   * Width.
    */
   private int _width;
 
@@ -40,9 +40,9 @@ public abstract class JC64Component extends JComponent {
   /**
    * Constructor.
    *
-   * @param width width in pixel
-   * @param height height in pixel
-   * @param factor zoom factor
+   * @param width Width in pixel.
+   * @param height Height in pixel.
+   * @param factor Zoom factor.
    * @param resizable Is the backing image resizable?
    */
   protected JC64Component(int width, int height, double factor, boolean resizable) {
@@ -59,11 +59,11 @@ public abstract class JC64Component extends JComponent {
       addComponentListener(new ComponentAdapter() {
         @Override
         public void componentResized(ComponentEvent e) {
-          // compute image size from new component size
+          // Compute image size from new component size.
           _width = Math.max(0, (int) Math.round(e.getComponent().getWidth() / _factor));
           _height = Math.max(0, (int) Math.round(e.getComponent().getHeight() / _factor));
 
-          // the image needs to be rebuild, so reset it now. the sub class has to rebuild it.
+          // The image needs to be rebuilt, so reset it now. The sub class has to rebuild it.
           _imageSource = null;
           _image = null;
         }
@@ -88,7 +88,7 @@ public abstract class JC64Component extends JComponent {
   /**
    * Set foreground color.
    *
-   * @param foreground foreground color index
+   * @param foreground Foreground color index.
    */
   public void setForeground(int foreground) {
     setForeground(SwingColors.COLOR[foreground]);
@@ -97,7 +97,7 @@ public abstract class JC64Component extends JComponent {
   /**
    * Set foreground color.
    *
-   * @param foreground foreground color
+   * @param foreground Foreground color.
    */
   public void setForeground(C64Color foreground) {
     setForeground(foreground.ordinal());
@@ -106,7 +106,7 @@ public abstract class JC64Component extends JComponent {
   /**
    * Set background color.
    *
-   * @param background background color index
+   * @param background Background color index.
    */
   public void setBackground(int background) {
     setBackground(SwingColors.COLOR[background]);
@@ -115,7 +115,7 @@ public abstract class JC64Component extends JComponent {
   /**
    * Set background color.
    *
-   * @param background background color
+   * @param background Background color.
    */
   public void setBackground(C64Color background) {
     setBackground(background.ordinal());
@@ -140,14 +140,14 @@ public abstract class JC64Component extends JComponent {
   /**
    * Do custom updating.
    *
-   * @param g graphics
+   * @param g Graphics.
    */
   protected abstract void doPaintComponent(Graphics g);
 
   /**
    * Draw backing image with the fixed defined size.
    *
-   * @param g graphics
+   * @param g Graphics.
    */
   protected void drawImage(Graphics g) {
     drawImageFixed(g);
@@ -156,7 +156,7 @@ public abstract class JC64Component extends JComponent {
   /**
    * Draw backing image with the fixed defined size.
    *
-   * @param g graphics
+   * @param g Graphics.
    */
   protected void drawImageFixed(Graphics g) {
     g.drawImage(_image, 0, 0, (int) Math.round(_width * _factor), (int) Math.round(_height * _factor), null);
@@ -165,7 +165,7 @@ public abstract class JC64Component extends JComponent {
   /**
    * Draw backing image fitting into the current component size.
    *
-   * @param g graphics
+   * @param g Graphics.
    */
   protected void drawImageResized(Graphics g) {
     g.drawImage(_image, 0, 0, getWidth(), getHeight(), null);
@@ -175,7 +175,7 @@ public abstract class JC64Component extends JComponent {
    * Lazily create image for screen display.
    */
   private void createImage() {
-    // create image
+    // Create image.
     _image = createImage(_imageSource);
     _image.setAccelerationPriority(1);
   }

@@ -20,7 +20,7 @@ public class CommandCreator {
   /**
    * Constructor.
    *
-   * @param commandBuffer Command buffer
+   * @param commandBuffer Command buffer.
    */
   public CommandCreator(CommandBuffer commandBuffer) {
     this.commandBuffer = commandBuffer;
@@ -49,22 +49,22 @@ public class CommandCreator {
       var type = commandBuffer.getType(index);
 
       if (type == CodeType.BIT) {
-        // BIT opcode used just to skip the next opcode
+        // BIT opcode used just to skip the next opcode.
         var opcode = code.readOpcode();
         int modeSize = opcode.getMode().getSize();
 
         if (opcode.getType() == OpcodeType.BIT && modeSize > 0 && code.has(modeSize)) {
           int argumentIndex = code.getCurrentIndex();
-          // Reset code buffer to the argument, because this should be the skipped opcode
+          // Reset code buffer to the argument, because this should be the skipped opcode.
           code.setCurrentIndex(argumentIndex);
           addCommand(new BitCommand(opcode, code.read(modeSize)));
         } else {
-          // no BIT opcode -> assume data
+          // No BIT opcode -> assume data.
           code.setCurrentIndex(codeIndex);
           addCommand(new DataCommand(code.readByte()));
         }
       } else if (type == CodeType.ADDRESS) {
-        // absolute address as data
+        // Absolute address as data.
         int address;
         if (code.has(2) && commandBuffer.hasAddress(address = code.read(2))) {
           commandBuffer.addCodeReference(index, address);
@@ -74,26 +74,26 @@ public class CommandCreator {
           addCommand(new DataCommand(code.readByte(), code.readByte()));
         }
       } else if (type == CodeType.DATA) {
-        // plain data
+        // Plain data.
         addCommand(new DataCommand(code.readByte()));
       } else {
-        // unknown or code -> try to disassemble an opcode
+        // Unknown or code -> try to disassemble an opcode.
         var opcode = code.readOpcode();
         var mode = opcode.getMode();
         int modeSize = mode.getSize();
 
         if (code.has(modeSize) && (opcode.isLegal() || type == CodeType.OPCODE)) {
-          // TODO mh: log error if illegal opcode and type is OPCODE?
+          // TODO mh: Log error if illegal opcode and type is OPCODE?
           int argument = code.read(modeSize);
           if (mode.isAddress()) {
             int pc = commandBuffer.addressForIndex(index);
             int address = mode.getAddress(pc, argument);
-            // track references of opcodes
+            // Track references of opcodes.
             commandBuffer.addReference(opcode.getType().isJump(), index, address);
           }
           addCommand(new OpcodeCommand(opcode, argument));
         } else {
-          // not enough argument bytes for opcode or illegal opcode -> assume data
+          // Not enough argument bytes for opcode or illegal opcode -> assume data.
           code.setCurrentIndex(codeIndex);
           addCommand(new DataCommand(code.readByte()));
         }
@@ -104,7 +104,7 @@ public class CommandCreator {
   /**
    * Add a command at the end of the buffer.
    *
-   * @param command command
+   * @param command Command.
    */
   public void addCommand(ICommand command) {
     requireThat(command, "command").isNotNull();
@@ -122,7 +122,7 @@ public class CommandCreator {
     for (var iter = commandBuffer.iterator(); iter.hasNext(); ) {
       var command = iter.next();
       if (!iter.hasLabel() && lastCommand != null && lastCommand.combineWith(command)) {
-        // TODO let command buffer handle this functionality?
+        // TODO Let command buffer handle this functionality?
         iter.remove();
       } else {
         lastCommand = command;
@@ -135,12 +135,12 @@ public class CommandCreator {
    * Computes transitive unreachability of commands.
    */
   private void unreachability() {
-    // initially mark all opcodes as reachable
+    // Initially mark all opcodes as reachable.
     for (var command : commandBuffer) {
       command.setReachable(command instanceof OpcodeCommand || command instanceof BitCommand);
     }
 
-    // trace backward from unreachable command to the previous
+    // Trace backward from unreachable command to the previous.
     ICommand lastCommand = new DummyCommand();
     for (var iter = commandBuffer.iterator().reverse(); iter.hasPrevious(); ) {
       var command = iter.previous();
@@ -148,7 +148,7 @@ public class CommandCreator {
        * A code command is not reachable, if it leads to unreachable code.
        * Exception is JSR, because its argument may follow directly after the instruction.
        *
-       * TODO mh: check JMP/JSR/Bxx targets for reachability?
+       * TODO mh: Check JMP/JSR/Bxx targets for reachability?
        */
       if (!lastCommand.isReachable() &&
         command.isReachable() && !command.isEnd() && !isJsr(command) && !iter.getType().isCode()) {
@@ -163,7 +163,7 @@ public class CommandCreator {
   /**
    * Check if command is a JSR.
    *
-   * @param command Command
+   * @param command Command.
    */
   private boolean isJsr(ICommand command) {
     return command instanceof OpcodeCommand opcodeCommand && opcodeCommand.getOpcode().getType() == OpcodeType.JSR;

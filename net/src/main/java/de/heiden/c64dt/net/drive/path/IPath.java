@@ -16,7 +16,7 @@ public interface IPath {
   /**
    * Change path.
    *
-   * @param path c64 encoded relative path
+   * @param path C64 encoded relative path.
    */
   IPath changePath(byte[] path) throws FileNotFoundException;
 

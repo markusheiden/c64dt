@@ -13,7 +13,7 @@ public class C64IndexColorModel extends IndexColorModel {
   private static final byte[] B;
 
   static {
-    // create color model components
+    // Create color model components.
     C64Color[] colors = C64Color.values();
     R = new byte[colors.length];
     G = new byte[colors.length];

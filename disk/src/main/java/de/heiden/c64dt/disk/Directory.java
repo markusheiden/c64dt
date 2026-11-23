@@ -18,9 +18,9 @@ public class Directory implements IDirectory {
   /**
    * Constructor.
    *
-   * @param name name
-   * @param idAndType id (2 bytes), 0xA0 and dos type (2 bytes)
-   * @param files files
+   * @param name Name.
+   * @param idAndType ID (2 bytes), 0xA0 and DOS type (2 bytes).
+   * @param files Files.
    */
   public Directory(byte[] name, byte[] idAndType, List<IFile> files, int freeBlocks) {
     requireThat(name, "name").isNotNull();

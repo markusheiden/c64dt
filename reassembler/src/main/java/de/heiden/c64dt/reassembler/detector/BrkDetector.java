@@ -10,7 +10,7 @@ import de.heiden.c64dt.reassembler.command.OpcodeCommand;
 import static de.heiden.c64dt.assembler.OpcodeType.BRK;
 
 /**
- * Detects unreachable brk commands as data.
+ * Detects unreachable BRK commands as data.
  */
 public class BrkDetector implements IDetector {
   @Override

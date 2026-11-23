@@ -12,7 +12,7 @@ public class Packet {
   /**
    * Constructor for empty packet.
    *
-   * @param max Maximum packet size
+   * @param max Maximum packet size.
    */
   public Packet(int max) {
     this.data = new byte[max];
@@ -22,7 +22,7 @@ public class Packet {
   /**
    * Constructor for packet with given data.
    *
-   * @param data Data
+   * @param data Data.
    */
   public Packet(byte[] data) {
     this.data = data;
@@ -32,7 +32,7 @@ public class Packet {
   /**
    * Add data to packet.
    *
-   * @param data data
+   * @param data Data.
    */
   public void addByte(int data) {
     this.data[length++] = (byte) data;
@@ -41,7 +41,7 @@ public class Packet {
   /**
    * Add data to packet.
    *
-   * @param data data
+   * @param data Data.
    */
   public void addByte(int... data) {
     for (int d : data) {
@@ -52,7 +52,7 @@ public class Packet {
   /**
    * Add data to packet.
    *
-   * @param data data
+   * @param data Data.
    */
   public void addData(byte... data) {
     addData(data, 0, data.length);
@@ -61,7 +61,7 @@ public class Packet {
   /**
    * Add data to packet.
    *
-   * @param data data
+   * @param data Data.
    */
   public void addData(byte[] data, int offset, int length) {
     System.arraycopy(data, offset, this.data, this.length, length);

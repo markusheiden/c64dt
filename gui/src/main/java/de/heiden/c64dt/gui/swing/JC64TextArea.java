@@ -41,9 +41,9 @@ public class JC64TextArea extends JC64CommonComponent {
    * Constructor.
    * The lower charset is used as default.
    *
-   * @param columns character columns to display
-   * @param rows character rows to display
-   * @param factor zoom factor
+   * @param columns Character columns to display.
+   * @param rows Character rows to display.
+   * @param factor Zoom factor.
    * @param resizable Is the backing image resizable?
    */
   public JC64TextArea(int columns, int rows, double factor, boolean resizable) {
@@ -126,7 +126,7 @@ public class JC64TextArea extends JC64CommonComponent {
   /**
    * Set charset to use.
    *
-   * @param upper use upper case only charset?
+   * @param upper Use upper case only charset?
    */
   public final void setCharset(boolean upper) {
     _upper = upper;
@@ -136,18 +136,18 @@ public class JC64TextArea extends JC64CommonComponent {
   /**
    * Draw a string to the screen.
    *
-   * @param column column
-   * @param row row
-   * @param s characters
+   * @param column Column.
+   * @param row Row.
+   * @param s Characters.
    */
   public void setText(int column, int row, String s) {
     if (!s.contains("\n")) {
-      // optimization for single line text
+      // Optimization for single line text.
       setText(column, row, _charset.toBytes(s));
       return;
     }
 
-    // handle multiline text
+    // Handle multiline text.
     StringTokenizer tokenizer = new StringTokenizer(s, "\n");
     for (int r = row; tokenizer.hasMoreTokens() && r < _rows; r++) {
       setText(column, r, tokenizer.nextToken());
@@ -157,9 +157,9 @@ public class JC64TextArea extends JC64CommonComponent {
   /**
    * Draw a string with inverted characters to the screen.
    *
-   * @param column column
-   * @param row row
-   * @param s characters
+   * @param column Column.
+   * @param row Row.
+   * @param s Characters.
    */
   public void setTextInverted(int column, int row, String s) {
     byte[] characters = _charset.toBytes(s);
@@ -172,9 +172,9 @@ public class JC64TextArea extends JC64CommonComponent {
   /**
    * Draw a string to the screen.
    *
-   * @param column column
-   * @param row row
-   * @param s characters in C64 encoding
+   * @param column Column.
+   * @param row Row.
+   * @param s Characters in C64 encoding.
    */
   public void setText(int column, int row, byte... s) {
     for (int i = 0, c = column; i < s.length && c < _columns; i++, c++) {
@@ -186,9 +186,9 @@ public class JC64TextArea extends JC64CommonComponent {
   /**
    * Draw a single character to the screen.
    *
-   * @param column column
-   * @param row row
-   * @param c character in C64 encoding
+   * @param column Column.
+   * @param row Row.
+   * @param c Character in C64 encoding.
    */
   public void setText(int column, int row, byte c) {
     setTextInternal(column, row, c);
@@ -198,14 +198,14 @@ public class JC64TextArea extends JC64CommonComponent {
   /**
    * Draw a single character to the screen.
    *
-   * @param column column
-   * @param row row
-   * @param c character in C64 encoding
+   * @param column Column.
+   * @param row Row.
+   * @param c Character in C64 encoding.
    */
   protected void setTextInternal(int column, int row, byte c) {
     if (column >= _columns || row >= _rows) {
-      // early exit, when the text exceeds the buffer.
-      // this may happen, e.g. when the component has been resized to a smaller size than the initial size.
+      // Early exit, when the text exceeds the buffer.
+      // This may happen, e.g. when the component has been resized to a smaller size than the initial size.
       return;
     }
 
@@ -239,7 +239,7 @@ public class JC64TextArea extends JC64CommonComponent {
    * A repaint has been requested.
    * So the backing image will be updated.
    *
-   * @param g graphics
+   * @param g Graphics.
    */
   @Override
   public void doPaintComponent(Graphics g) {
@@ -254,8 +254,8 @@ public class JC64TextArea extends JC64CommonComponent {
   /**
    * Paint a single character onto the screen.
    *
-   * @param column column
-   * @param row row
+   * @param column Column.
+   * @param row Row.
    */
   private void paintCharacter(int column, int row) {
     int[] imageData = getImageData();
@@ -282,7 +282,7 @@ public class JC64TextArea extends JC64CommonComponent {
   }
 
   //
-  // test
+  // Test.
   //
 
   public static void main(String[] args) {
@@ -321,7 +321,7 @@ public class JC64TextArea extends JC64CommonComponent {
       }
     }
 
-    // TODO 2010-03-07 mh: why is this repaint() needed???
+    // TODO 2010-03-07 mh: Why is this repaint() needed???
     frame.repaint();
   }
 }

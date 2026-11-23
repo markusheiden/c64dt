@@ -11,7 +11,7 @@ import de.heiden.c64dt.reassembler.command.OpcodeCommand;
 import java.util.List;
 
 /**
- * Detects bit commands which are intended to just skip the next opcode.
+ * Detects BIT commands which are intended to just skip the next opcode.
  */
 public class BitDetector implements IDetector {
   @Override

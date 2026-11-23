@@ -14,8 +14,8 @@ public abstract class AbstractEncoder extends CharsetEncoder {
   /**
    * Constructor.
    *
-   * @param cs charset
-   * @param replacement Replacement
+   * @param cs Charset.
+   * @param replacement Replacement.
    */
   protected AbstractEncoder(Charset cs, byte... replacement) {
     super(cs, 1, 1);
@@ -38,7 +38,7 @@ public abstract class AbstractEncoder extends CharsetEncoder {
   /**
    * Convert a character to a single byte.
    *
-   * @param c character
+   * @param c Character.
    */
   protected abstract byte toByte(char c) throws UnmappableCharacterException;
 }

@@ -52,7 +52,7 @@ public class JDirectory extends JList<Object> {
         i += 5;
         requireThat(i, "i").isEqualTo(text.length, "text.length");
 
-        // show directory header inverted
+        // Show directory header inverted.
         for (i = 2; i < text.length; i++) {
           text[i] |= 0x80;
         }
@@ -114,7 +114,7 @@ public class JDirectory extends JList<Object> {
   /**
    * Set directory (model).
    *
-   * @param directory directory
+   * @param directory Directory.
    */
   public void setDirectory(final IDirectory directory) {
     requireThat(directory, "directory").isNotNull();

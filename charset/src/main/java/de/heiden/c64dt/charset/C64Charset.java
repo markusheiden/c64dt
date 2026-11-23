@@ -46,7 +46,7 @@ public class C64Charset extends AbstractCharset {
     return new AbstractDecoder(this, " ") {
       @Override
       protected char toChar(byte b) throws UnmappableCharacterException {
-        int c = b & 0x7F; // accept inverted chars too
+        int c = b & 0x7F; // Accept inverted chars too.
         if (c >= 0x01 && c <= 0x1A) {
           char a = upper ? 'A' : 'a';
           return (char) (c - 0x01 + a);
@@ -62,7 +62,7 @@ public class C64Charset extends AbstractCharset {
   /**
    * Map common symbol characters.
    *
-   * @param c Character
+   * @param c Character.
    */
   protected char toSymbolChar(byte c) throws UnmappableCharacterException {
     switch (c) {
@@ -76,7 +76,7 @@ public class C64Charset extends AbstractCharset {
 //      case 0x1E: return '^'; // up arrow
 //      case 0x1F: return '<'; // left arrow
       case 0x20:
-        return ' '; // blank
+        return ' '; // Blank.
       case 0x21:
         return '!';
       case 0x22:
@@ -170,7 +170,7 @@ public class C64Charset extends AbstractCharset {
   /**
    * Map common symbol characters.
    *
-   * @param c symbol character
+   * @param c Symbol character.
    */
   protected byte toSymbolByte(char c) throws UnmappableCharacterException {
     switch (c) {
@@ -184,7 +184,7 @@ public class C64Charset extends AbstractCharset {
 //      case '^': return 0x1E; // up arrow
 //      case '<': return 0x1F; // left arrow
       case ' ':
-        return 0x20; // blank
+        return 0x20; // Blank.
       case '!':
         return 0x21;
       case '"':

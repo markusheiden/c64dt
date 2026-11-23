@@ -23,8 +23,8 @@ public class SectorInputStream extends InputStream {
   /**
    * Constructor.
    *
-   * @param diskImage disk image
-   * @param file file
+   * @param diskImage Disk image.
+   * @param file File.
    */
   public SectorInputStream(IDiskImage diskImage, IFile file) {
     this(diskImage, file.getTrack(), file.getSector());
@@ -33,9 +33,9 @@ public class SectorInputStream extends InputStream {
   /**
    * Constructor.
    *
-   * @param diskImage disk image
-   * @param track start track
-   * @param sector start sector
+   * @param diskImage Disk image.
+   * @param track Start track.
+   * @param sector Start sector.
    */
   public SectorInputStream(IDiskImage diskImage, int track, int sector) {
     requireThat(diskImage, "diskImage").isNotNull();

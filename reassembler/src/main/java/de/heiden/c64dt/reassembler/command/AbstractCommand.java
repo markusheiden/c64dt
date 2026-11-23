@@ -15,7 +15,7 @@ public abstract class AbstractCommand implements ICommand {
   /**
    * Constructor.
    *
-   * @param type the code type this command handles
+   * @param type The code type this command handles.
    */
   protected AbstractCommand(CodeType type) {
     this.type = type;

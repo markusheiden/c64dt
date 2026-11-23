@@ -67,13 +67,13 @@ public class ReassemblerView extends JFrame {
     add(main);
 
     //
-    // Reassembled code
+    // Reassembled code.
     //
 
     main.setRightComponent(code.createComponent());
 
     //
-    // Helper views
+    // Helper views.
     //
 
     JPanel helperPane = new JPanel();
@@ -85,7 +85,7 @@ public class ReassemblerView extends JFrame {
     helperPane.add(crossReference.createComponent());
 
     //
-    // Menu bar
+    // Menu bar.
     //
 
     setJMenuBar(createMenu());
@@ -94,7 +94,7 @@ public class ReassemblerView extends JFrame {
     setExtendedState(JFrame.MAXIMIZED_BOTH);
 
     use(new Reassembler());
-    // for testing purposes only...
+    // For testing purposes only...
     reassemble();
 
     updateGUI();
@@ -110,7 +110,7 @@ public class ReassemblerView extends JFrame {
       use(reassembler);
       currentFile = file;
     } catch (Exception e) {
-      // this method is just for test, so just output the exception
+      // This method is just for test, so just output the exception.
       e.printStackTrace();
     }
   }
@@ -118,7 +118,7 @@ public class ReassemblerView extends JFrame {
   /**
    * Use another reassembler.
    *
-   * @param reassembler Reassembler
+   * @param reassembler Reassembler.
    */
   public void use(Reassembler reassembler) {
     requireThat(reassembler, "reassembler").isNotNull();
@@ -144,7 +144,7 @@ public class ReassemblerView extends JFrame {
   }
 
   //
-  // Menu
+  // Menu.
   //
 
   /**
@@ -163,7 +163,7 @@ public class ReassemblerView extends JFrame {
         JFileChooser chooser = new JFileChooser();
         int result = chooser.showOpenDialog(ReassemblerView.this);
         if (result == JFileChooser.APPROVE_OPTION) {
-          // TODO mh: ask for start address
+          // TODO mh: Ask for start address.
           currentFile = null;
           reassembler.reassemble(CodeBuffer.fromCode(0x8000, new FileInputStream(chooser.getSelectedFile())));
         }

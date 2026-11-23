@@ -33,9 +33,9 @@ public abstract class AbstractDiskImage implements IDiskImage {
   /**
    * Constructor.
    *
-   * @param sides number of disk sides
-   * @param tracks number of tracks
-   * @param hasErrors support error informations?
+   * @param sides Number of disk sides.
+   * @param tracks Number of tracks.
+   * @param hasErrors Support error information?
    */
   protected AbstractDiskImage(int sides, int tracks, boolean hasErrors) {
     requireThat(sides, "sides").isGreaterThanOrEqualTo(1).isLessThanOrEqualTo(2);
@@ -115,7 +115,7 @@ public abstract class AbstractDiskImage implements IDiskImage {
   }
 
   //
-  // error support
+  // Error support.
   //
 
   @Override
@@ -146,21 +146,21 @@ public abstract class AbstractDiskImage implements IDiskImage {
   }
 
   //
-  // BAM, directory
+  // BAM, directory.
   //
 
   /**
-   * Size of a bam track entry in bytes.
+   * Size of a BAM track entry in bytes.
    */
   protected abstract int getBamEntrySize();
 
   /**
    * Read a track entry.
    *
-   * @param bam bam to fill
-   * @param track current track
-   * @param content sector buffer
-   * @param pos position in sector buffer
+   * @param bam BAM to fill.
+   * @param track Current track.
+   * @param content Sector buffer.
+   * @param pos Position in sector buffer.
    */
   protected void readBAM(IBAM bam, int track, byte[] content, int pos) {
     requireThat(bam, "bam").isNotNull();
@@ -174,12 +174,12 @@ public abstract class AbstractDiskImage implements IDiskImage {
   }
 
   /**
-   * Read a bam byte.
+   * Read a BAM byte.
    *
-   * @param bam bam to fill
-   * @param track current track
-   * @param sector current sector
-   * @param b byte to read
+   * @param bam BAM to fill.
+   * @param track Current track.
+   * @param sector Current sector.
+   * @param b Byte to read.
    */
   protected void readBAM(IBAM bam, int track, int sector, byte b) {
     requireThat(bam, "bam").isNotNull();
@@ -212,19 +212,19 @@ public abstract class AbstractDiskImage implements IDiskImage {
   /**
    * Read a directory entry.
    *
-   * @param content sector buffer
-   * @param pos position in sector buffer
+   * @param content Sector buffer.
+   * @param pos Position in sector buffer.
    */
   protected IFile getFile(byte[] content, int pos) {
-    // TODO evaluate all attributes
+    // TODO Evaluate all attributes.
     FileMode mode = FileMode.fileMode(content[pos + 0x02]);
     int track = ByteUtil.toByte(content, pos + 0x03);
     int sector = ByteUtil.toByte(content, pos + 0x04);
     byte[] name = TextUtil.strip(content, pos + 0x05, 16);
-    int sideTrack = ByteUtil.toByte(content, pos + 0x15); // rel only
-    int sideSector = ByteUtil.toByte(content, pos + 0x16); // rel only
-    int recordLength = ByteUtil.toByte(content, pos + 0x17); // rel only
-    // 0x18-0x1D unused
+    int sideTrack = ByteUtil.toByte(content, pos + 0x15); // REL only.
+    int sideSector = ByteUtil.toByte(content, pos + 0x16); // REL only.
+    int recordLength = ByteUtil.toByte(content, pos + 0x17); // REL only.
+    // 0x18-0x1D unused.
     int size = ByteUtil.toWord(content, pos + 0x1E);
 
     return new File(mode, track, sector, name, size);

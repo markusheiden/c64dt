@@ -25,7 +25,7 @@ class NonClosingBufferedWriter extends BufferedWriter {
 
   @Override
   public void close() throws IOException {
-    // just flush, no close!
+    // Just flush, no close!
     flush();
   }
 }

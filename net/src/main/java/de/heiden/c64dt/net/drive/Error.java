@@ -30,7 +30,7 @@ public enum Error {
   /**
    * Constructor.
    *
-   * @param code error code
+   * @param code Error code.
    */
   Error(int code, String description, int result) {
     requireThat(description, "description").isNotNull();
@@ -68,8 +68,8 @@ public enum Error {
   /**
    * Complete error line.
    *
-   * @param track track
-   * @param sector sector
+   * @param track Track.
+   * @param sector Sector.
    */
   public String toString(int track, int sector) {
     return toString() + "," + FORMAT.format(track) + "," + FORMAT.format(sector);
@@ -78,8 +78,8 @@ public enum Error {
   /**
    * Complete error line in C64 encoding.
    *
-   * @param track track
-   * @param sector sector
+   * @param track Track.
+   * @param sector Sector.
    */
   public byte[] toBytes(int track, int sector) {
     return C64Charset.LOWER.toBytes(toString(track, sector));

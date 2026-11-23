@@ -6,7 +6,7 @@ package de.heiden.c64dt.net.drive.stream;
 public class NullStream implements IStream {
   @Override
   public boolean isOpen() {
-    // stream is always closed
+    // Stream is always closed.
     return false;
   }
 

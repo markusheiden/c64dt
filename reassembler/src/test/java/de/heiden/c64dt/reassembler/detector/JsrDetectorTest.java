@@ -11,7 +11,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test for {@link JsrDetector}
+ * Test for {@link JsrDetector}.
  */
 public class JsrDetectorTest {
   @Test
@@ -32,15 +32,15 @@ public class JsrDetectorTest {
     Map<Integer, List<Integer>> crossReference = detector.crossReference(commands);
 
     List<Integer> references1000 = crossReference.get(0x1000);
-    // JSR at relative address 0 references $1000
+    // JSR at relative address 0 references $1000.
     assertThat(references1000).contains(0);
-    // JSR at relative address 6 references $1000
+    // JSR at relative address 6 references $1000.
     assertThat(references1000).contains(6);
 
     assertThat(references1000).hasSize(2);
 
     List<Integer> references1003 = crossReference.get(0x1003);
-    // JSR at relative address 3 references $1003
+    // JSR at relative address 3 references $1003.
     assertThat(references1003).contains(3);
 
     assertThat(references1003).hasSize(1);

@@ -12,7 +12,7 @@ public class GotoAddressEvent extends ReassemblerEvent {
   /**
    * Constructor for the case that no address has been selected.
    *
-   * @param eventSource Source of event
+   * @param eventSource Source of event.
    */
   public GotoAddressEvent(Object eventSource) {
     this(eventSource, -1);
@@ -21,8 +21,8 @@ public class GotoAddressEvent extends ReassemblerEvent {
   /**
    * Constructor for the case that an address has been selected.
    *
-   * @param eventSource Source of event
-   * @param index The relative address to go to
+   * @param eventSource Source of event.
+   * @param index The relative address to go to.
    */
   public GotoAddressEvent(Object eventSource, int index) {
     super(eventSource);
@@ -33,7 +33,7 @@ public class GotoAddressEvent extends ReassemblerEvent {
   /**
    * The relative address to go to.
    *
-   * @return Relative address
+   * @return Relative address.
    */
   public int getIndex() {
     return index;

@@ -46,9 +46,9 @@ public class C64TextArea extends C64Component {
    * Constructor.
    * The lower charset is used as default.
    *
-   * @param columns character columns to display
-   * @param rows character rows to display
-   * @param factor zoom factor
+   * @param columns Character columns to display.
+   * @param rows Character rows to display.
+   * @param factor Zoom factor.
    * @param resizable Is the backing image resizable?
    */
   public C64TextArea(int columns, int rows, double factor, boolean resizable) {
@@ -125,7 +125,7 @@ public class C64TextArea extends C64Component {
   /**
    * Set charset to use.
    *
-   * @param upper use upper case only charset?
+   * @param upper Use upper case only charset?
    */
   public final void setCharset(boolean upper) {
     _upper = upper;
@@ -135,18 +135,18 @@ public class C64TextArea extends C64Component {
   /**
    * Draw a string to the screen.
    *
-   * @param column column
-   * @param row row
-   * @param s characters
+   * @param column Column.
+   * @param row Row.
+   * @param s Characters.
    */
   public void setText(int column, int row, String s) {
     if (!s.contains("\n")) {
-      // optimization for single line text
+      // Optimization for single line text.
       setText(column, row, _charset.toBytes(s));
       return;
     }
 
-    // handle multi line text
+    // Handle multi line text.
     StringTokenizer tokenizer = new StringTokenizer(s, "\n");
     for (int r = row; tokenizer.hasMoreTokens() && r < _rows; r++) {
       setText(column, r, tokenizer.nextToken());
@@ -156,9 +156,9 @@ public class C64TextArea extends C64Component {
   /**
    * Draw a string with inverted characters to the screen.
    *
-   * @param column column
-   * @param row row
-   * @param s characters
+   * @param column Column.
+   * @param row Row.
+   * @param s Characters.
    */
   public void setTextInverted(int column, int row, String s) {
     byte[] characters = _charset.toBytes(s);
@@ -171,9 +171,9 @@ public class C64TextArea extends C64Component {
   /**
    * Draw a string to the screen.
    *
-   * @param column column
-   * @param row row
-   * @param s characters in C64 encoding
+   * @param column Column.
+   * @param row Row.
+   * @param s Characters in C64 encoding.
    */
   public void setText(int column, int row, byte... s) {
     PixelWriter writer = getPixelWriter();
@@ -185,9 +185,9 @@ public class C64TextArea extends C64Component {
   /**
    * Draw a single character to the screen.
    *
-   * @param column column
-   * @param row row
-   * @param c character in C64 encoding
+   * @param column Column.
+   * @param row Row.
+   * @param c Character in C64 encoding.
    */
   public void setText(int column, int row, byte c) {
     setTextInternal(column, row, c, getPixelWriter());
@@ -196,15 +196,15 @@ public class C64TextArea extends C64Component {
   /**
    * Draw a single character to the screen.
    *
-   * @param column column
-   * @param row row
-   * @param c character in C64 encoding
-   * @param writer Pixel writer for backing image
+   * @param column Column.
+   * @param row Row.
+   * @param c Character in C64 encoding.
+   * @param writer Pixel writer for backing image.
    */
   protected void setTextInternal(int column, int row, byte c, PixelWriter writer) {
     if (column >= _columns || row >= _rows) {
-      // early exit, when the text exceeds the buffer.
-      // this may happen, e.g. when the component has been resized to a smaller size than the initial size.
+      // Early exit, when the text exceeds the buffer.
+      // This may happen, e.g. when the component has been resized to a smaller size than the initial size.
       return;
     }
 
@@ -249,9 +249,9 @@ public class C64TextArea extends C64Component {
   /**
    * Paint a single character onto the screen.
    *
-   * @param column column
-   * @param row row
-   * @param writer Pixel writer for backing image
+   * @param column Column.
+   * @param row Row.
+   * @param writer Pixel writer for backing image.
    */
   private void paintCharacter(int column, int row, PixelWriter writer) {
     Color foregroundColor = _foregrounds[row][column];
@@ -274,7 +274,7 @@ public class C64TextArea extends C64Component {
   }
 
   //
-  // test
+  // Test.
   //
 
   /**

@@ -9,7 +9,7 @@ public abstract class ReassemblerEvent extends ApplicationEvent {
   /**
    * Constructor.
    *
-   * @param source Source of event
+   * @param source Source of event.
    */
   public ReassemblerEvent(Object source) {
     super(source);

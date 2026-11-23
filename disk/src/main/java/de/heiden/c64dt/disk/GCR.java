@@ -91,10 +91,10 @@ public class GCR {
   }
 
   /**
-   * Generate a reverse gcr table.
+   * Generate a reverse GCR table.
    *
-   * @param shift the number of bits the gcr is shifted
-   * @return reverse gcr table
+   * @param shift The number of bits the GCR is shifted.
+   * @return Reverse GCR table.
    */
   private int[] generate(int shift) {
     int[] nibble = new int[256];
@@ -111,10 +111,10 @@ public class GCR {
   }
 
   /**
-   * Merge all reverse gcr tables.
+   * Merge all reverse GCR tables.
    *
-   * @param nibbles reverse gcr tables
-   * @return the merged reverse gcr table
+   * @param nibbles Reverse GCR tables.
+   * @return The merged reverse GCR table.
    */
   public int[] calculate(int[][] nibbles) {
     int[] result = new int[512];
@@ -138,11 +138,11 @@ public class GCR {
   }
 
   /**
-   * Does the given reversed gcr table into the merged reversed gcr table.
+   * Does the given reversed GCR table fit into the merged reversed GCR table?
    *
-   * @param nibble reversed gcr table
-   * @param result merged reversed gcr table
-   * @param index the index to which nibble should be merged into result
+   * @param nibble Reversed GCR table.
+   * @param result Merged reversed GCR table.
+   * @param index The index to which nibble should be merged into result.
    */
   private boolean match(int[] nibble, int[] result, int index) {
     for (int i = 0, pos = index; i < nibble.length; i++, pos++) {
@@ -158,11 +158,11 @@ public class GCR {
   }
 
   /**
-   * Copy the given reversed gcr table into the merged reversed gcr table.
+   * Copy the given reversed GCR table into the merged reversed GCR table.
    *
-   * @param nibble reversed gcr table
-   * @param result merged reversed gcr table
-   * @param index the index to which nibble should be merged into result
+   * @param nibble Reversed GCR table.
+   * @param result Merged reversed GCR table.
+   * @param index The index to which nibble should be merged into result.
    */
   private void copy(int[] nibble, int[] result, int index) {
     for (int i = 0, pos = index; i < nibble.length; i++, pos++) {
@@ -176,10 +176,10 @@ public class GCR {
   }
 
   /**
-   * Length of the given gcr table.
+   * Length of the given GCR table.
    * Considers the first set byte to the last set byte.
    *
-   * @param table gcr table
+   * @param table GCR table.
    */
   private static int length(int[] table) {
     int first = first(table);
@@ -206,9 +206,9 @@ public class GCR {
   }
 
   /**
-   * Converts a gcr table to an easy to read string representation.
+   * Converts a GCR table to an easy to read string representation.
    *
-   * @param table gcr table
+   * @param table GCR table.
    */
   private static String toString(int[] table) {
     StringBuilder out = new StringBuilder(256 * 5);

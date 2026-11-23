@@ -28,7 +28,7 @@ public class DataCommand extends AbstractCommand {
   /**
    * Constructor.
    *
-   * @param dataByte byte this command represents
+   * @param dataByte Byte this command represents.
    */
   public DataCommand(int dataByte) {
     super(CodeType.DATA);
@@ -40,7 +40,7 @@ public class DataCommand extends AbstractCommand {
   /**
    * Constructor.
    *
-   * @param dataBytes bytes this command represents
+   * @param dataBytes Bytes this command represents.
    */
   public DataCommand(int... dataBytes) {
     super(CodeType.DATA);
@@ -63,12 +63,12 @@ public class DataCommand extends AbstractCommand {
 
   @Override
   public boolean combineWith(ICommand command) {
-    // Only other data commands may be merged
+    // Only other data commands may be merged.
     if (!(command instanceof DataCommand dataCommand)) {
       return false;
     }
 
-    // Only merge more than MAX_BYTES if result is a !FILL
+    // Only merge more than MAX_BYTES if result is a !FILL.
     if (data.size() >= MAX_BYTES && (!isSameByte() || !dataCommand.isSameByte() || !data.get(0).equals(dataCommand.data.get(0)))) {
       return false;
     }
@@ -83,7 +83,7 @@ public class DataCommand extends AbstractCommand {
 
     StringBuilder output = new StringBuilder(16 + data.size() * 8);
     if (data.size() > 8 && isSameByte()) {
-      // special case: the data consists of the same byte over and over again
+      // Special case: the data consists of the same byte over and over again.
 
       output.append("!FILL ");
       output.append(hex(data.size()));
@@ -91,7 +91,7 @@ public class DataCommand extends AbstractCommand {
       output.append(hexByte(data.get(0)));
 
     } else {
-      // default case: different data bytes
+      // Default case: different data bytes.
 
       output.append("!BYTE ");
       output.append(hexByte(data.get(0)));

@@ -25,7 +25,7 @@ public class CommandIterator implements Iterator<ICommand> {
   /**
    * Constructor.
    *
-   * @param commands Command buffer to iterate
+   * @param commands Command buffer to iterate.
    */
   public CommandIterator(CommandBuffer commands) {
     requireThat(commands, "commands").isNotNull();
@@ -36,21 +36,21 @@ public class CommandIterator implements Iterator<ICommand> {
   /**
    * Start iteration at the last command.
    *
-   * @return this, for method chaining
+   * @return this, for method chaining.
    */
   public CommandIterator reverse() {
-    // trace backward for last command
+    // Trace backward for last command.
     for (index = commands.getLength() - 1; index >= 0 && commands.getCommand(index) == null; index--) {
-      // search further
+      // Search further.
     }
-    // set index after last command
+    // Set index after last command.
     index = getNextIndex();
 
     return this;
   }
 
   //
-  // code types
+  // Code types.
   //
 
   /**
@@ -63,15 +63,15 @@ public class CommandIterator implements Iterator<ICommand> {
   /**
    * Set code type for the current opcode / command.
    *
-   * @param type code type
-   * @return whether a change has taken place
+   * @param type Code type.
+   * @return Whether a change has taken place.
    */
   public boolean setType(CodeType type) {
     return commands.setType(index, type);
   }
 
   //
-  // commands
+  // Commands.
   //
 
   /**
@@ -84,7 +84,7 @@ public class CommandIterator implements Iterator<ICommand> {
   /**
    * Sets the current relative address.
    *
-   * @param index relative address
+   * @param index Relative address.
    */
   public void setIndex(int index) {
     // Check that there is a command at the given index.
@@ -155,22 +155,22 @@ public class CommandIterator implements Iterator<ICommand> {
    */
   @SuppressWarnings({"StatementWithEmptyBody"})
   public ICommand previous() {
-    // get start of current command for consistency check
+    // Get start of current command for consistency check.
     int endIndex = index;
-    // trace backwards for previous command
+    // Trace backwards for previous command.
     while (index > 0 && commands.getCommand(--index) == null) {
-      // search further
+      // Search further.
     }
     ICommand result = getCommand();
 
     requireThat(result, "result").isNotNull();
-    // Check that the previous commands ends at the start of the current command.
+    // Check that the previous command ends at the start of the current command.
     requireThat(getNextIndex(), "getNextIndex()").isEqualTo(endIndex);
     return result;
   }
 
   //
-  // modifying operations during iteration
+  // Modifying operations during iteration.
   //
 
   /**
@@ -179,18 +179,18 @@ public class CommandIterator implements Iterator<ICommand> {
    */
   @Override
   public void remove() {
-    // remember position of current command
+    // Remember position of current command.
     int remove = index;
-    // skip current command
+    // Skip current command.
     index = getNextIndex();
-    // delete current command
+    // Delete current command.
     commands.removeCommand(remove);
-    // trace back to previous command
+    // Trace back to previous command.
     previous();
   }
 
   //
-  // label/reference specific interface
+  // Label/reference specific interface.
   //
 
   /**
@@ -203,7 +203,7 @@ public class CommandIterator implements Iterator<ICommand> {
   /**
    * Label representation for the current address.
    *
-   * @return label representation or null if no label exists for the current address
+   * @return Label representation or null if no label exists for the current address.
    */
   public ILabel getLabel() {
     return commands.getLabel(getCommand().getAddress());
@@ -226,7 +226,7 @@ public class CommandIterator implements Iterator<ICommand> {
   /**
    * Remove a reference from the current address.
    *
-   * @return whether a label has been removed
+   * @return Whether a label has been removed.
    */
   public boolean removeReference() {
     return commands.removeReference(index);

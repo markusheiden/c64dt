@@ -31,7 +31,7 @@ public interface ICommand {
   /**
    * Set the address.
    *
-   * @param address absolute address
+   * @param address Absolute address.
    */
   void setAddress(int address);
 
@@ -48,22 +48,22 @@ public interface ICommand {
   /**
    * Set whether this command is reachable.
    *
-   * @param reachable is this command reachable?
+   * @param reachable Is this command reachable?
    */
   void setReachable(boolean reachable);
 
   /**
    * Combine this command with the given command.
    *
-   * @param command command right after this command
-   * @return returns if commands have been combined
+   * @param command Command right after this command.
+   * @return Returns if commands have been combined.
    */
   boolean combineWith(ICommand command);
 
   /**
    * Write string representation of this command.
    *
-   * @param buffer command buffer
+   * @param buffer Command buffer.
    */
   String toString(CommandBuffer buffer);
 

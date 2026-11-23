@@ -35,9 +35,9 @@ public class JC64List extends JList<String> {
    * Constructor.
    * The lower charset is used as default.
    *
-   * @param columns character columns to display
-   * @param rows character rows to display
-   * @param factor zoom factor
+   * @param columns Character columns to display.
+   * @param rows Character rows to display.
+   * @param factor Zoom factor.
    * @param resizable Is the backing image resizable?
    */
   public JC64List(int columns, int rows, final double factor, final boolean resizable) {
@@ -111,7 +111,7 @@ public class JC64List extends JList<String> {
   /**
    * Set charset to use.
    *
-   * @param upper use upper case only charset?
+   * @param upper Use upper case only charset?
    */
   public final void setCharset(boolean upper) {
     _upper = upper;
@@ -120,7 +120,7 @@ public class JC64List extends JList<String> {
   /**
    * Set foreground color.
    *
-   * @param foreground foreground color index
+   * @param foreground Foreground color index.
    */
   public void setForeground(int foreground) {
     setForeground(SwingColors.COLOR[foreground]);
@@ -129,7 +129,7 @@ public class JC64List extends JList<String> {
   /**
    * Set foreground color.
    *
-   * @param foreground foreground color
+   * @param foreground Foreground color.
    */
   public void setForeground(C64Color foreground) {
     setForeground(foreground.ordinal());
@@ -138,7 +138,7 @@ public class JC64List extends JList<String> {
   /**
    * Set background color.
    *
-   * @param background background color index
+   * @param background Background color index.
    */
   public void setBackground(int background) {
     setBackground(SwingColors.COLOR[background]);
@@ -147,14 +147,14 @@ public class JC64List extends JList<String> {
   /**
    * Set background color.
    *
-   * @param background background color
+   * @param background Background color.
    */
   public void setBackground(C64Color background) {
     setBackground(background.ordinal());
   }
 
   //
-  // test
+  // Test.
   //
 
   public static void main(String[] args) {
@@ -173,7 +173,7 @@ public class JC64List extends JList<String> {
     frame.pack();
     frame.setVisible(true);
 
-    // TODO 2010-03-07 mh: why is this repaint() needed???
+    // TODO 2010-03-07 mh: Why is this repaint() needed???
     frame.repaint();
   }
 }

@@ -22,7 +22,7 @@ public interface ICodeBuffer {
   /**
    * Set the current address.
    *
-   * @param address address
+   * @param address Address.
    */
   void setCurrentAddress(int address);
 
@@ -34,12 +34,12 @@ public interface ICodeBuffer {
   /**
    * Set the current index.
    *
-   * @param index index
+   * @param index Index.
    */
   void setCurrentIndex(int index);
 
   //
-  // code specific interface
+  // Code specific interface.
   //
 
   /**
@@ -50,7 +50,7 @@ public interface ICodeBuffer {
   /**
    * Are there 'number' bytes left to read?
    *
-   * @param number number of bytes
+   * @param number Number of bytes.
    */
   boolean has(int number);
 
@@ -62,8 +62,8 @@ public interface ICodeBuffer {
   /**
    * Read 'number' bytes as one word.
    *
-   * @param number number of bytes to read
-   * @return read byte if number == 1, read word if number == 2, -1 if number == 0
+   * @param number Number of bytes to read.
+   * @return Read byte if number == 1, read word if number == 2, -1 if number == 0.
    */
   int read(int number);
 

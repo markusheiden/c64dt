@@ -34,7 +34,7 @@ public class DriveConnection extends AbstractConnection {
   /**
    * Constructor.
    *
-   * @param port port to use
+   * @param port Port to use.
    */
   public DriveConnection(int port) throws IOException {
     super(new InetSocketAddress(InetAddress.getLocalHost(), port), null, MAX_PACKET, 0xAD, 0xF8);
@@ -47,7 +47,7 @@ public class DriveConnection extends AbstractConnection {
   public synchronized DrivePacket waitForRequest() throws IOException {
     request = new DrivePacket(receivePacket().getData());
     if (sequence == request.getSequence()) {
-      // TODO 2011-01-09 mh: check, if at least one packet has been sent
+      // TODO 2011-01-09 mh: Check, if at least one packet has been sent.
       resendPacket();
     }
 
@@ -57,12 +57,12 @@ public class DriveConnection extends AbstractConnection {
   /**
    * Send reply with error code.
    *
-   * @param error error code
+   * @param error Error code.
    */
   public synchronized void sendReply(Error error) throws IOException {
     sequence = request.getSequence();
 
-    // TODO 2011-01-09 mh: check packet creation
+    // TODO 2011-01-09 mh: Check packet creation.
     Packet packet = new Packet(MAX_PACKET);
     packet.addByte(request.getSize());
     packet.addByte(0x01);
@@ -74,7 +74,7 @@ public class DriveConnection extends AbstractConnection {
   /**
    * Send reply with payload data.
    *
-   * @param data payload data
+   * @param data Payload data.
    */
   public void sendReply(byte[] data) throws IOException {
     requireThat(data, "data").isNotNull();
@@ -86,7 +86,7 @@ public class DriveConnection extends AbstractConnection {
 
     sequence = request.getSequence();
 
-    // TODO 2011-01-09 mh: check packet creation
+    // TODO 2011-01-09 mh: Check packet creation.
     Packet packet = new Packet(MAX_PACKET);
     packet.addByte(request.getSize());
     packet.addByte(SERVICE_DATA);

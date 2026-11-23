@@ -7,7 +7,7 @@ public class IllegalSectorException extends IllegalArgumentException {
   /**
    * Constructor for illegal tracks.
    *
-   * @param track track
+   * @param track Track.
    */
   public IllegalSectorException(int track) {
     super("Illegal track " + track);
@@ -16,8 +16,8 @@ public class IllegalSectorException extends IllegalArgumentException {
   /**
    * Constructor for illegal sectors.
    *
-   * @param track track
-   * @param sector sector
+   * @param track Track.
+   * @param sector Sector.
    */
   public IllegalSectorException(int track, int sector) {
     super("Illegal sector " + track + " / " + sector);

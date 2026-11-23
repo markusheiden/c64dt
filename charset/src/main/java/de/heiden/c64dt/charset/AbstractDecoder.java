@@ -14,8 +14,8 @@ public abstract class AbstractDecoder extends CharsetDecoder {
   /**
    * Constructor.
    *
-   * @param cs charset
-   * @param replacement Replacement
+   * @param cs Charset.
+   * @param replacement Replacement.
    */
   protected AbstractDecoder(Charset cs, String replacement) {
     super(cs, 1, 1);
@@ -38,7 +38,7 @@ public abstract class AbstractDecoder extends CharsetDecoder {
   /**
    * Convert a single byte to a char.
    *
-   * @param b character byte
+   * @param b Character byte.
    */
   protected abstract char toChar(byte b) throws UnmappableCharacterException;
 }

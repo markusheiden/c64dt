@@ -23,7 +23,7 @@ public abstract class AbstractDiskImageReader {
   /**
    * Read disk image from file.
    *
-   * @param file file
+   * @param file File.
    */
   public IDiskImage read(File file) throws IOException, WrongDiskImageFormatException {
     requireThat(file, "file").isNotNull();
@@ -35,7 +35,7 @@ public abstract class AbstractDiskImageReader {
    * Read disk image from stream.
    * The stream will not be closed.
    *
-   * @param stream stream
+   * @param stream Stream.
    */
   public IDiskImage read(InputStream stream) throws IOException, WrongDiskImageFormatException {
     requireThat(stream, "stream").isNotNull();
@@ -46,16 +46,16 @@ public abstract class AbstractDiskImageReader {
   /**
    * Read disk image from byte array.
    *
-   * @param data image data to read from
+   * @param data Image data to read from.
    */
   public abstract IDiskImage read(byte[] data) throws WrongDiskImageFormatException;
 
   /**
    * Read disk image from byte array.
    *
-   * @param data image data to read from
-   * @param diskImage disk image
-   * @return diskImage for method chaining
+   * @param data Image data to read from.
+   * @param diskImage Disk image.
+   * @return diskImage for method chaining.
    */
   protected IDiskImage read(byte[] data, IDiskImage diskImage) {
     requireThat(data, "data").isNotNull();
@@ -63,7 +63,7 @@ public abstract class AbstractDiskImageReader {
 
     int i = 0;
 
-    // read sector contents
+    // Read sector contents.
     byte[] content = new byte[256];
     for (int track = 1; track <= diskImage.getTracks(); track++) {
       logger.debug("Reading track {}", track);
@@ -75,7 +75,7 @@ public abstract class AbstractDiskImageReader {
       }
     }
 
-    // read errors
+    // Read errors.
     if (diskImage.hasErrors()) {
       logger.debug("Reading errors");
       for (int track = 1; track <= diskImage.getTracks(); track++) {

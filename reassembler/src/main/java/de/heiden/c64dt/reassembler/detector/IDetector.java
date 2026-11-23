@@ -9,8 +9,8 @@ public interface IDetector {
   /**
    * Detect type of code.
    *
-   * @param commands command buffer
-   * @return whether a change of code types has taken place
+   * @param commands Command buffer.
+   * @return Whether a change of code types has taken place.
    */
   boolean detect(CommandBuffer commands);
 }

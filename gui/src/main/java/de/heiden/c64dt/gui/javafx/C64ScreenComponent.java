@@ -11,11 +11,11 @@ import javafx.scene.image.PixelWriter;
 import javafx.stage.Stage;
 
 /**
- * Base class for component displaying c64 indexed color content.
+ * Base class for component displaying C64 indexed color content.
  */
 public abstract class C64ScreenComponent extends C64Component {
   //
-  // attributes
+  // Attributes.
   //
 
   /**
@@ -58,11 +58,11 @@ public abstract class C64ScreenComponent extends C64Component {
   /**
    * Constructor.
    *
-   * @param offset Offset of first pixel in byte buffer
-   * @param width width in pixel
-   * @param lineLength Length of a line in the byte buffer
-   * @param height height in pixel
-   * @param factor zoom factor
+   * @param offset Offset of first pixel in byte buffer.
+   * @param width Width in pixel.
+   * @param lineLength Length of a line in the byte buffer.
+   * @param height Height in pixel.
+   * @param factor Zoom factor.
    */
   protected C64ScreenComponent(int offset, int width, int lineLength, int height, double factor) {
     super(width, height, factor, false);
@@ -76,7 +76,7 @@ public abstract class C64ScreenComponent extends C64Component {
   /**
    * Update backing image.
    *
-   * @param imageData new backing image data
+   * @param imageData New backing image data.
    */
   protected void updateImageData(byte[] imageData) {
 //    requireThat("imageData", imageData).isNotNull();
@@ -85,7 +85,7 @@ public abstract class C64ScreenComponent extends C64Component {
     final int height = getImageHeight();
     final int lineOffset = _lineLength - width;
 
-    // convert color indexes to ARGB colors
+    // Convert color indexes to ARGB colors.
     for (int p = 0, d = _offset, row = 0; row < height; row++) {
       for (int column = 0; column < width; column++) {
         pixels[p++] = COLOR[imageData[d++]];
@@ -98,7 +98,7 @@ public abstract class C64ScreenComponent extends C64Component {
   }
 
   //
-  // test
+  // Test.
   //
 
   /**

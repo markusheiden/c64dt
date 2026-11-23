@@ -18,11 +18,11 @@ public class File implements IFile {
   /**
    * Constructor.
    *
-   * @param mode file mode
-   * @param track start track
-   * @param sector start sector
-   * @param name name in C64 encoding
-   * @param size file size in bytes
+   * @param mode File mode.
+   * @param track Start track.
+   * @param sector Start sector.
+   * @param name Name in C64 encoding.
+   * @param size File size in bytes.
    */
   public File(FileMode mode, int track, int sector, byte[] name, int size) {
     requireThat(mode, "mode").isNotNull();

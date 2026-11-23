@@ -13,7 +13,7 @@ import de.heiden.c64dt.net.drive.stream.IStream;
 import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
 /**
- * Path to a d64 image file.
+ * Path to a D64 image file.
  */
 public class D64Path extends AbstractPath {
   private IDiskImage d64;
@@ -39,7 +39,7 @@ public class D64Path extends AbstractPath {
 
   @Override
   protected IStream doFile(byte[] filename) throws FileNotFoundException {
-    // TODO implement
+    // TODO Implement.
     return null;
   }
 

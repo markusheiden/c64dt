@@ -27,7 +27,7 @@ public class CommandWriter {
   /**
    * Constructor.
    *
-   * @param output writer to write output to
+   * @param output Writer to write output to.
    */
   public CommandWriter(Writer output) {
     requireThat(output, "output").isNotNull();
@@ -39,23 +39,23 @@ public class CommandWriter {
   /**
    * Write commands to output writer.
    *
-   * @param commands Command buffer
+   * @param commands Command buffer.
    */
   public void write(CommandBuffer commands) throws IOException {
     requireThat(commands, "commands").isNotNull();
 
-    // start address
+    // Start address.
     output.append("*=").append(hexWord(commands.getStartAddress())).append("\n");
     output.append("\n");
 
-    // external labels
+    // External labels.
     Collection<ExternalLabel> externalReferences = new TreeSet<>(commands.getExternalLabels());
     for (ExternalLabel externalReference : externalReferences) {
       output.append(externalReference.toString()).append(" = ").append(hex(externalReference.getAddress())).append("\n");
     }
     output.append("\n");
 
-    // code
+    // Code.
     StringBuilder line = new StringBuilder(80);
     for (CommandIterator iter = commands.iterator(); iter.hasNext(); ) {
       ICommand command = iter.next();
@@ -63,7 +63,7 @@ public class CommandWriter {
 
       line.setLength(0);
 
-      // debug output: prefixes
+      // Debug output: prefixes.
       if (command == null) {
         line.append("?");
       } else {
@@ -82,7 +82,7 @@ public class CommandWriter {
       fillSpaces(line, 5);
       line.append(" | ");
 
-      // debug output: byte representation of command
+      // Debug output: byte representation of command.
       line.append(hexWordPlain(pc));
       List<Integer> data = command.toBytes();
       for (int i = 0; i < data.size() && i < 3; i++) {
@@ -93,10 +93,10 @@ public class CommandWriter {
       line.append(data.size() > 3 ? "..." : "   ");
       line.append(" | ");
 
-      // reassembler output
+      // Reassembler output.
       ILabel label = iter.getLabel();
       if (label != null) {
-        // TODO mh: check length of label?
+        // TODO mh: Check length of label?
         line.append(label.toString(pc)).append(":");
       }
 
@@ -106,7 +106,7 @@ public class CommandWriter {
       if (command != null) {
         output.append(command.toString(commands));
       } else {
-        // TODO mh: log error?
+        // TODO mh: Log error?
         output.append("???");
       }
 
@@ -119,8 +119,8 @@ public class CommandWriter {
   /**
    * Fill line with spaces up to a limit.
    *
-   * @param line line
-   * @param num limit
+   * @param line Line.
+   * @param num Limit.
    */
   private void fillSpaces(StringBuilder line, int num) {
     while (line.length() < num) {

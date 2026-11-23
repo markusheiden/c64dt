@@ -38,7 +38,7 @@ public enum FileType {
   REL(0x04, "REL"),
 
   //
-  // unknown values
+  // Unknown values.
   //
 
   /**
@@ -89,7 +89,7 @@ public enum FileType {
   /**
    * Get type for type code.
    *
-   * @param code type code
+   * @param code Type code.
    */
   public static FileType fileType(int code) {
     FileType result = types.get((byte) code);
@@ -105,8 +105,8 @@ public enum FileType {
   /**
    * Get type for extension.
    *
-   * @param extension extension
-   * @return matching file type or ANY for undefined extensions
+   * @param extension Extension.
+   * @return Matching file type or ANY for undefined extensions.
    */
   public static FileType fileType(String extension) {
     requireThat(extension, "extension").isNotNull();
@@ -124,7 +124,7 @@ public enum FileType {
   /**
    * Constructor.
    *
-   * @param code type code, -1 if none defined
+   * @param code Type code, -1 if none defined.
    */
   FileType(int code, String extension) {
     requireThat(extension, "extension").isNotNull();

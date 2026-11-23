@@ -15,7 +15,7 @@ public abstract class AbstractLabel implements ILabel {
   /**
    * Constructor.
    *
-   * @param address address the label points to.
+   * @param address Address the label points to.
    */
   public AbstractLabel(int address) {
     requireValidAddress(address);

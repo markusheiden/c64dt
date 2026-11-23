@@ -407,7 +407,7 @@ public enum Opcode {
   /**
    * Is the argument of the opcode a reference to a code location?.
    * <p>
-   * TODO rework detect all kinds of references, not just single location code references
+   * TODO Rework detect all kinds of references, not just single location code references.
    */
   public boolean isCodeReference() {
     return type.isJump() && (mode == OpcodeMode.REL || mode == OpcodeMode.ABS);
@@ -431,7 +431,7 @@ public enum Opcode {
   /**
    * Get opcode for byte representation of opcode.
    *
-   * @param opcode byte representation of opcode
+   * @param opcode Byte representation of opcode.
    */
   public static Opcode opcode(int opcode) {
     requireThat(opcode, "opcode").isBetween(0x00, 0xFF + 1);
@@ -453,8 +453,8 @@ public enum Opcode {
   /**
    * Disassembled representation.
    *
-   * @param pc address of opcode
-   * @param addr argument of opcode
+   * @param pc Address of opcode.
+   * @param addr Argument of opcode.
    */
   public String toString(int pc, int addr) {
     StringBuilder result = new StringBuilder();
@@ -468,11 +468,11 @@ public enum Opcode {
   /**
    * Constructor.
    *
-   * @param opcode opcode
-   * @param legal is this a legal opcode?
-   * @param type opcode type -> semantic of opcode
-   * @param mode address mode
-   * @param cycles number of cycles (without exceptional additional cycles)
+   * @param opcode Opcode.
+   * @param legal Is this a legal opcode?
+   * @param type Opcode type -> semantic of opcode.
+   * @param mode Address mode.
+   * @param cycles Number of cycles (without exceptional additional cycles).
    */
   Opcode(int opcode, boolean legal, OpcodeType type, OpcodeMode mode, int cycles) {
     requireThat(opcode, "opcode").isGreaterThanOrEqualTo(0x00).isLessThanOrEqualTo(0xFF);

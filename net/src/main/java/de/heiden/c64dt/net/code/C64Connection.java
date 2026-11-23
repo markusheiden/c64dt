@@ -14,7 +14,7 @@ import static de.heiden.c64dt.bytes.ByteUtil.hi;
 import static de.heiden.c64dt.bytes.ByteUtil.lo;
 
 /**
- * IP connection to a c64.
+ * IP connection to a C64.
  */
 public class C64Connection extends AbstractConnection {
   public static final int DEFAULT_PORT = 6462;
@@ -30,7 +30,7 @@ public class C64Connection extends AbstractConnection {
   /**
    * Constructor using default ports.
    *
-   * @param address Remote address of C64
+   * @param address Remote address of C64.
    */
   public C64Connection(InetAddress address) throws IOException {
     this(DEFAULT_PORT, address, DEFAULT_PORT);
@@ -39,9 +39,9 @@ public class C64Connection extends AbstractConnection {
   /**
    * Constructor.
    *
-   * @param sourcePort Port on this machine
-   * @param address Remote address of C64
-   * @param destinationPort Port of C64
+   * @param sourcePort Port on this machine.
+   * @param address Remote address of C64.
+   * @param destinationPort Port of C64.
    */
   public C64Connection(int sourcePort, InetAddress address, int destinationPort) throws IOException {
     super(new InetSocketAddress(InetAddress.getLocalHost(), sourcePort), new InetSocketAddress(address, destinationPort), MAX_PACKET, MAGIC1, MAGIC2);
@@ -64,8 +64,8 @@ public class C64Connection extends AbstractConnection {
   /**
    * Send data to memory location.
    *
-   * @param address address
-   * @param data data
+   * @param address Address.
+   * @param data Data.
    */
   public synchronized void write(int address, byte... data) throws IOException {
     requireValidAddress(address);
@@ -84,9 +84,9 @@ public class C64Connection extends AbstractConnection {
   /**
    * Fill memory area.
    *
-   * @param address address
-   * @param length length of memory area
-   * @param fill fill byte
+   * @param address Address.
+   * @param length Length of memory area.
+   * @param fill Fill byte.
    */
   public synchronized void fill(int address, int length, int fill) throws IOException {
     requireValidAddress(address);
@@ -99,7 +99,7 @@ public class C64Connection extends AbstractConnection {
   /**
    * Set PC.
    *
-   * @param address address
+   * @param address Address.
    */
   public synchronized void jump(int address) throws IOException {
     requireValidAddress(address);
@@ -110,7 +110,7 @@ public class C64Connection extends AbstractConnection {
   }
 
   /**
-   * Execute basic program by "RUN".
+   * Execute BASIC program by "RUN".
    */
   public synchronized void run() throws IOException {
     requireThat(isOpen(), "isOpen()").isTrue();
@@ -121,13 +121,13 @@ public class C64Connection extends AbstractConnection {
 
   /**
    * Read data from memory location ???.
-   * Command defined but not implemented in in CodeNet client.
+   * Command defined but not implemented in CodeNet client.
    * This method is currently broken!
-   * TODO 2011-01-09 mh: Fix this
+   * TODO 2011-01-09 mh: Fix this.
    *
-   * @param address address
-   * @param length number of bytes to read
-   * @return read data
+   * @param address Address.
+   * @param length Number of bytes to read.
+   * @return Read data.
    */
   public synchronized byte[] read(int address, int length) throws IOException {
     requireValidAddress(address);
@@ -136,7 +136,7 @@ public class C64Connection extends AbstractConnection {
     Packet packet = createPacket(8, hi(address), lo(address), hi(length), lo(length));
     Packet answer = sendPacketGetReply(packet);
     byte[] result = new byte[length];
-    // TODO 2011-01-09 mh: C64 currently just gets returns an ack
+    // TODO 2011-01-09 mh: C64 currently just gets returns an ack.
     System.arraycopy(answer.getData(), IDX_DATA, result, 0, length);
 
     return result;
@@ -145,8 +145,8 @@ public class C64Connection extends AbstractConnection {
   /**
    * Create packet.
    *
-   * @param service Service
-   * @param data data of the packet
+   * @param service Service.
+   * @param data Data of the packet.
    */
   protected synchronized Packet createPacket(int service, int... data) throws IOException {
     sequence++;
@@ -163,8 +163,8 @@ public class C64Connection extends AbstractConnection {
   /**
    * Send packet and receive reply with retries.
    *
-   * @param packet packet
-   * @return received packet (e.g. ack)
+   * @param packet Packet.
+   * @return Received packet (e.g. ack).
    */
   protected synchronized Packet sendPacketGetReply(Packet packet) throws IOException {
     Packet ack = null;
@@ -190,7 +190,7 @@ public class C64Connection extends AbstractConnection {
   /**
    * Check packet for a valid acknowledge.
    *
-   * @param ack packet
+   * @param ack Packet.
    */
   protected boolean isAck(Packet ack) throws IOException {
     byte[] data = ack.getData();

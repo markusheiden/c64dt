@@ -77,7 +77,7 @@ public class JsrDetector implements IDetector {
         continue;
       }
 
-      // mark subroutine calls
+      // Mark subroutine calls.
       for (int index : references) {
         int arguments = subroutine.getArguments();
         CodeType type = subroutine.getType();
@@ -85,7 +85,7 @@ public class JsrDetector implements IDetector {
         if (arguments == 0) {
           logger.debug("Known subroutine with zero terminated argument ({}) at address {}, referenced at index {}", type, hexWord(address), hexWord(index));
 
-          // search the zero which is terminating the argument
+          // Search the zero which is terminating the argument.
           int endIndex = search0(commands, index + 3, false);
           if (endIndex < 0) {
             continue;
@@ -95,10 +95,10 @@ public class JsrDetector implements IDetector {
         } else if (arguments > 0) {
           logger.debug("Known subroutine with {} byte argument ({}) at address {}, referenced at index {}", arguments, type, hexWord(address), hexWord(index));
 
-          // fixed length argument
+          // Fixed length argument.
           change |= markJSR(commands, index, index + 3 + arguments, type);
         }
-        // else: "normal" subroutine
+        // Else: "normal" subroutine.
       }
     }
 
@@ -108,8 +108,8 @@ public class JsrDetector implements IDetector {
   /**
    * Build JSR cross reference.
    *
-   * @param commands command buffer
-   * @return Absolute address to list of relative addresses of JSR to that absolute address
+   * @param commands Command buffer.
+   * @return Absolute address to list of relative addresses of JSR to that absolute address.
    */
   protected Map<Integer, List<Integer>> crossReference(CommandBuffer commands) {
     Map<Integer, List<Integer>> result = new HashMap<>();
@@ -135,17 +135,17 @@ public class JsrDetector implements IDetector {
   /**
    * Detect yet unknown subroutines with zero terminated argument.
    *
-   * @param commands command buffer
-   * @param address address of the subroutine
-   * @param references all references to that subroutine
-   * @return Subroutine or null, if no consistent type of subroutine could be detected
+   * @param commands Command buffer.
+   * @param address Address of the subroutine.
+   * @param references All references to that subroutine.
+   * @return Subroutine or null, if no consistent type of subroutine could be detected.
    */
   protected Subroutine detectZero(CommandBuffer commands, int address, List<Integer> references) {
     int matches = 0;
     int unreachable = 0;
     int count = 0;
     for (int index : references) {
-      // try automatic detection of zero-terminated argument
+      // Try automatic detection of zero-terminated argument.
       int endIndex = search0(commands, index + 3, true);
       if (endIndex >= 0) {
         matches++;
@@ -162,10 +162,10 @@ public class JsrDetector implements IDetector {
   /**
    * Detect yet unknown subroutines with absolute address argument.
    *
-   * @param commands command buffer
-   * @param address address of the subroutine
-   * @param references all references to that subroutine
-   * @return Subroutine or null, if no consistent type of subroutine could be detected
+   * @param commands Command buffer.
+   * @param address Address of the subroutine.
+   * @param references All references to that subroutine.
+   * @return Subroutine or null, if no consistent type of subroutine could be detected.
    */
   protected Subroutine detectAddress(CommandBuffer commands, int address, List<Integer> references) {
     CodeBuffer buffer = new CodeBuffer(commands.getStartAddress(), commands.getCode());
@@ -187,31 +187,31 @@ public class JsrDetector implements IDetector {
       count++;
     }
 
-    // disabled unreachableRatio for this case
+    // Disabled unreachableRatio for this case.
     return createSubroutine(commands, "absolute address argument", address, 2, CodeType.ADDRESS, matches, unreachable, count, false);
   }
 
   /**
    * Create new subroutine, if condition matches.
    *
-   * @param commands Command buffer
-   * @param kind Textual description of argument type
-   * @param address Absolute address of subroutine
-   * @param arguments Number of argument bytes of subroutine
-   * @param type Code Type of argument bytes
-   * @param matches Number of matches
-   * @param unreachable Number of unreachable code after JSR
-   * @param count Total number of JSRs
-   * @param checkUnreachable Should unreachableRation be checked?
-   * @return Subroutine or null, if condition does not match
+   * @param commands Command buffer.
+   * @param kind Textual description of argument type.
+   * @param address Absolute address of subroutine.
+   * @param arguments Number of argument bytes of subroutine.
+   * @param type Code Type of argument bytes.
+   * @param matches Number of matches.
+   * @param unreachable Number of unreachable code after JSR.
+   * @param count Total number of JSRs.
+   * @param checkUnreachable Should unreachableRatio be checked?
+   * @return Subroutine or null, if condition does not match.
    */
   private Subroutine createSubroutine(CommandBuffer commands, String kind, int address, int arguments, CodeType type, int matches, int unreachable, int count, boolean checkUnreachable) {
     if (matches == 0) {
-      // nothing detected
+      // Nothing detected.
       return null;
     }
 
-    // Check conditions
+    // Check conditions.
     double detectedUnreachableRatio = ((double) unreachable) / ((double) count);
     double detectedMatchRatio = ((double) matches) / ((double) count);
     if (matches < minMatches || checkUnreachable && detectedUnreachableRatio < unreachableRatio || detectedMatchRatio < matchRatio) {
@@ -219,7 +219,7 @@ public class JsrDetector implements IDetector {
       return null;
     }
 
-    // Met all conditions -> create subroutine
+    // Met all conditions -> create subroutine.
     logger.debug("Detected subroutine with {} at address {}: Probability {} ({}) / {}", kind, hexWord(address), matches, unreachable, count);
     Subroutine result = new Subroutine(address, arguments, type);
     commands.addSubroutine(result);
@@ -231,36 +231,36 @@ public class JsrDetector implements IDetector {
    * Search end of zero-terminated argument.
    * Stops after 256 Bytes.
    *
-   * @param commands command buffer
-   * @param startIndex index to start at
-   * @param check stop at labels?
-   * @return end index or -1, if no arguments have been found
+   * @param commands Command buffer.
+   * @param startIndex Index to start at.
+   * @param check Stop at labels?
+   * @return End index or -1, if no arguments have been found.
    */
   private int search0(CommandBuffer commands, int startIndex, boolean check) {
     requireThat(commands, "commands").isNotNull();
 
     byte[] code = commands.getCode();
     for (int index = startIndex, count = 0; commands.hasIndex(index) && count < maxLength; index++) {
-      // check for aborting conditions, only if requested
+      // Check for aborting conditions, only if requested.
       if (check) {
         if (commands.hasLabel(commands.addressForIndex(index))) {
-          // stop search at any label
+          // Stop search at any label.
           return -1;
         }
         CodeType type = commands.getType(index);
         if (!type.isUnknown() && !type.isData()) {
-          // stop if code type has already been determined
+          // Stop if code type has already been determined.
           return -1;
         }
       }
 
       if (code[index] == 0) {
-        // terminating zero found, return index of following code
+        // Terminating zero found, return index of following code.
         return index + 1;
       }
     }
 
-    // no valid zero-terminated argument found
+    // No valid zero-terminated argument found.
     return -1;
   }
 
@@ -268,26 +268,26 @@ public class JsrDetector implements IDetector {
    * Mark argument bytes of JSR.
    * Adds a code reference from JSR to the opcode after the argument of the JSR for reachability.
    *
-   * @param commands Command buffer
-   * @param index Relative address of JSR
-   * @param endIndex End index of data (excl.), next opcode
-   * @param type Code type of argument
-   * @return whether a change has taken place
+   * @param commands Command buffer.
+   * @param index Relative address of JSR.
+   * @param endIndex End index of data (excl.), next opcode.
+   * @param type Code type of argument.
+   * @return Whether a change has taken place.
    */
   private boolean markJSR(CommandBuffer commands, int index, int endIndex, CodeType type) {
     if (!commands.hasIndex(endIndex)) {
       return false;
     }
 
-    // Add reference to make code after the argument reachable
+    // Add reference to make code after the argument reachable.
     commands.addCodeReference(index, commands.addressForIndex(endIndex));
 
     return
-      // Mark JSR as opcode
+      // Mark JSR as opcode.
       commands.setType(index, CodeType.OPCODE) |
-        // Mark argument bytes as the given code type
+        // Mark argument bytes as the given code type.
         commands.setType(index + 3, endIndex, type) |
-        // At endIndex the code continues
+        // At endIndex the code continues.
         commands.setType(endIndex, CodeType.OPCODE);
   }
 }

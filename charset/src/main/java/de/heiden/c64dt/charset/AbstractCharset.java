@@ -12,8 +12,8 @@ public abstract class AbstractCharset extends Charset {
   /**
    * Constructor.
    *
-   * @param canonicalName name.
-   * @param aliases aliases
+   * @param canonicalName Name.
+   * @param aliases Aliases.
    */
   protected AbstractCharset(String canonicalName, String... aliases) {
     super(canonicalName, aliases);
@@ -25,7 +25,7 @@ public abstract class AbstractCharset extends Charset {
   /**
    * Convenience method to convert C64 encoded bytes into a string.
    *
-   * @param bytes bytes
+   * @param bytes Bytes.
    */
   public String toString(byte... bytes) {
     requireThat(bytes, "bytes").isNotNull();
@@ -36,9 +36,9 @@ public abstract class AbstractCharset extends Charset {
   /**
    * Convenience method to convert C64 encoded bytes into a string.
    *
-   * @param bytes bytes
-   * @param pos position in bytes to start from
-   * @param length number of bytes to convert
+   * @param bytes Bytes.
+   * @param pos Position in bytes to start from.
+   * @param length Number of bytes to convert.
    */
   public String toString(byte[] bytes, int pos, int length) {
     requireThat(bytes, "bytes").isNotNull();
@@ -61,8 +61,8 @@ public abstract class AbstractCharset extends Charset {
   /**
    * Convenience method to convert C64 encoded byte into a char.
    *
-   * @param b Byte
-   * @return Decoded char or 0
+   * @param b Byte.
+   * @return Decoded char or 0.
    */
   public char toChar(byte b) {
     return toChar(b, newDecoder());
@@ -71,9 +71,9 @@ public abstract class AbstractCharset extends Charset {
   /**
    * Convenience method to convert C64 encoded byte into a char.
    *
-   * @param b Byte
-   * @param decoder Decoder
-   * @return Decoded char or 0
+   * @param b Byte.
+   * @param decoder Decoder.
+   * @return Decoded char or 0.
    */
   private char toChar(byte b, AbstractDecoder decoder) {
     try {
@@ -89,7 +89,7 @@ public abstract class AbstractCharset extends Charset {
   /**
    * Convenience method to convert a string into C64 encoded bytes.
    *
-   * @param string string
+   * @param string String.
    */
   public byte[] toBytes(String string) {
     requireThat(string, "string").isNotNull();
@@ -104,9 +104,9 @@ public abstract class AbstractCharset extends Charset {
   /**
    * Convenience method to convert a string into C64 encoded bytes.
    *
-   * @param string string
-   * @param bytes resulting bytes
-   * @param pos position in bytes to write result to
+   * @param string String.
+   * @param bytes Resulting bytes.
+   * @param pos Position in bytes to write result to.
    */
   public void toBytes(String string, byte[] bytes, int pos) {
     requireThat(string, "string").isNotNull();
@@ -123,7 +123,7 @@ public abstract class AbstractCharset extends Charset {
   /**
    * Convenience method to convert a char into C64 encoded byte.
    *
-   * @param c Character
+   * @param c Character.
    */
   public byte toByte(char c) {
     return toByte(c, newEncoder());
@@ -132,14 +132,14 @@ public abstract class AbstractCharset extends Charset {
   /**
    * Convenience method to convert a char into C64 encoded byte.
    *
-   * @param c Character
-   * @param encoder Encoder
+   * @param c Character.
+   * @param encoder Encoder.
    */
   private byte toByte(char c, AbstractEncoder encoder) {
     try {
       return encoder.toByte(c);
     } catch (UnmappableCharacterException e) {
-      return 0x20; // space
+      return 0x20; // Space.
     }
   }
 }

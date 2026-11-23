@@ -128,7 +128,7 @@ public class JHexEditor extends JTable {
   }
 
   //
-  // Specific model class
+  // Specific model class.
   //
 
   private static class JHexEditorTableModel extends AbstractTableModel {
@@ -199,7 +199,7 @@ public class JHexEditor extends JTable {
   }
 
   //
-  // Test
+  // Test.
   //
 
   public static void main(String[] args) {

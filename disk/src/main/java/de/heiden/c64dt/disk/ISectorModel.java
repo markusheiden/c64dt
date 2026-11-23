@@ -27,7 +27,7 @@ public interface ISectorModel {
   /**
    * Number of sectors of a given track.
    *
-   * @param track Track
+   * @param track Track.
    */
   int getSectors(int track);
 }

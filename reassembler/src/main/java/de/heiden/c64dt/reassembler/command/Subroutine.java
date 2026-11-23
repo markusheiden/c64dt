@@ -12,7 +12,7 @@ public class Subroutine {
   private final int address;
 
   /**
-   * Number of bytes which follow the jsr as argument.
+   * Number of bytes which follow the JSR as argument.
    */
   private final int arguments;
 
@@ -24,8 +24,8 @@ public class Subroutine {
   /**
    * Constructor.
    *
-   * @param address Absolute address of subroutine
-   * @param arguments Number of bytes which follow the jsr as argument
+   * @param address Absolute address of subroutine.
+   * @param arguments Number of bytes which follow the JSR as argument.
    */
   public Subroutine(int address, int arguments) {
     this(address, arguments, CodeType.DATA);
@@ -34,9 +34,9 @@ public class Subroutine {
   /**
    * Constructor.
    *
-   * @param address Absolute address of subroutine
-   * @param arguments Number of bytes which follow the jsr as argument
-   * @param type Code type of argument
+   * @param address Absolute address of subroutine.
+   * @param arguments Number of bytes which follow the JSR as argument.
+   * @param type Code type of argument.
    */
   public Subroutine(int address, int arguments, CodeType type) {
     this.address = address;
@@ -52,14 +52,14 @@ public class Subroutine {
   }
 
   /**
-   * Number of bytes which follow the jsr as argument.
+   * Number of bytes which follow the JSR as argument.
    */
   public int getArguments() {
     return arguments;
   }
 
   /**
-   * Code type of arguments bytes.
+   * Code type of argument bytes.
    */
   public CodeType getType() {
     return type;

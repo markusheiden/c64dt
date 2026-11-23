@@ -27,7 +27,7 @@ public class NetDrive {
   /**
    * Constructor.
    *
-   * @param root root directory
+   * @param root Root directory.
    */
   public NetDrive(File root) throws IOException {
     this(root, DriveConnection.DEFAULT_PORT);
@@ -36,8 +36,8 @@ public class NetDrive {
   /**
    * Constructor.
    *
-   * @param root root directory
-   * @param port server port
+   * @param root Root directory.
+   * @param port Server port.
    */
   public NetDrive(File root, int port) throws IOException {
     requireThat(root, "root").isNotNull();
@@ -85,7 +85,7 @@ public class NetDrive {
     try {
       thread.join();
     } catch (InterruptedException e) {
-      // ignore
+      // Ignore.
     }
   }
 
@@ -127,7 +127,7 @@ public class NetDrive {
                     byte[] data = device.read(received.getChannel(), received.getData0());
                     connection.sendReply(data);
                   } catch (DeviceException e) {
-                    // TODO correct?
+                    // TODO Correct?
                     connection.sendReply(e.getError());
                   }
                   break;

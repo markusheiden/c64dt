@@ -41,9 +41,9 @@ public enum C64Color {
   /**
    * Constructor.
    *
-   * @param r red
-   * @param g green
-   * @param b blue
+   * @param r Red.
+   * @param g Green.
+   * @param b Blue.
    */
   C64Color(int r, int g, int b) {
     this.r = r;

@@ -56,7 +56,7 @@ public class Reassembler {
    * Constructor.
    */
   public Reassembler() {
-    // add default detectors
+    // Add default detectors.
     detectors.add(new LabelDetector());
     detectors.add(new BrkDetector());
     detectors.add(new BitDetector());
@@ -75,7 +75,7 @@ public class Reassembler {
   /**
    * Add code type detector to use.
    *
-   * @param detector code type detector
+   * @param detector Code type detector.
    */
   public void add(IDetector detector) {
     requireThat(detector, "detector").isNotNull();
@@ -94,13 +94,13 @@ public class Reassembler {
   /**
    * Reassemble.
    *
-   * @param code Code buffer
+   * @param code Code buffer.
    */
   public void reassemble(CodeBuffer code) throws IOException {
     requireThat(code, "code").isNotNull();
 
     if (code.getCurrentAddress() == 0x0801) {
-      // TODO check for basic header
+      // TODO Check for BASIC header.
     }
 
     commands = new CommandBuffer(code.getCode(), code.getCurrentAddress());
@@ -124,7 +124,7 @@ public class Reassembler {
   /**
    * Detect type of code.
    *
-   * @return whether a code label has been altered
+   * @return Whether a code label has been altered.
    */
   private boolean detectCodeType() {
     boolean change = false;
@@ -139,8 +139,8 @@ public class Reassembler {
 
     // TODO mh: setType() for label locations?
     // TODO mh: setType(OPCODE/CODE) for OpcodeCommands?
-    // TODO mh: detect self modifying code
-    // TODO mh: detect JSR with parameters afterwards
+    // TODO mh: Detect self modifying code.
+    // TODO mh: Detect JSR with parameters afterwards.
 
     return change;
   }

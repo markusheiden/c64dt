@@ -52,7 +52,7 @@ public class CrossReferenceTableModel extends DefaultTableModel {
   /**
    * Use another reassembler.
    *
-   * @param reassembler Underlying representation
+   * @param reassembler Underlying representation.
    */
   public void use(Reassembler reassembler) {
     this.reassembler = reassembler;
@@ -62,7 +62,7 @@ public class CrossReferenceTableModel extends DefaultTableModel {
   /**
    * Select a relative address to show the cross reference for.
    *
-   * @param index Relative address
+   * @param index Relative address.
    */
   public void select(int index) {
     this.index = index;
@@ -77,7 +77,7 @@ public class CrossReferenceTableModel extends DefaultTableModel {
     rowToIndex.clear();
     indexToRow.clear();
 
-    // no model -> no representation
+    // No model -> no representation.
     if (reassembler == null) {
       return;
     }
@@ -85,7 +85,7 @@ public class CrossReferenceTableModel extends DefaultTableModel {
     CommandBuffer commands = reassembler.getCommands();
 
     if (!commands.hasIndex(index)) {
-      // no row selected -> display nothing
+      // No row selected -> display nothing.
       return;
     }
 
@@ -98,8 +98,8 @@ public class CrossReferenceTableModel extends DefaultTableModel {
   /**
    * Add a row to the model.
    *
-   * @param index Relative address
-   * @param address Absolute address
+   * @param index Relative address.
+   * @param address Absolute address.
    */
   private void addRow(int index, int address) {
     rowToIndex.put(getRowCount(), index);
@@ -110,7 +110,7 @@ public class CrossReferenceTableModel extends DefaultTableModel {
   /**
    * The relative address of the code shown in a given row.
    *
-   * @param row Row
+   * @param row Row.
    */
   public Integer getIndex(int row) {
     return rowToIndex.get(row);
@@ -119,7 +119,7 @@ public class CrossReferenceTableModel extends DefaultTableModel {
   /**
    * The row in which the relative address is shown.
    *
-   * @param index Index
+   * @param index Index.
    */
   public Integer getRow(int index) {
     return indexToRow.get(index);
