@@ -139,18 +139,4 @@ public abstract class AbstractConnection {
       socket = null;
     }
   }
-
-  /**
-   * {@inheritDoc}
-   * <p>
-   * Ensure that socket gets closed.
-   */
-  @Override
-  protected void finalize() throws Throwable {
-    try {
-      close();
-    } finally {
-      super.finalize();
-    }
-  }
 }
