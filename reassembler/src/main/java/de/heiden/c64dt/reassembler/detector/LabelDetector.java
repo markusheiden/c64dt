@@ -11,10 +11,10 @@ import de.heiden.c64dt.reassembler.command.ICommand;
 public class LabelDetector implements IDetector {
   @Override
   public boolean detect(CommandBuffer commands) {
-    boolean change = false;
+    var change = false;
 
-    for (CommandIterator iter = commands.iterator(); iter.hasNext(); ) {
-      ICommand command = iter.next();
+    for (var iter = commands.iterator(); iter.hasNext(); ) {
+      var command = iter.next();
       if (iter.hasCodeLabel()) {
         // Mark all code label positions as a start of an opcode.
         change |= iter.setType(CodeType.OPCODE);
@@ -24,7 +24,7 @@ public class LabelDetector implements IDetector {
         // change |= iter.setType(CodeType.DATA);
 
         // Search for code label and mark the relative address as an opcode.
-        boolean notFound = true;
+        var notFound = true;
         for (int index = iter.getIndex() + 1, count = 1; count < command.getSize(); index++, count++) {
           // TODO mh: Move functionality to CommandBuffer: hasCodeLabel(int index).
           if (commands.hasCodeLabel(commands.addressForIndex(index))) {

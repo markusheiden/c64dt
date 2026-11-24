@@ -73,21 +73,21 @@ public class CodeTableModel extends DefaultTableModel {
       return;
     }
 
-    CommandBuffer commands = reassembler.getCommands();
+    var commands = reassembler.getCommands();
 
-    StringBuilder builder = new StringBuilder();
+    var builder = new StringBuilder();
 
-    CommandIterator iter = new CommandIterator(commands);
+    var iter = new CommandIterator(commands);
     while (iter.hasNext()) {
-      ICommand command = iter.next();
-      int index = iter.getIndex();
-      int addr = commands.addressForIndex(index);
+      var command = iter.next();
+      var index = iter.getIndex();
+      var addr = commands.addressForIndex(index);
 
       builder.setLength(0);
       if (!command.isReachable()) {
         builder.append("U");
       }
-      for (int i = 1; i < command.getSize(); i++) {
+      for (var i = 1; i < command.getSize(); i++) {
         if (commands.hasCodeLabel(addr + i)) {
           builder.append("C");
         }
@@ -95,25 +95,25 @@ public class CodeTableModel extends DefaultTableModel {
           builder.append("D");
         }
       }
-      String flags = builder.toString();
+      var flags = builder.toString();
 
       builder.setLength(0);
-      List<Integer> data = command.toBytes();
-      int i = index;
+      var data = command.toBytes();
+      var i = index;
       for (int dataByte : data) {
         builder.append(" ");
         builder.append(commands.getType(i++).getId().toLowerCase());
         builder.append(hexBytePlain(dataByte));
       }
-      String bytes = builder.toString().trim();
+      var bytes = builder.toString().trim();
 
       builder.setLength(0);
-      ILabel label = iter.getLabel();
+      var label = iter.getLabel();
       if (label != null) {
         // TODO mh: Check length of label?
         builder.append(label.toString(addr)).append(":");
       }
-      String labelString = builder.toString();
+      var labelString = builder.toString();
 
       builder.setLength(0);
       if (command != null) {
@@ -122,7 +122,7 @@ public class CodeTableModel extends DefaultTableModel {
         // TODO mh: Log error?
         builder.append("???");
       }
-      String code = builder.toString();
+      var code = builder.toString();
 
       addRow(index, flags, addr, bytes, labelString, code);
     }

@@ -16,7 +16,7 @@ public class C64CharsetTest {
     assertThat(C64Charset.LOWER.toByte('A')).isEqualTo((byte) 0x41);
     assertThat(C64Charset.LOWER.toByte('Z')).isEqualTo((byte) 0x5A);
 
-    byte[] hello = new byte[]{0x48, 0x05, 0x0C, 0x0C, 0x0F};
+    var hello = new byte[]{0x48, 0x05, 0x0C, 0x0C, 0x0F};
     assertThat(C64Charset.LOWER.toBytes("Hello")).containsExactly(hello);
   }
 
@@ -28,7 +28,7 @@ public class C64CharsetTest {
     assertThat(C64Charset.LOWER.toChar((byte) 0x41)).isEqualTo('A');
     assertThat(C64Charset.LOWER.toChar((byte) 0x5A)).isEqualTo('Z');
 
-    byte[] hello = new byte[]{0x48, 0x05, 0x0C, 0x0C, 0x0F};
+    var hello = new byte[]{0x48, 0x05, 0x0C, 0x0C, 0x0F};
     assertThat(C64Charset.LOWER.toString(hello)).isEqualTo("Hello");
   }
 
@@ -38,7 +38,7 @@ public class C64CharsetTest {
     assertThat(C64Charset.UPPER.toByte('A')).isEqualTo((byte) 0x01);
     assertThat(C64Charset.UPPER.toByte('Z')).isEqualTo((byte) 0x1A);
 
-    byte[] hello = new byte[]{0x08, 0x05, 0x0C, 0x0C, 0x0F};
+    var hello = new byte[]{0x08, 0x05, 0x0C, 0x0C, 0x0F};
     assertThat(C64Charset.LOWER.toBytes("hello")).containsExactly(hello);
   }
 
@@ -48,7 +48,7 @@ public class C64CharsetTest {
     assertThat(C64Charset.UPPER.toChar((byte) 0x01)).isEqualTo('A');
     assertThat(C64Charset.UPPER.toChar((byte) 0x1A)).isEqualTo('Z');
 
-    byte[] hello = new byte[]{0x08, 0x05, 0x0C, 0x0C, 0x0F};
+    var hello = new byte[]{0x08, 0x05, 0x0C, 0x0C, 0x0F};
     assertThat(C64Charset.LOWER.toString(hello)).isEqualTo("hello");
   }
 }

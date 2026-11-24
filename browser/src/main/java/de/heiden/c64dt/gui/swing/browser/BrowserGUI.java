@@ -25,17 +25,17 @@ public class BrowserGUI extends JPanel {
   }
 
   private Component explorer() {
-    JPanel result = new JPanel();
+    var result = new JPanel();
     result.setLayout(new BorderLayout());
 
-    JList<String> list = new JList<>(new String[]{"1", "2", "3"});
+    var list = new JList<String>(new String[]{"1", "2", "3"});
     result.add(list, BorderLayout.CENTER);
 
     return result;
   }
 
   private Component directory() {
-    JPanel result = new JPanel();
+    var result = new JPanel();
     result.setLayout(new BorderLayout());
 
     directory = new JDirectory();
@@ -45,7 +45,7 @@ public class BrowserGUI extends JPanel {
   }
 
   private Component details() {
-    JPanel result = new JPanel();
+    var result = new JPanel();
     result.setLayout(new BorderLayout());
 
     bam = new JBam();

@@ -20,21 +20,21 @@ import java.io.InputStreamReader;
  */
 public class ManualTest {
   public static void main(String[] args) throws Exception {
-    BufferedReader r = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(new byte[]{0x01, 0x70, 0x02, 0x03}), C64Charset.UPPER));
+    var r = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(new byte[]{0x01, 0x70, 0x02, 0x03}), C64Charset.UPPER));
     System.out.println(r.readLine());
     r.close();
 
-    IDiskImage diskImage = new D64Reader().read(new File("./boulder_dash.d64"));
-    BrowserGUI browser = new BrowserGUI();
+    var diskImage = new D64Reader().read(new File("./boulder_dash.d64"));
+    var browser = new BrowserGUI();
     browser.setDiskImage(diskImage);
     InputStream is = new SectorInputStream(diskImage, diskImage.getDirectory().getFiles().get(5));
-    byte[] boulderDash = IOUtils.toByteArray(is);
+    var boulderDash = IOUtils.toByteArray(is);
     System.out.println("Length: " + boulderDash.length);
     FileUtils.writeByteArrayToFile(new File("./dummy.prg"), boulderDash);
 
 //    JaC64.main(new String[]{"doubleScreen", "1", "autostartPGM", "./dummy.prg", "soundOn", "1"});
 
-    JFrame frame = new JFrame();
+    var frame = new JFrame();
     frame.getContentPane().add(browser);
     frame.pack();
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

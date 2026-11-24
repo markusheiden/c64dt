@@ -16,17 +16,17 @@ public class ResourceLoader {
    * @throws IOException
    */
   public static int[] load(int length, String filename) throws IOException {
-    InputStream stream = ResourceLoader.class.getResourceAsStream(filename);
-    byte[] read = new byte[length];
-    int size = stream.read(read);
+    var stream = ResourceLoader.class.getResourceAsStream(filename);
+    var read = new byte[length];
+    var size = stream.read(read);
     stream.close();
 
     if (size != length) {
       throw new IOException("ROM image '" + filename + "' has a wrong size");
     }
 
-    int[] result = new int[length];
-    for (int i = 0; i < result.length; i++) {
+    var result = new int[length];
+    for (var i = 0; i < result.length; i++) {
       result[i] = read[i] & 0xFF;
     }
 
@@ -41,12 +41,12 @@ public class ResourceLoader {
    */
   public static int[] load(String filename) throws IOException {
     InputStream stream = new FileInputStream(filename);
-    byte[] read = new byte[65536];
-    int size = stream.read(read);
+    var read = new byte[65536];
+    var size = stream.read(read);
     stream.close();
 
-    int[] result = new int[size];
-    for (int i = 0; i < result.length; i++) {
+    var result = new int[size];
+    for (var i = 0; i < result.length; i++) {
       result[i] = read[i] & 0xFF;
     }
 

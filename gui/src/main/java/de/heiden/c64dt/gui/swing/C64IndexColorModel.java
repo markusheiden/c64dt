@@ -14,12 +14,12 @@ public class C64IndexColorModel extends IndexColorModel {
 
   static {
     // Create color model components.
-    C64Color[] colors = C64Color.values();
+    var colors = C64Color.values();
     R = new byte[colors.length];
     G = new byte[colors.length];
     B = new byte[colors.length];
-    for (int i = 0; i < colors.length; i++) {
-      C64Color color = colors[i];
+    for (var i = 0; i < colors.length; i++) {
+      var color = colors[i];
       R[i] = (byte) color.getRed();
       G[i] = (byte) color.getGreen();
       B[i] = (byte) color.getBlue();

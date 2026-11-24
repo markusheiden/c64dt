@@ -29,7 +29,7 @@ public class D71 extends AbstractDiskImage {
     requireValidTrack(this, track);
 
     // Both sides always share the same sector model.
-    int tps = getTracksPerSide();
+    var tps = getTracksPerSide();
     if (track > tps) {
       track -= tps;
     }
@@ -47,11 +47,11 @@ public class D71 extends AbstractDiskImage {
 
   @Override
   public IBAM getBAM() {
-    BAM result = new BAM(this);
+    var result = new BAM(this);
 
-    byte[] bam = getSector(18, 0);
-    byte[] bam2 = getSector(53, 0);
-    int tps = getTracksPerSide();
+    var bam = getSector(18, 0);
+    var bam2 = getSector(53, 0);
+    var tps = getTracksPerSide();
     for (int track = 1, pos = 0x04; track <= tps; track++, pos += 4) {
       readBAM(result, track, bam, pos);
       readBAM(result, track + tps, bam2, pos);

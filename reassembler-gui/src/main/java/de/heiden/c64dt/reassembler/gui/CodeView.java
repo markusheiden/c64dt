@@ -72,7 +72,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent> {
    */
   public JComponent createComponent() {
     table = new JTable(model);
-    TableColumnModel columnModel = table.getColumnModel();
+    var columnModel = table.getColumnModel();
     columnModel.getColumn(0).setMaxWidth(40);
     columnModel.getColumn(1).setMaxWidth(40);
     columnModel.getColumn(1).setCellRenderer(new GreyRenderer());
@@ -99,7 +99,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent> {
         }
 
         // Select row on click of the right mouse button too.
-        int row = table.rowAtPoint(e.getPoint());
+        var row = table.rowAtPoint(e.getPoint());
         if (row >= 0 && !table.getSelectionModel().isSelectedIndex(row)) {
           table.getSelectionModel().setSelectionInterval(row, row);
         }
@@ -117,7 +117,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent> {
       }
     });
 
-    JScrollPane scroll = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    var scroll = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     scroll.setBorder(BorderFactory.createTitledBorder("Code"));
 
     return scroll;

@@ -24,21 +24,21 @@ public class ReassemblerTest {
   }
 
   public static void reassemble() throws Exception {
-    Reassembler reassembler = new Reassembler();
+    var reassembler = new Reassembler();
     reassembler.reassemble(CodeBuffer.fromProgram(new FileInputStream("./dummy2.prg")));
   }
 
   public static void reassemblerPerformanceTest() throws Exception {
-    byte[] data = FileUtils.readFileToByteArray(new File("./dummy2.prg"));
-    Reassembler reassembler = new Reassembler();
-    for (int i = 0; i < 64; i++) {
+    var data = FileUtils.readFileToByteArray(new File("./dummy2.prg"));
+    var reassembler = new Reassembler();
+    for (var i = 0; i < 64; i++) {
       reassembler.reassemble(CodeBuffer.fromProgram(data));
     }
   }
 
   public static void strip() throws IOException {
-    byte[] data = FileUtils.readFileToByteArray(new File("./dummy.prg"));
-    byte[] result = new byte[data.length - 0xFF];
+    var data = FileUtils.readFileToByteArray(new File("./dummy.prg"));
+    var result = new byte[data.length - 0xFF];
     result[0] = 0x00;
     result[1] = 0x50;
     System.arraycopy(data, 0xFF + 2, result, 2, result.length - 2);

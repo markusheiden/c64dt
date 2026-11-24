@@ -59,7 +59,7 @@ public abstract class AbstractConnection {
    * Remote address.
    */
   public String getDestination() {
-    SocketAddress result = destination != null ? destination : lastDestination;
+    var result = destination != null ? destination : lastDestination;
     return result != null ? result.toString() : "unknown";
   }
 
@@ -94,7 +94,7 @@ public abstract class AbstractConnection {
    */
   public synchronized void sendPacket(Packet packet) throws IOException {
     packet.pad();
-    byte[] data = packet.getData();
+    var data = packet.getData();
     lastOutput = new DatagramPacket(data, data.length, destination != null ? destination : lastDestination);
     Objects.requireNonNull(socket).send(lastOutput);
   }
@@ -107,7 +107,7 @@ public abstract class AbstractConnection {
     Objects.requireNonNull(socket).receive(lastInput);
     lastDestination = lastInput.getSocketAddress();
 
-    Packet result = new Packet(Arrays.copyOf(lastInput.getData(), lastInput.getLength()));
+    var result = new Packet(Arrays.copyOf(lastInput.getData(), lastInput.getLength()));
     if (!isValid(result)) {
       throw new IOException("Invalid packet");
     }
@@ -126,7 +126,7 @@ public abstract class AbstractConnection {
    * Check magic bytes.
    */
   protected boolean isValid(Packet packet) {
-    byte[] data = packet.getData();
+    var data = packet.getData();
     return data[IDX_MAGIC1] == magic1 && data[IDX_MAGIC2] == magic2;
   }
 

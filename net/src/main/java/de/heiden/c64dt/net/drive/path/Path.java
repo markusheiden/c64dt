@@ -39,18 +39,18 @@ public class Path extends AbstractPath {
   @Override
   protected IDirectory doDirectory() {
     List<IFile> entries = new ArrayList<>();
-    File[] files = directory.listFiles();
-    for (File file : files) {
-      int extensionPos = file.getName().lastIndexOf('.');
-      String extension = extensionPos >= 0 ? file.getName().substring(extensionPos + 1) : "";
-      FileMode mode = new FileMode(file.isDirectory() ? FileType.DIR : FileType.fileType(extension));
-      byte[] filename = encode(trimTo16(file.getName()));
-      int size = file.isDirectory() ? 0 : (int) ((file.length() + 253) / 254);
+    var files = directory.listFiles();
+    for (var file : files) {
+      var extensionPos = file.getName().lastIndexOf('.');
+      var extension = extensionPos >= 0 ? file.getName().substring(extensionPos + 1) : "";
+      var mode = new FileMode(file.isDirectory() ? FileType.DIR : FileType.fileType(extension));
+      var filename = encode(trimTo16(file.getName()));
+      var size = file.isDirectory() ? 0 : (int) ((file.length() + 253) / 254);
       entries.add(new de.heiden.c64dt.disk.File(mode, 1, 0, filename, size));
     }
-    byte[] trimmedName = new byte[16];
+    var trimmedName = new byte[16];
     Arrays.fill(trimmedName, SPACE);
-    byte[] dirName = encode(trimTo16(directory.getName()));
+    var dirName = encode(trimTo16(directory.getName()));
     System.arraycopy(dirName, 0, trimmedName, 0, dirName.length);
     return new Directory(trimmedName, encode(">NET<"), entries, 0);
   }
@@ -70,9 +70,9 @@ public class Path extends AbstractPath {
 
   @Override
   protected IPath doChangePath(byte[] path) throws FileNotFoundException {
-    String decodedPath = decode(path);
+    var decodedPath = decode(path);
     // TODO Implement wildcard search.
-    File newPath = new File(directory, decodedPath);
+    var newPath = new File(directory, decodedPath);
 
     if (!newPath.exists()) {
       throw new FileNotFoundException(newPath.getPath() + " not found");
@@ -88,9 +88,9 @@ public class Path extends AbstractPath {
 
   @Override
   protected IStream doFile(byte[] filename) throws FileNotFoundException {
-    String decodedFilename = decode(filename);
+    var decodedFilename = decode(filename);
     // TODO Implement wildcard search.
-    File file = new File(directory, decodedFilename);
+    var file = new File(directory, decodedFilename);
     return new FileStream(file);
   }
 }

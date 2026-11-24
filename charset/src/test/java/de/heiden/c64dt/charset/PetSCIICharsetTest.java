@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PetSCIICharsetTest {
   @Test
   public void decode() throws Exception {
-    PetSCIICharset charset = new PetSCIICharset(true);
+    var charset = new PetSCIICharset(true);
 
     assertThat(charset.toChar((byte) 0x41)).isEqualTo('A');
     assertThat(charset.toChar((byte) 0x5A)).isEqualTo('Z');

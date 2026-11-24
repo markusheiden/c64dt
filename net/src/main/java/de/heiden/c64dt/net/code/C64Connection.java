@@ -52,7 +52,7 @@ public class C64Connection extends AbstractConnection {
    */
   public synchronized boolean ping() {
     try {
-      Packet packet = createPacket(0);
+      var packet = createPacket(0);
       sendPacket(packet);
       return isAck(receivePacket());
     } catch (IOException e) {
@@ -72,8 +72,8 @@ public class C64Connection extends AbstractConnection {
     requireThat(isOpen(), "isOpen()").isTrue();
 
     for (int ptr = 0, remain = data.length; remain > 0; ptr += 128, remain -= 128) {
-      int length = remain > 128 ? 128 : remain;
-      Packet packet = createPacket(4, hi(address), lo(address), hi(length), lo(length));
+      var length = remain > 128 ? 128 : remain;
+      var packet = createPacket(4, hi(address), lo(address), hi(length), lo(length));
       packet.addData(data, ptr, length);
       sendPacketGetReply(packet);
     }
@@ -90,7 +90,7 @@ public class C64Connection extends AbstractConnection {
     requireValidAddress(address);
     requireThat(isOpen(), "isOpen()").isTrue();
 
-    Packet packet = createPacket(5, hi(address), lo(address), hi(length), lo(length), fill, (byte) 0x00);
+    var packet = createPacket(5, hi(address), lo(address), hi(length), lo(length), fill, (byte) 0x00);
     sendPacketGetReply(packet);
   }
 
@@ -103,7 +103,7 @@ public class C64Connection extends AbstractConnection {
     requireValidAddress(address);
     requireThat(isOpen(), "isOpen()").isTrue();
 
-    Packet packet = createPacket(6, hi(address), lo(address));
+    var packet = createPacket(6, hi(address), lo(address));
     sendPacketGetReply(packet);
   }
 
@@ -113,7 +113,7 @@ public class C64Connection extends AbstractConnection {
   public synchronized void run() throws IOException {
     requireThat(isOpen(), "isOpen()").isTrue();
 
-    Packet packet = createPacket(7);
+    var packet = createPacket(7);
     sendPacketGetReply(packet);
   }
 
@@ -131,9 +131,9 @@ public class C64Connection extends AbstractConnection {
     requireValidAddress(address);
     requireThat(isOpen(), "isOpen()").isTrue();
 
-    Packet packet = createPacket(8, hi(address), lo(address), hi(length), lo(length));
-    Packet answer = sendPacketGetReply(packet);
-    byte[] result = new byte[length];
+    var packet = createPacket(8, hi(address), lo(address), hi(length), lo(length));
+    var answer = sendPacketGetReply(packet);
+    var result = new byte[length];
     // TODO 2011-01-09 mh: C64 currently just returns an ACK.
     System.arraycopy(answer.getData(), IDX_DATA, result, 0, length);
 
@@ -148,7 +148,7 @@ public class C64Connection extends AbstractConnection {
    */
   protected synchronized Packet createPacket(int service, int... data) throws IOException {
     sequence++;
-    Packet result = new Packet(MAX_PACKET);
+    var result = new Packet(MAX_PACKET);
     result.addByte(MAGIC1);
     result.addByte(MAGIC2);
     result.addByte(sequence);
@@ -167,7 +167,7 @@ public class C64Connection extends AbstractConnection {
   protected synchronized Packet sendPacketGetReply(Packet packet) throws IOException {
     Packet ack = null;
     try {
-      for (int i = 0; i < 3; i++) {
+      for (var i = 0; i < 3; i++) {
         sendPacket(packet);
         ack = receivePacket();
         if (isAck(ack)) {
@@ -191,7 +191,7 @@ public class C64Connection extends AbstractConnection {
    * @param ack Packet.
    */
   protected boolean isAck(Packet ack) throws IOException {
-    byte[] data = ack.getData();
+    var data = ack.getData();
 
     if (!isValid(ack)) {
       throw new IOException("Invalid packet");

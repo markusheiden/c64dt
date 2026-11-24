@@ -96,12 +96,12 @@ public class OpcodeCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    StringBuilder result = new StringBuilder();
+    var result = new StringBuilder();
     result.append(opcode.getType().toString());
-    OpcodeMode mode = opcode.getMode();
+    var mode = opcode.getMode();
     if (mode.getSize() > 0) {
       result.append(" ");
-      ILabel label = mode.isAddress() ? buffer.getLabel(mode.getAddress(getAddress(), argument)) : null;
+      var label = mode.isAddress() ? buffer.getLabel(mode.getAddress(getAddress(), argument)) : null;
       if (label != null) {
         result.append(mode.toString(label.toString(mode.getAddress(getAddress(), argument))));
       } else {

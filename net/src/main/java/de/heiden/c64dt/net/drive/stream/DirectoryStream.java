@@ -29,7 +29,7 @@ public class DirectoryStream extends AbstractStream {
     writeWord(0x0401);
 
     writeHeader(directory);
-    for (IFile file : directory.getFiles()) {
+    for (var file : directory.getFiles()) {
       if (file.getMode().isVisible()) {
         writeFile(file);
       }
@@ -55,17 +55,17 @@ public class DirectoryStream extends AbstractStream {
   }
 
   private void writeFile(IFile file) {
-    int size = Math.min(file.getSize(), 9999);
+    var size = Math.min(file.getSize(), 9999);
 
     writeWord(0x0101);
     writeWord(size);
-    for (int i = 0; i < 4 - Integer.toString(size).length(); i++) {
+    for (var i = 0; i < 4 - Integer.toString(size).length(); i++) {
       writeByte(SPACE);
     }
     writeByte(DOUBLE_QUOTE);
     writeBytes(file.getName());
     writeByte(DOUBLE_QUOTE);
-    for (int i = 0; i < 16 - file.getName().length; i++) {
+    for (var i = 0; i < 16 - file.getName().length; i++) {
       writeByte(SPACE);
     }
     writeByte(SPACE);
@@ -99,7 +99,7 @@ public class DirectoryStream extends AbstractStream {
   public byte[] doRead(int length) {
     requireThat(length, "length").isGreaterThanOrEqualTo(0);
 
-    byte[] result = new byte[limitLength(content.length, length)];
+    var result = new byte[limitLength(content.length, length)];
     System.arraycopy(content, getPosition(), result, 0, result.length);
 
     return result;

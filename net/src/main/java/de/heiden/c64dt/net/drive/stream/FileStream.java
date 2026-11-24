@@ -25,13 +25,13 @@ public class FileStream extends AbstractStream {
   @Override
   public byte[] doRead(int length) throws IOException {
     file.seek(getPosition());
-    byte[] result = new byte[length];
-    int read = file.read(result);
+    var result = new byte[length];
+    var read = file.read(result);
 
     if (read < 0) {
       result = new byte[0];
     } else if (read < length) {
-      byte[] trimmed = new byte[read];
+      var trimmed = new byte[read];
       System.arraycopy(result, 0, trimmed, 0, read);
       result = trimmed;
     }

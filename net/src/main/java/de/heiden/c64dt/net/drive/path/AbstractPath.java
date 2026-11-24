@@ -59,7 +59,7 @@ public abstract class AbstractPath implements IPath {
 
   @Override
   public IPath changePath(byte[] path) throws FileNotFoundException {
-    int separatorPos = indexOfSeparator(path);
+    var separatorPos = indexOfSeparator(path);
 
     IPath result;
     if (separatorPos < 0) {
@@ -67,9 +67,9 @@ public abstract class AbstractPath implements IPath {
       result = doChangePath(path);
     } else {
       // Separate path into head and tail.
-      byte[] head = new byte[separatorPos];
+      var head = new byte[separatorPos];
       System.arraycopy(path, 0, head, 0, head.length);
-      byte[] tail = new byte[path.length - separatorPos - 1];
+      var tail = new byte[path.length - separatorPos - 1];
       System.arraycopy(path, separatorPos + 1, tail, 0, tail.length);
 
       if (Arrays.equals(head, CURRENT_DIR_PATH)) {
@@ -102,7 +102,7 @@ public abstract class AbstractPath implements IPath {
    * @return Index of first separator char or -1 if none.
    */
   protected int indexOfSeparator(byte[] path) {
-    for (int i = 0; i < path.length; i++) {
+    for (var i = 0; i < path.length; i++) {
       if (path[i] == SEPARATOR) {
         return i;
       }

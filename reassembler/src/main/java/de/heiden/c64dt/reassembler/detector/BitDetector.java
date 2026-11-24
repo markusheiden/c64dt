@@ -16,20 +16,20 @@ import java.util.List;
 public class BitDetector implements IDetector {
   @Override
   public boolean detect(CommandBuffer commands) {
-    boolean change = false;
+    var change = false;
 
-    for (CommandIterator iter = commands.iterator(); iter.hasNext(); ) {
-      ICommand command = iter.next();
+    for (var iter = commands.iterator(); iter.hasNext(); ) {
+      var command = iter.next();
       if (command instanceof OpcodeCommand opcodeCommand) {
-        Opcode opcode = opcodeCommand.getOpcode();
-        int size = opcodeCommand.getSize();
+        var opcode = opcodeCommand.getOpcode();
+        var size = opcodeCommand.getSize();
 
         if (opcode.getType().equals(OpcodeType.BIT) && size > 1 && commands.hasCodeLabel(opcodeCommand.getAddress() + 1)) {
-          List<Integer> bytes = opcodeCommand.toBytes();
-          Opcode skippedOpcode = Opcode.opcode(bytes.get(1));
+          var bytes = opcodeCommand.toBytes();
+          var skippedOpcode = Opcode.opcode(bytes.get(1));
 
           if (skippedOpcode.isLegal() && skippedOpcode.getSize() == size - 1) {
-            int index = iter.getIndex();
+            var index = iter.getIndex();
             change |= commands.setType(index++, CodeType.BIT);
             change |= commands.setType(index++, CodeType.OPCODE);
             if (bytes.size() == 3) {

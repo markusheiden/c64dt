@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class C64ConnectionTest {
   @Test
   public void testPing() throws Exception {
-    TestConnection connection = new TestConnection();
+    var connection = new TestConnection();
     connection.open();
     connection.ping();
     // 0, 1: Magic
@@ -26,7 +26,7 @@ public class C64ConnectionTest {
 
   @Test
   public void testWrite() throws Exception {
-    TestConnection connection = new TestConnection();
+    var connection = new TestConnection();
     connection.open();
     connection.write(0x1234, (byte) 5, (byte) 6, (byte) 7);
     // 0, 1: Magic
@@ -42,7 +42,7 @@ public class C64ConnectionTest {
 
   @Test
   public void testFill() throws Exception {
-    TestConnection connection = new TestConnection();
+    var connection = new TestConnection();
     connection.open();
     connection.fill(0x1234, 0x0102, 6);
     // 0, 1: Magic
@@ -58,7 +58,7 @@ public class C64ConnectionTest {
 
   @Test
   public void testJump() throws Exception {
-    TestConnection connection = new TestConnection();
+    var connection = new TestConnection();
     connection.open();
     connection.jump(0x1234);
     // 0, 1: Magic
@@ -71,7 +71,7 @@ public class C64ConnectionTest {
 
   @Test
   public void testRun() throws Exception {
-    TestConnection connection = new TestConnection();
+    var connection = new TestConnection();
     connection.open();
     connection.run();
     // 0, 1: Magic
@@ -83,7 +83,7 @@ public class C64ConnectionTest {
 
   public void assertSentData(int... expected) {
     assertThat(outputData.length).isEqualTo(expected.length);
-    for (int i = 0; i < expected.length; i++) {
+    for (var i = 0; i < expected.length; i++) {
       assertThat(outputData[i]).as("Byte " + i).isEqualTo((byte) expected[i]);
     }
   }
@@ -105,7 +105,7 @@ public class C64ConnectionTest {
     @Override
     public Packet receivePacket() throws IOException {
       // Always acknowledge OK.
-      Packet ack = new Packet(4);
+      var ack = new Packet(4);
       ack.addByte(0xCA, 0x1F, 1, 1); // ACK OK
 
       return ack;

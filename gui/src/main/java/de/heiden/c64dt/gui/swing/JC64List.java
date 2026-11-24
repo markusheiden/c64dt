@@ -50,15 +50,15 @@ public class JC64List extends JList<String> {
       (int) Math.ceil(rows * JC64TextArea.ROW_HEIGHT * factor)));
 
     setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
-      int columns1 = (int) Math.ceil(list.getWidth() / (JC64TextArea.COLUMN_WIDTH * factor));
-      int rows1 = 1;
+      var columns1 = (int) Math.ceil(list.getWidth() / (JC64TextArea.COLUMN_WIDTH * factor));
+      var rows1 = 1;
 
-      JC64TextArea component = new JC64TextArea(columns1, rows1, factor, resizable);
+      var component = new JC64TextArea(columns1, rows1, factor, resizable);
       component.setBackground(getBackground());
       component.setForeground(getForeground());
       component.setCharset(_upper);
 
-      StringBuilder v = new StringBuilder(component.getColumns());
+      var v = new StringBuilder(component.getColumns());
       v.append(value);
       for (int i = v.length(), e = component.getColumns(); i < e; i++) {
         v.append(" ");
@@ -158,15 +158,15 @@ public class JC64List extends JList<String> {
   //
 
   public static void main(String[] args) {
-    JFrame frame = new JFrame();
+    var frame = new JFrame();
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-    DefaultListModel<String> model = new DefaultListModel<>();
+    var model = new DefaultListModel<String>();
     model.add(0, "Test1 blah");
     model.add(1, "Test2");
     model.add(2, "Test3");
 
-    JC64List text = new JC64List(20, 3, 2, true);
+    var text = new JC64List(20, 3, 2, true);
     text.setModel(model);
     frame.add(text);
 

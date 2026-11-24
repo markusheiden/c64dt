@@ -19,14 +19,14 @@ public class CommandBufferMapperTest {
   @Test
   public void testWriteRead() throws Exception {
     // Code.
-    byte[] code = new byte[0xC000];
-    for (int i = 0; i < code.length; i++) {
+    var code = new byte[0xC000];
+    for (var i = 0; i < code.length; i++) {
       code[i] = (byte) i;
     }
 
-    Reassembler reassembler = new Reassembler();
+    var reassembler = new Reassembler();
     reassembler.reassemble(new CodeBuffer(0x1000, code));
-    CommandBuffer commands = reassembler.getCommands();
+    var commands = reassembler.getCommands();
 
     // Addresses.
     commands.rebase(0x0010, 0x2000);
@@ -44,46 +44,46 @@ public class CommandBufferMapperTest {
     commands.setType(0x9001, 0xA000, CodeType.CODE);
 
     // Write to XML.
-    ByteArrayOutputStream os = new ByteArrayOutputStream();
+    var os = new ByteArrayOutputStream();
     XmlUtil.marshal(reassembler, os);
-    byte[] xml = os.toByteArray();
+    var xml = os.toByteArray();
 
     // Read written XML.
-    Reassembler readReassembler = XmlUtil.unmarshal(new ByteArrayInputStream(xml), Reassembler.class);
-    CommandBuffer readCommands = readReassembler.getCommands();
+    var readReassembler = XmlUtil.unmarshal(new ByteArrayInputStream(xml), Reassembler.class);
+    var readCommands = readReassembler.getCommands();
 
     // Code.
-    byte[] readCode = readCommands.getCode();
-    for (int i = 0; i < code.length; i++) {
+    var readCode = readCommands.getCode();
+    for (var i = 0; i < code.length; i++) {
       assertThat(readCode[i]).as("Byte " + i + ":").isEqualTo(code[i]);
     }
 
     // Code types.
-    for (int index = 0; index < commands.getLength(); index++) {
+    for (var index = 0; index < commands.getLength(); index++) {
       assertThat(readCommands.getType(index)).as("Index " + index + ":").isEqualTo(commands.getType(index));
     }
 
     // Addresses.
-    SortedMap<Integer, Integer> commandsStart = commands.getStartAddresses();
-    SortedMap<Integer, Integer> readStart = readCommands.getStartAddresses();
-    for (Integer index : commandsStart.keySet()) {
+    var commandsStart = commands.getStartAddresses();
+    var readStart = readCommands.getStartAddresses();
+    for (var index : commandsStart.keySet()) {
       assertThat(readStart.get(index)).as("Index " + index + ":").isEqualTo(commandsStart.get(index));
     }
 
     // Subroutines.
-    SortedMap<Integer, Integer> commandsSubroutines = commands.getStartAddresses();
-    SortedMap<Integer, Integer> readSubroutines = readCommands.getStartAddresses();
-    for (Integer address : commandsSubroutines.keySet()) {
+    var commandsSubroutines = commands.getStartAddresses();
+    var readSubroutines = readCommands.getStartAddresses();
+    for (var address : commandsSubroutines.keySet()) {
       assertThat(readSubroutines.get(address)).as("Address " + address + ":").isEqualTo(commandsSubroutines.get(address));
     }
 
     // Write read XML again.
     os.reset();
     XmlUtil.marshal(readReassembler, os);
-    byte[] readXml = os.toByteArray();
+    var readXml = os.toByteArray();
 
     assertThat(readXml.length).isEqualTo(xml.length);
-    for (int i = 0; i < xml.length; i++) {
+    for (var i = 0; i < xml.length; i++) {
       assertThat(readXml[i]).as("Byte " + i).isEqualTo(xml[i]);
     }
   }

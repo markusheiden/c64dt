@@ -10,7 +10,7 @@ import java.awt.*;
 public class GreyRenderer extends DefaultTableCellRenderer {
   @Override
   public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-    Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+    var result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
     result.setForeground(Color.GRAY);
     return result;
   }

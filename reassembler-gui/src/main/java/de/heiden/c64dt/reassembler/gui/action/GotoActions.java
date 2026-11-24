@@ -80,13 +80,13 @@ public class GotoActions {
       return;
     }
 
-    CodeTableModel model = (CodeTableModel) table.getModel();
-    CommandBuffer commands = Objects.requireNonNull(model.getReassembler()).getCommands();
+    var model = (CodeTableModel) table.getModel();
+    var commands = Objects.requireNonNull(model.getReassembler()).getCommands();
 
     int index = Objects.requireNonNull(model.getIndex(row));
 
     // Just works for opcodes.
-    ICommand command = commands.getCommand(index);
+    var command = commands.getCommand(index);
     if (!(command instanceof OpcodeCommand opcodeCommand)) {
       return;
     }
@@ -97,13 +97,13 @@ public class GotoActions {
     }
 
     // Check if address is known.
-    int address = opcodeCommand.getArgumentAddress();
+    var address = opcodeCommand.getArgumentAddress();
     if (!commands.hasAddress(address)) {
       return;
     }
 
     // Do the jump.
-    int jumpIndex = commands.indexForAddress(address);
+    var jumpIndex = commands.indexForAddress(address);
     if (jumpIndex < 0) {
       return;
     }
@@ -117,7 +117,7 @@ public class GotoActions {
    * @param index Relative address.
    */
   public void gotoIndex(int index) {
-    CodeTableModel model = (CodeTableModel) table.getModel();
+    var model = (CodeTableModel) table.getModel();
 
     if (!Objects.requireNonNull(model.getReassembler()).getCommands().hasIndex(index)) {
       return;

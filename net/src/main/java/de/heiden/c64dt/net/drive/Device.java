@@ -30,7 +30,7 @@ public class Device {
     requireThat(root.isDirectory(), "root.isDirectory()").isTrue();
 
     streams = new IStream[16];
-    for (int i = 0; i < streams.length; i++) {
+    for (var i = 0; i < streams.length; i++) {
       streams[i] = new NullStream();
     }
 
@@ -121,9 +121,9 @@ public class Device {
 
     @Override
     public void open(byte[] data) {
-      String command = C64Charset.LOWER.toString(data);
+      var command = C64Charset.LOWER.toString(data);
       if (command.toLowerCase().startsWith("cd:")) {
-        String path = command.substring(3);
+        var path = command.substring(3);
         // TODO Change path.
       }
     }
@@ -138,7 +138,7 @@ public class Device {
 
       // Read current error.
       length = Math.min(length, error.length - getPosition());
-      byte[] result = new byte[length];
+      var result = new byte[length];
       System.arraycopy(error, getPosition(), result, 0, length);
 
       return result;

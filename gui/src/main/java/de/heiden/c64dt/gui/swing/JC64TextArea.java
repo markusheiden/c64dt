@@ -149,8 +149,8 @@ public class JC64TextArea extends JC64CommonComponent {
     }
 
     // Handle multiline text.
-    StringTokenizer tokenizer = new StringTokenizer(s, "\n");
-    for (int r = row; tokenizer.hasMoreTokens() && r < _rows; r++) {
+    var tokenizer = new StringTokenizer(s, "\n");
+    for (var r = row; tokenizer.hasMoreTokens() && r < _rows; r++) {
       setText(column, r, tokenizer.nextToken());
     }
   }
@@ -163,8 +163,8 @@ public class JC64TextArea extends JC64CommonComponent {
    * @param s Characters.
    */
   public void setTextInverted(int column, int row, String s) {
-    byte[] characters = _charset.toBytes(s);
-    for (int i = 0; i < characters.length; i++) {
+    var characters = _charset.toBytes(s);
+    for (var i = 0; i < characters.length; i++) {
       characters[i] |= 0x80;
     }
     setText(column, row, characters);
@@ -219,14 +219,14 @@ public class JC64TextArea extends JC64CommonComponent {
    * Clear component with background color.
    */
   public void clear() {
-    byte space = _charset.toBytes(" ")[0];
-    Color foreground = getForeground();
-    Color background = getBackground();
-    for (int row = 0; row < _rows; row++) {
-      byte[] charRow = _chars[row];
+    var space = _charset.toBytes(" ")[0];
+    var foreground = getForeground();
+    var background = getBackground();
+    for (var row = 0; row < _rows; row++) {
+      var charRow = _chars[row];
       @Nullable Color[] foregroundRow = _foregrounds[row];
       @Nullable Color[] backgroundRow = _backgrounds[row];
-      for (int column = 0; column < _columns; column++) {
+      for (var column = 0; column < _columns; column++) {
         charRow[column] = space;
         foregroundRow[column] = foreground;
         backgroundRow[column] = background;
@@ -244,8 +244,8 @@ public class JC64TextArea extends JC64CommonComponent {
    */
   @Override
   public void doPaintComponent(Graphics g) {
-    for (int row = 0; row < _rows; row++) {
-      for (int column = 0; column < _columns; column++) {
+    for (var row = 0; row < _rows; row++) {
+      for (var column = 0; column < _columns; column++) {
         paintCharacter(column, row);
       }
     }
@@ -259,23 +259,23 @@ public class JC64TextArea extends JC64CommonComponent {
    * @param row Row.
    */
   private void paintCharacter(int column, int row) {
-    int[] imageData = getImageData();
-    Color foregroundColor = _foregrounds[row][column];
+    var imageData = getImageData();
+    var foregroundColor = _foregrounds[row][column];
     if (foregroundColor == null) {
       return;
     }
-    Color backgroundColor = _backgrounds[row][column];
+    var backgroundColor = _backgrounds[row][column];
     if (backgroundColor == null) {
       return;
     }
-    int foreground = foregroundColor.getRGB();
-    int background = backgroundColor.getRGB();
+    var foreground = foregroundColor.getRGB();
+    var background = backgroundColor.getRGB();
 
-    int charOffset = _upper ? 0x0000 : 0x0800;
-    int charPtr = charOffset + (_chars[row][column] & 0xFF) * 8;
+    var charOffset = _upper ? 0x0000 : 0x0800;
+    var charPtr = charOffset + (_chars[row][column] & 0xFF) * 8;
     for (int y = row * 8, lastY = y + 8; y < lastY; y++) {
-      int offset = y * getImageWidth() + column * 8;
-      int data = _charsetROM[charPtr++];
+      var offset = y * getImageWidth() + column * 8;
+      var data = _charsetROM[charPtr++];
       for (int dx = 0, bit = 0x80; bit > 0; dx++, bit = bit >> 1) {
         imageData[offset + dx] = (data & bit) != 0 ? foreground : background;
       }
@@ -287,10 +287,10 @@ public class JC64TextArea extends JC64CommonComponent {
   //
 
   public static void main(String[] args) {
-    JFrame frame = new JFrame();
+    var frame = new JFrame();
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-    JC64TextArea text = new JC64TextArea(40, 25, 2, false);
+    var text = new JC64TextArea(40, 25, 2, false);
     frame.add(text);
 
     frame.pack();
@@ -311,8 +311,8 @@ public class JC64TextArea extends JC64CommonComponent {
     text.setText(0, 5, "@[] !\"#$%&'()*+,-./1234567890:;<=>?|_");
 
     byte c = 0;
-    for (int y = 0; y < 16; y++) {
-      for (int x = 0; x < 16; x++, c++) {
+    for (var y = 0; y < 16; y++) {
+      for (var x = 0; x < 16; x++, c++) {
         text.setCharset(false);
         text.setForeground(C64Color.LIGHT_GREEN);
         text.setText(x, y + 8, c);

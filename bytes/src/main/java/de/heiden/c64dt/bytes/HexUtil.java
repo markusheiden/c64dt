@@ -72,7 +72,7 @@ public class HexUtil {
    * @param value String representation.
    */
   public static int parseHexBytePlain(String value) {
-    int result = Integer.parseInt(value, 16);
+    var result = Integer.parseInt(value, 16);
 
     requireThat(result, "result").isBetween(0, 0xFF + 1);
     return result;
@@ -84,7 +84,7 @@ public class HexUtil {
    * @param value String representation.
    */
   public static int parseHexWordPlain(String value) {
-    int result = Integer.parseInt(value, 16);
+    var result = Integer.parseInt(value, 16);
 
     requireThat(result, "result").isBetween(0, 0xFFFF + 1);
     return result;

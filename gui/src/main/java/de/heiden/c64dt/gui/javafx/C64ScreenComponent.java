@@ -44,9 +44,9 @@ public abstract class C64ScreenComponent extends C64Component {
   private static final int[] COLOR = new int[C64Color.values().length];
 
   static {
-    C64Color[] colors = C64Color.values();
-    for (int i = 0; i < colors.length; i++) {
-      C64Color color = colors[i];
+    var colors = C64Color.values();
+    for (var i = 0; i < colors.length; i++) {
+      var color = colors[i];
       COLOR[i] = (0xFF << 24) | (color.getRed() << 16) | (color.getGreen() << 8) | color.getBlue();
     }
   }
@@ -81,19 +81,19 @@ public abstract class C64ScreenComponent extends C64Component {
   protected void updateImageData(byte[] imageData) {
 //    requireThat("imageData", imageData).isNotNull();
 
-    final int width = getImageWidth();
-    final int height = getImageHeight();
-    final int lineOffset = _lineLength - width;
+    final var width = getImageWidth();
+    final var height = getImageHeight();
+    final var lineOffset = _lineLength - width;
 
     // Convert color indexes to ARGB colors.
     for (int p = 0, d = _offset, row = 0; row < height; row++) {
-      for (int column = 0; column < width; column++) {
+      for (var column = 0; column < width; column++) {
         pixels[p++] = COLOR[imageData[d++]];
       }
       d += lineOffset;
     }
 
-    final PixelWriter writer = getPixelWriter();
+    final var writer = getPixelWriter();
     Platform.runLater(() -> writer.setPixels(0, 0, width, height, format, pixels, 0, width));
   }
 
@@ -116,8 +116,8 @@ public abstract class C64ScreenComponent extends C64Component {
     public void start(Stage stage) throws Exception {
       C64ScreenComponent screen = new C64ScreenComponent(0, 160, 160, 160, 1) {
       };
-      byte[] data = new byte[screen.getImageWidth() * screen.getImageHeight()];
-      for (int i = 0; i < data.length; i++) {
+      var data = new byte[screen.getImageWidth() * screen.getImageHeight()];
+      for (var i = 0; i < data.length; i++) {
         data[i] = (byte) ((i / 1600) & 0x0F);
       }
       screen.updateImageData(data);

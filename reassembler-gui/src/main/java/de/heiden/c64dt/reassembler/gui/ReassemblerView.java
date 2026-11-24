@@ -65,7 +65,7 @@ public class ReassemblerView extends JFrame {
 
   @PostConstruct
   private void init() {
-    JSplitPane main = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+    var main = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
     main.setContinuousLayout(true);
     main.setOneTouchExpandable(true);
     add(main);
@@ -80,7 +80,7 @@ public class ReassemblerView extends JFrame {
     // Helper views.
     //
 
-    JPanel helperPane = new JPanel();
+    var helperPane = new JPanel();
     helperPane.setLayout(new GridLayout(2, 1));
     main.setLeftComponent(helperPane);
 
@@ -109,8 +109,8 @@ public class ReassemblerView extends JFrame {
    */
   private void reassemble() {
     try {
-      File file = new File("retro replay", "rr38q-cnet-0.xml");
-      Reassembler reassembler = XmlUtil.unmarshal(new FileInputStream(file), Reassembler.class);
+      var file = new File("retro replay", "rr38q-cnet-0.xml");
+      var reassembler = XmlUtil.unmarshal(new FileInputStream(file), Reassembler.class);
       use(reassembler);
       currentFile = file;
     } catch (Exception e) {
@@ -136,7 +136,7 @@ public class ReassemblerView extends JFrame {
    * Update GUI state.
    */
   protected final void updateGUI() {
-    String title = "C64 Reassembler";
+    var title = "C64 Reassembler";
     if (currentFile != null) {
       title = currentFile.getAbsolutePath() + " - " + title;
     }
@@ -153,17 +153,17 @@ public class ReassemblerView extends JFrame {
    * Create menu bar.
    */
   private JMenuBar createMenu() {
-    JMenuBar menuBar = new JMenuBar();
+    var menuBar = new JMenuBar();
 
-    JMenu file = new JMenu("File");
+    var file = new JMenu("File");
     menuBar.add(file);
 
     fileOpen = new JMenuItem("Reassemble...");
     file.add(fileOpen);
     fileOpen.addActionListener(actionEvent -> {
       try {
-        JFileChooser chooser = new JFileChooser();
-        int result = chooser.showOpenDialog(ReassemblerView.this);
+        var chooser = new JFileChooser();
+        var result = chooser.showOpenDialog(ReassemblerView.this);
         if (result == JFileChooser.APPROVE_OPTION) {
           // TODO mh: Ask for start address.
           currentFile = null;
@@ -182,11 +182,11 @@ public class ReassemblerView extends JFrame {
     file.add(fileLoad);
     fileLoad.addActionListener(actionEvent -> {
       try {
-        JFileChooser chooser = new JFileChooser();
+        var chooser = new JFileChooser();
         if (currentFile != null) {
           chooser.setCurrentDirectory(currentFile.getParentFile());
         }
-        int result = chooser.showOpenDialog(ReassemblerView.this);
+        var result = chooser.showOpenDialog(ReassemblerView.this);
         if (result == JFileChooser.APPROVE_OPTION) {
           use(XmlUtil.unmarshal(new FileInputStream(chooser.getSelectedFile()), Reassembler.class));
           currentFile = chooser.getSelectedFile();
@@ -217,12 +217,12 @@ public class ReassemblerView extends JFrame {
     file.add(fileSaveAs);
     fileSaveAs.addActionListener(actionEvent -> {
       try {
-        JFileChooser chooser = new JFileChooser();
+        var chooser = new JFileChooser();
         if (currentFile != null) {
           chooser.setCurrentDirectory(currentFile.getParentFile());
           chooser.setSelectedFile(currentFile);
         }
-        int result = chooser.showSaveDialog(ReassemblerView.this);
+        var result = chooser.showSaveDialog(ReassemblerView.this);
         if (result == JFileChooser.APPROVE_OPTION) {
           XmlUtil.marshal(reassembler, new FileOutputStream(chooser.getSelectedFile()));
           currentFile = chooser.getSelectedFile();

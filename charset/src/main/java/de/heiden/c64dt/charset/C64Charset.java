@@ -46,9 +46,9 @@ public class C64Charset extends AbstractCharset {
     return new AbstractDecoder(this, " ") {
       @Override
       protected char toChar(byte b) throws UnmappableCharacterException {
-        int c = b & 0x7F; // Accept inverted chars too.
+        var c = b & 0x7F; // Accept inverted chars too.
         if (c >= 0x01 && c <= 0x1A) {
-          char a = upper ? 'A' : 'a';
+          var a = upper ? 'A' : 'a';
           return (char) (c - 0x01 + a);
         } else if (!upper && c >= 0x41 && c <= 0x5A) {
           return (char) (c - 0x41 + 'A');
@@ -158,7 +158,7 @@ public class C64Charset extends AbstractCharset {
         if (!upper && c >= 'a' && c <= 'z') {
           return (byte) (c - 'a' + 0x01);
         } else if (c >= 'A' && c <= 'Z') {
-          int a = upper ? 0x01 : 0x41;
+          var a = upper ? 0x01 : 0x41;
           return (byte) (c - 'A' + a);
         } else {
           return toSymbolByte(c);

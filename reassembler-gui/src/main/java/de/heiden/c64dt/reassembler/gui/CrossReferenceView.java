@@ -54,9 +54,9 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
    * Create GUI representation.
    */
   public JComponent createComponent() {
-    final JTable table = new JTable(model);
+    final var table = new JTable(model);
     table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-    TableColumnModel columnModel = table.getColumnModel();
+    var columnModel = table.getColumnModel();
     columnModel.getColumn(0).setMaxWidth(40);
     columnModel.getColumn(0).setCellRenderer(new GreyRenderer());
     columnModel.getColumn(1).setMaxWidth(40);
@@ -73,7 +73,7 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
       }
     });
 
-    JScrollPane scroll = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    var scroll = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     scroll.setBorder(BorderFactory.createTitledBorder("References"));
 
     return scroll;

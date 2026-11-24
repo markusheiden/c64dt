@@ -44,7 +44,7 @@ public class Packet {
    * @param data Data.
    */
   public void addByte(int... data) {
-    for (int d : data) {
+    for (var d : data) {
       this.data[length++] = (byte) d;
     }
   }

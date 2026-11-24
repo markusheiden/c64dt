@@ -36,17 +36,17 @@ public class Dumper {
    * @param output Output for reassembled code.
    */
   private void dump(ICodeBuffer code, BufferedWriter output) throws IOException {
-    StringBuilder chars = new StringBuilder(16);
+    var chars = new StringBuilder(16);
     while (code.hasMore()) {
       output.append(HexUtil.hexWordPlain(code.getCurrentAddress()));
       output.append("  ");
-      for (int i = 0; i < 16; i++) {
+      for (var i = 0; i < 16; i++) {
         if (code.hasMore()) {
-          int b = code.readByte();
+          var b = code.readByte();
           output.append(HexUtil.hexBytePlain(b));
           output.append(" ");
 
-          char c = charset.toChar((byte) b);
+          var c = charset.toChar((byte) b);
           chars.append(c != 0 ? c : '.');
         } else {
           output.append("   ");

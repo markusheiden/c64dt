@@ -42,7 +42,7 @@ public abstract class AbstractStream implements IStream {
     requireThat(length, "length").isGreaterThanOrEqualTo(0);
 
     lastPosition = position;
-    byte[] result = doRead(length);
+    var result = doRead(length);
     position += result.length;
 
     return result;

@@ -43,10 +43,10 @@ public abstract class AbstractCharset extends Charset {
     requireThat(length, "length").isGreaterThanOrEqualTo(0);
     requireThat(pos + length, "pos+length").isLessThanOrEqualTo(bytes.length, "bytes.length");
 
-    AbstractDecoder decoder = newDecoder();
-    StringBuilder result = new StringBuilder(bytes.length);
-    for (int i = 0; i < length; i++, pos++) {
-      char c = toChar(bytes[pos], decoder);
+    var decoder = newDecoder();
+    var result = new StringBuilder(bytes.length);
+    for (var i = 0; i < length; i++, pos++) {
+      var c = toChar(bytes[pos], decoder);
       if (c > 0) {
         result.append(c);
       }
@@ -89,7 +89,7 @@ public abstract class AbstractCharset extends Charset {
    * @param string String.
    */
   public byte[] toBytes(String string) {
-    byte[] result = new byte[string.length()];
+    var result = new byte[string.length()];
     toBytes(string, result, 0);
 
     return result;
@@ -106,8 +106,8 @@ public abstract class AbstractCharset extends Charset {
     requireThat(pos, "pos").isGreaterThanOrEqualTo(0);
     requireThat(pos + string.length(), "pos+string.length()").isLessThanOrEqualTo(bytes.length, "bytes.length");
 
-    AbstractEncoder encoder = newEncoder();
-    for (int i = 0; i < string.length(); i++, pos++) {
+    var encoder = newEncoder();
+    for (var i = 0; i < string.length(); i++, pos++) {
       bytes[pos] = toByte(string.charAt(i), encoder);
     }
   }

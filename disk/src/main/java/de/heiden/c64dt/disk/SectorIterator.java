@@ -39,7 +39,7 @@ public class SectorIterator implements Iterator<byte[]> {
   public byte[] next() {
     requireThat(hasNext(), "hasNext()").isTrue();
 
-    byte[] currentSector = diskImage.getSector(track, sector);
+    var currentSector = diskImage.getSector(track, sector);
     track = ByteUtil.toByte(currentSector[0]);
     sector = ByteUtil.toByte(currentSector[1]);
 

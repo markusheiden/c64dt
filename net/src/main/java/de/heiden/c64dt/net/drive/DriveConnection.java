@@ -64,7 +64,7 @@ public class DriveConnection extends AbstractConnection {
     sequence = Objects.requireNonNull(request).getSequence();
 
     // TODO 2011-01-09 mh: Check packet creation.
-    Packet packet = new Packet(MAX_PACKET);
+    var packet = new Packet(MAX_PACKET);
     packet.addByte(request.getSize());
     packet.addByte(0x01);
     packet.addByte(error.getResult());
@@ -78,7 +78,7 @@ public class DriveConnection extends AbstractConnection {
    * @param data Payload data.
    */
   public void sendReply(byte[] data) throws IOException {
-    byte size = (byte) data.length;
+    var size = (byte) data.length;
 //    if (IDX_DATA + size >= MAX_PACKET) {
 //      throw new IOException("Invalid packet size");
 //    }
@@ -87,7 +87,7 @@ public class DriveConnection extends AbstractConnection {
     sequence = Objects.requireNonNull(request).getSequence();
 
     // TODO 2011-01-09 mh: Check packet creation.
-    Packet packet = new Packet(MAX_PACKET);
+    var packet = new Packet(MAX_PACKET);
     packet.addByte(request.getSize());
     packet.addByte(SERVICE_DATA);
     packet.addByte(size);

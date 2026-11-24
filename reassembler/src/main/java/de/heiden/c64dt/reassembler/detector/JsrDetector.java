@@ -60,14 +60,14 @@ public class JsrDetector implements IDetector {
 
   @Override
   public boolean detect(CommandBuffer commands) {
-    boolean change = false;
+    var change = false;
 
-    Map<Integer, List<Integer>> crossReferences = crossReference(commands);
-    for (Entry<Integer, List<Integer>> crossReference : crossReferences.entrySet()) {
+    var crossReferences = crossReference(commands);
+    for (var crossReference : crossReferences.entrySet()) {
       int address = crossReference.getKey();
-      List<Integer> references = crossReference.getValue();
+      var references = crossReference.getValue();
 
-      Subroutine subroutine = commands.getSubroutine(address);
+      var subroutine = commands.getSubroutine(address);
       if (subroutine == null) {
         subroutine = detectZero(commands, address, references);
       }
@@ -80,14 +80,14 @@ public class JsrDetector implements IDetector {
 
       // Mark subroutine calls.
       for (int index : references) {
-        int arguments = subroutine.getArguments();
-        CodeType type = subroutine.getType();
+        var arguments = subroutine.getArguments();
+        var type = subroutine.getType();
 
         if (arguments == 0) {
           logger.debug("Known subroutine with zero terminated argument ({}) at address {}, referenced at index {}", type, hexWord(address), hexWord(index));
 
           // Search the zero which is terminating the argument.
-          int endIndex = search0(commands, index + 3, false);
+          var endIndex = search0(commands, index + 3, false);
           if (endIndex < 0) {
             continue;
           }
@@ -115,15 +115,15 @@ public class JsrDetector implements IDetector {
   protected Map<Integer, List<Integer>> crossReference(CommandBuffer commands) {
     Map<Integer, List<Integer>> result = new HashMap<>();
 
-    for (CommandIterator iter = commands.iterator(); iter.hasNext(); ) {
-      ICommand command = iter.next();
+    for (var iter = commands.iterator(); iter.hasNext(); ) {
+      var command = iter.next();
       if (!(command instanceof OpcodeCommand opcodeCommand)) {
         continue;
       }
 
-      Opcode opcode = opcodeCommand.getOpcode();
+      var opcode = opcodeCommand.getOpcode();
       if (command.isReachable() && opcode.getType() == JSR && opcode.getMode() == ABS && iter.hasNext()) {
-        int address = opcodeCommand.getArgument();
+        var address = opcodeCommand.getArgument();
         result
           .computeIfAbsent(address, k -> new ArrayList<>())
           .add(iter.getIndex());
@@ -142,12 +142,12 @@ public class JsrDetector implements IDetector {
    * @return Subroutine or null, if no consistent type of subroutine could be detected.
    */
   protected @Nullable Subroutine detectZero(CommandBuffer commands, int address, List<Integer> references) {
-    int matches = 0;
-    int unreachable = 0;
-    int count = 0;
+    var matches = 0;
+    var unreachable = 0;
+    var count = 0;
     for (int index : references) {
       // Try automatic detection of zero-terminated argument.
-      int endIndex = search0(commands, index + 3, true);
+      var endIndex = search0(commands, index + 3, true);
       if (endIndex >= 0) {
         matches++;
         if (!Objects.requireNonNull(commands.getCommand(index + 3)).isReachable()) {
@@ -169,11 +169,11 @@ public class JsrDetector implements IDetector {
    * @return Subroutine or null, if no consistent type of subroutine could be detected.
    */
   protected @Nullable Subroutine detectAddress(CommandBuffer commands, int address, List<Integer> references) {
-    CodeBuffer buffer = new CodeBuffer(commands.getStartAddress(), commands.getCode());
+    var buffer = new CodeBuffer(commands.getStartAddress(), commands.getCode());
 
-    int matches = 0;
-    int unreachable = 0;
-    int count = 0;
+    var matches = 0;
+    var unreachable = 0;
+    var count = 0;
     for (int index : references) {
       buffer.setCurrentIndex(index);
       if (buffer.has(3 + 2)) {
@@ -213,8 +213,8 @@ public class JsrDetector implements IDetector {
     }
 
     // Check conditions.
-    double detectedUnreachableRatio = ((double) unreachable) / ((double) count);
-    double detectedMatchRatio = ((double) matches) / ((double) count);
+    var detectedUnreachableRatio = ((double) unreachable) / ((double) count);
+    var detectedMatchRatio = ((double) matches) / ((double) count);
     if (matches < minMatches || checkUnreachable && detectedUnreachableRatio < unreachableRatio || detectedMatchRatio < matchRatio) {
       logger.debug("Potential subroutine with {} at address {}: Probability {} ({}) / {}", kind, hexWord(address), matches, unreachable, count);
       return null;
@@ -222,7 +222,7 @@ public class JsrDetector implements IDetector {
 
     // Met all conditions -> create subroutine.
     logger.debug("Detected subroutine with {} at address {}: Probability {} ({}) / {}", kind, hexWord(address), matches, unreachable, count);
-    Subroutine result = new Subroutine(address, arguments, type);
+    var result = new Subroutine(address, arguments, type);
     commands.addSubroutine(result);
 
     return result;
@@ -238,7 +238,7 @@ public class JsrDetector implements IDetector {
    * @return End index or -1, if no arguments have been found.
    */
   private int search0(CommandBuffer commands, int startIndex, boolean check) {
-    byte[] code = commands.getCode();
+    var code = commands.getCode();
     for (int index = startIndex, count = 0; commands.hasIndex(index) && count < maxLength; index++) {
       // Check for aborting conditions, only if requested.
       if (check) {
@@ -246,7 +246,7 @@ public class JsrDetector implements IDetector {
           // Stop search at any label.
           return -1;
         }
-        CodeType type = commands.getType(index);
+        var type = commands.getType(index);
         if (!type.isUnknown() && !type.isData()) {
           // Stop if code type has already been determined.
           return -1;

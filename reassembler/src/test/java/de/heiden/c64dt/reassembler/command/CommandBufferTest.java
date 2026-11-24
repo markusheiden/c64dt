@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CommandBufferTest {
   @Test
   public void testHasAddress() throws Exception {
-    CommandBuffer commands = new CommandBuffer(new byte[0x2000], 0x8000);
+    var commands = new CommandBuffer(new byte[0x2000], 0x8000);
 
     assertThat(commands.hasAddress(0x7FFF)).isFalse();
     assertThat(commands.hasAddress(0x8000)).isTrue();
@@ -20,7 +20,7 @@ public class CommandBufferTest {
 
   @Test
   public void testRebase() throws Exception {
-    CommandBuffer commands = new CommandBuffer(new byte[0x2000], 0x8000);
+    var commands = new CommandBuffer(new byte[0x2000], 0x8000);
     commands.rebase(0x1E00, 0xC000);
 
     assertThat(commands.hasAddress(0x7FFF)).isFalse();
@@ -35,7 +35,7 @@ public class CommandBufferTest {
 
   @Test
   public void testAddressForIndex() throws Exception {
-    CommandBuffer commands = new CommandBuffer(new byte[0x2000], 0x8000);
+    var commands = new CommandBuffer(new byte[0x2000], 0x8000);
     commands.rebase(0x1E00, 0xC000);
 
     assertThat(commands.addressForIndex(0x0000)).isEqualTo(0x8000);

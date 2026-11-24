@@ -92,12 +92,12 @@ public class DrivePacket {
    * Get payload data.
    */
   public byte[] getData() throws IOException {
-    int size = getSize();
+    var size = getSize();
     if (size >= IDX_DATA + data.length) {
       throw new IOException("Invalid packet size");
     }
 
-    byte[] result = new byte[size];
+    var result = new byte[size];
     System.arraycopy(data, IDX_DATA, result, 0, result.length);
 
     return result;

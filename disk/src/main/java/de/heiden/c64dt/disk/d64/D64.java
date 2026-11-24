@@ -50,10 +50,10 @@ public class D64 extends AbstractDiskImage {
 
   @Override
   public IBAM getBAM() {
-    BAM result = new BAM(this);
+    var result = new BAM(this);
 
-    byte[] bam = getSector(18, 0);
-    int tracks = getTracks();
+    var bam = getSector(18, 0);
+    var tracks = getTracks();
     for (int track = 1, pos = 0x04; track <= tracks; track++, pos += 4) {
       if (track == 37) {
         // TODO Currently only Dolphin DOS support implemented.

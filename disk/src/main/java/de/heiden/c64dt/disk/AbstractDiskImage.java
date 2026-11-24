@@ -49,11 +49,11 @@ public abstract class AbstractDiskImage implements IDiskImage {
 
     sectors = new byte[tracks][][];
     errors = new Error[tracks][];
-    for (int track = 1; track <= tracks; track++) {
-      int spt = getSectors(track);
+    for (var track = 1; track <= tracks; track++) {
+      var spt = getSectors(track);
       sectors[track - 1] = new byte[spt][];
       errors[track - 1] = new Error[spt];
-      for (int sector = 0; sector < spt; sector++) {
+      for (var sector = 0; sector < spt; sector++) {
         sectors[track - 1][sector] = new byte[256];
         errors[track - 1][sector] = Error.NO_ERROR;
       }
@@ -64,9 +64,9 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * Load D64 from binary representation.
    */
   public void load(InputStream stream) throws IOException {
-    byte[] bytes = IOUtils.toByteArray(stream);
+    var bytes = IOUtils.toByteArray(stream);
     for (int pos = 0, track = 1; track <= getTracks(); track++) {
-      for (int sector = 0; sector < getSectors(track) && pos < bytes.length; sector++, pos += 256) {
+      for (var sector = 0; sector < getSectors(track) && pos < bytes.length; sector++, pos += 256) {
         logger.info("Reading track {} sector {}.", track, sector);
         System.arraycopy(bytes, pos, sectors[track - 1][sector], 0, 256);
       }
@@ -162,7 +162,7 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param pos Position in sector buffer.
    */
   protected void readBAM(IBAM bam, int track, byte[] content, int pos) {
-    int free = ByteUtil.toByte(content[pos + 0x00]);
+    var free = ByteUtil.toByte(content[pos + 0x00]);
     bam.setFreeSectors(track, free);
     for (int i = 1, sector = 0; i < getBamEntrySize(); i++, sector += 8) {
       readBAM(bam, track, sector, content[pos + i]);
@@ -178,8 +178,8 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param b Byte to read.
    */
   protected void readBAM(IBAM bam, int track, int sector, byte b) {
-    int map = ByteUtil.toByte(b);
-    for (int i = 0; i < 8 && sector < getSectors(track); i++, sector++) {
+    var map = ByteUtil.toByte(b);
+    for (var i = 0; i < 8 && sector < getSectors(track); i++, sector++) {
       bam.setFree(track, sector, (map & 0x01) != 0);
       map = map >> 1;
     }
@@ -187,15 +187,15 @@ public abstract class AbstractDiskImage implements IDiskImage {
 
   @Override
   public IDirectory getDirectory() {
-    byte[] name = new byte[16];
+    var name = new byte[16];
     System.arraycopy(getSector(18, 0), 0x90, name, 0, 16);
-    byte[] idAndType = new byte[5];
+    var idAndType = new byte[5];
     System.arraycopy(getSector(18, 0), 0xA2, idAndType, 0, 5);
 
     List<IFile> files = new ArrayList<>(18 * 8);
-    for (SectorIterator iter = new SectorIterator(this, 18, 1); iter.hasNext(); ) {
-      byte[] content = iter.next();
-      for (int pos = 0; pos < 256; pos += 0x20) {
+    for (var iter = new SectorIterator(this, 18, 1); iter.hasNext(); ) {
+      var content = iter.next();
+      for (var pos = 0; pos < 256; pos += 0x20) {
         files.add(getFile(content, pos));
       }
     }
@@ -211,15 +211,15 @@ public abstract class AbstractDiskImage implements IDiskImage {
    */
   protected IFile getFile(byte[] content, int pos) {
     // TODO Evaluate all attributes.
-    FileMode mode = FileMode.fileMode(content[pos + 0x02]);
-    int track = ByteUtil.toByte(content, pos + 0x03);
-    int sector = ByteUtil.toByte(content, pos + 0x04);
-    byte[] name = TextUtil.strip(content, pos + 0x05, 16);
-    int sideTrack = ByteUtil.toByte(content, pos + 0x15); // REL only.
-    int sideSector = ByteUtil.toByte(content, pos + 0x16); // REL only.
-    int recordLength = ByteUtil.toByte(content, pos + 0x17); // REL only.
+    var mode = FileMode.fileMode(content[pos + 0x02]);
+    var track = ByteUtil.toByte(content, pos + 0x03);
+    var sector = ByteUtil.toByte(content, pos + 0x04);
+    var name = TextUtil.strip(content, pos + 0x05, 16);
+    var sideTrack = ByteUtil.toByte(content, pos + 0x15); // REL only.
+    var sideSector = ByteUtil.toByte(content, pos + 0x16); // REL only.
+    var recordLength = ByteUtil.toByte(content, pos + 0x17); // REL only.
     // 0x18-0x1D unused.
-    int size = ByteUtil.toWord(content, pos + 0x1E);
+    var size = ByteUtil.toWord(content, pos + 0x1E);
 
     return new File(mode, track, sector, name, size);
   }
@@ -228,12 +228,12 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * Read file content.
    */
   public byte[] read(IFile file) {
-    int track = file.getTrack();
-    int sector = file.getSector();
-    byte[] content = new byte[file.getSize() * 256];
-    int pos = 0;
+    var track = file.getTrack();
+    var sector = file.getSector();
+    var content = new byte[file.getSize() * 256];
+    var pos = 0;
     while (track > 0) {
-      byte[] sectorContent = getSector(track, sector);
+      var sectorContent = getSector(track, sector);
       track = ByteUtil.toByte(sectorContent, 0);
       sector = ByteUtil.toByte(sectorContent, 1);
       if (track == 0) {
@@ -246,7 +246,7 @@ public abstract class AbstractDiskImage implements IDiskImage {
     }
 
     // Resize array to actual file size.
-    byte[] result = new byte[pos];
+    var result = new byte[pos];
     System.arraycopy(content, 0, result, 0, pos);
     return result;
   }

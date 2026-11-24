@@ -43,7 +43,7 @@ public class CommandCreator {
 
     commandBuffer.clear();
     while (code.hasMore()) {
-      int codeIndex = code.getCurrentIndex();
+      var codeIndex = code.getCurrentIndex();
 
       requireThat(codeIndex, "codeIndex").isEqualTo(index, "index");
       var type = commandBuffer.getType(index);
@@ -51,10 +51,10 @@ public class CommandCreator {
       if (type == CodeType.BIT) {
         // BIT opcode used just to skip the next opcode.
         var opcode = code.readOpcode();
-        int modeSize = opcode.getMode().getSize();
+        var modeSize = opcode.getMode().getSize();
 
         if (opcode.getType() == OpcodeType.BIT && modeSize > 0 && code.has(modeSize)) {
-          int argumentIndex = code.getCurrentIndex();
+          var argumentIndex = code.getCurrentIndex();
           // Reset code buffer to the argument, because this should be the skipped opcode.
           code.setCurrentIndex(argumentIndex);
           addCommand(new BitCommand(opcode, code.read(modeSize)));
@@ -80,14 +80,14 @@ public class CommandCreator {
         // Unknown or code -> try to disassemble an opcode.
         var opcode = code.readOpcode();
         var mode = opcode.getMode();
-        int modeSize = mode.getSize();
+        var modeSize = mode.getSize();
 
         if (code.has(modeSize) && (opcode.isLegal() || type == CodeType.OPCODE)) {
           // TODO mh: Log error if illegal opcode and type is OPCODE?
-          int argument = code.read(modeSize);
+          var argument = code.read(modeSize);
           if (mode.isAddress()) {
-            int pc = commandBuffer.addressForIndex(index);
-            int address = mode.getAddress(pc, argument);
+            var pc = commandBuffer.addressForIndex(index);
+            var address = mode.getAddress(pc, argument);
             // Track references of opcodes.
             commandBuffer.addReference(opcode.getType().isJump(), index, address);
           }

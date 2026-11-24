@@ -7,7 +7,7 @@ import java.io.File;
  */
 public class NetDriveTest {
   public static void main(String[] args) throws Exception {
-    NetDrive netDrive = new NetDrive(new File("."));
+    var netDrive = new NetDrive(new File("."));
     netDrive.start();
 
     System.in.read();

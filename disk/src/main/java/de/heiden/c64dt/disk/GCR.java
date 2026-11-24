@@ -25,7 +25,7 @@ public class GCR {
   }
 
   private void start() {
-    int[] result = calculate();
+    var result = calculate();
     if (result == null) {
       System.out.println("no match");
       return;
@@ -36,7 +36,7 @@ public class GCR {
   }
 
   private int @Nullable [] calculate() {
-    int[][] nibbles = new int[][]
+    var nibbles = new int[][]
       {
         generate(0), // nibble1
         generate(5), // nibble2
@@ -53,9 +53,9 @@ public class GCR {
 
   private int @Nullable [] calculateNew() {
     int @Nullable [] result = null;
-    int min = Integer.MAX_VALUE;
+    var min = Integer.MAX_VALUE;
 
-    int[][] nibbles = new int[][]
+    var nibbles = new int[][]
       {
         generate(0), // nibble1
         generate(5), // nibble2
@@ -67,11 +67,11 @@ public class GCR {
         generate(3)  // nibble8
       };
 
-    int[][] permutate = new int[8][];
-    for (int i = 0; i < (1 << 3) * 8; i++) {
+    var permutate = new int[8][];
+    for (var i = 0; i < (1 << 3) * 8; i++) {
       Arrays.fill(permutate, null);
       for (int j = 0, permutation = i; j < nibbles.length; j++) {
-        int index = permutation & 0x7;
+        var index = permutation & 0x7;
         permutation >>= 3;
         if (permutate[index] != null) {
           break;
@@ -79,9 +79,9 @@ public class GCR {
         permutate[index] = nibbles[j];
       }
 
-      int[] merged = calculate(permutate);
+      var merged = calculate(permutate);
       if (merged != null) {
-        int length = length(merged);
+        var length = length(merged);
         if (length < min) {
           min = length;
           result = merged;
@@ -99,12 +99,12 @@ public class GCR {
    * @return Reverse GCR table.
    */
   private int[] generate(int shift) {
-    int[] nibble = new int[256];
+    var nibble = new int[256];
     Arrays.fill(nibble, -1);
-    for (int i = 0; i < GCR.length; i++) {
-      int gcr = GCR[i];
+    for (var i = 0; i < GCR.length; i++) {
+      var gcr = GCR[i];
       if (gcr >= 0) {
-        int shifted = gcr << shift;
+        var shifted = gcr << shift;
         nibble[(shifted & 0xFF) | (shifted >> 8)] = i;
       }
     }
@@ -119,11 +119,11 @@ public class GCR {
    * @return The merged reverse GCR table.
    */
   public int @Nullable [] calculate(int[][] nibbles) {
-    int[] result = new int[512];
+    var result = new int[512];
     Arrays.fill(result, -1);
 
-    for (int[] nibble : nibbles) {
-      int i = 0; // -first(nibble);
+    for (var nibble : nibbles) {
+      var i = 0; // -first(nibble);
       for (; i < 256; i++) {
         if (match(nibble, result, i)) {
           copy(nibble, result, i);
@@ -184,9 +184,9 @@ public class GCR {
    * @param table GCR table.
    */
   private static int length(int[] table) {
-    int first = first(table);
+    var first = first(table);
 
-    int last = table.length - 1;
+    var last = table.length - 1;
     for (; last >= 0; last--) {
       if (table[last] >= 0) {
         break;
@@ -197,7 +197,7 @@ public class GCR {
   }
 
   private static int first(int[] table) {
-    int first = 0;
+    var first = 0;
     for (; first < table.length; first++) {
       if (table[first] >= 0) {
         break;
@@ -213,11 +213,11 @@ public class GCR {
    * @param table GCR table.
    */
   private static String toString(int[] table) {
-    StringBuilder out = new StringBuilder(256 * 5);
-    for (int i = 0; i < table.length; ) {
+    var out = new StringBuilder(256 * 5);
+    for (var i = 0; i < table.length; ) {
       out.append(HexUtil.hexWord(i));
       out.append(": ");
-      for (int j = 0; j < 16; i++, j++) {
+      for (var j = 0; j < 16; i++, j++) {
         out.append(table[i] >= 0 ? HexUtil.hexByte(table[i]) : "---");
         out.append(", ");
       }

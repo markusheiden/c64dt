@@ -201,7 +201,7 @@ public class Commands {
     requireThat(hasIndex(index), "hasIndex(index)").isTrue();
 
     // Compute start index for address range index belongs to.
-    Integer startIndex = startAddresses.floorKey(index);
+    var startIndex = startAddresses.floorKey(index);
 
     return Objects.requireNonNull(startAddresses.get(startIndex)) + index;
   }
@@ -234,10 +234,10 @@ public class Commands {
    * @return Relative address or -1, if not found.
    */
   private int indexForAddressImpl(int address) {
-    Iterator<Entry<Integer, Integer>> iter = startAddresses.entrySet().iterator();
-    Entry<Integer, Integer> lastAddressEntry = iter.next();
+    var iter = startAddresses.entrySet().iterator();
+    var lastAddressEntry = iter.next();
     while (iter.hasNext()) {
-      Entry<Integer, Integer> addressEntry = iter.next();
+      var addressEntry = iter.next();
       if (address >= lastAddressEntry.getValue() + lastAddressEntry.getKey() &&
         address < lastAddressEntry.getValue() + addressEntry.getKey()) {
         return address - lastAddressEntry.getValue();
@@ -258,7 +258,7 @@ public class Commands {
     requireThat(hasIndex(startIndex), "hasIndex(startIndex)").isTrue();
     requireValidAddress(baseAddress);
 
-    Integer removed = startAddresses.put(startIndex, baseAddress);
+    var removed = startAddresses.put(startIndex, baseAddress);
     // Check that the same index is not rebased twice.
     requireThat(removed, "removed").isNull();
   }
@@ -273,7 +273,7 @@ public class Commands {
     requireThat(hasIndex(startIndex), "hasIndex(startIndex)").isTrue();
     requireValidAddress(address);
 
-    Integer removed = startAddresses.put(startIndex, address - startIndex);
+    var removed = startAddresses.put(startIndex, address - startIndex);
     // Check that the same index is not based twice.
     requireThat(removed, "removed").isNull();
   }
@@ -288,7 +288,7 @@ public class Commands {
    * @param subroutine Subroutine.
    */
   public void addSubroutine(Subroutine subroutine) {
-    Subroutine removed = subroutines.put(subroutine.getAddress(), subroutine);
+    var removed = subroutines.put(subroutine.getAddress(), subroutine);
     // Check that there are no doubled subroutines.
     requireThat(removed, "removed").isNull();
   }
@@ -339,8 +339,8 @@ public class Commands {
     requireThat(hasEndIndex(endIndex), "hasEndIndex(endIndex)").isTrue();
     requireThat(startIndex, "startIndex").isLessThanOrEqualTo(endIndex, "endIndex");
 
-    boolean change = false;
-    for (int index = startIndex; index < endIndex; index++) {
+    var change = false;
+    for (var index = startIndex; index < endIndex; index++) {
       change |= setType(index, type);
     }
 
@@ -357,7 +357,7 @@ public class Commands {
   public boolean setType(int index, CodeType type) {
     requireThat(hasIndex(index), "hasIndex(index)").isTrue();
 
-    boolean change = !type.equals(types[index]);
+    var change = !type.equals(types[index]);
     types[index] = type;
 
     return change;
@@ -499,7 +499,7 @@ public class Commands {
    */
   public SortedSet<Integer> getReferences(int address) {
     SortedSet<Integer> result = new TreeSet<>();
-    for (int i = 0; i < code.length; i++) {
+    for (var i = 0; i < code.length; i++) {
       if (codeReferences[i] == address) {
         result.add(i);
       } else if (dataReferences[i] == address) {
@@ -534,7 +534,7 @@ public class Commands {
    */
   private boolean removeReference(int index, int[] references, Map<Integer, ?> labels) {
     // Get referenced absolute address.
-    int referenced = references[index];
+    var referenced = references[index];
     // Delete reference.
     references[index] = -1;
 
@@ -544,7 +544,7 @@ public class Commands {
     }
 
     // Check if referenced address is referenced from elsewhere too.
-    for (int reference : references) {
+    for (var reference : references) {
       if (reference == referenced) {
         // Referenced address is still referenced, no label needs to be removed.
         return false;
@@ -597,7 +597,7 @@ public class Commands {
     requireThat(hasIndex(index), "hasIndex(index)").isTrue();
     requireThat(command.hasAddress(), "command.hasAddress()").isFalse();
 
-    int address = addressForIndex(index);
+    var address = addressForIndex(index);
     requireThat(address, "address").isGreaterThanOrEqualTo(0);
 
     command.setAddress(address);

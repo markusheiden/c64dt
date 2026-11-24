@@ -78,22 +78,22 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
 
   @Override
   public CommandBufferMapper marshal(CommandBuffer commands) throws Exception {
-    CommandBufferMapper result = new CommandBufferMapper();
+    var result = new CommandBufferMapper();
 
     result.code = commands.getCode();
 
     // Start addresses.
-    SortedMap<Integer, Integer> startAddresses = commands.getStartAddresses();
-    for (Entry<Integer, Integer> entry : startAddresses.entrySet()) {
-      AddressMapper address = new AddressMapper();
+    var startAddresses = commands.getStartAddresses();
+    for (var entry : startAddresses.entrySet()) {
+      var address = new AddressMapper();
       address.index = entry.getKey();
       address.base = entry.getValue();
       result.addresses.add(address);
     }
 
     // Subroutines.
-    for (Entry<Integer, Subroutine> entry : commands.getSubroutines().entrySet()) {
-      SubroutineMapper subroutine = new SubroutineMapper();
+    for (var entry : commands.getSubroutines().entrySet()) {
+      var subroutine = new SubroutineMapper();
       subroutine.address = entry.getKey();
       subroutine.arguments = entry.getValue().getArguments();
       subroutine.type = entry.getValue().getType();
@@ -101,22 +101,22 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
     }
 
     // Detected code types.
-    for (int index = 0; index < commands.getLength(); ) {
-      int startIndex = index;
-      CodeType type = commands.getType(index++);
+    for (var index = 0; index < commands.getLength(); ) {
+      var startIndex = index;
+      var type = commands.getType(index++);
       if (type.isUnknown()) {
         continue;
       }
 
       // Count indexes with the same type.
-      int count = 1;
+      var count = 1;
       for (; index < commands.getLength(); index++, count++) {
         if (!commands.getType(index).equals(type)) {
           break;
         }
       }
 
-      TypeMapper codeType = new TypeMapper();
+      var codeType = new TypeMapper();
       codeType.index = startIndex;
       if (count > 1) {
         codeType.end = index;
@@ -131,34 +131,34 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
 
   @Override
   public CommandBuffer unmarshal(CommandBufferMapper xmlCommands) throws Exception {
-    List<AddressMapper> addresses = xmlCommands.addresses;
+    var addresses = xmlCommands.addresses;
 
     // Start address / first base address.
-    AddressMapper firstAddress = addresses.get(0);
-    int startIndex = firstAddress.index;
+    var firstAddress = addresses.get(0);
+    var startIndex = firstAddress.index;
     requireThat(startIndex, "startIndex").isEqualTo(0);
 
     // The start address is the first base address and automatically sets the end base address.
-    CommandBuffer commands = new CommandBuffer(xmlCommands.code, firstAddress.base);
+    var commands = new CommandBuffer(xmlCommands.code, firstAddress.base);
 
     // Remaining base addresses.
-    for (int i = 1; i < addresses.size() - 1; i++) {
-      AddressMapper address = addresses.get(i);
+    for (var i = 1; i < addresses.size() - 1; i++) {
+      var address = addresses.get(i);
       commands.rebase(address.index, address.base);
     }
 
     // End base address.
-    AddressMapper lastAddress = addresses.get(addresses.size() - 1);
+    var lastAddress = addresses.get(addresses.size() - 1);
     requireThat(lastAddress.index, "lastAddress.index").isEqualTo(xmlCommands.code.length, "xmlCommands.code.length");
     requireThat(lastAddress.base, "lastAddress.base").isEqualTo(firstAddress.base, "firstAddress.base");
 
     // Subroutines.
-    for (SubroutineMapper subroutineMapper : xmlCommands.subroutines) {
+    for (var subroutineMapper : xmlCommands.subroutines) {
       commands.addSubroutine(new Subroutine(subroutineMapper.address, subroutineMapper.arguments, subroutineMapper.type));
     }
 
     // Detected code types.
-    for (TypeMapper typeMapper : xmlCommands.types) {
+    for (var typeMapper : xmlCommands.types) {
       if (typeMapper.end != null) {
         commands.setType(typeMapper.index, typeMapper.end, typeMapper.type);
       } else {

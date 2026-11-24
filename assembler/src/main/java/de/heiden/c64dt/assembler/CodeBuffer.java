@@ -78,8 +78,8 @@ public class CodeBuffer extends AbstractCodeBuffer {
   public static CodeBuffer fromProgram(byte[] program) throws IOException {
     requireThat(program.length, "program.length").isGreaterThanOrEqualTo(2);
 
-    int address = toWord(program, 0);
-    byte[] code = new byte[program.length - 2];
+    var address = toWord(program, 0);
+    var code = new byte[program.length - 2];
     System.arraycopy(program, 2, code, 0, code.length);
     return new CodeBuffer(address, code);
   }

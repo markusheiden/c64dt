@@ -54,13 +54,13 @@ public abstract class AbstractDiskImageReader {
    * @return diskImage for method chaining.
    */
   protected IDiskImage read(byte[] data, IDiskImage diskImage) {
-    int i = 0;
+    var i = 0;
 
     // Read sector contents.
-    byte[] content = new byte[256];
-    for (int track = 1; track <= diskImage.getTracks(); track++) {
+    var content = new byte[256];
+    for (var track = 1; track <= diskImage.getTracks(); track++) {
       logger.debug("Reading track {}", track);
-      for (int sector = 0; sector < diskImage.getSectors(track); sector++) {
+      for (var sector = 0; sector < diskImage.getSectors(track); sector++) {
         logger.debug("Reading sector {} from {}", sector, Integer.toHexString(i));
         System.arraycopy(data, i, content, 0, content.length);
         diskImage.setSector(track, sector, content);
@@ -71,8 +71,8 @@ public abstract class AbstractDiskImageReader {
     // Read errors.
     if (diskImage.hasErrors()) {
       logger.debug("Reading errors");
-      for (int track = 1; track <= diskImage.getTracks(); track++) {
-        for (int sector = 0; sector < diskImage.getSectors(track); sector++) {
+      for (var track = 1; track <= diskImage.getTracks(); track++) {
+        for (var sector = 0; sector < diskImage.getSectors(track); sector++) {
           diskImage.setError(track, sector, Error.error(data[i]));
           i++;
         }

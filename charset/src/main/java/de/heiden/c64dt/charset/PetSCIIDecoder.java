@@ -41,9 +41,9 @@ public class PetSCIIDecoder extends AbstractDecoder {
    * @param b Encoded char.
    */
   protected char toChar(byte b) throws UnmappableCharacterException {
-    int c = b & 0xFF;
+    var c = b & 0xFF;
     if (c >= 0x41 && c <= 0x5A) {
-      char a = charset.upper ? 'A' : 'a';
+      var a = charset.upper ? 'A' : 'a';
       return (char) (c - 0x41 + a);
     } else if (c >= 0x61 && c <= 0x7A) {
       if (charset.upper) {

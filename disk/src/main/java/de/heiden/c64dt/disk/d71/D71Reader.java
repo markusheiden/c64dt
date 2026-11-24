@@ -20,7 +20,7 @@ public class D71Reader extends AbstractDiskImageReader {
 
   @Override
   public IDiskImage read(byte[] data) throws WrongDiskImageFormatException {
-    int tracks = 70;
+    var tracks = 70;
     boolean hasErrors;
     switch (data.length) {
       case SIZE_70_TRACKS_NO_ERRORS:

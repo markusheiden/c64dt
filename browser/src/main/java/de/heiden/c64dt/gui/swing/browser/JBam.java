@@ -44,11 +44,11 @@ public class JBam extends JComponent {
   public void setDiskImage(IDiskImage diskImage) {
     this.diskImage = diskImage;
 
-    Font font = getFont().deriveFont(Font.BOLD);
+    var font = getFont().deriveFont(Font.BOLD);
     setFont(font);
-    FontMetrics fontMetrics = getFontMetrics(font);
+    var fontMetrics = getFontMetrics(font);
 
-    Rectangle bounds = fontMetrics.getStringBounds("88", getGraphics()).getBounds();
+    var bounds = fontMetrics.getStringBounds("88", getGraphics()).getBounds();
     left = (int) Math.ceil(bounds.getWidth());
     leftSpace = (int) Math.ceil(left / 2D);
     height = (int) Math.ceil(bounds.getHeight());
@@ -59,8 +59,8 @@ public class JBam extends JComponent {
       border = 1;
     }
 
-    int x = leftSpace + left + border + diskImage.getTracks() * (box + border) + 1;
-    int y = topSpace + height + border + diskImage.getSectors(1) * (box + border) + 1;
+    var x = leftSpace + left + border + diskImage.getTracks() * (box + border) + 1;
+    var y = topSpace + height + border + diskImage.getSectors(1) * (box + border) + 1;
     setPreferredSize(new Dimension(x, y));
 
     repaint();
@@ -75,19 +75,19 @@ public class JBam extends JComponent {
       return;
     }
 
-    IBAM bam = diskImage.getBAM();
+    var bam = diskImage.getBAM();
 
-    FontMetrics fontMetrics = g.getFontMetrics();
-    int descent = fontMetrics.getDescent();
+    var fontMetrics = g.getFontMetrics();
+    var descent = fontMetrics.getDescent();
 
     // Track numbers.
     g.setColor(getForeground());
-    int x = leftSpace + left + border + box / 2; // Center of first horizontal box.
-    int y = topSpace / 2 + height - descent; // Base line of top space.
-    for (int track = 1; track < diskImage.getTracks(); track += 10) {
-      String description = Integer.toString(track);
+    var x = leftSpace + left + border + box / 2; // Center of first horizontal box.
+    var y = topSpace / 2 + height - descent; // Base line of top space.
+    for (var track = 1; track < diskImage.getTracks(); track += 10) {
+      var description = Integer.toString(track);
       // Draw centered regarding to box.
-      Rectangle2D bounds = fontMetrics.getStringBounds(description, g);
+      var bounds = fontMetrics.getStringBounds(description, g);
       g.drawString(description, (int) Math.round(x - bounds.getWidth() / 2), y);
       x += 10 * (box + border);
     }
@@ -95,23 +95,23 @@ public class JBam extends JComponent {
     // Sector numbers.
     g.setColor(getForeground());
     y = topSpace + height + border + box / 2; // Center of first vertical box.
-    for (int sector = 0; sector < diskImage.getSectors(); sector += 10) {
-      String description = Integer.toString(sector);
+    for (var sector = 0; sector < diskImage.getSectors(); sector += 10) {
+      var description = Integer.toString(sector);
       // Draw centered regarding to box.
-      Rectangle2D bounds = fontMetrics.getStringBounds(description, g);
+      var bounds = fontMetrics.getStringBounds(description, g);
       g.drawString(description, (int) Math.ceil(left - bounds.getWidth()) + (left - leftSpace) / 2, (int) Math.round(y + bounds.getHeight() / 2) - descent);
       y += 10 * (box + border);
     }
 
     // BAM map.
     x = leftSpace + left;
-    for (int track = 1; track <= diskImage.getTracks(); track++) {
+    for (var track = 1; track <= diskImage.getTracks(); track++) {
       y = topSpace + height;
-      int spt = diskImage.getSectors(track);
+      var spt = diskImage.getSectors(track);
       g.setColor(Color.BLACK);
       g.fillRect(x, y, border + box + border, border + spt * (box + border));
-      for (int sector = 0; sector < spt; sector++) {
-        Color color = used;
+      for (var sector = 0; sector < spt; sector++) {
+        var color = used;
         if (diskImage.hasError(track, sector)) {
           color = error;
         } else if (bam.isFree(track, sector)) {

@@ -60,18 +60,18 @@ public class Disassembler {
    * @param output Output for reassembled code.
    */
   private void disassembleOpcode(ICodeBuffer code, BufferedWriter output) throws IOException {
-    Opcode opcode = code.readOpcode();
-    OpcodeMode mode = opcode.getMode();
-    int size = mode.getSize();
+    var opcode = code.readOpcode();
+    var mode = opcode.getMode();
+    var size = mode.getSize();
 
-    int pc = code.getCommandAddress();
+    var pc = code.getCommandAddress();
     output.append(hexWordPlain(pc));
     output.append("  ");
     output.append(hexBytePlain(opcode.getOpcode()));
 
     if (opcode.isLegal() && code.has(size)) {
       if (size > 0) {
-        int argument = code.read(mode.getSize());
+        var argument = code.read(mode.getSize());
 
         output.append(size >= 1 ? " " + hexBytePlain(lo(argument)) : "   ");
         output.append(size >= 2 ? " " + hexBytePlain(hi(argument)) : "   ");

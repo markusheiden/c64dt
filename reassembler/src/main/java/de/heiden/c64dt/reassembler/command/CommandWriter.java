@@ -44,16 +44,16 @@ public class CommandWriter {
 
     // External labels.
     Collection<ExternalLabel> externalReferences = new TreeSet<>(commands.getExternalLabels());
-    for (ExternalLabel externalReference : externalReferences) {
+    for (var externalReference : externalReferences) {
       output.append(externalReference.toString()).append(" = ").append(hex(externalReference.getAddress())).append("\n");
     }
     output.append("\n");
 
     // Code.
-    StringBuilder line = new StringBuilder(80);
-    for (CommandIterator iter = commands.iterator(); iter.hasNext(); ) {
-      ICommand command = iter.next();
-      int pc = command.getAddress();
+    var line = new StringBuilder(80);
+    for (var iter = commands.iterator(); iter.hasNext(); ) {
+      var command = iter.next();
+      var pc = command.getAddress();
 
       line.setLength(0);
 
@@ -64,7 +64,7 @@ public class CommandWriter {
         if (!command.isReachable()) {
           line.append("U");
         }
-        for (int i = 1; i < command.getSize(); i++) {
+        for (var i = 1; i < command.getSize(); i++) {
           if (commands.hasCodeLabel(pc + i)) {
             line.append("C");
           }
@@ -78,8 +78,8 @@ public class CommandWriter {
 
       // Debug output: byte representation of command.
       line.append(hexWordPlain(pc));
-      List<Integer> data = command.toBytes();
-      for (int i = 0; i < data.size() && i < 3; i++) {
+      var data = command.toBytes();
+      for (var i = 0; i < data.size() && i < 3; i++) {
         line.append(" ");
         line.append(hexBytePlain(data.get(i)));
       }
@@ -88,7 +88,7 @@ public class CommandWriter {
       line.append(" | ");
 
       // Reassembler output.
-      ILabel label = iter.getLabel();
+      var label = iter.getLabel();
       if (label != null) {
         // TODO mh: Check length of label?
         line.append(label.toString(pc)).append(":");

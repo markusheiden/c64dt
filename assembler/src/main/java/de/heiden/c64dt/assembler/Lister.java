@@ -66,9 +66,9 @@ public class Lister {
    * @return Are there more commands?
    */
   boolean listLine(ICodeBuffer code, BufferedWriter output) throws IOException {
-    int pc = code.getCurrentAddress();
+    var pc = code.getCurrentAddress();
     // Next address is not used for searching for the next command, because the linking may be broken.
-    final int nextAddress = code.readWord();
+    final var nextAddress = code.readWord();
     if (nextAddress == 0) {
       return false;
     }
@@ -79,9 +79,9 @@ public class Lister {
     output.append(Integer.toString(code.readWord()));
     output.append(" ");
 
-    boolean escaped = false;
+    var escaped = false;
     while (code.hasMore()) {
-      int b = code.readByte();
+      var b = code.readByte();
       if (b == 0x00) {
         break;
       }

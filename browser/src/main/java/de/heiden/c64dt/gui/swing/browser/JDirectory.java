@@ -27,7 +27,7 @@ public class JDirectory extends JList<Object> {
   public JDirectory() {
     setOpaque(true);
     setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    Dimension size = new Dimension(16 * fontSize, 0);
+    var size = new Dimension(16 * fontSize, 0);
     setPreferredSize(size);
     setMaximumSize(size);
     setCellRenderer((list, value, index, isSelected, cellHasFocus) -> {
@@ -36,11 +36,11 @@ public class JDirectory extends JList<Object> {
         text = new byte[26];
         Arrays.fill(text, (byte) 0xA0);
 
-        IDirectory directory = (IDirectory) value;
-        byte[] name = directory.getName();
-        byte[] idAndType = directory.getIdAndType();
+        var directory = (IDirectory) value;
+        var name = directory.getName();
+        var idAndType = directory.getIdAndType();
 
-        int i = 0;
+        var i = 0;
         text[i++] = 0x30; // '0'
         text[i++] = 0x20; // ' '
         text[i++] = 0x22; // '"'
@@ -60,10 +60,10 @@ public class JDirectory extends JList<Object> {
         text = new byte[columns];
         Arrays.fill(text, (byte) 0x20);
 
-        IFile file = (IFile) value;
-        byte[] name = file.getName();
+        var file = (IFile) value;
+        var name = file.getName();
 
-        int i = 0;
+        var i = 0;
         writeInt(file.getSize(), text, i);
         i += 4;
         text[i++] = 0x20; // ' '
@@ -80,7 +80,7 @@ public class JDirectory extends JList<Object> {
         }
       }
 
-      JC64TextArea result = new JC64TextArea(text.length, 1, 2, false);
+      var result = new JC64TextArea(text.length, 1, 2, false);
       if (isSelected) {
         result.setForeground(getSelectionForeground());
         result.setBackground(getSelectionBackground());
@@ -100,7 +100,7 @@ public class JDirectory extends JList<Object> {
     if (size == 0) {
       text[pos] = 0x30;
     } else {
-      int digits = ((int) Math.floor(Math.log10(size))) + 1;
+      var digits = ((int) Math.floor(Math.log10(size))) + 1;
       pos += digits;
       while (size != 0) {
         text[--pos] = (byte) (size % 10 + 0x30);
@@ -115,7 +115,7 @@ public class JDirectory extends JList<Object> {
    * @param directory Directory.
    */
   public void setDirectory(final IDirectory directory) {
-    final List<IFile> files = directory.getFiles();
+    final var files = directory.getFiles();
     files.removeIf(file -> !file.getMode().isVisible());
 
     setModel(new ListModel<>() {
@@ -143,7 +143,7 @@ public class JDirectory extends JList<Object> {
       }
     });
 
-    Dimension size = new Dimension(columns * fontSize, (directory.getFiles().size() + 1) * fontSize);
+    var size = new Dimension(columns * fontSize, (directory.getFiles().size() + 1) * fontSize);
     setPreferredSize(size);
     setMaximumSize(size);
     repaint();

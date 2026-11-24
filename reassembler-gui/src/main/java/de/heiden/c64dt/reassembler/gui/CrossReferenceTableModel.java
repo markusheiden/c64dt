@@ -83,15 +83,15 @@ public class CrossReferenceTableModel extends DefaultTableModel {
       return;
     }
 
-    CommandBuffer commands = reassembler.getCommands();
+    var commands = reassembler.getCommands();
 
     if (!commands.hasIndex(index)) {
       // No row selected -> display nothing.
       return;
     }
 
-    SortedSet<Integer> references = commands.getReferences(commands.addressForIndex(index));
-    for (Integer reference : references) {
+    var references = commands.getReferences(commands.addressForIndex(index));
+    for (var reference : references) {
       addRow(reference, commands.addressForIndex(reference));
     }
   }

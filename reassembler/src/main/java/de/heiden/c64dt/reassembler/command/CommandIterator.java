@@ -122,7 +122,7 @@ public class CommandIterator implements Iterator<ICommand> {
   @Override
   public ICommand next() {
     index = getNextIndex();
-    ICommand result = getCommand();
+    var result = getCommand();
 
     return result;
   }
@@ -138,7 +138,7 @@ public class CommandIterator implements Iterator<ICommand> {
    * Get the next command without iterating to it.
    */
   public @Nullable ICommand peek() {
-    int nextIndex = getNextIndex();
+    var nextIndex = getNextIndex();
     return commands.hasIndex(nextIndex) ? commands.getCommand(nextIndex) : DummyCommand.DUMMY_COMMAND;
   }
 
@@ -155,12 +155,12 @@ public class CommandIterator implements Iterator<ICommand> {
   @SuppressWarnings({"StatementWithEmptyBody"})
   public ICommand previous() {
     // Get start of current command for consistency check.
-    int endIndex = index;
+    var endIndex = index;
     // Trace backwards for previous command.
     while (index > 0 && commands.getCommand(--index) == null) {
       // Search further.
     }
-    ICommand result = getCommand();
+    var result = getCommand();
 
     // Check that the previous command ends at the start of the current command.
     requireThat(getNextIndex(), "getNextIndex()").isEqualTo(endIndex);
@@ -178,7 +178,7 @@ public class CommandIterator implements Iterator<ICommand> {
   @Override
   public void remove() {
     // Remember position of current command.
-    int remove = index;
+    var remove = index;
     // Skip current command.
     index = getNextIndex();
     // Delete current command.

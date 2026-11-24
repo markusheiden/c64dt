@@ -59,10 +59,10 @@ public class FileMode {
    * @param mode Mode code.
    */
   public static FileMode fileMode(int mode) {
-    FileType type = FileType.fileType(mode & 0x0F);
-    boolean replaced = (mode & (1 << 5)) != 0;
-    boolean locked = (mode & (1 << 6)) != 0;
-    boolean closed = (mode & (1 << 7)) != 0;
+    var type = FileType.fileType(mode & 0x0F);
+    var replaced = (mode & (1 << 5)) != 0;
+    var locked = (mode & (1 << 6)) != 0;
+    var closed = (mode & (1 << 7)) != 0;
 
     return new FileMode(type, replaced, locked, closed);
   }

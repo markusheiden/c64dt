@@ -40,7 +40,7 @@ public abstract class AbstractLabel implements ILabel {
 
   @Override
   public String toString(int address) {
-    String result = getLabelPrefix() + "_" + hexPlain(this.address);
+    var result = getLabelPrefix() + "_" + hexPlain(this.address);
     if (this.address < address) {
       result += " + " + (address - this.address);
     } else if (this.address > address) {

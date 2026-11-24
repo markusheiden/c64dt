@@ -94,7 +94,7 @@ public enum FileType {
    * @param code Type code.
    */
   public static FileType fileType(int code) {
-    FileType result = Objects.requireNonNull(types).get((byte) code);
+    var result = Objects.requireNonNull(types).get((byte) code);
     if (result == null) {
       logger.info("Unknown file type code {}", Integer.toHexString(code));
       result = UNKNOWN;
@@ -110,7 +110,7 @@ public enum FileType {
    * @return Matching file type or ANY for undefined extensions.
    */
   public static FileType fileType(String extension) {
-    FileType result = Objects.requireNonNull(extensions).get(extension.toUpperCase());
+    var result = Objects.requireNonNull(extensions).get(extension.toUpperCase());
     if (result == null || result.code < 0) {
       logger.debug("Unknown file extension {}", extension);
       result = ANY;
@@ -131,11 +131,11 @@ public enum FileType {
     this.extension = extension;
 
     if (code >= 0) {
-      FileType removed = types().put((byte) code, this);
+      var removed = types().put((byte) code, this);
       // No doubled codes.
       requireThat(removed, "removed").isNull();
     }
-    FileType removed = extensions().put(extension.toUpperCase(), this);
+    var removed = extensions().put(extension.toUpperCase(), this);
     // No doubled extensions.
     requireThat(removed, "removed").isNull();
   }

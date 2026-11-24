@@ -15,11 +15,11 @@ import static de.heiden.c64dt.assembler.OpcodeType.BRK;
 public class BrkDetector implements IDetector {
   @Override
   public boolean detect(CommandBuffer commands) {
-    boolean change = false;
+    var change = false;
 
-    for (CommandIterator iter = commands.iterator(); iter.hasNext(); ) {
-      ICommand command = iter.next();
-      int index = iter.getIndex();
+    for (var iter = commands.iterator(); iter.hasNext(); ) {
+      var command = iter.next();
+      var index = iter.getIndex();
       if (command instanceof OpcodeCommand opcodeCommand) {
         if (opcodeCommand.getOpcode().getType() == BRK && !opcodeCommand.isReachable()) {
           change |= commands.setType(index, CodeType.DATA);

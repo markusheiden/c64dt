@@ -111,7 +111,7 @@ public enum Error {
    * @param error Error code.
    */
   public static Error error(int error) {
-    Error result = Objects.requireNonNull(errors).get((byte) error);
+    var result = Objects.requireNonNull(errors).get((byte) error);
     if (result == null) {
       logger.info("Unknow error code {}", Integer.toHexString(error));
       result = UNKNOWN;

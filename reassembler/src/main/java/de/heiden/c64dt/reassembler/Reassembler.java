@@ -106,8 +106,8 @@ public class Reassembler {
    * Reassemble again.
    */
   public void reassemble() {
-    boolean change = true;
-    for (int count = 0; change && count < 10; count++) {
+    var change = true;
+    for (var count = 0; change && count < 10; count++) {
       logger.info("Iteration {}", count);
       change = detectCodeType();
     }
@@ -121,10 +121,10 @@ public class Reassembler {
    * @return Whether a code label has been altered.
    */
   private boolean detectCodeType() {
-    boolean change = false;
+    var change = false;
 
-    for (IDetector detector : detectors) {
-      boolean detectorHit = detector.detect(commands);
+    for (var detector : detectors) {
+      var detectorHit = detector.detect(commands);
       if (detectorHit) {
         logger.info("{} changed code types", detector.getClass().getSimpleName());
       }

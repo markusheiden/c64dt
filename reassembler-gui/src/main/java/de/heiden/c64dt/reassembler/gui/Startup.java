@@ -21,8 +21,8 @@ public class Startup {
     // Native look and feel.
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-    AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("de.heiden.c64dt");
-    ReassemblerView gui = context.getBean(ReassemblerView.class);
+    var context = new AnnotationConfigApplicationContext("de.heiden.c64dt");
+    var gui = context.getBean(ReassemblerView.class);
     gui.setVisible(true);
   }
 

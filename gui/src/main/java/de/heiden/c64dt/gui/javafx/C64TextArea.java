@@ -148,8 +148,8 @@ public class C64TextArea extends C64Component {
     }
 
     // Handle multi line text.
-    StringTokenizer tokenizer = new StringTokenizer(s, "\n");
-    for (int r = row; tokenizer.hasMoreTokens() && r < _rows; r++) {
+    var tokenizer = new StringTokenizer(s, "\n");
+    for (var r = row; tokenizer.hasMoreTokens() && r < _rows; r++) {
       setText(column, r, tokenizer.nextToken());
     }
   }
@@ -162,8 +162,8 @@ public class C64TextArea extends C64Component {
    * @param s Characters.
    */
   public void setTextInverted(int column, int row, String s) {
-    byte[] characters = _charset.toBytes(s);
-    for (int i = 0; i < characters.length; i++) {
+    var characters = _charset.toBytes(s);
+    for (var i = 0; i < characters.length; i++) {
       characters[i] |= 0x80;
     }
     setText(column, row, characters);
@@ -177,7 +177,7 @@ public class C64TextArea extends C64Component {
    * @param s Characters in C64 encoding.
    */
   public void setText(int column, int row, byte... s) {
-    PixelWriter writer = getPixelWriter();
+    var writer = getPixelWriter();
     for (int i = 0, c = column; i < s.length && c < _columns; i++, c++) {
       setTextInternal(c, row, s[i], writer);
     }
@@ -220,14 +220,14 @@ public class C64TextArea extends C64Component {
    * Clear component with background color.
    */
   public void clear() {
-    byte space = _charset.toBytes(" ")[0];
-    Color foreground = getForegroundColor();
-    Color background = getBackgroundColor();
-    for (int row = 0; row < _rows; row++) {
-      byte[] charRow = _chars[row];
+    var space = _charset.toBytes(" ")[0];
+    var foreground = getForegroundColor();
+    var background = getBackgroundColor();
+    for (var row = 0; row < _rows; row++) {
+      var charRow = _chars[row];
       @Nullable Color[] foregroundRow = _foregrounds[row];
       @Nullable Color[] backgroundRow = _backgrounds[row];
-      for (int column = 0; column < _columns; column++) {
+      for (var column = 0; column < _columns; column++) {
         charRow[column] = space;
         foregroundRow[column] = foreground;
         backgroundRow[column] = background;
@@ -239,9 +239,9 @@ public class C64TextArea extends C64Component {
 
   @Override
   protected void restoreImage() {
-    PixelWriter writer = getPixelWriter();
-    for (int row = 0; row < _rows; row++) {
-      for (int column = 0; column < _columns; column++) {
+    var writer = getPixelWriter();
+    for (var row = 0; row < _rows; row++) {
+      for (var column = 0; column < _columns; column++) {
         paintCharacter(column, row, writer);
       }
     }
@@ -255,19 +255,19 @@ public class C64TextArea extends C64Component {
    * @param writer Pixel writer for backing image.
    */
   private void paintCharacter(int column, int row, PixelWriter writer) {
-    Color foregroundColor = _foregrounds[row][column];
+    var foregroundColor = _foregrounds[row][column];
     if (foregroundColor == null) {
       return;
     }
-    Color backgroundColor = _backgrounds[row][column];
+    var backgroundColor = _backgrounds[row][column];
     if (backgroundColor == null) {
       return;
     }
 
-    int charOffset = _upper ? 0x0000 : 0x0800;
-    int charPtr = charOffset + (_chars[row][column] & 0xFF) * 8;
+    var charOffset = _upper ? 0x0000 : 0x0800;
+    var charPtr = charOffset + (_chars[row][column] & 0xFF) * 8;
     for (int y = row * 8, lastY = y + 8; y < lastY; y++) {
-      int data = _charsetROM[charPtr++];
+      var data = _charsetROM[charPtr++];
       for (int x = column * 8, bit = 0x80; bit > 0; x++, bit = bit >> 1) {
         writer.setColor(x, y, (data & bit) != 0 ? foregroundColor : backgroundColor);
       }
@@ -291,7 +291,7 @@ public class C64TextArea extends C64Component {
   public static class TestApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-      C64TextArea text = new C64TextArea(40, 25, 2, true);
+      var text = new C64TextArea(40, 25, 2, true);
 
       text.setForegroundColor(C64Color.LIGHT_BLUE);
       text.setBackgroundColor(C64Color.BLUE);
@@ -308,8 +308,8 @@ public class C64TextArea extends C64Component {
       text.setText(0, 5, "@[] !\"#$%&'()*+,-./1234567890:;<=>?|_");
 
       byte c = 0;
-      for (int y = 0; y < 16; y++) {
-        for (int x = 0; x < 16; x++, c++) {
+      for (var y = 0; y < 16; y++) {
+        for (var x = 0; x < 16; x++, c++) {
           text.setCharset(false);
           text.setForegroundColor(C64Color.LIGHT_GREEN);
           text.setText(x, y + 8, c);

@@ -14,9 +14,9 @@ class SwingColors {
   public static final Color[] COLOR = new Color[C64Color.values().length];
 
   static {
-    C64Color[] colors = C64Color.values();
-    for (int i = 0; i < colors.length; i++) {
-      C64Color color = colors[i];
+    var colors = C64Color.values();
+    for (var i = 0; i < colors.length; i++) {
+      var color = colors[i];
       COLOR[i] = new Color(color.getRed(), color.getGreen(), color.getBlue());
     }
   }

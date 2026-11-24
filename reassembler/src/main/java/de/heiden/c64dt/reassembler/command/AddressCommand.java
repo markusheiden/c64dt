@@ -42,7 +42,7 @@ public class AddressCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    ILabel label = buffer.getLabel(address);
+    var label = buffer.getLabel(address);
     if (label == null) {
       return "!WORD " + hexWord(address);
     }

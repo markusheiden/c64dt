@@ -14,10 +14,10 @@ public class BAM implements IBAM {
   public BAM(ISectorModel sectorModel) {
     this.sectorModel = sectorModel;
 
-    int tracks = sectorModel.getTracks();
+    var tracks = sectorModel.getTracks();
     isFree = new boolean[tracks][];
     freeSectors = new int[tracks];
-    for (int track = 1; track <= tracks; track++) {
+    for (var track = 1; track <= tracks; track++) {
       isFree[track - 1] = new boolean[sectorModel.getSectors(track)];
       freeSectors[track - 1] = 0;
     }
@@ -43,8 +43,8 @@ public class BAM implements IBAM {
 
   @Override
   public int getFreeSectors() {
-    int free = 0;
-    for (int track = 1; track < sectorModel.getTracks(); track++) {
+    var free = 0;
+    for (var track = 1; track < sectorModel.getTracks(); track++) {
       free += getFreeSectors(track);
     }
 

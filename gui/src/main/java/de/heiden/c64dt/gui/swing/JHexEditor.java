@@ -20,8 +20,8 @@ import org.jspecify.annotations.Nullable;
 public class JHexEditor extends JTable {
   public JHexEditor() {
     setTableHeader(null);
-    byte[] bytes = new byte[256];
-    for (int i = 0; i < bytes.length; i++) {
+    var bytes = new byte[256];
+    for (var i = 0; i < bytes.length; i++) {
       bytes[i] = (byte) i;
     }
     setBytes(bytes);
@@ -32,8 +32,8 @@ public class JHexEditor extends JTable {
     setColumnSelectionAllowed(false);
     setCellSelectionEnabled(true);
     setDefaultRenderer(byte[].class, (table, value, isSelected, hasFocus, row, column) -> {
-      byte[] text = (byte[]) value;
-      JC64TextArea renderer = new JC64TextArea(text.length, 1, 2, false);
+      var text = (byte[]) value;
+      var renderer = new JC64TextArea(text.length, 1, 2, false);
       if (isSelected) {
         renderer.setBackground(getSelectionBackground());
         renderer.setForeground(getSelectionForeground());
@@ -49,8 +49,8 @@ public class JHexEditor extends JTable {
 
       @Override
       public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, final int row, final int column) {
-        byte[] text = (byte[]) value;
-        JC64TextArea editor = new JC64TextArea(text.length, 1, 2, false);
+        var text = (byte[]) value;
+        var editor = new JC64TextArea(text.length, 1, 2, false);
         if (isSelected) {
           editor.setBackground(getSelectionBackground());
           editor.setForeground(getSelectionForeground());
@@ -99,7 +99,7 @@ public class JHexEditor extends JTable {
 
       @Override
       public boolean stopCellEditing() {
-        for (CellEditorListener listener : new ArrayList<>(listeners)) {
+        for (var listener : new ArrayList<>(listeners)) {
           listener.editingStopped(new ChangeEvent(this));
         }
         return true;
@@ -107,7 +107,7 @@ public class JHexEditor extends JTable {
 
       @Override
       public void cancelCellEditing() {
-        for (CellEditorListener listener : new ArrayList<>(listeners)) {
+        for (var listener : new ArrayList<>(listeners)) {
           listener.editingStopped(new ChangeEvent(this));
         }
       }
@@ -125,7 +125,7 @@ public class JHexEditor extends JTable {
   }
 
   public void setBytes(final byte[] bytes) {
-    final int width = 16;
+    final var width = 16;
     setModel(new JHexEditorTableModel(bytes, width));
   }
 
@@ -183,7 +183,7 @@ public class JHexEditor extends JTable {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-      byte[] line = new byte[width];
+      var line = new byte[width];
       System.arraycopy(bytes, rowIndex * width, line, 0, width);
       switch (columnIndex) {
         case 0:
@@ -205,10 +205,10 @@ public class JHexEditor extends JTable {
   //
 
   public static void main(String[] args) {
-    JHexEditor editor = new JHexEditor();
+    var editor = new JHexEditor();
     editor.setPreferredSize(new Dimension(200, 200));
 
-    JFrame frame = new JFrame();
+    var frame = new JFrame();
     frame.getContentPane().add(editor);
     frame.pack();
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

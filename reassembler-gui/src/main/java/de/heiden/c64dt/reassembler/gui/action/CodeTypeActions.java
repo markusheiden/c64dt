@@ -53,7 +53,7 @@ public class CodeTypeActions {
     markAsAbsoluteAddressAction = createMarkAsAbsoluteAddressAction();
 
     table.getSelectionModel().addListSelectionListener(listSelectionEvent -> {
-      boolean isSelection = table.getSelectedRowCount() > 0;
+      var isSelection = table.getSelectedRowCount() > 0;
       markAsUnknownAction.setEnabled(isSelection);
       markAsCodeAction.setEnabled(isSelection);
       markAsDataAction.setEnabled(isSelection);
@@ -127,12 +127,12 @@ public class CodeTypeActions {
    * @param type Code type.
    */
   private void mark(CodeType type) {
-    CodeTableModel model = (CodeTableModel) table.getModel();
-    Reassembler reassembler = Objects.requireNonNull(model.getReassembler());
-    CommandBuffer commands = reassembler.getCommands();
-    for (int row : table.getSelectedRows()) {
+    var model = (CodeTableModel) table.getModel();
+    var reassembler = Objects.requireNonNull(model.getReassembler());
+    var commands = reassembler.getCommands();
+    for (var row : table.getSelectedRows()) {
       int index = Objects.requireNonNull(model.getIndex(row));
-      ICommand command = Objects.requireNonNull(commands.getCommand(index));
+      var command = Objects.requireNonNull(commands.getCommand(index));
       // TODO mh: Do not overwrite OPCODE etc.?
       commands.setType(index, index + command.getSize(), type);
     }

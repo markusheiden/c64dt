@@ -19,12 +19,12 @@ public class CommandIteratorTest {
    */
   @Test
   public void testNextCommand() throws Exception {
-    CommandBuffer commands = new CommandBuffer(new byte[6], 0x1000);
+    var commands = new CommandBuffer(new byte[6], 0x1000);
     // LDA $1234, STA $1234
     commands.setCommand(0, new OpcodeCommand(Opcode.OPCODE_AD, 0x1234));
     commands.setCommand(3, new OpcodeCommand(Opcode.OPCODE_8D, 0x1234));
 
-    CommandIterator iter = new CommandIterator(commands);
+    var iter = new CommandIterator(commands);
 
     assertThat(iter.hasNext()).isTrue();
 
@@ -54,12 +54,12 @@ public class CommandIteratorTest {
    */
   @Test
   public void testPreviousCommand() throws Exception {
-    CommandBuffer commands = new CommandBuffer(new byte[6], 0x1000);
+    var commands = new CommandBuffer(new byte[6], 0x1000);
     // LDA $1234, STA $1234
     commands.setCommand(0, new OpcodeCommand(Opcode.OPCODE_AD, 0x1234));
     commands.setCommand(3, new OpcodeCommand(Opcode.OPCODE_8D, 0x1234));
 
-    CommandIterator iter = new CommandIterator(commands).reverse();
+    var iter = new CommandIterator(commands).reverse();
 
     assertThat(iter.hasPrevious()).isTrue();
 

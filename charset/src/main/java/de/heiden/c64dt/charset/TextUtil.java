@@ -27,10 +27,10 @@ public class TextUtil {
     requireThat(length, "length").isGreaterThanOrEqualTo(0);
     requireThat(pos + length, "pos+length").isLessThanOrEqualTo(text.length, "text.length");
 
-    for (int i = pos + length - 1; i >= pos && text[i] == (byte) 0xA0; --i) {
+    for (var i = pos + length - 1; i >= pos && text[i] == (byte) 0xA0; --i) {
       --length;
     }
-    byte[] result = new byte[length];
+    var result = new byte[length];
     System.arraycopy(text, pos, result, 0, length);
 
     return result;

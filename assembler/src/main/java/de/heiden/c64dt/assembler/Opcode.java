@@ -436,7 +436,7 @@ public enum Opcode {
   public static Opcode opcode(int opcode) {
     requireThat(opcode, "opcode").isBetween(0x00, 0xFF + 1);
 
-    Opcode result = values()[opcode];
+    var result = values()[opcode];
 
     requireThat(result.getOpcode(), "result.getOpcode()").isEqualTo(opcode, "opcode");
     return result;
@@ -457,7 +457,7 @@ public enum Opcode {
    * @param addr Argument of opcode.
    */
   public String toString(int pc, int addr) {
-    StringBuilder result = new StringBuilder();
+    var result = new StringBuilder();
 //    result.append(legal ? ' ' : '*');
     result.append(type.toString());
     result.append(' ');

@@ -100,7 +100,7 @@ public class NetDrive {
           connection.open();
           while (isRunning) {
             try {
-              DrivePacket received = connection.waitForRequest();
+              var received = connection.waitForRequest();
               logger.debug("Received packet from {}", connection.getDestination());
               switch (received.getService()) {
                 case DriveConnection.SERVICE_OPEN: {
@@ -126,7 +126,7 @@ public class NetDrive {
                 case DriveConnection.SERVICE_READ: {
                   logger.info("READ {},{},{}", received.getLogicalFile(), received.getDevice(), received.getChannel());
                   try {
-                    byte[] data = device.read(received.getChannel(), received.getData0());
+                    var data = device.read(received.getChannel(), received.getData0());
                     connection.sendReply(data);
                   } catch (DeviceException e) {
                     // TODO Correct?
@@ -180,7 +180,7 @@ public class NetDrive {
       return data;
     }
 
-    byte[] result = new byte[data.length - 1];
+    var result = new byte[data.length - 1];
     System.arraycopy(data, 0, result, 0, result.length);
 
     return result;

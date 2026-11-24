@@ -45,7 +45,7 @@ public class DataCommand extends AbstractCommand {
     super(CodeType.DATA);
 
     this.data = new ArrayList<>(MAX_BYTES);
-    for (int dataByte : dataBytes) {
+    for (var dataByte : dataBytes) {
       this.data.add(dataByte);
     }
   }
@@ -78,7 +78,7 @@ public class DataCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    StringBuilder output = new StringBuilder(16 + data.size() * 8);
+    var output = new StringBuilder(16 + data.size() * 8);
     if (data.size() > 8 && isSameByte()) {
       // Special case: the data consists of the same byte over and over again.
 
@@ -92,13 +92,13 @@ public class DataCommand extends AbstractCommand {
 
       output.append("!BYTE ");
       output.append(hexByte(data.get(0)));
-      for (int i = 1; i < data.size(); i++) {
+      for (var i = 1; i < data.size(); i++) {
         output.append(", ");
         output.append(hexByte(data.get(i)));
       }
       output.append("; '");
-      byte[] string = new byte[data.size()];
-      for (int i = 0; i < data.size(); i++) {
+      var string = new byte[data.size()];
+      for (var i = 0; i < data.size(); i++) {
         string[i] = data.get(i).byteValue();
       }
       output.append(C64Charset.LOWER.toString(string));
@@ -112,8 +112,8 @@ public class DataCommand extends AbstractCommand {
    * Detect if the data consists of the same byte repeated multiple times.
    */
   private boolean isSameByte() {
-    Integer content = data.get(0);
-    for (Integer dataByte : data) {
+    var content = data.get(0);
+    for (var dataByte : data) {
       if (!content.equals(dataByte)) {
         return false;
       }

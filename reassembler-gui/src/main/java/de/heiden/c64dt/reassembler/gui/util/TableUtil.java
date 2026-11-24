@@ -16,12 +16,12 @@ public class TableUtil {
    * @param height Height.
    */
   public static Rectangle getRowBounds(JTable table, int row, int height) {
-    int first = Math.max(0, row - height);
-    int last = Math.min(table.getRowCount() - 1, row + height);
+    var first = Math.max(0, row - height);
+    var last = Math.min(table.getRowCount() - 1, row + height);
 
-    Rectangle result = table.getCellRect(first, -1, true);
+    var result = table.getCellRect(first, -1, true);
     result = result.union(table.getCellRect(last, -1, true));
-    Insets i = table.getInsets();
+    var i = table.getInsets();
 
     result.x = i.left;
     result.width = table.getWidth() - i.left - i.right;
