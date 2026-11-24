@@ -1,6 +1,5 @@
 package de.heiden.c64dt.reassembler.command;
 
-import java.util.Collections;
 import java.util.List;
 
 import de.heiden.c64dt.assembler.CodeType;
@@ -45,6 +44,6 @@ public class BitCommand extends AbstractCommand {
 
   @Override
   public List<Integer> toBytes() {
-    return Collections.singletonList(opcode.getOpcode());
+    return List.of(opcode.getOpcode());
   }
 }

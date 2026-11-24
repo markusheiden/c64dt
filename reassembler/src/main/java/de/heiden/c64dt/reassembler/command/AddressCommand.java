@@ -1,6 +1,5 @@
 package de.heiden.c64dt.reassembler.command;
 
-import java.util.Arrays;
 import java.util.List;
 
 import de.heiden.c64dt.assembler.CodeType;
@@ -53,6 +52,6 @@ public class AddressCommand extends AbstractCommand {
 
   @Override
   public List<Integer> toBytes() {
-    return Arrays.asList(ByteUtil.lo(address), ByteUtil.hi(address));
+    return List.of(ByteUtil.lo(address), ByteUtil.hi(address));
   }
 }
