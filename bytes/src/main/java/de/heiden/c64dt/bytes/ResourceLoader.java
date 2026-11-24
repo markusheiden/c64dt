@@ -40,7 +40,7 @@ public class ResourceLoader {
    * @throws IOException
    */
   public static int[] load(String filename) throws IOException {
-    InputStream stream = new FileInputStream(filename);
+    var stream = new FileInputStream(filename);
     var read = new byte[65536];
     var size = stream.read(read);
     stream.close();

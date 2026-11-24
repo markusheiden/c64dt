@@ -39,7 +39,7 @@ public class Lister {
    * @param output Output for BASIC listing.
    */
   public void list(ICodeBuffer code, Writer output) throws IOException {
-    try (BufferedWriter out = new NonClosingBufferedWriter(output)) {
+    try (var out = new NonClosingBufferedWriter(output)) {
       list(code, out);
     }
     output.flush();

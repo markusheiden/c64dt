@@ -113,7 +113,7 @@ public class JsrDetector implements IDetector {
    * @return Absolute address to list of relative addresses of JSR to that absolute address.
    */
   protected Map<Integer, List<Integer>> crossReference(CommandBuffer commands) {
-    Map<Integer, List<Integer>> result = new HashMap<>();
+    var result = new HashMap<Integer, List<Integer>>();
 
     for (var iter = commands.iterator(); iter.hasNext(); ) {
       var command = iter.next();

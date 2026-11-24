@@ -114,7 +114,7 @@ public abstract class C64ScreenComponent extends C64Component {
   public static class TestApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-      C64ScreenComponent screen = new C64ScreenComponent(0, 160, 160, 160, 1) {
+      var screen = new C64ScreenComponent(0, 160, 160, 160, 1) {
       };
       var data = new byte[screen.getImageWidth() * screen.getImageHeight()];
       for (var i = 0; i < data.length; i++) {

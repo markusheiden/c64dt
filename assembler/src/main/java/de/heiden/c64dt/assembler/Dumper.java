@@ -23,7 +23,7 @@ public class Dumper {
    * @param output Output for reassembled code.
    */
   public void dump(ICodeBuffer code, Writer output) throws IOException {
-    try (BufferedWriter out = new NonClosingBufferedWriter(output)) {
+    try (var out = new NonClosingBufferedWriter(output)) {
       dump(code, out);
     }
     output.flush();

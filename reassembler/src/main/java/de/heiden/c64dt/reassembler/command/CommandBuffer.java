@@ -498,7 +498,7 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param address Absolute address.
    */
   public SortedSet<Integer> getReferences(int address) {
-    SortedSet<Integer> result = new TreeSet<>();
+    var result = new TreeSet<Integer>();
     for (var i = 0; i < code.length; i++) {
       if (codeReferences[i] == address) {
         result.add(i);

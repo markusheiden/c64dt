@@ -38,7 +38,7 @@ public class Path extends AbstractPath {
 
   @Override
   protected IDirectory doDirectory() {
-    List<IFile> entries = new ArrayList<>();
+    var entries = new ArrayList<IFile>();
     var files = directory.listFiles();
     for (var file : files) {
       var extensionPos = file.getName().lastIndexOf('.');

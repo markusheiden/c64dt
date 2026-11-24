@@ -43,7 +43,7 @@ public class CommandWriter {
     output.append("\n");
 
     // External labels.
-    Collection<ExternalLabel> externalReferences = new TreeSet<>(commands.getExternalLabels());
+    var externalReferences = new TreeSet<ExternalLabel>(commands.getExternalLabels());
     for (var externalReference : externalReferences) {
       output.append(externalReference.toString()).append(" = ").append(hex(externalReference.getAddress())).append("\n");
     }

@@ -41,7 +41,7 @@ public class Disassembler {
    * @param list List BASIC header?.
    */
   public void listAndDisassemble(ICodeBuffer code, Writer output, boolean list) throws IOException {
-    try (BufferedWriter out = new NonClosingBufferedWriter(output)) {
+    try (var out = new NonClosingBufferedWriter(output)) {
       if (list) {
         new Lister().list(code, out);
       }

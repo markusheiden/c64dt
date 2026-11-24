@@ -27,7 +27,7 @@ public class ManualTest {
     var diskImage = new D64Reader().read(new File("./boulder_dash.d64"));
     var browser = new BrowserGUI();
     browser.setDiskImage(diskImage);
-    InputStream is = new SectorInputStream(diskImage, diskImage.getDirectory().getFiles().get(5));
+    var is = new SectorInputStream(diskImage, diskImage.getDirectory().getFiles().get(5));
     var boulderDash = IOUtils.toByteArray(is);
     System.out.println("Length: " + boulderDash.length);
     FileUtils.writeByteArrayToFile(new File("./dummy.prg"), boulderDash);

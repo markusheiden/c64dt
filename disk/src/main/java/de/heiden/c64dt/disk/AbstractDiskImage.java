@@ -192,7 +192,7 @@ public abstract class AbstractDiskImage implements IDiskImage {
     var idAndType = new byte[5];
     System.arraycopy(getSector(18, 0), 0xA2, idAndType, 0, 5);
 
-    List<IFile> files = new ArrayList<>(18 * 8);
+    var files = new ArrayList<IFile>(18 * 8);
     for (var iter = new SectorIterator(this, 18, 1); iter.hasNext(); ) {
       var content = iter.next();
       for (var pos = 0; pos < 256; pos += 0x20) {
