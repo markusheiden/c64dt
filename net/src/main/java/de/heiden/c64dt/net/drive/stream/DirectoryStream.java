@@ -2,10 +2,12 @@ package de.heiden.c64dt.net.drive.stream;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 import de.heiden.c64dt.bytes.ByteUtil;
 import de.heiden.c64dt.disk.IDirectory;
 import de.heiden.c64dt.disk.IFile;
+import org.jspecify.annotations.Nullable;
 
 import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
@@ -19,7 +21,7 @@ public class DirectoryStream extends AbstractStream {
   private static final byte LOWER = encode('<');
   private static final byte[] BLOCKS_FREE = encode("BLOCKS FREE");
 
-  private ByteArrayOutputStream baos;
+  private @Nullable ByteArrayOutputStream baos;
   private byte[] content;
 
   public DirectoryStream(IDirectory directory) {
@@ -83,16 +85,16 @@ public class DirectoryStream extends AbstractStream {
   }
 
   private void writeByte(int b) {
-    baos.write(ByteUtil.toByte(b));
+    Objects.requireNonNull(baos).write(ByteUtil.toByte(b));
   }
 
   private void writeBytes(byte... b) {
-    baos.write(b, 0, b.length);
+    Objects.requireNonNull(baos).write(b, 0, b.length);
   }
 
   private void writeWord(int w) {
-    baos.write(ByteUtil.toByte(w & 0xFF));
-    baos.write(ByteUtil.toByte(w >> 8));
+    Objects.requireNonNull(baos).write(ByteUtil.toByte(w & 0xFF));
+    Objects.requireNonNull(baos).write(ByteUtil.toByte(w >> 8));
   }
 
   @Override

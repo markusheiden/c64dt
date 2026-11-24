@@ -3,7 +3,9 @@ package de.heiden.c64dt.net.drive;
 import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.Objects;
 
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +22,7 @@ public class NetDrive {
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
   private volatile boolean isRunning;
-  private Thread thread;
+  private @Nullable Thread thread;
   private DriveConnection connection;
   private Device device;
 
@@ -75,7 +77,8 @@ public class NetDrive {
     requireThat(isRunning(), "isRunning()").isTrue();
 
     isRunning = false;
-    thread.interrupt();
+    // The thread has been created by start(), because the server is running.
+    Objects.requireNonNull(thread).interrupt();
     try {
       connection.close();
     } catch (IOException e) {

@@ -8,6 +8,7 @@ import de.heiden.c64dt.reassembler.gui.CodeTableModel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.util.Objects;
 
 /**
  * "Mark as" actions.
@@ -127,11 +128,11 @@ public class CodeTypeActions {
    */
   private void mark(CodeType type) {
     CodeTableModel model = (CodeTableModel) table.getModel();
-    Reassembler reassembler = model.getReassembler();
+    Reassembler reassembler = Objects.requireNonNull(model.getReassembler());
     CommandBuffer commands = reassembler.getCommands();
     for (int row : table.getSelectedRows()) {
-      int index = model.getIndex(row);
-      ICommand command = commands.getCommand(index);
+      int index = Objects.requireNonNull(model.getIndex(row));
+      ICommand command = Objects.requireNonNull(commands.getCommand(index));
       // TODO mh: Do not overwrite OPCODE etc.?
       commands.setType(index, index + command.getSize(), type);
     }

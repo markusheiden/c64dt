@@ -3,6 +3,7 @@ package de.heiden.c64dt.gui.swing;
 import de.heiden.c64dt.bytes.ResourceLoader;
 import de.heiden.c64dt.charset.C64Charset;
 import de.heiden.c64dt.gui.C64Color;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +36,7 @@ public class JC64TextArea extends JC64CommonComponent {
   private C64Charset _charset;
   private final int[] _charsetROM;
 
-  private static int[] _defaultCharsetROM;
+  private static int @Nullable [] _defaultCharsetROM;
 
   /**
    * Constructor.

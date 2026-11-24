@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * Hex editor.
  */
@@ -81,7 +83,7 @@ public class JHexEditor extends JTable {
       }
 
       @Override
-      public Object getCellEditorValue() {
+      public @Nullable Object getCellEditorValue() {
         return null;
       }
 

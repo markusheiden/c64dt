@@ -3,6 +3,7 @@ package de.heiden.c64dt.gui.swing;
 import java.awt.*;
 import java.awt.image.ColorModel;
 import java.awt.image.MemoryImageSource;
+import java.util.Objects;
 
 import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
@@ -89,6 +90,6 @@ public abstract class JC64ScreenComponent extends JC64Component {
     requireThat(imageData.length, "imageData.length").isEqualTo(getImageData().length, "getImageData().length");
 
     _imageData = imageData;
-    _imageSource.newPixels(imageData, _colorModel, _offset, _lineLength);
+    Objects.requireNonNull(_imageSource).newPixels(imageData, _colorModel, _offset, _lineLength);
   }
 }

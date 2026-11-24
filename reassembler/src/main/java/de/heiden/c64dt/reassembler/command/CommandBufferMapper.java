@@ -15,6 +15,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.jspecify.annotations.Nullable;
 
 import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
@@ -24,6 +25,7 @@ import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requir
 @XmlType
 public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, CommandBuffer> {
   @XmlElement(name = "code")
+  @SuppressWarnings("NullAway.Init")
   private byte[] code;
 
   @XmlElement(name = "address")
@@ -53,6 +55,7 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
     @XmlJavaTypeAdapter(type = int.class, value = HexByteAdapter.class)
     private int arguments;
     @XmlValue
+    @SuppressWarnings("NullAway.Init")
     private CodeType type;
   }
 
@@ -67,8 +70,9 @@ public class CommandBufferMapper extends XmlAdapter<CommandBufferMapper, Command
     private int index;
     @XmlAttribute
     @XmlJavaTypeAdapter(type = Integer.class, value = HexWordAdapter.class)
-    private Integer end;
+    private @Nullable Integer end;
     @XmlValue
+    @SuppressWarnings("NullAway.Init")
     private CodeType type;
   }
 

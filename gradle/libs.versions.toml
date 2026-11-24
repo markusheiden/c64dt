@@ -1,21 +1,30 @@
 [versions]
 commons-io = "2.22.0"
+error-prone = "2.52.0"
 gradle = "9.9.1"
+jspecify = "1.0.1"
+nullaway = "0.14.3"
 openjfx = "27.0.1"
 requirements = "11.0"
 spring-boot = "4.1.2"
 
 # Gradle plugins
+error-prone-plugin = "5.2.0"
 javafx-plugin = "0.1.0"
 versions-plugin = "0.67.0"
 
 [plugins]
+error-prone = { id = "net.ltgt.errorprone", version.ref = "error-prone-plugin" }
 javafx = { id = "org.openjfx.javafxplugin", version.ref = "javafx-plugin" }
 versions = { id = "io.github.ben-manes.versions", version.ref = "versions-plugin" }
 
 [libraries]
 # Spring Boot BOM — imported as platform() in each subproject
 spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
+
+error-prone = { module = "com.google.errorprone:error_prone_core", version.ref = "error-prone" }
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
+nullaway = { module = "com.uber.nullaway:nullaway", version.ref = "nullaway" }
 
 # Not in Spring Boot BOM
 commons-io = { module = "commons-io:commons-io", version.ref = "commons-io" }

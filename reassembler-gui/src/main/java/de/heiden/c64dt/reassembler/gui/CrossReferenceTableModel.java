@@ -2,6 +2,7 @@ package de.heiden.c64dt.reassembler.gui;
 
 import de.heiden.c64dt.reassembler.Reassembler;
 import de.heiden.c64dt.reassembler.command.CommandBuffer;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class CrossReferenceTableModel extends DefaultTableModel {
   /**
    * Underlying representation: the reassembler.
    */
-  private Reassembler reassembler;
+  private @Nullable Reassembler reassembler;
 
   /**
    * Mapping from row to relative address of the code shown in that row.
@@ -45,7 +46,7 @@ public class CrossReferenceTableModel extends DefaultTableModel {
   /**
    * Get underlying reassembler.
    */
-  public Reassembler getReassembler() {
+  public @Nullable Reassembler getReassembler() {
     return reassembler;
   }
 
@@ -112,7 +113,7 @@ public class CrossReferenceTableModel extends DefaultTableModel {
    *
    * @param row Row.
    */
-  public Integer getIndex(int row) {
+  public @Nullable Integer getIndex(int row) {
     return rowToIndex.get(row);
   }
 
@@ -121,7 +122,7 @@ public class CrossReferenceTableModel extends DefaultTableModel {
    *
    * @param index Index.
    */
-  public Integer getRow(int index) {
+  public @Nullable Integer getRow(int index) {
     return indexToRow.get(index);
   }
 }

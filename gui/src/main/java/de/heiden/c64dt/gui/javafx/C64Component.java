@@ -39,11 +39,13 @@ public abstract class C64Component extends Region {
   /**
    * Foreground color.
    */
+  @SuppressWarnings("NullAway.Init")
   private Color _foreground;
 
   /**
    * Background color.
    */
+  @SuppressWarnings("NullAway.Init")
   private Color _background;
 
   /**

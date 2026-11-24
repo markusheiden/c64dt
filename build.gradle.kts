@@ -1,5 +1,8 @@
+import net.ltgt.gradle.errorprone.errorprone
+
 plugins {
     `java-library`
+    alias(libs.plugins.error.prone) apply false
     alias(libs.plugins.versions)
 }
 
@@ -11,6 +14,7 @@ subprojects {
     apply(plugin = "java-library")
     apply(plugin = "jacoco")
     apply(plugin = "maven-publish")
+    apply(plugin = "net.ltgt.errorprone")
 
     base {
         archivesName = "${rootProject.name}-${project.name}"
@@ -44,14 +48,29 @@ subprojects {
         dependencies {
             implementation(platform(libs.spring.boot.bom))
 
+            "api"(libs.jspecify)
             implementation("org.slf4j:slf4j-api")
             runtimeOnly("ch.qos.logback:logback-classic")
 
             implementation(libs.requirements)
 
+            "errorprone"(libs.error.prone)
+            "errorprone"(libs.nullaway)
+
             testRuntimeOnly("org.junit.platform:junit-platform-launcher")
             testImplementation("org.junit.jupiter:junit-jupiter")
             testImplementation("org.assertj:assertj-core")
+        }
+    }
+
+    tasks.withType<JavaCompile>().configureEach {
+        options.errorprone {
+            // Check just the null safety of the production code.
+            disableAllChecks = true
+            enabled = !name.contains("test", ignoreCase = true)
+            error("NullAway")
+            option("NullAway:AnnotatedPackages", "de.heiden.c64dt")
+            option("NullAway:JSpecifyMode", "true")
         }
     }
 

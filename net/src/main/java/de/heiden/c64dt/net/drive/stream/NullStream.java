@@ -19,6 +19,7 @@ public class NullStream implements IStream {
   }
 
   @Override
+  @SuppressWarnings("NullAway") // Never called, because this stream is never open.
   public byte[] read(int length) {
     return null;
   }

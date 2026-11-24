@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.jspecify.annotations.Nullable;
 
 import java.util.StringTokenizer;
 
@@ -36,7 +37,7 @@ public class C64TextArea extends C64Component {
   private C64Charset _charset;
   private final int[] _charsetROM;
 
-  private static int[] _defaultCharsetROM;
+  private static int @Nullable [] _defaultCharsetROM;
 
   //
   //

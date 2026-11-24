@@ -2,6 +2,7 @@ package de.heiden.c64dt.reassembler.gui;
 
 import de.heiden.c64dt.reassembler.Reassembler;
 import de.heiden.c64dt.reassembler.command.CommandBuffer;
+import org.jspecify.annotations.Nullable;
 import de.heiden.c64dt.reassembler.command.CommandIterator;
 import de.heiden.c64dt.reassembler.command.ICommand;
 import de.heiden.c64dt.reassembler.label.ILabel;
@@ -21,7 +22,7 @@ public class CodeTableModel extends DefaultTableModel {
   /**
    * Underlying representation: the reassembler.
    */
-  private Reassembler reassembler;
+  private @Nullable Reassembler reassembler;
 
   /**
    * Mapping from row to relative address of the code shown in that row.
@@ -44,7 +45,7 @@ public class CodeTableModel extends DefaultTableModel {
   /**
    * Get underlying reassembler.
    */
-  public Reassembler getReassembler() {
+  public @Nullable Reassembler getReassembler() {
     return reassembler;
   }
 
@@ -148,7 +149,7 @@ public class CodeTableModel extends DefaultTableModel {
    *
    * @param row Row.
    */
-  public Integer getIndex(int row) {
+  public @Nullable Integer getIndex(int row) {
     return rowToIndex.get(row);
   }
 
@@ -157,7 +158,7 @@ public class CodeTableModel extends DefaultTableModel {
    *
    * @param index Index.
    */
-  public Integer getRow(int index) {
+  public @Nullable Integer getRow(int index) {
     return indexToRow.get(index);
   }
 }

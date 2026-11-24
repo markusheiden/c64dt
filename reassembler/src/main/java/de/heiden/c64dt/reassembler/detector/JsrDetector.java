@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 import de.heiden.c64dt.assembler.CodeBuffer;
 import de.heiden.c64dt.assembler.CodeType;
@@ -15,6 +16,7 @@ import de.heiden.c64dt.reassembler.command.ICommand;
 import de.heiden.c64dt.reassembler.command.OpcodeCommand;
 import de.heiden.c64dt.reassembler.command.Subroutine;
 import jakarta.xml.bind.annotation.XmlAttribute;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -140,7 +142,7 @@ public class JsrDetector implements IDetector {
    * @param references All references to that subroutine.
    * @return Subroutine or null, if no consistent type of subroutine could be detected.
    */
-  protected Subroutine detectZero(CommandBuffer commands, int address, List<Integer> references) {
+  protected @Nullable Subroutine detectZero(CommandBuffer commands, int address, List<Integer> references) {
     int matches = 0;
     int unreachable = 0;
     int count = 0;
@@ -149,7 +151,7 @@ public class JsrDetector implements IDetector {
       int endIndex = search0(commands, index + 3, true);
       if (endIndex >= 0) {
         matches++;
-        if (!commands.getCommand(index + 3).isReachable()) {
+        if (!Objects.requireNonNull(commands.getCommand(index + 3)).isReachable()) {
           unreachable++;
         }
       }
@@ -167,7 +169,7 @@ public class JsrDetector implements IDetector {
    * @param references All references to that subroutine.
    * @return Subroutine or null, if no consistent type of subroutine could be detected.
    */
-  protected Subroutine detectAddress(CommandBuffer commands, int address, List<Integer> references) {
+  protected @Nullable Subroutine detectAddress(CommandBuffer commands, int address, List<Integer> references) {
     CodeBuffer buffer = new CodeBuffer(commands.getStartAddress(), commands.getCode());
 
     int matches = 0;
@@ -179,7 +181,7 @@ public class JsrDetector implements IDetector {
         buffer.setCurrentIndex(index + 3);
         if (commands.hasAddress(buffer.read(2))) {
           matches++;
-          if (!commands.getCommand(index + 3).isReachable()) {
+          if (!Objects.requireNonNull(commands.getCommand(index + 3)).isReachable()) {
             unreachable++;
           }
         }
@@ -205,7 +207,7 @@ public class JsrDetector implements IDetector {
    * @param checkUnreachable Should unreachableRatio be checked?
    * @return Subroutine or null, if condition does not match.
    */
-  private Subroutine createSubroutine(CommandBuffer commands, String kind, int address, int arguments, CodeType type, int matches, int unreachable, int count, boolean checkUnreachable) {
+  private @Nullable Subroutine createSubroutine(CommandBuffer commands, String kind, int address, int arguments, CodeType type, int matches, int unreachable, int count, boolean checkUnreachable) {
     if (matches == 0) {
       // Nothing detected.
       return null;

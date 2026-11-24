@@ -2,8 +2,10 @@ package de.heiden.c64dt.disk;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 import de.heiden.c64dt.bytes.ByteUtil;
+import org.jspecify.annotations.Nullable;
 
 import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidSector;
@@ -16,7 +18,7 @@ public class SectorInputStream extends InputStream {
   private int track;
   private int sector;
 
-  private byte[] currentSector;
+  private byte @Nullable [] currentSector;
   private int pos;
   private int remaining;
 
@@ -57,14 +59,16 @@ public class SectorInputStream extends InputStream {
         return -1;
       }
 
-      currentSector = diskImage.getSector(track, sector);
-      track = ByteUtil.toByte(currentSector[0]);
-      sector = ByteUtil.toByte(currentSector[1]);
+      var nextSector = diskImage.getSector(track, sector);
+      currentSector = nextSector;
+      track = ByteUtil.toByte(nextSector[0]);
+      sector = ByteUtil.toByte(nextSector[1]);
       pos = 0x02;
       remaining = track == 0x00 ? sector : 0xFE;
     }
 
     --remaining;
-    return ByteUtil.toByte(currentSector[pos++]);
+    // remaining is 0 until the first sector has been read, so the current sector is set here.
+    return ByteUtil.toByte(Objects.requireNonNull(currentSector)[pos++]);
   }
 }

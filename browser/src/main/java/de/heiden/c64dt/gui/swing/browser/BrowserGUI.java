@@ -12,7 +12,9 @@ import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requir
  * GUI of the browser.
  */
 public class BrowserGUI extends JPanel {
+  @SuppressWarnings("NullAway.Init")
   private JDirectory directory;
+  @SuppressWarnings("NullAway.Init")
   private JBam bam;
 
   public BrowserGUI() {

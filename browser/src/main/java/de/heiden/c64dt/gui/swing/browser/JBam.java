@@ -7,6 +7,7 @@ import javax.swing.*;
 
 import de.heiden.c64dt.disk.IBAM;
 import de.heiden.c64dt.disk.IDiskImage;
+import org.jspecify.annotations.Nullable;
 
 import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
@@ -18,7 +19,7 @@ public class JBam extends JComponent {
   private Color used;
   private Color error;
 
-  private IDiskImage diskImage;
+  private @Nullable IDiskImage diskImage;
   private int left;
   private int leftSpace;
   private int height;
@@ -73,14 +74,14 @@ public class JBam extends JComponent {
   protected void paintComponent(Graphics g) {
     requireThat(g, "g").isNotNull();
 
-    IBAM bam = diskImage.getBAM();
-
     g.setColor(getBackground());
     g.fillRect(0, 0, getWidth(), getHeight());
 
     if (diskImage == null) {
       return;
     }
+
+    IBAM bam = diskImage.getBAM();
 
     FontMetrics fontMetrics = g.getFontMetrics();
     int descent = fontMetrics.getDescent();

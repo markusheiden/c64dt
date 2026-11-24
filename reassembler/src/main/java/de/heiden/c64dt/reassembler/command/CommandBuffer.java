@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
+import java.util.Objects;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -17,6 +18,7 @@ import de.heiden.c64dt.reassembler.label.CodeLabel;
 import de.heiden.c64dt.reassembler.label.DataLabel;
 import de.heiden.c64dt.reassembler.label.ExternalLabel;
 import de.heiden.c64dt.reassembler.label.ILabel;
+import org.jspecify.annotations.Nullable;
 
 import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.bytes.AddressUtil.requireValidAddress;
@@ -64,7 +66,7 @@ public class CommandBuffer implements Iterable<ICommand> {
   /**
    * Commands as detected by the reassembler.
    */
-  private final ICommand[] commands;
+  private final @Nullable ICommand[] commands;
 
   //
   // Persistent attributes.
@@ -177,7 +179,8 @@ public class CommandBuffer implements Iterable<ICommand> {
    * Start address of code (incl.).
    */
   public int getStartAddress() {
-    return startAddresses.get(0);
+    // The start address of index 0 always exists.
+    return Objects.requireNonNull(startAddresses.get(0));
   }
 
   /**
@@ -201,7 +204,7 @@ public class CommandBuffer implements Iterable<ICommand> {
     Integer startIndex = startAddresses.floorKey(index);
     requireThat(startIndex, "startIndex").isNotNull();
 
-    return startAddresses.get(startIndex) + index;
+    return Objects.requireNonNull(startAddresses.get(startIndex)) + index;
   }
 
   /**
@@ -299,7 +302,7 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param address Absolute address.
    * @return Subroutine or null, if there is no subroutine at this address.
    */
-  public Subroutine getSubroutine(int address) {
+  public @Nullable Subroutine getSubroutine(int address) {
     return subroutines.get(address);
   }
 
@@ -386,7 +389,7 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param address Absolute address.
    * @return Label or null if no label exists for this address.
    */
-  public ILabel getLabel(int address) {
+  public @Nullable ILabel getLabel(int address) {
     ILabel result = codeLabels.get(address);
     if (result == null) {
       result = dataLabels.get(address);
@@ -584,7 +587,7 @@ public class CommandBuffer implements Iterable<ICommand> {
    *
    * @param index Relative address.
    */
-  public ICommand getCommand(int index) {
+  public @Nullable ICommand getCommand(int index) {
     requireThat(hasIndex(index), "hasIndex(index)").isTrue();
 
     return commands[index];

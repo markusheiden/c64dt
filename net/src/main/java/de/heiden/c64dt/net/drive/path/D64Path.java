@@ -38,6 +38,7 @@ public class D64Path extends AbstractPath {
   }
 
   @Override
+  @SuppressWarnings("NullAway") // Not implemented yet.
   protected IStream doFile(byte[] filename) throws FileNotFoundException {
     // TODO Implement.
     return null;

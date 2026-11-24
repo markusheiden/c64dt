@@ -2,7 +2,9 @@ package de.heiden.c64dt.disk;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,7 +89,7 @@ public enum Error {
    */
   private static final Logger logger = LoggerFactory.getLogger(Error.class);
 
-  private static Map<Byte, Error> errors;
+  private static @Nullable Map<Byte, Error> errors;
 
   private final byte error;
 
@@ -111,7 +113,7 @@ public enum Error {
    * @param error Error code.
    */
   public static Error error(int error) {
-    Error result = errors.get((byte) error);
+    Error result = Objects.requireNonNull(errors).get((byte) error);
     if (result == null) {
       logger.info("Unknow error code {}", Integer.toHexString(error));
       result = UNKNOWN;

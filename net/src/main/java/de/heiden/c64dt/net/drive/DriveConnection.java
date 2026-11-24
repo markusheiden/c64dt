@@ -3,9 +3,11 @@ package de.heiden.c64dt.net.drive;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.util.Objects;
 
 import de.heiden.c64dt.net.AbstractConnection;
 import de.heiden.c64dt.net.Packet;
+import org.jspecify.annotations.Nullable;
 
 import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
@@ -22,7 +24,7 @@ public class DriveConnection extends AbstractConnection {
   public static final byte SERVICE_WRITE = 0x05;
   public static final byte SERVICE_DATA = 0x20;
 
-  private DrivePacket request = null;
+  private @Nullable DrivePacket request = null;
 
   /**
    * Constructor using the default port.
@@ -60,7 +62,8 @@ public class DriveConnection extends AbstractConnection {
    * @param error Error code.
    */
   public synchronized void sendReply(Error error) throws IOException {
-    sequence = request.getSequence();
+    // Replies are sent only after a request has been received.
+    sequence = Objects.requireNonNull(request).getSequence();
 
     // TODO 2011-01-09 mh: Check packet creation.
     Packet packet = new Packet(MAX_PACKET);
@@ -84,7 +87,8 @@ public class DriveConnection extends AbstractConnection {
 //      throw new IOException("Invalid packet size");
 //    }
 
-    sequence = request.getSequence();
+    // Replies are sent only after a request has been received.
+    sequence = Objects.requireNonNull(request).getSequence();
 
     // TODO 2011-01-09 mh: Check packet creation.
     Packet packet = new Packet(MAX_PACKET);

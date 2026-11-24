@@ -5,9 +5,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 import javax.swing.*;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,13 +32,17 @@ public class ReassemblerView extends JFrame {
    */
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
+  @SuppressWarnings("NullAway.Init")
   private Reassembler reassembler;
 
-  private File currentFile;
+  private @Nullable File currentFile;
 
+  @SuppressWarnings("NullAway.Init")
   private JMenuItem fileOpen;
+  @SuppressWarnings("NullAway.Init")
   private JMenuItem fileLoad;
   private JMenuItem fileSave;
+  @SuppressWarnings("NullAway.Init")
   private JMenuItem fileSaveAs;
 
   /**

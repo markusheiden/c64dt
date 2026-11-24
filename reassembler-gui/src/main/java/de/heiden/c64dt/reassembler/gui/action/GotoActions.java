@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Objects;
 
 /**
  * All types of "go to" actions.
@@ -80,9 +81,9 @@ public class GotoActions {
     }
 
     CodeTableModel model = (CodeTableModel) table.getModel();
-    CommandBuffer commands = model.getReassembler().getCommands();
+    CommandBuffer commands = Objects.requireNonNull(model.getReassembler()).getCommands();
 
-    int index = model.getIndex(row);
+    int index = Objects.requireNonNull(model.getIndex(row));
 
     // Just works for opcodes.
     ICommand command = commands.getCommand(index);
@@ -118,11 +119,11 @@ public class GotoActions {
   public void gotoIndex(int index) {
     CodeTableModel model = (CodeTableModel) table.getModel();
 
-    if (!model.getReassembler().getCommands().hasIndex(index)) {
+    if (!Objects.requireNonNull(model.getReassembler()).getCommands().hasIndex(index)) {
       return;
     }
 
-    int row = model.getRow(index);
+    int row = Objects.requireNonNull(model.getRow(index));
     table.scrollRectToVisible(TableUtil.getRowBounds(table, row, 3));
     table.getSelectionModel().setSelectionInterval(row, row);
   }

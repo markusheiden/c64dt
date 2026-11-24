@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.MemoryImageSource;
+import java.util.Objects;
+
+import org.jspecify.annotations.Nullable;
 
 /**
  * Base class for component displaying C64 content.
@@ -30,12 +33,12 @@ public abstract class JC64Component extends JComponent {
   /**
    * Image source.
    */
-  protected MemoryImageSource _imageSource;
+  protected @Nullable MemoryImageSource _imageSource;
 
   /**
    * Image.
    */
-  private Image _image;
+  private @Nullable Image _image;
 
   /**
    * Constructor.
@@ -134,7 +137,7 @@ public abstract class JC64Component extends JComponent {
    * Notify image source that the backing image data has been changed.
    */
   protected void updateImageData() {
-    _imageSource.newPixels();
+    Objects.requireNonNull(_imageSource).newPixels();
   }
 
   /**

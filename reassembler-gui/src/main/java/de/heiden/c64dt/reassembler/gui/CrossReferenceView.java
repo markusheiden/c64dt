@@ -3,6 +3,7 @@ package de.heiden.c64dt.reassembler.gui;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Objects;
 
 import javax.swing.*;
 import javax.swing.table.TableColumnModel;
@@ -71,7 +72,7 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
       @Override
       public void mouseClicked(MouseEvent e) {
         if (e.getClickCount() == 2) {
-          publisher.publishEvent(new GotoAddressEvent(this, model.getIndex(table.rowAtPoint(e.getPoint()))));
+          publisher.publishEvent(new GotoAddressEvent(this, Objects.requireNonNull(model.getIndex(table.rowAtPoint(e.getPoint())))));
         }
       }
     });

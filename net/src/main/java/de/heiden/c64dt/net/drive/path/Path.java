@@ -13,6 +13,7 @@ import de.heiden.c64dt.disk.IDirectory;
 import de.heiden.c64dt.disk.IFile;
 import de.heiden.c64dt.net.drive.stream.FileStream;
 import de.heiden.c64dt.net.drive.stream.IStream;
+import org.jspecify.annotations.Nullable;
 
 import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.decode;
@@ -26,7 +27,7 @@ public class Path extends AbstractPath {
 
   private File directory;
 
-  public Path(IPath parent, File directory) throws FileNotFoundException {
+  public Path(@Nullable IPath parent, File directory) throws FileNotFoundException {
     super(parent);
 
     requireThat(directory, "directory").isNotNull();

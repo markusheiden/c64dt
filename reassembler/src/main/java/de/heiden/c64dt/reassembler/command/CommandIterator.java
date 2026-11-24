@@ -1,9 +1,11 @@
 package de.heiden.c64dt.reassembler.command;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 import de.heiden.c64dt.assembler.CodeType;
 import de.heiden.c64dt.reassembler.label.ILabel;
+import org.jspecify.annotations.Nullable;
 
 import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 
@@ -132,13 +134,13 @@ public class CommandIterator implements Iterator<ICommand> {
    * Get the current command.
    */
   public ICommand getCommand() {
-    return commands.getCommand(index);
+    return Objects.requireNonNull(commands.getCommand(index));
   }
 
   /**
    * Get the next command without iterating to it.
    */
-  public ICommand peek() {
+  public @Nullable ICommand peek() {
     int nextIndex = getNextIndex();
     return commands.hasIndex(nextIndex) ? commands.getCommand(nextIndex) : DummyCommand.DUMMY_COMMAND;
   }
@@ -205,7 +207,7 @@ public class CommandIterator implements Iterator<ICommand> {
    *
    * @return Label representation or null if no label exists for the current address.
    */
-  public ILabel getLabel() {
+  public @Nullable ILabel getLabel() {
     return commands.getLabel(getCommand().getAddress());
   }
 

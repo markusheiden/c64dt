@@ -2,7 +2,9 @@ package de.heiden.c64dt.disk;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,8 +68,8 @@ public enum FileType {
    */
   private static final Logger logger = LoggerFactory.getLogger(FileType.class);
 
-  private static Map<Byte, FileType> types;
-  private static Map<String, FileType> extensions;
+  private static @Nullable Map<Byte, FileType> types;
+  private static @Nullable Map<String, FileType> extensions;
 
   private final byte code;
   private String extension;
@@ -92,7 +94,7 @@ public enum FileType {
    * @param code Type code.
    */
   public static FileType fileType(int code) {
-    FileType result = types.get((byte) code);
+    FileType result = Objects.requireNonNull(types).get((byte) code);
     if (result == null) {
       logger.info("Unknown file type code {}", Integer.toHexString(code));
       result = UNKNOWN;
@@ -111,7 +113,7 @@ public enum FileType {
   public static FileType fileType(String extension) {
     requireThat(extension, "extension").isNotNull();
 
-    FileType result = extensions.get(extension.toUpperCase());
+    FileType result = Objects.requireNonNull(extensions).get(extension.toUpperCase());
     if (result == null || result.code < 0) {
       logger.debug("Unknown file extension {}", extension);
       result = ANY;

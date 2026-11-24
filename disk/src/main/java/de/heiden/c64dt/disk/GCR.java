@@ -4,6 +4,8 @@ import de.heiden.c64dt.bytes.HexUtil;
 
 import java.util.Arrays;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * GCR codec.
  * <p>
@@ -33,7 +35,7 @@ public class GCR {
     System.out.println(toString(result));
   }
 
-  private int[] calculate() {
+  private int @Nullable [] calculate() {
     int[][] nibbles = new int[][]
       {
         generate(0), // nibble1
@@ -49,8 +51,8 @@ public class GCR {
     return calculate(nibbles);
   }
 
-  private int[] calculateNew() {
-    int[] result = null;
+  private int @Nullable [] calculateNew() {
+    int @Nullable [] result = null;
     int min = Integer.MAX_VALUE;
 
     int[][] nibbles = new int[][]
@@ -116,7 +118,7 @@ public class GCR {
    * @param nibbles Reverse GCR tables.
    * @return The merged reverse GCR table.
    */
-  public int[] calculate(int[][] nibbles) {
+  public int @Nullable [] calculate(int[][] nibbles) {
     int[] result = new int[512];
     Arrays.fill(result, -1);
 

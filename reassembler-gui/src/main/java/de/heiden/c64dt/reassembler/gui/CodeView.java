@@ -3,6 +3,7 @@ package de.heiden.c64dt.reassembler.gui;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Objects;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -32,6 +33,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent> {
   /**
    * The table.
    */
+  @SuppressWarnings("NullAway.Init")
   private JTable table;
 
   /**
@@ -42,6 +44,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent> {
   /**
    * Context menu.
    */
+  @SuppressWarnings("NullAway.Init")
   private JPopupMenu contextMenu;
 
   /**
@@ -114,7 +117,7 @@ public class CodeView implements ApplicationListener<ReassemblerEvent> {
       @Override
       public void valueChanged(ListSelectionEvent listSelectionEvent) {
         publisher.publishEvent(new AddressChangedEvent(this,
-          table.getSelectedRow() >= 0 ? model.getIndex(table.getSelectedRow()) : -1));
+          table.getSelectedRow() >= 0 ? Objects.requireNonNull(model.getIndex(table.getSelectedRow())) : -1));
       }
     });
 
@@ -137,11 +140,11 @@ public class CodeView implements ApplicationListener<ReassemblerEvent> {
    * @param index Relative address.
    */
   public void gotoIndex(int index) {
-    if (!model.getReassembler().getCommands().hasIndex(index)) {
+    if (!Objects.requireNonNull(model.getReassembler()).getCommands().hasIndex(index)) {
       return;
     }
 
-    int row = model.getRow(index);
+    int row = Objects.requireNonNull(model.getRow(index));
     table.scrollRectToVisible(TableUtil.getRowBounds(table, row, 3));
     table.getSelectionModel().setSelectionInterval(row, row);
   }

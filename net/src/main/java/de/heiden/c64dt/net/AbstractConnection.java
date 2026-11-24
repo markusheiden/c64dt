@@ -5,6 +5,9 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketAddress;
 import java.util.Arrays;
+import java.util.Objects;
+
+import org.jspecify.annotations.Nullable;
 
 /**
  * Common code for connections.
@@ -16,22 +19,22 @@ public abstract class AbstractConnection {
   private static final int IDX_MAGIC2 = 1;
 
   private final SocketAddress source;
-  private SocketAddress destination;
-  private SocketAddress lastDestination;
+  private @Nullable SocketAddress destination;
+  private @Nullable SocketAddress lastDestination;
   protected final int packetSize;
   private final byte magic1;
   private final byte magic2;
 
-  private DatagramSocket socket;
+  private @Nullable DatagramSocket socket;
   private final byte[] input;
-  private DatagramPacket lastInput;
-  private DatagramPacket lastOutput;
+  private @Nullable DatagramPacket lastInput;
+  private @Nullable DatagramPacket lastOutput;
   protected byte sequence;
 
   /**
    * Constructor.
    */
-  protected AbstractConnection(SocketAddress source, SocketAddress destination, int packetSize, int magic1, int magic2) {
+  protected AbstractConnection(SocketAddress source, @Nullable SocketAddress destination, int packetSize, int magic1, int magic2) {
     this.source = source;
     this.destination = destination;
     this.packetSize = packetSize;
@@ -93,7 +96,7 @@ public abstract class AbstractConnection {
     packet.pad();
     byte[] data = packet.getData();
     lastOutput = new DatagramPacket(data, data.length, destination != null ? destination : lastDestination);
-    socket.send(lastOutput);
+    Objects.requireNonNull(socket).send(lastOutput);
   }
 
   /**
@@ -101,7 +104,7 @@ public abstract class AbstractConnection {
    */
   public synchronized Packet receivePacket() throws IOException {
     lastInput = new DatagramPacket(input, input.length);
-    socket.receive(lastInput);
+    Objects.requireNonNull(socket).receive(lastInput);
     lastDestination = lastInput.getSocketAddress();
 
     Packet result = new Packet(Arrays.copyOf(lastInput.getData(), lastInput.getLength()));
@@ -116,7 +119,7 @@ public abstract class AbstractConnection {
    * Send the last packet again.
    */
   public synchronized void resendPacket() throws IOException {
-    socket.send(lastOutput);
+    Objects.requireNonNull(socket).send(lastOutput);
   }
 
   /**

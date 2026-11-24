@@ -6,6 +6,7 @@ import java.util.Arrays;
 import de.heiden.c64dt.disk.IDirectory;
 import de.heiden.c64dt.net.drive.stream.DirectoryStream;
 import de.heiden.c64dt.net.drive.stream.IStream;
+import org.jspecify.annotations.Nullable;
 
 import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
@@ -26,7 +27,7 @@ public abstract class AbstractPath implements IPath {
    *
    * @param parent Parent path, null means there is no parent.
    */
-  protected AbstractPath(IPath parent) {
+  protected AbstractPath(@Nullable IPath parent) {
     // Set this as parent, when no parent is specified to not leave root dir.
     this.parent = parent == null ? this : parent;
   }
