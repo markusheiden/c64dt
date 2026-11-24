@@ -36,7 +36,7 @@ Null safety is checked at compile time by NullAway (via Error Prone, JSpecify mo
 
 - Non-null is the default: every package (tests too) has a `package-info.java` with `@NullMarked`, new packages need one too. NullAway additionally treats `de.heiden.c64dt` as annotated (`NullAway:AnnotatedPackages`).
 - Annotate only what may be null with `org.jspecify.annotations.Nullable`, as a type annotation right before the type: `private @Nullable Foo foo`, `Foo @Nullable []` (nullable array), `@Nullable Foo[]` (nullable elements). Never use `@NonNull`.
-- No null checks for non-null values: no `requireThat(x, "x").isNotNull()` and no `assert x != null`. NullAway does not understand them anyway. Narrow nullable values via a local `var` and a null check, or `Objects.requireNonNull` if null is impossible by invariant.
+- No null checks for non-null values: no `requireThat(x, "x").isNotNull()` no `assert x != null` and no `@require x != null` in the Javadoc. NullAway does not understand them anyway. Narrow nullable values via a local `var` and a null check, or `Objects.requireNonNull` if null is impossible by invariant.
 - Fields initialized after construction (e.g. by `connect()`, `start()` or a framework) are annotated with `@SuppressWarnings("NullAway.Init")`. Avoid `@SuppressWarnings("NullAway")`.
 
 ## Gradle Setup
