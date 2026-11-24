@@ -3,6 +3,7 @@ package de.heiden.c64dt.reassembler.command;
 import de.heiden.c64dt.assembler.Opcode;
 import org.junit.jupiter.api.Test;
 
+import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -34,7 +35,7 @@ public class CommandIteratorTest {
     assertThat(iter.getAddress()).isEqualTo(0x1000);
 
     // Look ahead at next command does not change iterator.
-    assertThat(((OpcodeCommand) iter.peek()).getOpcode()).isEqualTo(Opcode.OPCODE_8D);
+    assertThat(((OpcodeCommand) requireNonNull(iter.peek())).getOpcode()).isEqualTo(Opcode.OPCODE_8D);
     assertThat(iter.getIndex()).isEqualTo(0x0000);
     assertThat(iter.getAddress()).isEqualTo(0x1000);
 

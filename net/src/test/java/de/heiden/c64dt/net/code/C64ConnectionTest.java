@@ -88,7 +88,7 @@ public class C64ConnectionTest {
     }
   }
 
-  private byte[] outputData;
+  private byte[] outputData = new byte[0];
 
   private class TestConnection extends C64Connection {
     public TestConnection() throws IOException {
