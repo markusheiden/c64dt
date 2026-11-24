@@ -225,8 +225,8 @@ public class C64TextArea extends C64Component {
     var background = getBackgroundColor();
     for (var row = 0; row < _rows; row++) {
       var charRow = _chars[row];
-      @Nullable Color[] foregroundRow = _foregrounds[row];
-      @Nullable Color[] backgroundRow = _backgrounds[row];
+      var foregroundRow = _foregrounds[row];
+      var backgroundRow = _backgrounds[row];
       for (var column = 0; column < _columns; column++) {
         charRow[column] = space;
         foregroundRow[column] = foreground;
