@@ -29,8 +29,8 @@ public class JC64TextArea extends JC64CommonComponent {
   private int _rows;
   private final double _factor;
   private byte[][] _chars;
-  private Color[][] _foregrounds;
-  private Color[][] _backgrounds;
+  private @Nullable Color[][] _foregrounds;
+  private @Nullable Color[][] _backgrounds;
 
   private boolean _upper;
   private C64Charset _charset;
@@ -76,8 +76,8 @@ public class JC64TextArea extends JC64CommonComponent {
     _rows = (int) Math.ceil(getImageHeight() / (double) ROW_HEIGHT);
 
     _chars = new byte[_rows][_columns];
-    _foregrounds = new Color[_rows][_columns];
-    _backgrounds = new Color[_rows][_columns];
+    _foregrounds = new @Nullable Color[_rows][_columns];
+    _backgrounds = new @Nullable Color[_rows][_columns];
     clear();
   }
 
@@ -224,8 +224,8 @@ public class JC64TextArea extends JC64CommonComponent {
     Color background = getBackground();
     for (int row = 0; row < _rows; row++) {
       byte[] charRow = _chars[row];
-      Color[] foregroundRow = _foregrounds[row];
-      Color[] backgroundRow = _backgrounds[row];
+      @Nullable Color[] foregroundRow = _foregrounds[row];
+      @Nullable Color[] backgroundRow = _backgrounds[row];
       for (int column = 0; column < _columns; column++) {
         charRow[column] = space;
         foregroundRow[column] = foreground;
