@@ -8,6 +8,7 @@ import de.heiden.c64dt.reassembler.label.ILabel;
 import org.jspecify.annotations.Nullable;
 
 import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Command iterator.
@@ -88,7 +89,7 @@ public class CommandIterator implements Iterator<ICommand> {
    */
   public void setIndex(int index) {
     // Check that there is a command at the given index.
-    requireThat(commands.getCommand(index), "commands.getCommand(index)").isNotNull();
+    requireNonNull(commands.getCommand(index), "commands.getCommand(index)");
 
     this.index = index;
   }
@@ -131,7 +132,7 @@ public class CommandIterator implements Iterator<ICommand> {
    * Get the current command.
    */
   public ICommand getCommand() {
-    return Objects.requireNonNull(commands.getCommand(index));
+    return requireNonNull(commands.getCommand(index));
   }
 
   /**
