@@ -1,6 +1,5 @@
 package de.heiden.c64dt.disk;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidSector;
 import static de.heiden.c64dt.disk.SectorModelUtil.requireValidTrack;
 
@@ -13,8 +12,6 @@ public class BAM implements IBAM {
   private final int[] freeSectors;
 
   public BAM(ISectorModel sectorModel) {
-    requireThat(sectorModel, "sectorModel").isNotNull();
-
     this.sectorModel = sectorModel;
 
     int tracks = sectorModel.getTracks();

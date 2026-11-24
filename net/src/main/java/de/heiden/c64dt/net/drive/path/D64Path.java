@@ -10,8 +10,6 @@ import de.heiden.c64dt.disk.WrongDiskImageFormatException;
 import de.heiden.c64dt.disk.d64.D64Reader;
 import de.heiden.c64dt.net.drive.stream.IStream;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
-
 /**
  * Path to a D64 image file.
  */
@@ -20,8 +18,6 @@ public class D64Path extends AbstractPath {
 
   public D64Path(IPath parent, File d64) throws FileNotFoundException {
     super(parent);
-
-    requireThat(d64, "d64").isNotNull();
 
     try {
       this.d64 = new D64Reader().read(d64);

@@ -20,7 +20,6 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.assembler.OpcodeMode.ABS;
 import static de.heiden.c64dt.assembler.OpcodeType.JSR;
 import static de.heiden.c64dt.bytes.HexUtil.hexWord;
@@ -239,8 +238,6 @@ public class JsrDetector implements IDetector {
    * @return End index or -1, if no arguments have been found.
    */
   private int search0(CommandBuffer commands, int startIndex, boolean check) {
-    requireThat(commands, "commands").isNotNull();
-
     byte[] code = commands.getCode();
     for (int index = startIndex, count = 0; commands.hasIndex(index) && count < maxLength; index++) {
       // Check for aborting conditions, only if requested.

@@ -21,8 +21,6 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
-
 /**
  * Reassembler.
  */
@@ -78,8 +76,6 @@ public class Reassembler {
    * @param detector Code type detector.
    */
   public void add(IDetector detector) {
-    requireThat(detector, "detector").isNotNull();
-
     detectors.add(detector);
   }
 
@@ -97,8 +93,6 @@ public class Reassembler {
    * @param code Code buffer.
    */
   public void reassemble(CodeBuffer code) throws IOException {
-    requireThat(code, "code").isNotNull();
-
     if (code.getCurrentAddress() == 0x0801) {
       // TODO Check for BASIC header.
     }

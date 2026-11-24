@@ -17,7 +17,6 @@ public class ByteUtil {
    * Read byte from byte array.
    */
   public static int toByte(byte[] data, int pos) {
-    requireThat(data, "data").isNotNull();
     requireThat(pos, "pos").isLessThanOrEqualTo(data.length, "data.length");
 
     return toByte(data[pos]);
@@ -34,7 +33,6 @@ public class ByteUtil {
    * Read word from byte array.
    */
   public static int toWord(byte[] data, int pos) {
-    requireThat(data, "data").isNotNull();
     requireThat(pos + 1, "pos+1").isLessThan(data.length, "data.length");
 
     return toWord(data[pos], data[pos + 1]);

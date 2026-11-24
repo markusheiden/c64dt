@@ -4,8 +4,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
-
 /**
  * Util class to load resources as byte arrays.
  */
@@ -32,7 +30,6 @@ public class ResourceLoader {
       result[i] = read[i] & 0xFF;
     }
 
-    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -53,7 +50,6 @@ public class ResourceLoader {
       result[i] = read[i] & 0xFF;
     }
 
-    requireThat(result, "result").isNotNull();
     return result;
   }
 }

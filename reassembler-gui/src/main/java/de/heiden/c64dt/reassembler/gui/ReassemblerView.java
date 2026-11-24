@@ -20,8 +20,6 @@ import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
-
 /**
  * GUI for {@link Reassembler}.
  */
@@ -127,8 +125,6 @@ public class ReassemblerView extends JFrame {
    * @param reassembler Reassembler.
    */
   public void use(Reassembler reassembler) {
-    requireThat(reassembler, "reassembler").isNotNull();
-
     this.currentFile = null;
     this.reassembler = reassembler;
 

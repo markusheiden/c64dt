@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.bytes.ByteUtil.hi;
 import static de.heiden.c64dt.bytes.ByteUtil.lo;
 import static de.heiden.c64dt.bytes.HexUtil.hexBytePlain;
@@ -42,9 +41,6 @@ public class Disassembler {
    * @param list List BASIC header?.
    */
   public void listAndDisassemble(ICodeBuffer code, Writer output, boolean list) throws IOException {
-    requireThat(code, "code").isNotNull();
-    requireThat(output, "output").isNotNull();
-
     try (BufferedWriter out = new NonClosingBufferedWriter(output)) {
       if (list) {
         new Lister().list(code, out);

@@ -55,7 +55,6 @@ public class CodeBuffer extends AbstractCodeBuffer {
    */
   public static CodeBuffer fromCode(int startAddr, InputStream code) throws IOException {
     requireThat(startAddr, "startAddr").isGreaterThanOrEqualTo(0);
-    requireThat(code, "code").isNotNull();
 
     return new CodeBuffer(startAddr, IOUtils.toByteArray(code));
   }
@@ -67,8 +66,6 @@ public class CodeBuffer extends AbstractCodeBuffer {
    * @param program Program with start address.
    */
   public static CodeBuffer fromProgram(InputStream program) throws IOException {
-    requireThat(program, "program").isNotNull();
-
     return fromProgram(IOUtils.toByteArray(program));
   }
 
@@ -79,7 +76,6 @@ public class CodeBuffer extends AbstractCodeBuffer {
    * @param program Program with start address.
    */
   public static CodeBuffer fromProgram(byte[] program) throws IOException {
-    requireThat(program, "program").isNotNull();
     requireThat(program.length, "program.length").isGreaterThanOrEqualTo(2);
 
     int address = toWord(program, 0);

@@ -25,12 +25,10 @@ public class File implements IFile {
    * @param size File size in bytes.
    */
   public File(FileMode mode, int track, int sector, byte[] name, int size) {
-    requireThat(mode, "mode").isNotNull();
     if (!mode.isDeleted()) {
       requireThat(track, "track").isGreaterThanOrEqualTo(1);
       requireThat(sector, "sector").isGreaterThanOrEqualTo(0);
     }
-    requireThat(name, "name").isNotNull();
     requireThat(name.length, "name.length").isLessThanOrEqualTo(16);
     requireThat(size, "size").isGreaterThanOrEqualTo(0);
 
@@ -43,7 +41,6 @@ public class File implements IFile {
 
   @Override
   public FileMode getMode() {
-    requireThat(mode, "result").isNotNull();
     return mode;
   }
 
@@ -61,7 +58,6 @@ public class File implements IFile {
 
   @Override
   public byte[] getName() {
-    requireThat(name, "result").isNotNull();
     requireThat(name.length, "result.length").isLessThanOrEqualTo(16);
     return name;
   }

@@ -15,7 +15,6 @@ import de.heiden.c64dt.net.drive.stream.FileStream;
 import de.heiden.c64dt.net.drive.stream.IStream;
 import org.jspecify.annotations.Nullable;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.decode;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
 
@@ -30,7 +29,6 @@ public class Path extends AbstractPath {
   public Path(@Nullable IPath parent, File directory) throws FileNotFoundException {
     super(parent);
 
-    requireThat(directory, "directory").isNotNull();
     if (!directory.isDirectory()) {
       throw new FileNotFoundException(directory.getPath() + " is no directory");
     }

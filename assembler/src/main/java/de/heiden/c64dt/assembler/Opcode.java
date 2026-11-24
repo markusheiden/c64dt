@@ -476,8 +476,6 @@ public enum Opcode {
    */
   Opcode(int opcode, boolean legal, OpcodeType type, OpcodeMode mode, int cycles) {
     requireThat(opcode, "opcode").isGreaterThanOrEqualTo(0x00).isLessThanOrEqualTo(0xFF);
-    requireThat(type, "type").isNotNull();
-    requireThat(mode, "mode").isNotNull();
     if (type != KIL) {
       requireThat(cycles, "cycles").isGreaterThan(0);
     }

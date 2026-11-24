@@ -42,8 +42,6 @@ public class AddressCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    requireThat(buffer, "buffer").isNotNull();
-
     ILabel label = buffer.getLabel(address);
     if (label == null) {
       return "!WORD " + hexWord(address);

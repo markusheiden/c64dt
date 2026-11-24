@@ -86,7 +86,6 @@ public abstract class JC64ScreenComponent extends JC64Component {
    * @param imageData New backing image data.
    */
   protected void updateImageData(byte[] imageData) {
-    requireThat(imageData, "imageData").isNotNull();
     requireThat(imageData.length, "imageData.length").isEqualTo(getImageData().length, "getImageData().length");
 
     _imageData = imageData;

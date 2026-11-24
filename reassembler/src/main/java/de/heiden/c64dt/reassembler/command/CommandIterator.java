@@ -30,8 +30,6 @@ public class CommandIterator implements Iterator<ICommand> {
    * @param commands Command buffer to iterate.
    */
   public CommandIterator(CommandBuffer commands) {
-    requireThat(commands, "commands").isNotNull();
-
     this.commands = commands;
   }
 
@@ -126,7 +124,6 @@ public class CommandIterator implements Iterator<ICommand> {
     index = getNextIndex();
     ICommand result = getCommand();
 
-    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -165,7 +162,6 @@ public class CommandIterator implements Iterator<ICommand> {
     }
     ICommand result = getCommand();
 
-    requireThat(result, "result").isNotNull();
     // Check that the previous command ends at the start of the current command.
     requireThat(getNextIndex(), "getNextIndex()").isEqualTo(endIndex);
     return result;

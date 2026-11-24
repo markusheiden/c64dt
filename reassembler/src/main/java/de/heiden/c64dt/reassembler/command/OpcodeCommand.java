@@ -39,8 +39,6 @@ public class OpcodeCommand extends AbstractCommand {
   public OpcodeCommand(Opcode opcode, int argument) {
     super(CodeType.OPCODE);
 
-    requireThat(opcode, "opcode").isNotNull();
-
     this.opcode = opcode;
     this.argument = argument;
     this.size = 1 + opcode.getMode().getSize();
@@ -98,8 +96,6 @@ public class OpcodeCommand extends AbstractCommand {
 
   @Override
   public String toString(CommandBuffer buffer) {
-    requireThat(buffer, "buffer").isNotNull();
-
     StringBuilder result = new StringBuilder();
     result.append(opcode.getType().toString());
     OpcodeMode mode = opcode.getMode();
@@ -127,7 +123,6 @@ public class OpcodeCommand extends AbstractCommand {
       result.add(ByteUtil.hi(argument));
     }
 
-    requireThat(result, "result").isNotNull();
     return result;
   }
 }

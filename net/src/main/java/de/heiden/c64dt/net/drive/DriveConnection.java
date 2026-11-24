@@ -9,8 +9,6 @@ import de.heiden.c64dt.net.AbstractConnection;
 import de.heiden.c64dt.net.Packet;
 import org.jspecify.annotations.Nullable;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
-
 /**
  * Connection of net drive server.
  */
@@ -80,8 +78,6 @@ public class DriveConnection extends AbstractConnection {
    * @param data Payload data.
    */
   public void sendReply(byte[] data) throws IOException {
-    requireThat(data, "data").isNotNull();
-
     byte size = (byte) data.length;
 //    if (IDX_DATA + size >= MAX_PACKET) {
 //      throw new IOException("Invalid packet size");

@@ -42,7 +42,6 @@ public class NetDrive {
    * @param port Server port.
    */
   public NetDrive(File root, int port) throws IOException {
-    requireThat(root, "root").isNotNull();
     requireThat(root.isDirectory(), "root.isDirectory()").isTrue();
     requireThat(port, "port").isBetween(0, 65535 + 1);
 

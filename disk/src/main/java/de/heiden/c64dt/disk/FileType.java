@@ -100,7 +100,6 @@ public enum FileType {
       result = UNKNOWN;
     }
 
-    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -111,15 +110,12 @@ public enum FileType {
    * @return Matching file type or ANY for undefined extensions.
    */
   public static FileType fileType(String extension) {
-    requireThat(extension, "extension").isNotNull();
-
     FileType result = Objects.requireNonNull(extensions).get(extension.toUpperCase());
     if (result == null || result.code < 0) {
       logger.debug("Unknown file extension {}", extension);
       result = ANY;
     }
 
-    requireThat(result, "result").isNotNull();
     return result;
   }
 
@@ -129,7 +125,6 @@ public enum FileType {
    * @param code Type code, -1 if none defined.
    */
   FileType(int code, String extension) {
-    requireThat(extension, "extension").isNotNull();
     requireThat(extension.length(), "extension.length()").isEqualTo(3);
 
     this.code = (byte) code;

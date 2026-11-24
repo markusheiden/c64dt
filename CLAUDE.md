@@ -30,6 +30,15 @@ Java library targeting C64 development tooling. All submodules share the package
 - `browser` → `charset`, `common`, `disk`, `gui` — disk image browser UI
 - `reassembler-gui` → `assembler`, `bytes`, `common`, `reassembler` — Swing GUI for the reassembler, Spring-wired
 
+## Null Safety
+
+Null safety is checked at compile time by NullAway (via Error Prone, JSpecify mode) for the production code; violations fail the build. The tests are not checked.
+
+- Non-null is the default: every package (tests too) has a `package-info.java` with `@NullMarked`, new packages need one too. NullAway additionally treats `de.heiden.c64dt` as annotated (`NullAway:AnnotatedPackages`).
+- Annotate only what may be null with `org.jspecify.annotations.Nullable`, as a type annotation right before the type: `private @Nullable Foo foo`, `Foo @Nullable []` (nullable array), `@Nullable Foo[]` (nullable elements). Never use `@NonNull`.
+- No null checks for non-null values: no `requireThat(x, "x").isNotNull()` and no `assert x != null`. NullAway does not understand them anyway. Narrow nullable values via a local `var` and a null check, or `Objects.requireNonNull` if null is impossible by invariant.
+- Fields initialized after construction (e.g. by `connect()`, `start()` or a framework) are annotated with `@SuppressWarnings("NullAway.Init")`. Avoid `@SuppressWarnings("NullAway")`.
+
 ## Gradle Setup
 
 - Versions are centralized in `gradle/libs.versions.toml`

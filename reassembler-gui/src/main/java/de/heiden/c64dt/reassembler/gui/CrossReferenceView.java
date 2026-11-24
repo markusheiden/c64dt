@@ -18,8 +18,6 @@ import de.heiden.c64dt.reassembler.gui.event.AddressChangedEvent;
 import de.heiden.c64dt.reassembler.gui.event.GotoAddressEvent;
 import de.heiden.c64dt.reassembler.gui.event.ReassemblerEvent;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
-
 /**
  * View for cross reference of current opcode.
  */
@@ -49,8 +47,6 @@ public class CrossReferenceView implements ApplicationListener<ReassemblerEvent>
    * @param reassembler Reassembler.
    */
   public void use(Reassembler reassembler) {
-    requireThat(reassembler, "reassembler").isNotNull();
-
     model.use(reassembler);
   }
 

@@ -6,8 +6,6 @@ import de.heiden.c64dt.disk.WrongDiskImageFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
-
 /**
  * Reads a D64 image from a file.
  */
@@ -24,8 +22,6 @@ public class D64Reader extends AbstractDiskImageReader {
 
   @Override
   public IDiskImage read(byte[] data) throws WrongDiskImageFormatException {
-    requireThat(data, "data").isNotNull();
-
     int tracks;
     boolean hasErrors;
     switch (data.length) {

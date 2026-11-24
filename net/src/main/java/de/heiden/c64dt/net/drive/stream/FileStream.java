@@ -5,8 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
-
 /**
  * Stream for a java.io.File.
  */
@@ -14,8 +12,6 @@ public class FileStream extends AbstractStream {
   private RandomAccessFile file;
 
   public FileStream(File file) throws FileNotFoundException {
-    requireThat(file, "file").isNotNull();
-
     if (!file.isFile()) {
       throw new FileNotFoundException(file.getPath() + " is no file");
     }
@@ -40,7 +36,6 @@ public class FileStream extends AbstractStream {
       result = trimmed;
     }
 
-    requireThat(result, "result").isNotNull();
     return result;
   }
 

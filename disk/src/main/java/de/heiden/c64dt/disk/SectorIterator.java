@@ -23,7 +23,6 @@ public class SectorIterator implements Iterator<byte[]> {
    * @param sector Start sector.
    */
   public SectorIterator(IDiskImage diskImage, int track, int sector) {
-    requireThat(diskImage, "diskImage").isNotNull();
     requireValidSector(diskImage, track, sector);
 
     this.diskImage = diskImage;
@@ -44,7 +43,6 @@ public class SectorIterator implements Iterator<byte[]> {
     track = ByteUtil.toByte(currentSector[0]);
     sector = ByteUtil.toByte(currentSector[1]);
 
-    requireThat(currentSector, "result").isNotNull();
     return currentSector;
   }
 

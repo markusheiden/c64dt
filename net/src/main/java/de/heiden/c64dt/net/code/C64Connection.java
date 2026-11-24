@@ -45,7 +45,6 @@ public class C64Connection extends AbstractConnection {
    */
   public C64Connection(int sourcePort, InetAddress address, int destinationPort) throws IOException {
     super(new InetSocketAddress(InetAddress.getLocalHost(), sourcePort), new InetSocketAddress(address, destinationPort), MAX_PACKET, MAGIC1, MAGIC2);
-    requireThat(address, "address").isNotNull();
   }
 
   /**
@@ -69,7 +68,6 @@ public class C64Connection extends AbstractConnection {
    */
   public synchronized void write(int address, byte... data) throws IOException {
     requireValidAddress(address);
-    requireThat(data, "data").isNotNull();
     requireThat(4 + data.length, "4+data.length").isLessThanOrEqualTo(getPacketSize());
     requireThat(isOpen(), "isOpen()").isTrue();
 

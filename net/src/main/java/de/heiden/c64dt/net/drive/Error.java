@@ -5,8 +5,6 @@ import java.text.NumberFormat;
 
 import de.heiden.c64dt.charset.C64Charset;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
-
 /**
  * Error constants.
  */
@@ -33,8 +31,6 @@ public enum Error {
    * @param code Error code.
    */
   Error(int code, String description, int result) {
-    requireThat(description, "description").isNotNull();
-
     this.code = (byte) code;
     this.description = description;
     this.result = (byte) result;

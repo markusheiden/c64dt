@@ -90,14 +90,12 @@ public class JDirectory extends JList<Object> {
       }
       result.setText(0, 0, text);
 
-      requireThat(result, "result").isNotNull();
       return result;
     });
   }
 
   protected void writeInt(int size, byte[] text, int pos) {
     requireThat(size, "size").isGreaterThanOrEqualTo(0);
-    requireThat(text, "text").isNotNull();
 
     if (size == 0) {
       text[pos] = 0x30;
@@ -117,8 +115,6 @@ public class JDirectory extends JList<Object> {
    * @param directory Directory.
    */
   public void setDirectory(final IDirectory directory) {
-    requireThat(directory, "directory").isNotNull();
-
     final List<IFile> files = directory.getFiles();
     files.removeIf(file -> !file.getMode().isVisible());
 

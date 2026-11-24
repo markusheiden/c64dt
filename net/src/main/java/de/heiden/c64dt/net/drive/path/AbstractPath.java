@@ -8,7 +8,6 @@ import de.heiden.c64dt.net.drive.stream.DirectoryStream;
 import de.heiden.c64dt.net.drive.stream.IStream;
 import org.jspecify.annotations.Nullable;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
 import static de.heiden.c64dt.net.drive.DeviceEncoding.encode;
 
 /**
@@ -34,14 +33,11 @@ public abstract class AbstractPath implements IPath {
 
   @Override
   public IPath getParent() {
-    requireThat(parent, "result").isNotNull();
     return parent;
   }
 
   @Override
   public IStream getFile(byte[] filename) throws FileNotFoundException {
-    requireThat(filename, "filename").isNotNull();
-
     if (Arrays.equals(filename, DIRECTORY_NAME)) {
       return new DirectoryStream(doDirectory());
     } else {
@@ -85,7 +81,6 @@ public abstract class AbstractPath implements IPath {
       }
     }
 
-    requireThat(result, "result").isNotNull();
     return result;
   }
 

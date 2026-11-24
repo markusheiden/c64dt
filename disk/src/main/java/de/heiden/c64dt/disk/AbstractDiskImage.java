@@ -140,7 +140,6 @@ public abstract class AbstractDiskImage implements IDiskImage {
   public void setError(int track, int sector, Error error) {
     requireThat(hasErrors(), "hasErrors()").isTrue();
     requireValidSector(this, track, sector);
-    requireThat(error, "error").isNotNull();
 
     errors[track - 1][sector] = error;
   }
@@ -163,9 +162,6 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param pos Position in sector buffer.
    */
   protected void readBAM(IBAM bam, int track, byte[] content, int pos) {
-    requireThat(bam, "bam").isNotNull();
-    requireThat(content, "content").isNotNull();
-
     int free = ByteUtil.toByte(content[pos + 0x00]);
     bam.setFreeSectors(track, free);
     for (int i = 1, sector = 0; i < getBamEntrySize(); i++, sector += 8) {
@@ -182,8 +178,6 @@ public abstract class AbstractDiskImage implements IDiskImage {
    * @param b Byte to read.
    */
   protected void readBAM(IBAM bam, int track, int sector, byte b) {
-    requireThat(bam, "bam").isNotNull();
-
     int map = ByteUtil.toByte(b);
     for (int i = 0; i < 8 && sector < getSectors(track); i++, sector++) {
       bam.setFree(track, sector, (map & 0x01) != 0);

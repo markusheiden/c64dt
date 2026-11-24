@@ -8,8 +8,6 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
-
 /**
  * D64 error codes.
  */
@@ -119,7 +117,6 @@ public enum Error {
       result = UNKNOWN;
     }
 
-    requireThat(result, "result").isNotNull();
     return result;
   }
 

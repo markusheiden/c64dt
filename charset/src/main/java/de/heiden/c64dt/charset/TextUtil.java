@@ -23,7 +23,6 @@ public class TextUtil {
    * @param length Length of text.
    */
   public static byte[] strip(byte[] text, int pos, int length) {
-    requireThat(text, "text").isNotNull();
     requireThat(pos, "pos").isGreaterThanOrEqualTo(0);
     requireThat(length, "length").isGreaterThanOrEqualTo(0);
     requireThat(pos + length, "pos+length").isLessThanOrEqualTo(text.length, "text.length");
@@ -34,7 +33,6 @@ public class TextUtil {
     byte[] result = new byte[length];
     System.arraycopy(text, pos, result, 0, length);
 
-    requireThat(result, "result").isNotNull();
     return result;
   }
 }

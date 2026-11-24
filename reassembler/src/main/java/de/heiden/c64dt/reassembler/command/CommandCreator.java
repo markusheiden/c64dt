@@ -107,7 +107,6 @@ public class CommandCreator {
    * @param command Command.
    */
   public void addCommand(ICommand command) {
-    requireThat(command, "command").isNotNull();
     requireThat(command.hasAddress(), "command.hasAddress()").isFalse();
 
     commandBuffer.setCommand(index, command);

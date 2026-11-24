@@ -26,8 +26,6 @@ public abstract class AbstractDiskImageReader {
    * @param file File.
    */
   public IDiskImage read(File file) throws IOException, WrongDiskImageFormatException {
-    requireThat(file, "file").isNotNull();
-
     return read(FileUtils.readFileToByteArray(file));
   }
 
@@ -38,8 +36,6 @@ public abstract class AbstractDiskImageReader {
    * @param stream Stream.
    */
   public IDiskImage read(InputStream stream) throws IOException, WrongDiskImageFormatException {
-    requireThat(stream, "stream").isNotNull();
-
     return read(IOUtils.toByteArray(stream));
   }
 
@@ -58,9 +54,6 @@ public abstract class AbstractDiskImageReader {
    * @return diskImage for method chaining.
    */
   protected IDiskImage read(byte[] data, IDiskImage diskImage) {
-    requireThat(data, "data").isNotNull();
-    requireThat(diskImage, "diskImage").isNotNull();
-
     int i = 0;
 
     // Read sector contents.
@@ -88,7 +81,6 @@ public abstract class AbstractDiskImageReader {
 
     requireThat(i, "i").isEqualTo(data.length, "data.length");
 
-    requireThat(diskImage, "diskImage").isNotNull();
     return diskImage;
   }
 }

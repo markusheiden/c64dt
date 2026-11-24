@@ -27,7 +27,6 @@ public class Device {
    * Constructor.
    */
   public Device(File root) throws FileNotFoundException {
-    requireThat(root, "root").isNotNull();
     requireThat(root.isDirectory(), "root.isDirectory()").isTrue();
 
     streams = new IStream[16];
@@ -50,7 +49,6 @@ public class Device {
 
   public void open(int channel, byte[] file) throws DeviceException {
     assertValidChannel(channel);
-    requireThat(file, "file").isNotNull();
 
     // Create new channel from path.
     if (channel != COMMAND_CHANNEL) {
@@ -143,7 +141,6 @@ public class Device {
       byte[] result = new byte[length];
       System.arraycopy(error, getPosition(), result, 0, length);
 
-      requireThat(result, "result").isNotNull();
       return result;
     }
 

@@ -7,8 +7,6 @@ import java.io.Writer;
 import de.heiden.c64dt.bytes.HexUtil;
 import de.heiden.c64dt.charset.C64Charset;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
-
 /**
  * Dumps memory.
  */
@@ -25,9 +23,6 @@ public class Dumper {
    * @param output Output for reassembled code.
    */
   public void dump(ICodeBuffer code, Writer output) throws IOException {
-    requireThat(code, "code").isNotNull();
-    requireThat(output, "output").isNotNull();
-
     try (BufferedWriter out = new NonClosingBufferedWriter(output)) {
       dump(code, out);
     }
@@ -41,9 +36,6 @@ public class Dumper {
    * @param output Output for reassembled code.
    */
   private void dump(ICodeBuffer code, BufferedWriter output) throws IOException {
-    requireThat(code, "code").isNotNull();
-    requireThat(output, "output").isNotNull();
-
     StringBuilder chars = new StringBuilder(16);
     while (code.hasMore()) {
       output.append(HexUtil.hexWordPlain(code.getCurrentAddress()));

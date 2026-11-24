@@ -9,8 +9,6 @@ import de.heiden.c64dt.disk.IBAM;
 import de.heiden.c64dt.disk.IDiskImage;
 import org.jspecify.annotations.Nullable;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
-
 /**
  * Component for displaying a BAM.
  */
@@ -44,8 +42,6 @@ public class JBam extends JComponent {
    * @param diskImage Disk image.
    */
   public void setDiskImage(IDiskImage diskImage) {
-    requireThat(diskImage, "diskImage").isNotNull();
-
     this.diskImage = diskImage;
 
     Font font = getFont().deriveFont(Font.BOLD);
@@ -72,8 +68,6 @@ public class JBam extends JComponent {
 
   @Override
   protected void paintComponent(Graphics g) {
-    requireThat(g, "g").isNotNull();
-
     g.setColor(getBackground());
     g.fillRect(0, 0, getWidth(), getHeight());
 

@@ -202,7 +202,6 @@ public class CommandBuffer implements Iterable<ICommand> {
 
     // Compute start index for address range index belongs to.
     Integer startIndex = startAddresses.floorKey(index);
-    requireThat(startIndex, "startIndex").isNotNull();
 
     return Objects.requireNonNull(startAddresses.get(startIndex)) + index;
   }
@@ -289,8 +288,6 @@ public class CommandBuffer implements Iterable<ICommand> {
    * @param subroutine Subroutine.
    */
   public void addSubroutine(Subroutine subroutine) {
-    requireThat(subroutine, "subroutine").isNotNull();
-
     Subroutine removed = subroutines.put(subroutine.getAddress(), subroutine);
     // Check that there are no doubled subroutines.
     requireThat(removed, "removed").isNull();
@@ -341,7 +338,6 @@ public class CommandBuffer implements Iterable<ICommand> {
     requireThat(hasIndex(startIndex), "hasIndex(startIndex)").isTrue();
     requireThat(hasIndex(endIndex), "hasIndex(endIndex)").isTrue();
     requireThat(startIndex, "startIndex").isLessThanOrEqualTo(endIndex, "endIndex");
-    requireThat(type, "type").isNotNull();
 
     boolean change = false;
     for (int index = startIndex; index < endIndex; index++) {
@@ -360,7 +356,6 @@ public class CommandBuffer implements Iterable<ICommand> {
    */
   public boolean setType(int index, CodeType type) {
     requireThat(hasIndex(index), "hasIndex(index)").isTrue();
-    requireThat(type, "type").isNotNull();
 
     boolean change = !type.equals(types[index]);
     types[index] = type;
@@ -559,7 +554,6 @@ public class CommandBuffer implements Iterable<ICommand> {
     // Remove label, because the address is no more referenced.
     Object removed = labels.remove(referenced);
     // There needs to be a label, if there had been a reference.
-    requireThat(removed, "removed").isNotNull();
 
     // Label has been removed.
     return true;
@@ -601,7 +595,6 @@ public class CommandBuffer implements Iterable<ICommand> {
    */
   public void setCommand(int index, ICommand command) {
     requireThat(hasIndex(index), "hasIndex(index)").isTrue();
-    requireThat(command, "command").isNotNull();
     requireThat(command.hasAddress(), "command.hasAddress()").isFalse();
 
     int address = addressForIndex(index);

@@ -1,7 +1,5 @@
 package de.heiden.c64dt.net.drive;
 
-import static com.github.cowwoc.requirements10.java.DefaultJavaValidators.requireThat;
-
 /**
  * Exception for device operations.
  */
@@ -18,7 +16,6 @@ public class DeviceException extends Exception {
    * Error.
    */
   public Error getError() {
-    requireThat(error, "result").isNotNull();
     return error;
   }
 }
